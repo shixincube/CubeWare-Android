@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:id="@+id/toolbar_rl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height_44"
+        >
+
+        <TextView
+            android:id="@+id/title_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="@dimen/view_space_18"
+            android:paddingRight="@dimen/view_space_18"
+            android:text="@string/cancel"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/text_size_14"
+            />
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="选择联系人"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/text_size_16"
+            />
+
+        <TextView
+            android:id="@+id/title_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:enabled="true"
+            android:gravity="center"
+            android:paddingLeft="@dimen/view_space_18"
+            android:paddingRight="@dimen/view_space_18"
+            android:textColor="@color/assist_text"
+            android:text="确定"
+            android:textSize="@dimen/text_size_14"
+            />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/contacts_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <cube.ware.widget.indexbar.CubeIndexBar
+            android:id="@+id/sidebar"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="24dp"
+            android:layout_height="300dp"
+            android:layout_gravity="right|center"
+            android:paddingTop="8dp"
+            app:indexBarPressBackground="@color/transparent_40"
+            app:indexBarTextSize="12sp"
+            />
+
+        <TextView
+            android:id="@+id/sidebar_dialog_tv"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_indexbar_bg"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="36sp"
+            android:visibility="gone"
+            />
+
+        <RelativeLayout
+            android:id="@+id/empty_rl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            >
+
+            <ImageView
+                android:id="@+id/no_task_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="50dp"
+                android:src="@drawable/no_contact"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/no_task_iv"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="暂无联系人"
+                android:textColor="@color/C5"
+                />
+        </RelativeLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

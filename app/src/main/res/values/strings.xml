@@ -1,0 +1,192 @@
+<resources>
+    <string name="app_name">CubeWare</string>
+
+    <string name="contact">联系人</string>
+    <string name="contact_friend">好友</string>
+    <string name="contact_group">群组</string>
+    <string name="contact_send_message">发消息</string>
+
+
+    <string name="create_group1">创建群</string>
+    <string name="add_contact">加入群</string>
+    <string name="group_num">群号码</string>
+    <string name="user_num">ID</string>
+    <string name="scan">扫一扫</string>
+    <string name="next_step">下一步</string>
+
+    <string name="user_name">昵称</string>
+    <string name="group_name">编辑群聊名称</string>
+    <string name="login_out">退出登录</string>
+    <string name="choose_from_photo">相册选取</string>
+    <string name="cancel">取消</string>
+    <string name="save_finish">完成</string>
+    <string name="select_forward_user">你最多选择%1$d个好友或群组</string>
+    <string name="network_is_not_available">当前网络不可用，请检查你的网络设置</string>
+    <string name="no_data_no_net_tip">网络消化不良，请检查您的手机是否联网</string>
+    <string name="no_data_message">暂无消息</string>
+    <string name="connecting">正在连接</string>
+    <string name="no_connection">未连接</string>
+    <string name="receiving">收取中…</string>
+    <string name="chat_message_edit_hint">说点什么…</string>
+    <string name="send">发送</string>
+    <string name="group_call_is_talking">正在语音聊天\n是否加入？</string>
+    <string name="call_video_num">%1$d人正在进行视频通话</string>
+    <string name="call_now_num">%1$d人正在进行通话</string>
+    <string name="share_Screen_now_num">%1$d人正在屏幕分享</string>
+    <string name="whiteborad_now_num">%1$d人正在白板演示</string>
+    <string name="un_read">未读</string>
+    <string name="empty" />
+    <string name="secret_text_message">点击查看</string>
+    <string name="call">呼叫</string>
+    <string name="copy">复制</string>
+    <string name="x_phone_tips">%1$s可能是一个电话号码，你可以</string>
+    <string name="x_mail_tips">%1$s可能是一个Email地址，你可以</string>
+    <string name="new_message_divide_line_tips">以下为新消息</string>
+    <string name="at_all_x">\&#064;全体成员%1$d/%2$d</string>
+    <string name="all_member">全体成员</string>
+    <string name="message_notify">%1$d条新消息</string>
+    <string name="unknown_message_type">不支持的消息类型,请到其他终端查看</string>
+    <string name="chat_msg_back">消息</string>
+    <string name="secret_chat_msg_back">密聊</string>
+    <string name="chat_msg_num_back">消息(%1$s)</string>
+    <string name="secret_chat_msg_num_back">密聊(%1$s)</string>
+    <string name="secret_message_tip">消息已读后立即销毁\n消息在各端不留痕迹\n消息不可转发或保存\n头像马赛克以防截屏</string>
+    <string name="at_contacts">选择提醒的人</string>
+    <string name="writing_chat">对方正在输入...</string>
+    <string name="image_message">[图片]</string>
+    <string name="video_message">[视频消息]</string>
+    <string name="voice_message">[语音消息]</string>
+    <string name="video_call_message">[视频通话]</string>
+    <string name="voice_call_message">[语音通话]</string>
+    <string name="file_message">[文件]</string>
+    <string name="whiteboard_message">[白板消息]</string>
+    <string name="invilid_file">无效的文件</string>
+    <string name="call_phone_tip">正在使用手机流量</string>
+    <string name="file_local">本机文件</string>
+    <string name="video_chat">视频通话</string>
+    <string name="voice_chat">语音通话</string>
+    <string name="group_chat">群通话</string>
+    <string name="group_video">群视频</string>
+    <string name="whiteboard">白板演示</string>
+    <string name="share_screen">共享屏幕</string>
+    <string name="settting">设置</string>
+    <string name="notice_send_recall">你撤回了一条消息</string>
+    <string name="notice_received_recall">[%1$s]撤回了一条消息</string>
+
+    <string name="group_created_tips">【群创建成功】</string>
+
+    <!--权限申请-->
+    <string name="request_storage_permission">请打开SD卡读取权限！</string>
+    <string name="request_camera_permission">请打开照相机权限！</string>
+    <string name="request_record_permission">请打开录音权限！</string>
+    <string name="request_contact_permission">请打开读取通讯录权限！</string>
+    <string name="request_sms_permission">请打开读取短信权限！</string>
+    <string name="request_basic_permission">请申请APP相关应用权限！</string>
+
+    <!--发送语音-->
+    <string name="in_calling_tips">正在通话中，请稍后再试</string>
+    <string name="pressed_to_speak">按住说话</string>
+    <string name="release_to_speak">松开结束</string>
+    <string name="release_to_play">松开试听</string>
+    <string name="recording_too_short">录音时间太短</string>
+    <string name="move_up_to_cancel">手指上滑，取消发送</string>
+    <string name="release_to_cancel">松开手指，取消发送</string>
+    <string name="record_too_short">录音时间太短</string>
+    <string name="record_error">录音语音出错，请查看权限是否开启</string>
+
+    <!--发送文件-->
+    <string name="message_received">已接收</string>
+    <string name="not_download">未下载</string>
+    <string name="save_image">保存到相册</string>
+    <string name="identify_qr_code">识别图中的二维码</string>
+    <string name="send_msg_error">发送消息出错</string>
+    <string name="send_success">已发送</string>
+
+
+    <!-- 音视频通话 -->
+    <string name="refuse">拒绝</string>
+    <string name="answer">接听</string>
+    <string name="hang_up">挂断</string>
+    <string name="speaker">免提</string>
+    <string name="mute">麦克风</string>
+    <string name="join">立即加入</string>
+    <string name="need_join_member">参与人员</string>
+    <string name="audio_calling_title">语音通话</string>
+    <string name="video_calling_title">视频通话</string>
+    <string name="conference_calling">多人语音</string>
+    <string name="wb_calling_title">白板演示</string>
+    <string name="wb_calling">白板演示</string>
+    <string name="sharescreen_calling">共享屏幕</string>
+    <string name="conference_video_Calling">多人语音</string>
+
+
+    <string name="someone_wanted_to_talk_to_you_voice_calls">邀请您参与多人语音</string>
+    <string name="someone_wanted_to_talk_to_you_video_calls">邀请您参与视频通话</string>
+    <string name="someone_wanted_to_talk_to_you_share_desktop">邀请您加入屏幕分享</string>
+    <string name="someone_wanted_to_talk_to_you_wb_calls">邀请您参与白板演示</string>
+    <string name="call_member">通话成员</string>
+    <string name="waiting_for_the_other_answer">正在等待对方接受邀请…</string>
+    <string name="audio_calling">正在进行语音通话...</string>
+    <string name="calling_please_try_again_later">正在通话中，请稍后再试</string>
+    <string name="switch_to_voice">切换到语音</string>
+    <string name="switch_to_video">切换到视频</string>
+    <string name="switch_camera">切换摄像头</string>
+    <string name="network_not_available_please_try_again_later">网络不可用，请稍后再试</string>
+    <string name="call_failure_please_try_again_later">呼叫失败，请稍后再试</string>
+
+    <string name="connection_failure_please_try_again_later">连接失败，请稍后再试</string>
+    <string name="connection_failure">网络异常，通话中断</string>
+    <string name="call_user_busy">对方正在忙</string>
+    <string name="call_voice_not_answer">对方无应答</string>
+    <string name="peer_offline_please_try_again_later">对方无应答</string>
+    <string name="peer_has_refused">对方已拒绝</string>
+    <string name="peer_has_cancelled">对方已取消</string>
+    <string name="refused">已拒绝</string>
+    <string name="cancelled">已取消</string>
+    <string name="call_not_accept">通话未接听</string>
+    <string name="call_completed">通话已结束</string>
+    <string name="other_terminal_has_answered">其它终端已接听</string>
+
+
+    <!-- 屏幕分享 -->
+    <string name="start_share_screen">%1$s正在屏幕分享</string>
+    <string name="connect_white_borad">白板演示</string>
+    <string name="connect_share_screen">屏幕分享</string>
+    <string name="joined_member_share_screen">已加入成员</string>
+    <string name="invited_member_share_screen">待加入成员</string>
+
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="choose_friend">选择好友</string>
+    <string name="sure">确定</string>
+    <string name="find_group">找群</string>
+    <string name="invite_you_join_white_board">邀请你参与白板</string>
+    <string name="white_board_show">白板演示</string>
+    <string name="white_board_joined">已加入成员</string>
+    <string name="white_board_unjoin">待加入成员</string>
+    <string name="conference">会议</string>
+    <string name="create_conference">创建会议</string>
+    <string name="join_member">参会人员</string>
+    <string name="please_add_conference_theme">请输入会议主题</string>
+    <string name="please_invite_conference_member">请邀请会议成员</string>
+    <string name="please_choose_member">请选择联系人</string>
+    <string name="enter_groupid">群号码</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logining">登录中。。。</string>
+    <string name="start_join_screen">%1$s 人正在会议</string>
+    <string name="start_join_video">%1$s 人正在视频</string>
+    <string name="start_whiteboard">%1$s 人正在白板演示</string>
+
+    <string name="start_time">开始时间</string>
+    <string name="conference_time">会议时间</string>
+    <string name="fifth_minute">15分钟</string>
+    <string name="conference_details">会议详情</string>
+    <string name="create_conferences">+创建会议</string>
+    <string name="send_message">发消息</string>
+    <string name="join_conference">进入会议</string>
+    <string name="joining">加入中。。。</string>
+    <string name="join_in_conference">加入成功，进入会议中。。。</string>
+
+
+</resources>

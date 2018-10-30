@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tool="http://schemas.android.com/tools">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/view_height_10"
+        android:layout_marginBottom="@dimen/view_space_10"
+        android:paddingTop="@dimen/text_size_22"
+        android:paddingBottom="@dimen/text_size_22"
+        android:background="@drawable/shape_con_bg"
+        android:layout_marginRight="@dimen/view_space_20"
+        android:layout_marginLeft="@dimen/view_space_20">
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/view_space_8"
+            android:layout_width="wrap_content"
+            android:textColor="@color/assist_text"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_conference_name"
+            android:textColor="@color/text_primary"
+            android:layout_marginLeft="@dimen/view_space_10"
+            android:layout_marginRight="@dimen/view_space_130"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_centerVertical="true"
+            android:textSize="18sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</RelativeLayout>

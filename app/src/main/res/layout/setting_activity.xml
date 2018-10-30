@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/cube_toolbar"/>
+    <include layout="@layout/include_divider_line"/>
+
+    <TextView
+        android:id="@+id/tv_notify"
+        android:background="@drawable/cube_selector_common_btn"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/text_primary"
+        android:gravity="center"
+        android:text="通知配置"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/cb_isAlerts"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提醒"/>
+
+        <CheckBox
+            android:id="@+id/cb_isDetails"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="详情"/>
+
+        <CheckBox
+            android:id="@+id/cb_isSound"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="声音"/>
+
+        <CheckBox
+            android:id="@+id/cb_isVibrate"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="震动"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_disturb"
+        android:background="@drawable/cube_selector_common_btn"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/text_primary"
+        android:gravity="center"
+        android:text="免打扰配置"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/cb_isNotDisturb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="免打扰"/>
+
+        <EditText
+            android:id="@+id/et_start"
+            android:layout_marginLeft="20dp"
+            android:hint="开始时间HH:MM"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"/>
+        <EditText
+            android:id="@+id/et_end"
+            android:hint="结束时间HH:MM"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_deviceToken"
+        android:background="@drawable/cube_selector_common_btn"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/text_primary"
+        android:gravity="center"
+        android:text="更新DeviceToken"/>
+
+    <EditText
+        android:id="@+id/et_diviceToken"
+        android:hint="diviceToken"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:id="@+id/tv_add_top"
+            android:background="@drawable/cube_selector_common_btn"
+            android:textColor="@color/text_primary"
+            android:gravity="center"
+            android:text="置顶"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tv_remove_top"
+            android:background="@drawable/cube_selector_common_btn"
+            android:textColor="@color/text_primary"
+            android:gravity="center"
+            android:text="移除置顶"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tv_add_mute"
+            android:background="@drawable/cube_selector_common_btn"
+            android:textColor="@color/text_primary"
+            android:gravity="center"
+            android:text="静音"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tv_remove_mute"
+            android:background="@drawable/cube_selector_common_btn"
+            android:textColor="@color/text_primary"
+            android:gravity="center"
+            android:text="移除静音"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_chatId"
+        android:hint="会话id"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tv_query"
+        android:background="@drawable/cube_selector_common_btn"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/text_primary"
+        android:gravity="center"
+        android:text="查询最新设置"/>
+
+
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

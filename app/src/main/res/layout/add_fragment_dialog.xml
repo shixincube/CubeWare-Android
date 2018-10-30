@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/add_bg"
+    android:id="@+id/rl_bg_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/iv_cancel"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/edit_close_btn"
+        android:padding="0dp"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_centerHorizontal="true"
+        android:layout_width="@dimen/view_height_50"
+        android:layout_height="@dimen/view_height_50" />
+    <LinearLayout
+        android:layout_marginLeft="@dimen/view_space_20"
+        android:layout_marginRight="@dimen/view_space_20"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/view_space_200"
+        android:layout_width="match_parent"
+        android:weightSum="2"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/ll_audio"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/tab_more_voice_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="多人语音"
+                android:textSize="@dimen/text_size_16"
+                android:textColor="@color/text_primary"
+                android:layout_marginTop="@dimen/view_height_10"
+                android:layout_width="100dp"
+                android:gravity="center"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_whiteboard"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/tab_more_whiteborad_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="白板演示"
+                android:textSize="@dimen/text_size_16"
+                android:textColor="@color/text_primary"
+                android:layout_marginTop="@dimen/view_height_10"
+                android:layout_width="100dp"
+                android:gravity="center"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

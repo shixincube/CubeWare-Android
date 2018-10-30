@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.contact.addfriend.AddFriendActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height_50">
+        <ImageView
+            android:id="@+id/iv_back"
+            android:src="@drawable/icon_back"
+            android:gravity="center"
+            android:padding="15dp"
+            android:textColor="@color/text_2b2c32"
+            android:textSize="@dimen/text_size_14"
+            android:text="@string/cancel"
+            android:layout_width="@dimen/view_height_50"
+            android:layout_height="@dimen/view_height_50" />
+        <TextView
+            android:gravity="center"
+            android:textColor="@color/text_2b2c32"
+            android:textSize="@dimen/text_size_16"
+            android:layout_marginLeft="@dimen/view_height_10"
+            android:text="@string/find_group"
+            android:textStyle="normal"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_search_bg"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/view_space_40"
+        android:layout_marginRight="@dimen/view_space_40"
+        android:layout_height="@dimen/view_height_36">
+        <ImageView
+            android:id="@+id/iv_search"
+            android:padding="5dp"
+            android:src="@drawable/icon_search"
+            android:layout_width="@dimen/view_height_40"
+            android:layout_height="@dimen/view_height_40" />
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textSize="16sp"
+            android:hint="@string/enter_groupid"
+            android:imeOptions="actionSearch"
+            android:layout_toRightOf="@+id/iv_search"
+            android:layout_width="match_parent"
+            android:background="@color/search_bg"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="@dimen/view_height_10"
+        android:id="@+id/rv_member"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

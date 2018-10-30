@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/friend_root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_item_bg"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/view_space_8"
+    android:paddingLeft="@dimen/view_space_16"
+    android:paddingRight="@dimen/view_space_16"
+    android:paddingTop="@dimen/view_space_8"
+    >
+
+    <CheckBox
+        android:id="@+id/friend_cb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="@dimen/view_space_8"
+        android:background="@null"
+        android:button="@drawable/selector_item_checked_more"
+        android:checked="false"
+        android:clickable="false"
+        />
+
+    <ImageView
+        android:id="@+id/friend_head_iv"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/friend_cb"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_head_user"
+        />
+    <TextView
+        android:id="@+id/friend_name_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/view_space_16"
+        android:layout_marginRight="@dimen/view_space_16"
+        android:layout_toRightOf="@+id/friend_head_iv"
+        android:singleLine="true"
+        tools:text="名字"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_size_16"
+        />
+</RelativeLayout>

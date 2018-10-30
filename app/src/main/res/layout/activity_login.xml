@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.main.MainActivity">
+    <ImageView
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginTop="40dp"
+        android:layout_width="80dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="80dp" />
+    <EditText
+        android:id="@+id/et_appid"
+        android:hint="APP ID"
+        android:textSize="16sp"
+        android:paddingLeft="10dp"
+        android:enabled="false"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp" />
+    <EditText
+        android:id="@+id/et_appkey"
+        android:hint="APP KEY"
+        android:paddingLeft="10dp"
+        android:textSize="16sp"
+        android:enabled="false"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp" />
+    <Button
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/login_btn"
+        android:paddingLeft="@dimen/view_height_10"
+        android:paddingRight="@dimen/view_height_10"
+        android:textColor="@color/white"
+        android:background="@drawable/shape_login_next_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/view_height_40"
+        android:text="@string/next_step"
+        />
+
+</LinearLayout>

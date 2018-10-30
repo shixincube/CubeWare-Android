@@ -1,0 +1,70 @@
+package cube.ware.ui.chat.adapter;
+
+import android.text.TextUtils;
+import android.view.View;
+
+import com.common.utils.utils.glide.GlideUtil;
+import com.common.utils.utils.log.LogUtil;
+
+import java.util.Map;
+
+import cube.ware.R;
+import cube.ware.data.model.dataModel.CubeMessageViewModel;
+import cube.ware.data.model.dataModel.enmu.CubeSessionType;
+import cube.ware.data.room.model.CubeMessage;
+import cube.ware.ui.chat.activity.preview.PreviewImageActivity;
+import cube.ware.widget.recyclerview.BaseRecyclerViewHolder;
+
+
+/**
+ * 聊天消息图片模块
+ *
+ * @author Wangxx
+ * @date 2017/1/10
+ */
+
+public class MsgViewHolderImg extends MsgViewHolderPVBase {
+    private static final String TAG = MsgViewHolderImg.class.getSimpleName();
+
+    public MsgViewHolderImg(ChatMessageAdapter adapter, BaseRecyclerViewHolder viewHolder, CubeMessageViewModel data, int position, Map<String, CubeMessage> selectedMap) {
+        super(adapter, viewHolder, data, position, selectedMap);
+    }
+
+    @Override
+    protected void loadThumbnailImage(String path) {
+        LogUtil.d("加载缩略图url-----> " + mThumbUrl);
+        if (!TextUtils.isEmpty(mFileUrl) && mFileUrl.contains(".gif")) {
+            GlideUtil.loadImage(mFileUrl,mContext,mChatContentIv, R.drawable.default_image,true);
+        } else {
+            GlideUtil.loadImage(mThumbUrl,mContext,mChatContentIv, R.drawable.default_image,false);
+        }
+    }
+
+    @Override
+    protected int getContentResId() {
+        return R.layout.item_chat_message_picture;
+    }
+
+    @Override
+    protected void refreshStatus() {
+        super.refreshStatus();
+    }
+
+    @Override
+    protected void onItemClick(View view) {
+        PreviewImageActivity.start(mContext, this.mAdapter.mChatId, CubeSessionType.Secret.getType(), this.mData.mMessage.getMessageSN());
+    }
+
+    protected int leftBackground() {
+        return R.color.transparent;
+    }
+
+    /**
+     * 当是发送出去的消息时，内容区域背景的drawable id
+     *
+     * @return
+     */
+    protected int rightBackground() {
+        return R.color.transparent;
+    }
+}

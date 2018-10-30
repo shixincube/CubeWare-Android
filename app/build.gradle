@@ -1,0 +1,120 @@
+apply plugin: 'com.android.application'
+
+
+def appDependencies = rootProject.ext.android
+def developmentDependencies = rootProject.ext.developmentDependencies
+def testDependencies = rootProject.ext.testDependencies
+
+android {
+    compileSdkVersion appDependencies.compileSdkVersion
+    buildToolsVersion appDependencies.buildToolsVersion
+
+    defaultConfig {
+        applicationId appDependencies.applicationId
+        minSdkVersion appDependencies.minSdkVersion
+        targetSdkVersion appDependencies.targetSdkVersion
+        versionCode appDependencies.versionCode
+        versionName appDependencies.versionName
+        flavorDimensions "versionCode"
+
+        buildConfigField "String", "UMENG_APP_KEY", "\"5bcedbf0b465f543c9000078\""
+
+        ndk {
+            abiFilters "armeabi-v7a"
+        }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName: project.getName(),"room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+        // Enabling multidex support.
+        multiDexEnabled true
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
+    // 签名
+    signingConfigs {
+        debug {}
+        release {
+            keyAlias 'cubeware'
+            keyPassword 'shixincube'
+            storePassword '123456'
+            storeFile file('../cube.jks')
+        }
+    }
+
+    buildTypes {
+        debug{
+            signingConfig signingConfigs.debug
+        }
+        release {
+            // zipalign优化
+            zipAlignEnabled false
+            // 移除无用的资源文件
+            shrinkResources false
+            // release
+            signingConfig signingConfigs.release
+            shrinkResources false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // 打包名称
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "CubeWare_v${defaultConfig.versionName}.apk"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation developmentDependencies.support_appcompat_v7
+    implementation developmentDependencies.support_v4
+    implementation developmentDependencies.support_recyclerview_v7
+    implementation developmentDependencies.multidex
+    implementation developmentDependencies.constraint_layout
+    implementation developmentDependencies.support_design
+    implementation developmentDependencies.support_cardview_v7
+    implementation developmentDependencies.retrofit
+    implementation developmentDependencies.retrofit_gson
+    implementation developmentDependencies.retrofit_rxjava
+    implementation developmentDependencies.okhttp_logging
+    implementation developmentDependencies.gson
+    implementation developmentDependencies.rxjava
+    implementation developmentDependencies.rxandroid
+    implementation developmentDependencies.rxpermissions
+    implementation developmentDependencies.eventbus
+    implementation developmentDependencies.umeng
+    implementation developmentDependencies.umeng_common
+    implementation developmentDependencies.recyclerview_helper
+    implementation developmentDependencies.smartrefresh
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation developmentDependencies.arouter
+    annotationProcessor developmentDependencies.arouter_compiler
+    implementation developmentDependencies.arouter_annotation
+    implementation 'com.lzy.widget:imagepicker:0.6.1'
+    implementation 'top.zibin:Luban:1.1.8'
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    androidTestImplementation 'android.arch.persistence.room:testing:1.1.1'
+    implementation 'com.contrarywind:Android-PickerView:4.1.6'
+    implementation 'com.shixincube:engine:3.0.102'
+    implementation 'com.shixincube:genie:2.0.21'
+    implementation 'com.shixincube:rtc:2.1.4'
+    implementation 'com.shixincube:sip:1.1.13'
+    implementation project(path: ':CommonMvp')
+    implementation project(path: ':CommonSdk')
+    implementation project(path: ':CommonUtils')
+
+}

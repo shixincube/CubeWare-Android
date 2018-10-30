@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height_50">
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:gravity="center"
+            android:textColor="@color/text_2b2c32"
+            android:textSize="@dimen/text_size_16"
+            android:layout_marginLeft="@dimen/view_height_10"
+            android:text="@string/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/tv_title"
+            android:gravity="center"
+            android:textColor="@color/text_2b2c32"
+            android:textSize="@dimen/text_size_18"
+            android:layout_marginLeft="@dimen/view_height_10"
+            android:text="@string/user_name"
+            android:textStyle="bold"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/tv_save"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/view_height_10"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/C7"
+            android:textSize="@dimen/text_size_16"
+            android:layout_marginLeft="@dimen/view_height_10"
+            android:text="@string/save_finish"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/et_name"
+            android:background="@color/white"
+            android:textColor="@color/text_primary"
+            android:hint="@string/user_name"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:paddingRight="@dimen/view_height_40"
+            android:paddingLeft="@dimen/view_height_16"
+            android:layout_width="match_parent"
+            android:maxLength="20"
+            android:layout_height="@dimen/view_height_45" />
+        <ImageView
+            android:id="@+id/iv_clear"
+            android:src="@drawable/round_close"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:padding="5dp"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/text_size_30"
+            android:layout_height="@dimen/text_size_30" />
+        <View
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="15dp"
+            android:background="@color/primary_divider_setting"
+            android:layout_below="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_size_1"/>
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_count"
+        android:gravity="end"
+        android:paddingRight="10dp"
+        android:text="0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

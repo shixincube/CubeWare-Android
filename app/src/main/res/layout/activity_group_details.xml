@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/detail_group_layout"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height_44"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/title_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:paddingLeft="@dimen/view_space_18"
+                android:paddingRight="@dimen/view_space_18"
+                android:src="@drawable/icon_back" />
+
+            <ImageView
+                android:id="@+id/title_iv"
+                android:layout_width="@dimen/view_height_44"
+                android:layout_height="@dimen/view_height_44"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:padding="@dimen/view_space_2" />
+
+            <ImageView
+                android:id="@+id/title_more"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingLeft="@dimen/view_space_18"
+                android:paddingRight="@dimen/view_space_18"
+                android:src="@drawable/ic_more" />
+        </RelativeLayout>
+
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/view_height_44">
+
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:fitsSystemWindows="true">
+                <!--
+                AppBarLayout里放入的都可以跟着向上滑动滑出布局的的，
+                添加app:layout_scrollFlags="scroll"属性可以滑出布局
+                TabLayout没有添加，所以停留在顶部
+                -->
+                <android.support.design.widget.CollapsingToolbarLayout
+                    android:id="@+id/cool_toolbar_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        app:layout_scrollFlags="scroll">
+
+                        <ImageView
+                            android:id="@+id/face_iv"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
+                            android:layout_centerInParent="true"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/default_head_group" />
+
+                        <TextView
+                            android:id="@+id/display_name_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/view_space_16"
+                            android:ellipsize="end"
+                            android:maxEms="7"
+                            tools:text="问题收集"
+                            android:singleLine="true"
+                            android:textColor="@color/C1"
+                            android:textSize="@dimen/F2" />
+                    </LinearLayout>
+                </android.support.design.widget.CollapsingToolbarLayout>
+
+               <!-- <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/view_height_30"
+                    android:layout_marginTop="@dimen/view_space_26"
+                    android:gravity="center"
+                    android:paddingLeft="70dp"
+                    android:paddingRight="70dp"
+                    >
+                    <TextView
+                        android:id="@+id/send_message_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:drawablePadding="@dimen/view_space_10"
+                        android:drawableTop="@drawable/ic_contact_send_message"
+                        android:gravity="center"
+                        android:text="@string/contact_send_message"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_size_14"
+                        />
+                </RelativeLayout>-->
+
+            </android.support.design.widget.AppBarLayout>
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/group_num_code_rl"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/view_height_60">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/view_space_18"
+                            android:layout_marginRight="@dimen/view_space_40"
+                            android:gravity="center|left"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/group_num"
+                                android:textColor="@color/C2"
+                                android:textSize="@dimen/text_size_12" />
+
+                            <include layout="@layout/include_divider_4dp" />
+
+                            <TextView
+                                android:id="@+id/group_num_code_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                tools:text="123456"
+                                android:textColor="@color/primary_text"
+                                android:textSize="@dimen/text_size_14" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/divider_size_0.5"
+                        android:layout_marginLeft="@dimen/view_space_18"
+                        android:background="@color/primary_divider" />
+
+                    <RelativeLayout
+                        android:id="@+id/group_name_rl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="@dimen/view_height_60">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/view_space_18"
+                            android:layout_marginRight="@dimen/view_space_40"
+                            android:gravity="center|left"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="群聊名称"
+                                android:textColor="@color/C2"
+                                android:textSize="@dimen/text_size_12" />
+
+                            <include layout="@layout/include_divider_4dp" />
+
+                            <TextView
+                                android:id="@+id/group_chat_name_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/primary_text"
+                                tools:text="问题收集"
+                                android:textSize="@dimen/text_size_14" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/group_chat_arrow_iv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/view_space_18"
+                            android:src="@drawable/ic_arrow_collapse_spap" />
+                    </RelativeLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/view_space_12"
+                        android:background="@color/contact_divider" />
+
+                    <LinearLayout
+                        android:id="@+id/group_member_rl"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/view_space_18"
+                        android:layout_marginRight="@dimen/view_space_40"
+                        android:orientation="vertical"
+                        >
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="群成员"
+                                android:textColor="@color/C2"
+                                android:textSize="@dimen/text_size_12" />
+
+                            <include layout="@layout/include_divider_4dp" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/divider_size_0.5"
+                        android:layout_marginLeft="@dimen/view_space_18"
+                        android:background="@color/primary_divider" />
+
+                </LinearLayout>
+            </android.support.v4.widget.NestedScrollView>
+        </android.support.design.widget.CoordinatorLayout>
+        <TextView
+            android:id="@+id/send_message_tv"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:background="@color/cube_primary"
+            android:textColor="@color/white"
+            android:layout_gravity="bottom"
+            android:text="@string/send_message"
+            android:layout_height="@dimen/view_height_45" />
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <FrameLayout
+            android:id="@+id/message_container_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
+
+            <cube.ware.widget.MsgBkImageView
+                android:id="@+id/message_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/cube_primary_bg"
+                />
+
+            <cube.ware.widget.CubeSwipeRefreshLayout
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/message_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:default_circle_target="22"
+                app:header_view_height="20"
+                >
+                <cube.ware.widget.recyclerview.CubeRecyclerView
+                    android:id="@+id/message_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+            </cube.ware.widget.CubeSwipeRefreshLayout>
+
+            <LinearLayout
+                android:id="@+id/message_notify_ly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/view_height_64"
+                android:background="@drawable/ic_message_notify_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/view_space_4"
+                android:visibility="gone"
+                >
+                <ImageView
+                    android:id="@+id/message_notify_head_iv"
+                    android:layout_width="@dimen/view_space_32"
+                    android:layout_height="@dimen/view_space_32"
+                    android:src="@drawable/default_head_user"
+                    />
+
+                <TextView
+                    android:id="@+id/message_notify_head_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_space_8"
+                    android:drawablePadding="@dimen/view_space_8"
+                    android:textSize="@dimen/text_size_14"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/new_message_tip_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="@dimen/view_space_6"
+                android:layout_marginRight="@dimen/view_space_12"
+                android:background="@drawable/ic_new_message_tips"
+                android:gravity="center_horizontal"
+                android:paddingTop="@dimen/view_space_8"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_12"
+                android:visibility="gone"
+                />
+
+        </FrameLayout>
+
+        <include layout="@layout/cube_chat_bottom_layout"/>
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/message_non_friend"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_space_48"
+        android:layout_marginTop="48dp"
+        android:background="@color/C8"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/group_call_tip"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_space_48"
+        android:layout_marginTop="@dimen/chat_panel_title_bar_height"
+        android:background="@color/white"
+        android:drawableLeft="@drawable/ic_audio_group_call"
+        android:drawablePadding="@dimen/view_space_10"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/view_space_18"
+        android:text="@string/call_now_num"
+        android:textColor="@color/cube_primary_text"
+        android:visibility="gone"
+        />
+</FrameLayout>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cube.ware">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+
+    <!-- 添加如下权限，以便使用更多的第三方SDK和更精准的统计数据 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/BaseAppTheme">
+
+        <!-- 友盟配置 -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5bcedbf0b465f543c9000078" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="demo" />
+
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:icon="@mipmap/ic_launcher"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            />
+
+        <!-- cube核心服务 -->
+        <service android:name=".service.core.CoreService" />
+
+        <!-- 核心服务中的内部辅助服务 -->
+        <service android:name=".service.core.CoreService$InnerService" />
+
+        <!-- cube核心服务 -->
+        <service android:name=".service.core.CoreAliveService" />
+
+        <activity android:name=".ui.login.CubeIdListActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.mine.ChangeAvatorActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.contact.select.SelectContactActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.group.details.GroupDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.contact.friend.details.FriendDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.chat.activity.p2p.P2PChatActivity"
+            android:launchMode="singleTask"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.chat.activity.group.GroupChatActivity"
+            android:launchMode="singleTask"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.chat.activity.preview.PreviewImageActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".ui.chat.activity.preview.PreviewVideoActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".ui.chat.activity.file.FileActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".ui.setting.SettingActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".service.call.ui.P2PCallActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".ui.mine.ModifyNameActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".service.remoteDesktop.ui.ShareScreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.contact.addfriend.AddFriendActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.whiteboard.WhiteBoardActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.conference.create.CreateConferenceActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|navigation"
+            android:windowSoftInputMode="stateVisible|adjustPan|stateHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.conference.select.SelectMemberActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".ui.conference.conference.ConferenceActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+    </application>
+
+</manifest>

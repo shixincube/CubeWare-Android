@@ -1,0 +1,139 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/call_video_bg"
+    >
+
+    <RelativeLayout
+        android:id="@+id/group_user_info_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/view_space_16"
+        >
+
+        <ImageView
+            android:id="@+id/group_peer_head_iv"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@null"
+            android:src="@drawable/default_head_user"
+            />
+
+        <TextView
+            android:id="@+id/group_peer_name_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/group_peer_head_iv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/view_space_8"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:maxWidth="96dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_12"
+            />
+
+        <TextView
+            android:id="@+id/call_group_hint_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/group_peer_name_tv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/view_space_8"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/someone_wanted_to_talk_to_you_video_calls"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_12"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/call_group_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/group_user_info_layout"
+        android:layout_marginTop="@dimen/view_space_16"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:maxWidth="96dp"
+        android:text=""
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_20"
+        />
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/call_group_name"
+        android:layout_marginTop="@dimen/view_space_8"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:maxWidth="96dp"
+        android:text="@string/call_member"
+        android:textColor="@color/cube_assist_text"
+        android:textSize="@dimen/text_size_12"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/group_member_face"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/view_space_12"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        >
+
+    </android.support.v7.widget.RecyclerView>
+
+
+    <LinearLayout
+        android:id="@+id/call_group_control_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/view_space_24"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:id="@+id/call_group_refuse_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawablePadding="@dimen/view_space_8"
+            android:drawableTop="@drawable/selector_call_hang_up"
+            android:text="@string/refuse"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_12"
+            style="?android:attr/borderlessButtonStyle"
+            />
+
+        <Button
+            android:id="@+id/call_group_answer_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawablePadding="@dimen/view_space_8"
+            android:drawableTop="@drawable/selector_call_answer"
+            android:text="@string/answer"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_12"
+            style="?android:attr/borderlessButtonStyle"
+            />
+    </LinearLayout>
+
+</RelativeLayout>
+

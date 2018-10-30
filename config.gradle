@@ -1,0 +1,123 @@
+/* Gradle依赖的统一管理 */
+ext {
+  def supportVersion = '26.1.0'
+  def multidexVersion = '1.0.1'
+  def rxjavaVersion = '1.3.0'
+  def rxandroidVersion = '1.2.1'
+  def retrofitVersion = '2.1.0'
+  def okhttpVersion = '3.4.1'
+  def gsonVersion = '2.8.4'
+  def glideVersion = '3.8.0'
+  def zxingVersion = '3.3.0'
+  def pinyinVersion = '2.0.3'
+  def recyclerViewHelperVersion = '2.9.25'
+  def photoViewVersion = '2.0.0'
+  def rxPermissionsVersion = '0.9.4@aar'
+  def richEditorVersion = '1.2.2'
+  def commonsTextVersion = '1.1'
+  def stethoVersion = '1.4.1'
+  def stethoRealmVersion = '2.0.0'
+  def jsoupVersion = '1.10.2'
+  def junitVersion = '4.12'
+  def mockitoVersion = '2.15.0'
+  def eventbusVersion = '3.1.1'
+  def smartrefreshVersion = '1.1.0-alpha-5'
+
+  // android依赖
+  android = [compileSdkVersion: 27,
+             buildToolsVersion: "27.0.3",
+             applicationId    : "cube.ware",
+             minSdkVersion    : 16,
+             targetSdkVersion : 27,
+             versionCode      : 4,
+             versionName      : "1.0.4"]
+
+  // 开发依赖
+  developmentDependencies = [// Android support library
+                             support_appcompat_v7    : "com.android.support:appcompat-v7:${supportVersion}",
+                             support_v4              : "com.android.support:support-v4:${supportVersion}",
+                             support_recyclerview_v7 : "com.android.support:recyclerview-v7:${supportVersion}",
+                             support_design          : "com.android.support:design:26.1.0",
+                             support_cardview_v7     : "com.android.support:cardview-v7:${supportVersion}",
+
+                             // multidex
+                             multidex                : "com.android.support:multidex:${multidexVersion}",
+
+                             // RxJava相关
+                             rxjava                  : "io.reactivex:rxjava:${rxjavaVersion}",
+                             rxandroid               : "io.reactivex:rxandroid:${rxandroidVersion}",
+
+                             // retrofit相关
+                             retrofit                : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
+                             retrofit_rxjava         : "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}",
+                             retrofit_gson           : "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
+
+                             // okhttp
+                             okhttp                  : "com.squareup.okhttp3:okhttp:${okhttpVersion}",
+                             okhttp_logging          : "com.squareup.okhttp3:logging-interceptor:${okhttpVersion}",
+
+                             // rx权限管理
+                             rxpermissions           : "com.tbruyelle.rxpermissions:rxpermissions:${rxPermissionsVersion}",
+
+                             // gson
+                             gson                    : "com.google.code.gson:gson:${gsonVersion}",
+
+                             // glide
+                             glide                   : "com.github.bumptech.glide:glide:${glideVersion}",
+
+                             // zxing
+                             zxing                   : "com.google.zxing:core:${zxingVersion}",
+
+                             // pinyin
+                             pinyin                  : "com.github.promeg:tinypinyin:${pinyinVersion}",
+
+                             appmsg                  : "com.github.johnkil.android-appmsg:appmsg:1.2.0",
+
+                             // widget相关
+                             constraint_layout       : "com.android.support.constraint:constraint-layout:1.1.2",
+                             recyclerview_helper     : "com.github.CymChad:BaseRecyclerViewAdapterHelper:${recyclerViewHelperVersion}",
+                             photoview               : "com.github.chrisbanes:PhotoView:${photoViewVersion}",
+                             pickerview              : "com.contrarywind:Android-PickerView:3.2.4",
+                             materialish_progress    : "com.pnikosis:materialish-progress:1.7",
+                             switchbutton            : "com.kyleduo.switchbutton:library:1.4.6",
+                             rich_editor             : "jp.wasabeef:richeditor-android:${richEditorVersion}",
+                             // 侧滑返回
+                             swipebacklayout         : "me.imid.swipebacklayout.lib:library:1.1.0",
+
+                             // 友盟
+                             umeng                   : "com.umeng.analytics:analytics:latest.integration",
+                             umeng_common            : "com.umeng.sdk:common:latest.integration",
+                             // html转义字符处理
+                             commons_text            : "org.apache.commons:commons-text:${commonsTextVersion}",
+
+                             // html 处理
+                             jsoup                   : "org.jsoup:jsoup:${jsoupVersion}",
+
+                             // leakcanary检查内存泄露
+                             leakcanary_android      : "com.squareup.leakcanary:leakcanary-android:1.5.4",
+                             leakcanary_android_no_op: "com.squareup.leakcanary:leakcanary-android-no-op:1.5.4",
+
+                             // 调试工具
+                             stetho                  : "com.facebook.stetho:stetho:${stethoVersion}",
+                             stetho_realm            : "com.uphyca:stetho_realm:${stethoRealmVersion}",
+
+                             // 日志工具
+                             timber                  : "com.jakewharton.timber:timber:4.7.1",
+                             logger                  : "com.orhanobut:logger:2.2.0",
+
+                             // 路由工具
+                             "arouter"                  : "com.alibaba:arouter-api:1.3.1",
+                             "arouter_compiler"         : "com.alibaba:arouter-compiler:1.1.4",
+                             "arouter_annotation"         : "com.alibaba:arouter-annotation:1.0.4",
+
+                             // EventBus
+                             eventbus                : "org.greenrobot:eventbus:${eventbusVersion}",
+                             smartrefresh            : "com.scwang.smartrefresh:SmartRefreshLayout:${smartrefreshVersion}",
+                             smartrefresheader       : "com.scwang.smartrefresh:SmartRefreshHeader:${smartrefreshVersion}",
+  ]
+
+  testDependencies = [junit          : "junit:junit:${junitVersion}",
+                      mockito        : "org.mockito:mockito-core:${mockitoVersion}",
+                      mockito_android: "org.mockito:mockito-android:${mockitoVersion}"]
+
+}
