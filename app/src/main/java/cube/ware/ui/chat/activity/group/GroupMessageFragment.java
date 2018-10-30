@@ -25,7 +25,6 @@ import cube.service.common.model.CubeError;
 import cube.service.conference.model.Conference;
 import cube.service.group.GroupType;
 import cube.service.whiteboard.model.Whiteboard;
-import cube.utils.SpUtil;
 import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
@@ -33,6 +32,7 @@ import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.ui.chat.message.MessageFragment;
 import cube.ware.ui.conference.eventbus.UpdateTipViewEvent;
 import cube.ware.ui.conference.eventbus.UpdateWhiteBoardTipView;
+import cube.ware.utils.SpUtil;
 
 /**
  * Created by dth

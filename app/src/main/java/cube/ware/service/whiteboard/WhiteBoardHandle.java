@@ -17,16 +17,11 @@ import java.util.List;
 
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
-import cube.service.group.GroupType;
 import cube.service.group.model.Member;
-import cube.service.message.model.CustomMessage;
-import cube.service.message.model.Receiver;
-import cube.service.message.model.Sender;
 import cube.service.user.model.User;
 import cube.service.whiteboard.WhiteboardListener;
 import cube.service.whiteboard.model.Whiteboard;
 import cube.service.whiteboard.model.WhiteboardSlide;
-import cube.utils.JSONUtil;
 import cube.ware.AppConstants;
 import cube.ware.CubeUI;
 import cube.ware.R;
