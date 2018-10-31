@@ -30,7 +30,6 @@ public interface AppConstants {
         String APP_KEY     = "9074ad1395f24fbd83a92ddc80facb1f";         // 引擎key
         String BASE_URL    = "http://125.208.1.67:4000";                    // 服务器接口地址
         String LICENSE_URL = "http://dev.license.shixincube.cn/auth/license/get";   // 服务license地址
-        
     }
 
     //超时时间常量
