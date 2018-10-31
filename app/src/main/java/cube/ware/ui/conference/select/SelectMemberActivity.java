@@ -62,6 +62,7 @@ public class SelectMemberActivity extends BaseActivity<SelectPresenter> implemen
     private String mShareDeskId;
     private String mGroupId;
     private Conference mConference;
+    private Whiteboard mWhiteBoard;
     private WBListener mWBListener;
     private ConferenceCreateListener mCreateListener;
     private ProgressDialog mProgressDialog;
@@ -318,11 +319,11 @@ public class SelectMemberActivity extends BaseActivity<SelectPresenter> implemen
             mProgressDialog.dismiss();
         }
         //会议创建成功，但是sip失败，销毁会议
-        if(conference!=null){
-            CubeEngine.getInstance().getConferenceService().destroy(conference.conferenceId);
+        if(mConference!=null){
+            CubeEngine.getInstance().getConferenceService().destroy(mConference.conferenceId);
         }
         ConferenceHandle.getInstance().removeConferenceStateListener(mCreateListener);
-        showMessage(error.desc);
+//        showMessage(error.desc);
     }
 
     //白板回调
@@ -337,6 +338,7 @@ public class SelectMemberActivity extends BaseActivity<SelectPresenter> implemen
 
     @Override
     public void onWBCreate(Whiteboard whiteboard) {
+        mWhiteBoard=whiteboard;
         mProgressDialog.setMessage("创建成功，进入白板。。。");
     }
 
@@ -345,9 +347,8 @@ public class SelectMemberActivity extends BaseActivity<SelectPresenter> implemen
         if(mProgressDialog!=null){
             mProgressDialog.dismiss();
         }
-        if(whiteboard!=null){
-            //创建失败。destory百白板
-            CubeEngine.getInstance().getWhiteboardService().destroy(whiteboard.whiteboardId);
+        if(mWhiteBoard!=null){//创建失败。destory白板
+            CubeEngine.getInstance().getWhiteboardService().destroy(mWhiteBoard.whiteboardId);
         }
         LogUtil.i("创建失败"+error.code+" "+error.desc);
         WhiteBoardHandle.getInstance().removeWhiteBoardStateListeners(mWBListener);

@@ -82,7 +82,6 @@ public class RVSelectAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (item != null) {
             GlideUtil.loadCircleImage(AppConstants.AVATAR_URL+item.getCubeId(), mContext,mContactsHeadIv, DiskCacheStrategy.NONE,true, R.drawable.default_head_user);
             mContactsNameTv.setText(TextUtils.isEmpty(item.getDisplayName()) ? item.getCubeId() : item.getDisplayName());
-
             final String userCube = item.getCubeId();
 
             if (this.mSelectedCubeMap.containsKey(userCube)) {
