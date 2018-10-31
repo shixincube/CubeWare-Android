@@ -199,11 +199,15 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
             if (ms != null) {
                 if (ms.isVideoEnabled()) {
                     ms.setVideoEnabled(false);
+                    mCallSwitchAudioBtn.setText(R.string.switch_to_video);
+                }else{
+                    ms.setVideoEnabled(true);
+                    mCallSwitchAudioBtn.setText(R.string.switch_to_voice);
                 }
             }
-            //切换到语音通话视图
-            hideVideoCallViewStub();
-            showAudioCallViewStub();
+//            //切换到语音通话视图
+//            hideVideoCallViewStub();
+//            showAudioCallViewStub();
         }
         else if (i == R.id.call_switch_speaker_btn) {
             MediaService ms = CubeEngine.getInstance().getMediaService();

@@ -1,5 +1,6 @@
 package cube.ware.service.remoteDesktop.ui;
 
+import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -110,6 +111,8 @@ public class ShareScreenActivity extends BaseActivity implements ScreenSwitchUti
     private Button call_join_btn;                       //立即加入按钮
     private TextView hint_tv;
     private TextView hint_groupName_tv;                 //群组名称
+    private ProgressDialog mProgressDialog;
+    private ImageView imag_back;
 
     @Override
     protected int getContentViewId() {
@@ -137,6 +140,9 @@ public class ShareScreenActivity extends BaseActivity implements ScreenSwitchUti
         super.initListener();
         mScreenSwitchUtils = ScreenSwitchUtils.init(CubeUI.getInstance().getContext());
         mScreenSwitchUtils.setChangedListener(this);
+        if (null != imag_back){
+            imag_back.setOnClickListener(this);
+        }
         if (mShareCancelBtn != null) {
             //拒接
             mShareCancelBtn.setOnClickListener(this);
@@ -177,6 +183,8 @@ public class ShareScreenActivity extends BaseActivity implements ScreenSwitchUti
         } else if (mStatus == CallStatus.REMOTE_DESKTOP_JOIN) {
             showJoinViewStub(mConference);
         }
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage("加载中。。。");
 
     }
 
@@ -265,7 +273,7 @@ private void getUserNickName(String cubeId) {
             tv_hint.setText(R.string.someone_wanted_to_talk_to_you_share_desktop);
             hint_groupName_tv = ((TextView) inflateView.findViewById(R.id.call_hint_group_name_tv));
             //群组名称
-            hint_groupName_tv.setText("");
+            hint_groupName_tv.setText(shareDesktop.displayName);
             getUserNickName(shareDesktop.founder);
             // 群组屏幕邀请
             if (null != shareDesktop.bindGroupId || TextUtils.isEmpty(shareDesktop.bindGroupId)) {
@@ -313,6 +321,7 @@ private void getUserNickName(String cubeId) {
             group_member_face = ((RecyclerView)inflateView.findViewById(R.id.group_member_face));
             call_join_btn = ((Button) inflateView.findViewById(R.id.call_group_join_btn));
             hint_tv = ((TextView) inflateView.findViewById(R.id.call_group_hint_tv));
+            imag_back = ((ImageView) inflateView.findViewById(R.id.imag_back));
             hint_tv.setText(getString(R.string.share_Screen_now_num,conference.getMembers().size()));
             List<String> membersList = new ArrayList<>();
             for (int i = 0; i <conference.getMembers().size(); i++) {
@@ -358,7 +367,7 @@ private void getUserNickName(String cubeId) {
 
         // 默认打开免提
         if (this.switch_speaker_btn != null) {
-            this.switch_speaker_btn.setSelected(CubeEngine.getInstance().getMediaService().isSpeakerEnabled());
+            this.switch_speaker_btn.setSelected(true);
         }
         if (this.switch_mute_btn != null) {
             this.switch_mute_btn.setSelected(CubeEngine.getInstance().getMediaService().isAudioEnabled());
@@ -455,8 +464,13 @@ private void getUserNickName(String cubeId) {
     public void onClick(View v) {
         super.onClick(v);
         switch (v.getId()) {
+            case R.id.imag_back:
+                this.finish();
+                break;
             case R.id.call_group_join_btn:
                 CubeEngine.getInstance().getConferenceService().join(mConference.conferenceId);
+                mProgressDialog.setCanceledOnTouchOutside(false);
+                mProgressDialog.show();
                 break;
             case R.id.call_group_hang_up_btn:
                 //挂断
@@ -600,6 +614,7 @@ private void getUserNickName(String cubeId) {
         if (joinedMember.cubeId.equals(SpUtil.getCubeId())) {
             CubeEngine.getInstance().getConferenceService().addControlVideo(mConference.conferenceId, joinedMember.cubeId);
         }
+        mProgressDialog.setMessage(getString(R.string.join_in_conference_share));
 
     }
 
@@ -608,6 +623,7 @@ private void getUserNickName(String cubeId) {
         LogUtil.d("===videoEnabled"+videoEnabled);
         if (videoEnabled) {
             //自己加入收到回调
+            mProgressDialog.dismiss();
             mConference = conference;
             mStatus = CallStatus.REMOTE_DESKTOP_CALLING;
             hideInComingView();

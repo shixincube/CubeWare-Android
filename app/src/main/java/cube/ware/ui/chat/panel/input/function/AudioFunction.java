@@ -102,6 +102,7 @@ public class AudioFunction extends BaseFunction {
                     ToastUtil.showToast(getActivity(),"当前存在白板");
                 }else if (whiteBoardData.whiteboards.size() == 0){
                     //表示当前群没有白板，跳入选择成员页面
+                    LogUtil.d("===没有白板==");
                     Bundle bundle=new Bundle();
                     bundle.putInt("select_type",2);//视频音频会议首次创建
                     bundle.putString("group_id",mChatContainer.mChatId); //mChatId 就是 groupId
@@ -111,10 +112,10 @@ public class AudioFunction extends BaseFunction {
             @Override
             public void onFailed(CubeError error) {
                 LogUtil.d("===查询白板失败了=="+error.code+"==="+error.desc);
-                Bundle bundle=new Bundle();
-                bundle.putInt("select_type",2);//视频音频会议首次创建
-                bundle.putString("group_id",mChatContainer.mChatId); //mChatId 就是 groupId
-                RouterUtil.navigation(AppConstants.Router.SelectMemberActivity,bundle);
+//                Bundle bundle=new Bundle();
+//                bundle.putInt("select_type",2);//视频音频会议首次创建
+//                bundle.putString("group_id",mChatContainer.mChatId); //mChatId 就是 groupId
+//                RouterUtil.navigation(AppConstants.Router.SelectMemberActivity,bundle);
             }
         });
     }

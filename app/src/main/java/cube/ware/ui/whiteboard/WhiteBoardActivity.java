@@ -99,6 +99,7 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     private ImageView mIvPeerHeader;
     private boolean hasJoined;
     private ProgressDialog mProgressDialog;
+    private ImageView imag_back;
 
     @Override
     protected int getContentViewId() {
@@ -275,6 +276,7 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
             mTvJoinTitle = inflateView.findViewById(R.id.call_group_hint_tv);
             mTvCallType = inflateView.findViewById(R.id.call_hint_tv);
             mRvNeedInvite = inflateView.findViewById(R.id.group_member_face);
+            imag_back = ((ImageView) inflateView.findViewById(R.id.imag_back));
         }
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
@@ -349,6 +351,9 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
 
     @Override
     protected void initListener() {
+        if (null != imag_back){
+            imag_back.setOnClickListener(this);
+        }
         //接受邀请
         if(callState==AppConstants.Value.CALLSTATE_INVITE){
             mIvReceiveAnswer.setOnClickListener(this);
@@ -381,6 +386,9 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     @Override
     public void onClick(View view){
         switch (view.getId()){
+            case R.id.imag_back:
+                this.finish();
+                break;
             case R.id.call_group_join_btn: //主动加入
                 CubeEngine.getInstance().getWhiteboardService().join(mWhiteboard.whiteboardId);
                 if(mProgressDialog!=null&&!mProgressDialog.isShowing()){

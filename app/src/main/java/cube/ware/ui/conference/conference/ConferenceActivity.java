@@ -102,6 +102,7 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
     private ProgressDialog mProgressDialog;
     private LinearLayout mLlHeaderLayout;
     private LinearLayout mLlControlLayout;
+    private ImageView imag_back;
 
     @Override
     protected int getContentViewId() {
@@ -335,6 +336,8 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
             mTvJoinTitle = inflateView.findViewById(R.id.call_group_hint_tv);
             mTvCallType = inflateView.findViewById(R.id.call_hint_tv);
             mRvNeedInvite = inflateView.findViewById(R.id.group_member_face);
+            imag_back = inflateView.findViewById(R.id.imag_back);
+
         }
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
@@ -409,6 +412,9 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
         if(callState.equals(CallStatus.GROUP_CALL_JOIN)){
             mBtJoin.setOnClickListener(this);
         }
+        if (null != imag_back){
+            imag_back.setOnClickListener(this);
+        }
 
         //测试媒体通话质量
 //        CubeEngine.getInstance().getMediaService().getMediaQuality(new CubeCallback<CubeMediaQuality>() {
@@ -427,6 +433,9 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
     @Override
     public void onClick(View view) {
         switch (view.getId()){
+            case R.id.imag_back:
+                this.finish();
+                break;
             case R.id.call_group_join_btn://接收
                 CubeEngine.getInstance().getConferenceService().join(mConference.conferenceId);
                 mProgressDialog.setMessage(getString(R.string.joining));
@@ -456,8 +465,10 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
                 MediaService ms = CubeEngine.getInstance().getMediaService();
                 ms.setVideoEnabled(!ms.isVideoEnabled());
                 if(!ms.isVideoEnabled()){
+                    mCallSwitchAudioBtn.setSelected(false);
                     this.mCallSwitchAudioBtn.setText(getString(R.string.switch_to_video));
                 }else {
+                    mCallSwitchAudioBtn.setSelected(true);
                     this.mCallSwitchAudioBtn.setText(getString(R.string.switch_to_voice));
                 }
                 break;
@@ -500,6 +511,8 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
                 }
                 break;
         }
+
+
     }
 
     //跳转到邀请页面

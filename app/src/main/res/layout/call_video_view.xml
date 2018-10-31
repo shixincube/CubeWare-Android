@@ -144,7 +144,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:drawablePadding="@dimen/view_space_8"
-                    android:drawableTop="@drawable/selector_call_switch_audio"
+                    android:drawableTop="@drawable/selector_call_switch_cameraone"
                     android:text="@string/switch_to_voice"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_12" />
