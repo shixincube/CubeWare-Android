@@ -56,6 +56,7 @@ public enum CubeCustomMessageType {
     DOWNLOAD_COMPLETE("download"), //接收方文件下载完成
     ConferenceVideoCall("video-call"),// 会议视频通话
     ConferenceVoiceCall("voice-call"),// 会议语音通话
+    ConferenceShareScreen("share-screen"),// 会议屏幕分享
     SHAREDESKCREATE("share-desk-create"),
     SHAREDESKDESTORY("share-desk-destory"),
     WhiteBoardApply("create_wb"),// 群主白板创建

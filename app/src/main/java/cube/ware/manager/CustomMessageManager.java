@@ -10,6 +10,7 @@ import org.json.JSONException;
 import java.util.HashMap;
 import java.util.Map;
 
+import cube.service.group.GroupType;
 import cube.service.message.model.CustomMessage;
 import cube.service.message.model.Receiver;
 import cube.service.message.model.Sender;
@@ -297,16 +298,6 @@ public class CustomMessageManager {
             cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
             text = buildCloseWhiteBoard(message);
         }
-
-        //sharedesk
-        else if (type.equals(CubeCustomMessageType.SHAREDESKCREATE.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
-            text = buildCreateSharedesk(message);
-        }
-        else if (type.equals(CubeCustomMessageType.SHAREDESKDESTORY.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
-            text = buildCloseSharedesk(message);
-        }
 //        else if (type.equals(CubeCustomMessageType.CompletedTates.getType())) {
 //            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
 //            CubeUI.getInstance().getGroupOperationListener().compledeGroupTask(message.getHeader("taskId"), Long.parseLong(message.getHeader("groupId")));
@@ -353,8 +344,12 @@ public class CustomMessageManager {
     private static String buildCloseConference(CustomMessage message) {
         if(message.getHeader("conferenceType").equals(CubeCustomMessageType.ConferenceVideoCall.getType())){
             return "视频通话已结束";
-        }else {
+        }else  if(message.getHeader("conferenceType").equals(CubeCustomMessageType.ConferenceVoiceCall.getType())){
             return "语音通话已结束";
+        }else if(message.getHeader("conferenceType").equals(CubeCustomMessageType.ConferenceShareScreen.getType())){
+            return "屏幕分享已结束";
+        }else {
+            return "";
         }
     }
 
@@ -364,8 +359,12 @@ public class CustomMessageManager {
         String userDN = message.getHeader("userDN");
         if(message.getHeader("conferenceType").equals(CubeCustomMessageType.ConferenceVideoCall.getType())){
             return "【" +  (TextUtils.isEmpty(userDN) ? userCube : userDN) + "】" + "发起了视频通话";
-        }else {
+        }else if(message.getHeader("conferenceType").equals(CubeCustomMessageType.ConferenceVoiceCall.getType())){
             return "【" +  (TextUtils.isEmpty(userDN) ? userCube : userDN) + "】" + "发起了语音通话";
+        }else if(message.getHeader("conferenceType").equals(CubeCustomMessageType.ConferenceShareScreen.getType())){
+            return "【" +  (TextUtils.isEmpty(userDN) ? userCube : userDN) + "】" + "发起了屏幕分享";
+        }else {
+            return "";
         }
     }
 
@@ -379,23 +378,6 @@ public class CustomMessageManager {
         String userDN = message.getHeader("userDN");
 
         return "【" +  (TextUtils.isEmpty(userDN) ? userCube : userDN) + "】" + "发起了白板演示";
-    }
-
-    /**
-     * 共享屏幕消息
-     * @param message
-     * @return
-     */
-    private static String buildCloseSharedesk(CustomMessage message) {
-        return "屏幕分享已结束";
-    }
-
-    private static String buildCreateSharedesk(CustomMessage message) {
-        String userCube = message.getHeader("userCube");
-        String groupCube = message.getHeader("groupCube");
-        String userDN = message.getHeader("userDN");
-
-        return "【" +  (TextUtils.isEmpty(userDN) ? userCube : userDN) + "】" + "发起了屏幕分享";
     }
 
     /**

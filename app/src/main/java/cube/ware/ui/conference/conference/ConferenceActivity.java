@@ -122,6 +122,7 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
         getArgment();
         switchViewStub();
         mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.setMessage("加载中。。。");
     }
 
@@ -538,6 +539,10 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
     protected void onDestroy() {
         super.onDestroy();
         RingtoneUtil.release();
+        if(mConference != null && callState.equals(CallStatus.GROUP_CALL_JOIN)){
+            //没有进入，直接关闭
+            CubeEngine.getInstance().getConferenceService().quit(mConference.conferenceId);
+        }
         ConferenceHandle.getInstance().removeConferenceStateListener(this);
     }
 
@@ -695,12 +700,15 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
     public void onConferenceFailed(Conference conference, CubeError cubeError) {
         LogUtil.i(TAG,"onConferenceFailed "+cubeError.toString());
         if (cubeError.code == CubeErrorCode.ApplyConferenceFailed.code) {
-            ToastUtil.showToast(this, 0, "创建通话失败，请稍后再试！");
+            showMessage(CubeErrorCode.ApplyConferenceFailed.message);
+        }
+        if(mProgressDialog!=null && mProgressDialog.isShowing()){
+            mProgressDialog.dismiss();
         }
         if (conference==null) {
 //            showMessage("登录sip失败");
             if(cubeError.code==CubeErrorCode.JoinConferenceEarly.code){
-                ToastUtil.showToast(this, 0, CubeErrorCode.JoinConferenceEarly.message);
+                showMessage(CubeErrorCode.JoinConferenceEarly.message);
             }
             LogUtil.i(TAG,"onConferenceFailed: "+"登录sip失败");
             finish();
@@ -716,6 +724,7 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
             }
             if (cubeError.code == CubeErrorCode.OverMaxNumber.code) {
                 //加入时或申请加入时会出这个错误 关闭界面
+
                 showMessage(CubeErrorCode.OverMaxNumber.message);
                 if (callState == CallStatus.GROUP_CALL_JOIN) {
                     CubeEngine.getInstance().getConferenceService().quit(conference.conferenceId);
@@ -737,6 +746,7 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
                 finish();
             }
         }
+
     }
 
     @Override
