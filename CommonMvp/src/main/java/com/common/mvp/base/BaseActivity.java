@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import com.common.mvp.rx.RxManager;
 import com.common.utils.manager.ActivityManager;
 import com.common.utils.receiver.NetworkStateReceiver;
 import com.common.utils.utils.ClickUtil;
@@ -33,6 +35,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     private   Handler mHandler;
     private boolean mDestroyed = false;
     protected Context mContext;
+    protected RxManager mRxManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         setContentView(this.getContentViewId());
         this.mContext = this;
         this.mPresenter = this.createPresenter();
+        mRxManager = new RxManager();
         this.initToolBar();
         this.initView();
         this.initListener();
@@ -337,6 +341,10 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         this.mDestroyed = true;
         if (this.mPresenter != null) {
             this.mPresenter.onDestroy();
+        }
+        if (mRxManager != null) {
+            mRxManager.clear();
+            mRxManager = null;
         }
     }
 }

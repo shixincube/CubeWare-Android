@@ -131,4 +131,9 @@ public class CubeEvent {
      * 通知消息同步完成
      */
     public static final String EVENT_MESSAGE_SYNC_END = "event_message_sync_end";
+
+    /**
+     * 更换头像缓存签名，刷新列表头像
+     */
+    public static final String EVENT_REFRESH_CUBE_AVATAR = "event_refresh_cube_avatar";
 }
