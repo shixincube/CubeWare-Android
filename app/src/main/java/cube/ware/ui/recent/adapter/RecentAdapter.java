@@ -4,7 +4,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.common.utils.utils.FriendlyDateUtil;
@@ -38,8 +37,7 @@ public class RecentAdapter extends BaseQuickAdapter<CubeRecentViewModel,BaseView
         CubeRecentSession cubeRecentSession = item.cubeRecentSession;
         ImageView headIv = helper.getView(R.id.head_iv);
 //        GlideUtil.loadCircleImage(item.userFace,mContext,headIv,R.drawable.default_head_user);
-//        GlideUtil.loadCircleImage(item.userFace,mContext,headIv, DiskCacheStrategy.NONE,true,R.drawable.default_head_user);
-        GlideUtil.loadCircleImage(AppConstants.AVATAR_URL+item.cubeRecentSession.getSessionId(),mContext,headIv, DiskCacheStrategy.NONE,true,R.drawable.default_head_user);
+        GlideUtil.loadSignatureCircleImage(AppConstants.AVATAR_URL+item.cubeRecentSession.getSessionId(),mContext,headIv, R.drawable.default_head_user);
 //        helper.setText(R.id.message_name_tv, TextUtils.isEmpty(item.userName) ? cubeRecentSession.getSessionId() : item.userName)
         helper.setText(R.id.message_name_tv, cubeRecentSession.getSessionName())
                 .setVisible(R.id.message_badge_tv, cubeRecentSession.getUnRead() > 0)

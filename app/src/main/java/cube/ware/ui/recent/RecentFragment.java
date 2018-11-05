@@ -429,5 +429,10 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
 
     }
 
+    @Override
+    public void onRefreshListAvatar() {
+        mRecentAdapter.notifyDataSetChanged();
+    }
+
 
 }

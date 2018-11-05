@@ -28,6 +28,8 @@ public interface RecentContract {
 
         void onRemoveSession(String sessionId);
 
+        void onRefreshListAvatar();
+
     }
 
 

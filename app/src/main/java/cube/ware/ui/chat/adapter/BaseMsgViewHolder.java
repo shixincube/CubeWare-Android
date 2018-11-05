@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.common.utils.utils.DateUtil;
 import com.common.utils.utils.DeviceUtil;
 import com.common.utils.utils.ScreenUtil;
@@ -346,7 +345,7 @@ public abstract class BaseMsgViewHolder implements MessagePopupManager.OnPopMenu
                     nameContainer.setVisibility(View.GONE);
                     mUserNickName.setVisibility(View.GONE);
                 }
-                GlideUtil.loadCircleImage(mData.userFace, mContext, show, DiskCacheStrategy.NONE,true, R.drawable.default_head_group);
+                GlideUtil.loadSignatureCircleImage(mData.userFace,mContext, show, R.drawable.default_head_group);
             }
             else {
                 nameContainer.setVisibility(View.GONE);
@@ -354,7 +353,7 @@ public abstract class BaseMsgViewHolder implements MessagePopupManager.OnPopMenu
                     Glide.with(mContext).load(R.drawable.ic_chat_secret_face_1).into(show);
                 }
                 else {
-                    GlideUtil.loadCircleImage(mData.userFace, mContext, show,  DiskCacheStrategy.NONE,true, R.drawable.default_head_user);
+                    GlideUtil.loadSignatureCircleImage(mData.userFace, mContext, show, R.drawable.default_head_user);
                 }
             }
         }

@@ -96,6 +96,13 @@ public class RecentPresenter extends RecentContract.Presenter{
             }
         });
 
+        mRxManager.on(CubeEvent.EVENT_REFRESH_CUBE_AVATAR, new Action1<Object>() {
+            @Override
+            public void call(Object o) {
+                mView.onRefreshListAvatar();
+            }
+        });
+
     }
 
     public void queryUnReadAll() {
