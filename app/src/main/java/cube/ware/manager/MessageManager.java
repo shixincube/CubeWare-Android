@@ -694,6 +694,9 @@ public class MessageManager {
                     CubeMessage message = cubeMessages.get(0);
                     //发送消息回执
                     if (!message.isReceipt && message.isReceivedMessage()) {
+                        //直接更新本地数据库消息回执状态，不等服务器的回执消息反馈
+                        ReceiptManager.getInstance().updateIsReceipted(chatId,message.getTimestamp(),false);
+                        //发送回执消息
                         ReceiptMessage receiptMessage = new ReceiptMessage(message.isGroupMessage() ? message.getGroupId() : message.getSenderId(), SpUtil.getCubeId());
                         receiptMessage.setTraceless(true);
                         CubeEngine.getInstance().getMessageService().sendMessage(receiptMessage);
