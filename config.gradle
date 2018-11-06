@@ -29,8 +29,8 @@ ext {
              applicationId    : "cube.ware",
              minSdkVersion    : 16,
              targetSdkVersion : 27,
-             versionCode      : 5,
-             versionName      : "1.0.5"]
+             versionCode      : 6,
+             versionName      : "1.0.6"]
 
   // 开发依赖
   developmentDependencies = [// Android support library
