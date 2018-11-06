@@ -265,6 +265,7 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
         //默认开启
         mCallSswitchSpeakerBtn.setSelected(true);
         mCallSwitchMuteBtn.setSelected(true);
+        mCallSwitchAudioBtn.setSelected(false);
         this.mMyVideoView = CubeEngine.getInstance().getConferenceService().getLocalView();
         this.mPeerVideoView = CubeEngine.getInstance().getConferenceService().getRemoteView();
         //视频
@@ -465,13 +466,14 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
             case R.id.call_switch_audio_btn: //切换音频视频
                 MediaService ms = CubeEngine.getInstance().getMediaService();
                 ms.setVideoEnabled(!ms.isVideoEnabled());
-                if(!ms.isVideoEnabled()){
+                if(mCallSwitchAudioBtn.isSelected()){
+                    //关闭
                     mCallSwitchAudioBtn.setSelected(false);
-                    this.mCallSwitchAudioBtn.setText(getString(R.string.switch_to_video));
-                }else {
-                    mCallSwitchAudioBtn.setSelected(true);
                     this.mCallSwitchAudioBtn.setText(getString(R.string.switch_to_voice));
-                }
+                }else {  //开启
+                    mCallSwitchAudioBtn.setSelected(true);
+                    this.mCallSwitchAudioBtn.setText(getString(R.string.switch_to_video));
+                    }
                 break;
             case R.id.call_switch_camera_btn: //切换摄像头
                 MediaService msCamera = CubeEngine.getInstance().getMediaService();

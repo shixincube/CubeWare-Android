@@ -10,15 +10,11 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.common.sdk.RouterUtil;
-import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.glide.GlideUtil;
-import com.common.utils.utils.log.LogUtil;
-
 import java.util.List;
 import cube.service.user.model.User;
 import cube.ware.AppConstants;
 import cube.ware.R;
-import cube.ware.ui.whiteboard.adapter.RVJoinedMemAdapter;
 
 /**
  * author: kun .
@@ -41,6 +37,7 @@ public class RVCreateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         View inflate = LayoutInflater.from(mContext).inflate(R.layout.show_conference_members_layout, null);
         return new MyHolder(inflate);
     }
+
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
