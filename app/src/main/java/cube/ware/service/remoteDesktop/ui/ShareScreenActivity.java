@@ -645,7 +645,7 @@ private void getUserNickName(String cubeId) {
     @Override
     public void onConferenceUpdated(Conference conference) {
         //刷新适配器
-        updateAdapter(conference);
+//        updateAdapter(conference);
 
     }
 
