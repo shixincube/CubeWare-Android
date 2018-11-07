@@ -694,6 +694,9 @@ public class MessageManager {
                     CubeMessage message = cubeMessages.get(0);
                     //发送消息回执
                     if (!message.isReceipt && message.isReceivedMessage()) {
+                        //直接更新本地数据库消息回执状态，不等服务器的回执消息反馈
+                        ReceiptManager.getInstance().updateIsReceipted(chatId,message.getTimestamp(),false);
+                        //发送回执消息
                         ReceiptMessage receiptMessage = new ReceiptMessage(message.isGroupMessage() ? message.getGroupId() : message.getSenderId(), SpUtil.getCubeId());
                         receiptMessage.setTraceless(true);
                         CubeEngine.getInstance().getMessageService().sendMessage(receiptMessage);
@@ -861,14 +864,13 @@ public class MessageManager {
                     @Override
                     public Boolean call(CubeMessage cubeMessage) {
                         LogUtil.i("updateMessageInLocal==>sn filter");
-                        //                RxBus.getInstance().post(CubeEvent.EVENT_ADD_OR_UPDATE_CHAT_MESSAGE, cubeMessage);
-                        if (!mContainer.isEmpty()) {
-                            for (ChatContainer chatContainer : mContainer.values()) {
-                                chatContainer.mPanelProxy.onMessageInLocalUpdated(cubeMessage);
-                            }
-                        }
-                        // 更新最近会话
+                        // 更新消息列表和最近会话
                         if (cubeMessage != null) {
+                            if (!mContainer.isEmpty()) {
+                                for (ChatContainer chatContainer : mContainer.values()) {
+                                    chatContainer.mPanelProxy.onMessageInLocalUpdated(cubeMessage);
+                                }
+                            }
                             RecentSessionManager.getInstance().addOrUpdateRecentSession(messageEntity);
                         }
                         return cubeMessage != null;
@@ -888,13 +890,14 @@ public class MessageManager {
                 .filter(new Func1<CubeMessage, Boolean>() {
                     @Override
                     public Boolean call(CubeMessage cubeMessage) {
-                        if (!mContainer.isEmpty()) {
-                            for (ChatContainer chatContainer : mContainer.values()) {
-                                chatContainer.mPanelProxy.onMessagePersisted(cubeMessage);
-                            }
-                        }
-                        // 更新最近会话
+
+                        // 更新消息列表和最近会话
                         if (cubeMessage != null) {
+                            if (!mContainer.isEmpty()) {
+                                for (ChatContainer chatContainer : mContainer.values()) {
+                                    chatContainer.mPanelProxy.onMessagePersisted(cubeMessage);
+                                }
+                            }
                             RecentSessionManager.getInstance().addOrUpdateRecentSession(messageEntity);
                         }
                         return cubeMessage != null;
@@ -971,6 +974,8 @@ public class MessageManager {
                 cubeMessage.setContent(CubeUI.getInstance().getContext().getString(R.string.unknown_message_type));
             }
             if (messageEntity instanceof ReceiptMessage) {
+                LogUtil.i("引擎回执消息转化处理====>");
+                return null;
             } else if (messageEntity instanceof TextMessage) {         // 文本消息
                 TextMessage textMessage = (TextMessage) messageEntity;
                 String textContent = textMessage.getContent();
@@ -1100,8 +1105,6 @@ public class MessageManager {
                     //回复消息在最近列表中显示reply消息的内容 如果reply消息仍然 intanceof ReplyMessage则说明出错了 概率很低 简单容错处理一下
                     cubeMessage.setContent("回复消息");
                 }
-            } else if (messageEntity instanceof ReceiptMessage) {
-                LogUtil.i("引擎回执消息转化处理====>");
             } else {
                 cubeMessage.setMessageType(CubeMessageType.Unknown.getType());
                 cubeMessage.setContent(CubeUI.getInstance().getContext().getString(R.string.unknown_message_type));

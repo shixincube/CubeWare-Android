@@ -52,11 +52,22 @@ public class ReceiptManager {
         //收到回执后缓存一下
         System.arraycopy(mReceiptedMessages, 1, mReceiptedMessages, 0, mReceiptedMessages.length - 1);
         mReceiptedMessages[mReceiptedMessages.length - 1] = messageEntity;
-        CubeMessageRepository.getInstance().updateIsReceipted(messageEntity, sessionId, isGroup, messageEntity.getTimestamp(), false).subscribe(new Action1<List<CubeMessage>>() {
+        updateIsReceipted(sessionId,messageEntity.getTimestamp(),false);
+
+    }
+
+    /**
+     * 更新本地数据库消息回执
+     * @param chatId
+     * @param time
+     * @param isReceipted
+     */
+    public void updateIsReceipted(String chatId, long time, boolean isReceipted) {
+        CubeMessageRepository.getInstance().updateIsReceipted(chatId, time, isReceipted).subscribe(new Action1<List<CubeMessage>>() {
             @Override
             public void call(List<CubeMessage> cubeMessages) {
                 // 消息变化通知最近消息界面
-                RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_RECENT_SESSION_SINGLE, sessionId);
+                RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_RECENT_SESSION_SINGLE, chatId);
             }
         });
     }

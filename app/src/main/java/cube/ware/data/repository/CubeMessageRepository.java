@@ -58,16 +58,14 @@ public class CubeMessageRepository {
     }
 
     /**
-     * 根据最后一条消息SN更新多条消息已回执状态
+     * 根据最后一条回执消息时间戳更新多条消息已回执状态
      *
-     * @param messageEntity
      * @param chatId
-     * @param isGroup
      * @param time
      * @param isReceipted
      * @return
      */
-    public Observable<List<CubeMessage>> updateIsReceipted(MessageEntity messageEntity, String chatId, boolean isGroup, long time, boolean isReceipted) {
+    public Observable<List<CubeMessage>> updateIsReceipted(String chatId, long time, boolean isReceipted) {
         return Observable.create(new OnSubscribeRoom<List<CubeMessage>>() {
             @Override
             protected List<CubeMessage> get() {
