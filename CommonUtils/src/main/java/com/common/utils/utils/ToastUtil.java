@@ -1,6 +1,7 @@
 package com.common.utils.utils;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -35,6 +36,7 @@ public class ToastUtil extends Toast {
 
         // 由layout文件创建一个View对象
         LinearLayout layout = new LinearLayout(context);
+        layout.setBackgroundResource(android.R.drawable.toast_frame);
 
         // 实例化ImageView和TextView对象
         ImageView imageView = new ImageView(context);
@@ -52,6 +54,7 @@ public class ToastUtil extends Toast {
         }
 
         textView.setText(text);
+        textView.setTextColor(Color.WHITE);
 
         result.setView(layout);
         result.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
