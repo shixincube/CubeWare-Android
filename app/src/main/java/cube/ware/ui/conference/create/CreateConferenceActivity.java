@@ -337,7 +337,6 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
     //会议创建的监听
     @Override
     public void onConferenceCreated(Conference conference, User from) {
-//        CubeEngine.getInstance().getConferenceService().join(conference.conferenceId);
         EventBus.getDefault().post(new InviteConferenceEvent(conference));
         if(mProgressDialog!=null){
             mProgressDialog.dismiss();
@@ -367,17 +366,14 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
 
     @Override
     public void onConferenceJoined(Conference conference, User joinedMember) {
-//        if(mPresenter.isCurrentGroup(mGroupId,conference.groupId)){
            mProgressDialog.setMessage("加入成功,进入会议中。。。");
             //必须调用会议控制
             mConference=conference;
             CubeEngine.getInstance().getConferenceService().addControlAudio(conference.conferenceId,mUser.cubeId);
-//        }
     }
 
     @Override
     public void onVideoEnabled(Conference conference, boolean videoEnabled) {
-//        if(mPresenter.isCurrentGroup(mGroupId,conference.groupId)){
             mConference=conference;
             mProgressDialog.dismiss();
             //跳转到会议界面 c4410400
@@ -387,7 +383,6 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
             bundle.putSerializable(AppConstants.Value.CONFERENCE_CONFERENCE,mConference);
             RouterUtil.navigation(this,bundle,AppConstants.Router.ConferenceActivity);
             finish();
-//        }
     }
 
     @Override
@@ -416,18 +411,4 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
                         InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-
-    public InputFilter getFilter(){
-        InputFilter filter = new InputFilter() {
-            @Override
-            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-                if (source.equals(" ") || source.toString().contentEquals("\n")) {
-                    return "";
-                } else {
-                    return null;
-                }
-            }
-        };
-        return filter;
-    }
 }
