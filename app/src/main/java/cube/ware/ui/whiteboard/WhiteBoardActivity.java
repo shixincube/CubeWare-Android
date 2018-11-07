@@ -49,7 +49,6 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     private ViewStub mVSWhiteReceiveallLayout;  // 受邀
     private ViewStub mVSWhiteBoardLayout;       // 演示
     private ViewStub mVSWhiteBoardJoinLayout;   // 直接加入
-
     private ImageView mIvCallAvator;
     private TextView mTvCallName;
     private ImageView mImageViewvReceiveAvator;
@@ -128,14 +127,13 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
         groupId=bundle.getString(AppConstants.Value.GROUP_ID);
         mChatType= (CubeSessionType) bundle.getSerializable(AppConstants.Value.CHAT_TYPE);
         inviteList=bundle.getStringArrayList(AppConstants.Value.INVITE_LIST);
+        mUser=CubeEngine.getInstance().getSession().getUser();
         LogUtil.d("===getArgment--中获取到的邀请者id== "+inviteId);
         LogUtil.d("===getArgment--中获取到的groupId== "+groupId);
 
         if(callState==AppConstants.Value.CALLSTATE_CREATE){
             initAction();
-//            RingtoneUtil.play(R.raw.outgoing,this);
         }
-        mUser=CubeEngine.getInstance().getSession().getUser();
     }
 
     private void initAction() {
@@ -276,11 +274,12 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
             mTvJoinTitle = inflateView.findViewById(R.id.call_group_hint_tv);
             mTvCallType = inflateView.findViewById(R.id.call_hint_tv);
             mRvNeedInvite = inflateView.findViewById(R.id.group_member_face);
-            imag_back = ((ImageView) inflateView.findViewById(R.id.imag_back));
+            imag_back =  inflateView.findViewById(R.id.imag_back);
         }
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         mRvNeedInvite.setLayoutManager(gridLayoutManager);
+        //获取所有人员
         List<Member> memberList=new ArrayList<>();
         if (mWhiteboard != null && mWhiteboard.members != null) {
             //设置数据
@@ -290,8 +289,8 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
             //设置数据
             memberList.addAll(mWhiteboard.invites);
         }
+        //添加所有的人员，加入了的和邀请的所有人员
         initInviteRV(memberList);
-
         mTvJoinTitle.setText(getString(R.string.start_whiteboard,mWhiteboard.members.size()+""));
         mPresenter.getUserData(mWhiteboard.founder);
         this.initListener();
@@ -308,6 +307,7 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
         }
     }
 
+    //收到邀请的列表
     private void initInviteRV(List<Member> cubeIdList) {
         if(cubeIdList!=null) {
             //直接刷新头像列表
