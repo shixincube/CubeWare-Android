@@ -24,10 +24,8 @@ public interface AppConstants {
      * 测试服环境
      */
     public interface Debug {
-//        String APP_ID      = "09eab471bc1d4a1b855f6b8f87b01caf800";         // 引擎id
-//        String APP_KEY     = "cc9793d0dd534cfc8c8f74e2f2ab1baf800";         // 引擎key
-        String APP_ID      = "6365f0cafd8a47b984bdc08a64327881";         // 引擎id
-        String APP_KEY     = "9074ad1395f24fbd83a92ddc80facb1f";         // 引擎key
+        String APP_ID      = "";         // 引擎id
+        String APP_KEY     = "";         // 引擎key
         String BASE_URL    = "https://dev.user.shixincube.cn";                    // 服务器接口地址
         String LICENSE_URL = "http://dev.license.shixincube.cn/auth/license/get";   // 服务license地址
     }
