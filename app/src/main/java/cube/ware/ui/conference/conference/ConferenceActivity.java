@@ -743,7 +743,6 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
                 finish();
             }
         }
-
     }
 
     @Override

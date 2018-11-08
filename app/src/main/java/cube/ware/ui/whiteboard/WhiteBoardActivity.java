@@ -664,12 +664,7 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     @Override
     public void onBackPressed() {
         if(mWhiteboard!=null){
-            if(mWhiteboard.members.size()==1){
-                CubeEngine.getInstance().getWhiteboardService().destroy(mWhiteboard.whiteboardId);
-            }else {
-                CubeEngine.getInstance().getWhiteboardService().quit(mWhiteboard.whiteboardId);
-            }
-
+            CubeEngine.getInstance().getWhiteboardService().quit(mWhiteboard.whiteboardId);
         }
         super.onBackPressed();
     }
