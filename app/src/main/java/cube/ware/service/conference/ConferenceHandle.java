@@ -35,6 +35,7 @@ import cube.ware.service.remoteDesktop.ui.ShareScreenActivity;
 import cube.ware.service.whiteboard.manager.WBCallManager;
 import cube.ware.ui.conference.eventbus.InviteConferenceEvent;
 import cube.ware.ui.conference.eventbus.UpdateTipViewEvent;
+import cube.ware.utils.SpUtil;
 
 /**
  * 引擎会议服务处理
@@ -142,7 +143,7 @@ public class ConferenceHandle implements ConferenceListener {
     public void onConferenceInvited(Conference conference, User from, List<User> invites) {
         LogUtil.i("ConferenceInvited", from.toString() + invites.toString());
         //是自己收到了邀请
-        if (!from.cubeId.equals(CubeEngine.getInstance().getSession().getUser().cubeId)) {
+        if (!from.cubeId.equals(SpUtil.getCubeId())||from.cubeId.equals("10000")) { //from.cubeId.equals("10000")表示自己创建的会议，收到服务器发起的邀请
             //不在会议中,不在单聊中
             if(!WBCallManager.getInstance().isCalling() && !OneOnOneCallManager.getInstance().isCalling() && !ConferenceCallManager.getInstance().isCalling()){ //没有正在会议
                 if (conference.type.equals(GroupType.SHARE_SCREEN)) {

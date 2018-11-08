@@ -98,16 +98,21 @@ public class WhiteBoardHandle implements WhiteboardListener {
      */
     @Override
     public void onWhiteboardCreated(Whiteboard whiteboard, User user) {
+        if (WBCallManager.getInstance().isCalling()) {
+            return;
+        }
         List<String> mGroupIds=new ArrayList<>();
         if(whiteboard.maxNumber!=2 && null!= whiteboard.bindGroupId){
             LogUtil.d("===onWhiteboardCreated=="+whiteboard.getMembers().size());
             mGroupIds.add(whiteboard.bindGroupId);
             EventBus.getDefault().post(new UpdateWhiteBoardTipView(mGroupIds));
         }
+        //没有白板
         if(!WBCallManager.getInstance().isCalling()){
             for (int i = 0; i < mWhiteBoardStateListeners.size(); i++) {
                 mWhiteBoardStateListeners.get(i).onWhiteboardCreated(whiteboard,user);
             }
+            WBCallManager.getInstance().setCalling(true);
         }
     }
 

@@ -43,6 +43,9 @@ public class WhiteboardFunction extends BaseFunction implements CreateCallback {
 
     @Override
     public void onClick() {
+        if(!ClickUtil.isFastClick(1000)){
+            return;
+        }
         if(getChatType().equals(CubeSessionType.P2P)){//单聊
             if (WBCallManager.getInstance().isCalling()){
                 ToastUtil.showToast(getActivity(),R.string.calling_please_try_again_later);
