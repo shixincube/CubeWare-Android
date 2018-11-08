@@ -85,7 +85,8 @@ public class SelectMemberActivity extends BaseActivity<SelectPresenter> implemen
         }
         mProgressDialog.show();
         //数据源,来自群
-        if(selectType==2 || selectType==3 || selectType==4 || selectType==5 || selectType==6 || selectType==7 ||selectType==8){
+        if(selectType==2 || selectType==3 || selectType==4 ||
+                selectType==5 || selectType==6 || selectType==7 ||selectType==8){
             if(TextUtils.isEmpty(mGroupId)){
                 mPresenter.getMemberList();
             }else {
@@ -160,10 +161,6 @@ public class SelectMemberActivity extends BaseActivity<SelectPresenter> implemen
                 finish();
                 break;
             case R.id.title_complete:
-//                if(mSelectedCubeMap.size()+mNotChecked.size()>=9){
-//                    showMessage("你已经超过九个人的上线了");
-//                    return;
-//                }
                 if(mSelectedCubeMap.size()<1){
                     showMessage(getString(R.string.please_choose_member));
                 }else {
@@ -187,7 +184,6 @@ public class SelectMemberActivity extends BaseActivity<SelectPresenter> implemen
                         mProgressDialog.show();
                         return;
                     }
-
                     if(selectType==8){ //视频绑定群组首次邀请人员
                         mCreateListener = new ConferenceCreateListener(this,mGroupId,iniviteList);
                         mCreateListener.setCreateCallback(this);
@@ -198,7 +194,6 @@ public class SelectMemberActivity extends BaseActivity<SelectPresenter> implemen
                         mProgressDialog.show();
                         return;
                     }
-
                     if(selectType==3){ //白板首次邀请人员
                         mWBListener = new WBListener(this, CubeSessionType.Group, iniviteList,mGroupId);
                         mWBListener.setCreateCallback(this);
@@ -208,7 +203,6 @@ public class SelectMemberActivity extends BaseActivity<SelectPresenter> implemen
                         mProgressDialog.show();
                         return;
                     }
-
                     if(selectType==9){
                         //创建不依赖群的音频
                         mCreateListener = new ConferenceCreateListener(this,mGroupId,iniviteList);
@@ -219,7 +213,6 @@ public class SelectMemberActivity extends BaseActivity<SelectPresenter> implemen
                         mProgressDialog.show();
                         return;
                     }
-
                     if(selectType==10){
                         //创建不依赖群的白板
                         mWBListener = new WBListener(this, CubeSessionType.Group, iniviteList,"");
@@ -230,17 +223,14 @@ public class SelectMemberActivity extends BaseActivity<SelectPresenter> implemen
                         mProgressDialog.show();
                         return;
                     }
-
                     if(selectType==4 || selectType==5){ //音频视频二次邀请人员,方法是一样的
                         //会议邀请
                         CubeEngine.getInstance().getConferenceService().inviteMembers(mConferenceId,iniviteList);
                     }
-
                     if(selectType==6){ //白板邀请人员
                         //白板邀请人员
                         CubeEngine.getInstance().getWhiteboardService().inviteMembers(mWhiteBoardId,iniviteList);
                     }
-
                     if(selectType==7){
                         //分享邀请
                         CubeEngine.getInstance().getConferenceService().inviteMembers(mConferenceId,iniviteList);

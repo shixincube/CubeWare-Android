@@ -108,9 +108,6 @@ public class MessageHandle implements MessageListener {
     public void onMessageUploading(MessageEntity message, long processed, long total) {
         LogUtil.i("文件上传中的消息: sn:" + message.getSerialNumber() + "当前大小:" + processed + " 总大小:" + total);
 
-        //更新文件上传进度
-//        MessageManager.getInstance().updateMessageInLocal(message).subscribeOn(Schedulers.io()).compose(RxSchedulers.<CubeMessage>io_main()).subscribe();
-
         // 监听上传中回调
         Map<String, FileMessageUploadListener> uploadMap = uploadListenerMap.get(message.getSerialNumber());
         if (EmptyUtil.isNotEmpty(uploadMap)) {
@@ -154,9 +151,6 @@ public class MessageHandle implements MessageListener {
     public void onMessageDownloading(MessageEntity message, long processed, long total) {
 
         LogUtil.i("文件下载中的消息: sn:" + message.getSerialNumber() + "当前大小:" + processed + " 总大小:" + total);
-
-        //更新文件下载进度
-//        MessageManager.getInstance().updateMessageInLocal(message).subscribeOn(Schedulers.io()).compose(RxSchedulers.<CubeMessage>io_main()).subscribe();
 
         // 监听下载中回调
         Map<String, FileMessageDownloadListener> downloadMap = downloadListenerMap.get(message.getSerialNumber());
@@ -225,7 +219,8 @@ public class MessageHandle implements MessageListener {
     public void onMessageReceived(MessageEntity message) {
         LogUtil.i("接收的消息: " + message.toString());
         if (message instanceof ReceiptMessage){
-            ReceiptManager.getInstance().onReceiptedAll(message, message.getFromDevice());
+            //收到的回执消息，表示会话对端已回执（已读），无需求暂时不处理。
+//            ReceiptManager.getInstance().onReceiptedAll(message, message.getFromDevice());
             return;
         }
         MessageHandler.getInstance().read(message);

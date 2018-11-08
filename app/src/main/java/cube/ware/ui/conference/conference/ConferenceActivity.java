@@ -273,7 +273,6 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
             this.mMyVideoLayout.setVisibility(View.GONE);
         }
         if (this.mPeerVideoLayout.getChildAt(0) == null && this.mPeerVideoView != null) {
-            int displayWidth = ScreenUtil.getDisplayWidth();
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
                     , ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.gravity = Gravity.CENTER;
@@ -322,7 +321,6 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
                 mRvJoinedMemAdapter.addListDate(MemberToCubeIds(members));
             }
         }
-
         //去重复
         List<Member> memberList = mPresenter.deleteRepeat(members, invites);
         //待加入
@@ -504,7 +502,7 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
                     this.mCallSwitchMuteBtn.setSelected(true);
                 }
                 break;
-            case R.id.peer_video_layout:
+            case R.id.peer_video_layout: //视频会议点击隐藏界面
                 if(mLlHeaderLayout.getVisibility()==View.GONE){
                     mLlHeaderLayout.setVisibility(View.VISIBLE);
                     mLlControlLayout.setVisibility(View.VISIBLE);
@@ -514,8 +512,6 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
                 }
                 break;
         }
-
-
     }
 
     //跳转到邀请页面
@@ -726,7 +722,6 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
             }
             if (cubeError.code == CubeErrorCode.OverMaxNumber.code) {
                 //加入时或申请加入时会出这个错误 关闭界面
-
                 showMessage(CubeErrorCode.OverMaxNumber.message);
                 if (callState == CallStatus.GROUP_CALL_JOIN) {
                     CubeEngine.getInstance().getConferenceService().quit(conference.conferenceId);
@@ -748,7 +743,6 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
                 finish();
             }
         }
-
     }
 
     @Override
