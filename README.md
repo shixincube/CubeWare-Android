@@ -34,6 +34,20 @@ CubeWare展示的功能主要包括：用户登录，即时消息（文字，语
 	魔方引擎音视频框架 cube-rtc-*.jar libcube_rtc.so 音视频通信模块，集成（可选）。
 	魔方引擎信令框架 cube-sip-*.jar 群组音视频聊天模块，集成（可选）
 
+### 依赖的使用方法
+
+	implementation 'com.shixincube:engine:x.x.x'
+    implementation 'com.shixincube:genie:x.x.x'
+    implementation 'com.shixincube:rtc:x.x.x'
+    implementation 'com.shixincube:sip:x.x.x'
+	
+	//最外层的build.gradle中添加
+	repositories {
+	  jcenter(){
+	     url 'https://dl.bintray.com/shixinyun/engine/'
+	    }
+	}
+
 ### 模块简述
 
 CubeWare中将魔方引擎的功能分为如下几大模块：
