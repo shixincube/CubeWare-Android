@@ -1,5 +1,7 @@
 package cube.ware.service.user;
 
+import android.text.TextUtils;
+
 import com.common.mvp.rx.RxBus;
 import com.common.utils.utils.log.LogUtil;
 
@@ -143,7 +145,14 @@ public class UserHandle implements UserListener {
     @Override
     public void onDeviceOnline(DeviceInfo loginDevice, List<DeviceInfo> onlineDevices, User from) {
         DeviceInfo deviceInfo = CubeEngine.getInstance().getDeviceInfo();
+        String platform = loginDevice.getPlatform();
         if (deviceInfo.equals(loginDevice)) {
+            return;
+        }
+
+        LogUtil.i("platform -------> : " +platform);
+        //不是移动端允许多终端在线
+        if (!TextUtils.equals(loginDevice.getPlatform(), "Android") && !TextUtils.equals(platform, "ios")) {
             return;
         }
         for (UserStateListener listener : userStateListeners) {

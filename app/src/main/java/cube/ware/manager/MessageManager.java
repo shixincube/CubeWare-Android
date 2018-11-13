@@ -1122,7 +1122,7 @@ public class MessageManager {
             cubeMessage.setRead(messageEntity.getDirection() == MessageDirection.Sent || cubeMessage.getMessageType().equals(CubeMessageType.CustomTips.getType()) || messageEntity.isReceipted());
             cubeMessage.setReceipt(messageEntity.isReceipted());
             cubeMessage.setAnonymous(messageEntity.isAnonymous());
-            boolean alreadyReceiptedMessage = ReceiptManager.getInstance().isAlreadyReceiptedMessage(cubeMessage.getMessageSN());
+            boolean alreadyReceiptedMessage = ReceiptManager.getInstance().isAlreadyReceiptedMessage(cubeMessage.getTimestamp());
             if (alreadyReceiptedMessage) {
                 cubeMessage.setRead(true);
                 cubeMessage.setReceipt(true);

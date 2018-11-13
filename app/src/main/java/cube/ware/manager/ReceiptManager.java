@@ -75,13 +75,13 @@ public class ReceiptManager {
     /**
      * 是否是已经回执过的消息
      */
-    public boolean isAlreadyReceiptedMessage(long sn) {
+    public boolean isAlreadyReceiptedMessage(long timestamp) {
         for (int i = mReceiptedMessages.length - 1; i >= 0; i--) { //反向遍历命中概率更大
             MessageEntity receiptedMessage = mReceiptedMessages[i];
             if (receiptedMessage == null) {
                 continue;
             }
-            if (sn == receiptedMessage.getSerialNumber()) {
+            if (timestamp <= receiptedMessage.getTimestamp()) {
                 return true;
             }
         }
