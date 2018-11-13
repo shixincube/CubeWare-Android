@@ -38,12 +38,15 @@ import cube.service.user.model.User;
 import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
+import cube.ware.data.repository.CubeUserRepository;
+import cube.ware.data.room.model.CubeUser;
 import cube.ware.service.call.CallHandle;
 import cube.ware.service.call.adapter.P2PCallContract;
 import cube.ware.service.call.adapter.P2PCallPresenter;
 import cube.ware.service.call.adapter.P2PmemberAdapter;
 import cube.ware.service.listener.CallStateListener;
 import cube.ware.utils.SpUtil;
+import rx.functions.Action1;
 
 
 /**
@@ -291,6 +294,19 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
         CubeEngine.getInstance().getCallService().terminateCall(getPeerCubeId());
         release();
     }
+
+    private void getUserNickName(String cubeId) {
+        CubeUserRepository.getInstance().queryUser(cubeId).subscribe(new Action1<CubeUser>() {
+            @Override
+            public void call(CubeUser cubeUser) {
+                if (!cubeUser.getDisplayName().equals("") && null != cubeUser.getDisplayName()) {
+                    mPeerNameTv.setText(cubeUser.getDisplayName());
+                } else {
+                    mPeerNameTv.setText(cubeId);
+                }
+            }
+        });
+    }
     /**
      * 显示语音呼叫视图
      */
@@ -312,7 +328,7 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
         if (this.mCallSwitchMuteBtn != null) {
             this.mCallSwitchMuteBtn.setSelected(CubeEngine.getInstance().getMediaService().isAudioEnabled());
         }
-        this.mPeerNameTv.setText(this.mCallId);
+        getUserNickName(this.mCallId);
         GlideUtil.loadCircleImage(AppConstants.AVATAR_URL+ this.mCallId,this,mPeerHeadIv, DiskCacheStrategy.NONE,true,R.drawable.default_head_user);
         this.initListener();
     }
@@ -338,12 +354,13 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
             this.mCallHintTv = (TextView) inflateView.findViewById(R.id.call_hint_tv);
             this.mCallRefuseBtn = (Button) inflateView.findViewById(R.id.call_refuse_btn);
             this.mCallAnswerBtn = (Button) inflateView.findViewById(R.id.call_answer_btn);
-            this.mCallHintTv.setText(R.string.someone_wanted_to_talk_to_you_voice_calls);
+            this.mCallHintTv.setText(R.string.someone_wanted_to_talk_to_you_voice_call);
         }
         else {
             this.mCallAudioIncomingVs.setVisibility(View.VISIBLE);
         }
         this.mPeerNameTv.setText(this.mCallId);
+        getUserNickName(this.mCallId);
         GlideUtil.loadCircleImage(AppConstants.AVATAR_URL+this.mCallId,this,mPeerHeadIv, DiskCacheStrategy.NONE,true,R.drawable.default_head_user);
         this.initListener();
     }

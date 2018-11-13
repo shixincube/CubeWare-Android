@@ -66,7 +66,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         if (v.getId() == loginBtn.getId()) {
             if (!TextUtils.isEmpty(mEtAppId.getText().toString()) && !TextUtils.isEmpty(mEtAppKey.getText().toString())) {
                 showToast("登录中。。。");
-                mPresenter.login();
+                mPresenter.login(mEtAppId.getText().toString().trim(),mEtAppKey.getText().toString().trim());
             }
             else {
                 showToast("AppId 和 AppKey 不能为空");

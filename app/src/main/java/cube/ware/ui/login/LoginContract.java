@@ -47,6 +47,6 @@ public interface LoginContract {
         /**
          * login
          */
-        abstract void login();
+        abstract void login(String appId,String appKey);
     }
 }
