@@ -36,6 +36,9 @@ public class MsgViewHolderImg extends MsgViewHolderPVBase {
         if (!TextUtils.isEmpty(mFileUrl) && mFileUrl.contains(".gif")) {
             GlideUtil.loadImage(mFileUrl,mContext,mChatContentIv, R.drawable.default_image,true);
         } else {
+            if (TextUtils.isEmpty(mThumbUrl)) {
+                mThumbUrl = mFileUrl + "?imageView2/0/w/200/h/100";//缩略图规则，w，h可以自定义
+            }
             GlideUtil.loadImage(mThumbUrl,mContext,mChatContentIv, R.drawable.default_image,false);
         }
     }

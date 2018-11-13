@@ -32,13 +32,16 @@
         android:supportsRtl="true"
         android:theme="@style/BaseAppTheme">
 
-        <!-- 友盟配置 -->
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="5bcedbf0b465f543c9000078" />
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="demo" />
+        <!-- FileProvider配置访问路径，适配7.0及其以上 -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
 
         <activity
             android:name=".ui.splash.SplashActivity"
