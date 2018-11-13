@@ -25,12 +25,12 @@ public class LoginPresenter extends LoginContract.Presenter {
     }
 
     @Override
-    void login() {
-        getCubeList();
+    void login(String appId,String appKey) {
+        getCubeList(appId,appKey);
     }
 
-    private void getCubeList() {
-        ApiFactory.getInstance().find(AppManager.getAppId(), 0, 20, new Callback<ResultData<TotalData>>() {
+    private void getCubeList(String appId, String appKey) {
+        ApiFactory.getInstance().find(appId, 0, 20, new Callback<ResultData<TotalData>>() {
             @Override
             public void onResponse(Call<ResultData<TotalData>> call, Response<ResultData<TotalData>> response) {
                 if (response.isSuccessful() && response.body().state.code == 200) {
@@ -40,7 +40,7 @@ public class LoginPresenter extends LoginContract.Presenter {
                     }
                     else {
                         //创建20个账号
-                        createCubeId();
+                        createCubeId(appId,appKey);
                     }
                 }
                 else {
@@ -56,9 +56,9 @@ public class LoginPresenter extends LoginContract.Presenter {
         });
     }
 
-    private void createCubeId() {
+    private void createCubeId(String appId,String appKey) {
         //创建CubeId号
-        ApiFactory.getInstance().login(AppManager.getAppId(), AppManager.getAppKey(), new Callback<ResultData<LoginCubeData>>() {
+        ApiFactory.getInstance().login(appId, appKey, new Callback<ResultData<LoginCubeData>>() {
             @Override
             public void onResponse(Call<ResultData<LoginCubeData>> call, Response<ResultData<LoginCubeData>> response) {
                 if (response.isSuccessful() && response.body().state.code == 200) {
@@ -67,7 +67,7 @@ public class LoginPresenter extends LoginContract.Presenter {
                         mView.loginSuccess();
                     }
                     else {
-                        createCubeId();
+                        createCubeId(appId,appKey);
                     }
                 }
                 else {
