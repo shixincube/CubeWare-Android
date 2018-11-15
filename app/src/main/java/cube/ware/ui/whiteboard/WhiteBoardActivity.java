@@ -1,6 +1,7 @@
 package cube.ware.ui.whiteboard;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.common.mvp.base.BaseActivity;
+import com.common.mvp.rx.RxPermissionUtil;
+import com.common.mvp.rx.RxSchedulers;
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.RingtoneUtil;
 import com.common.utils.utils.ScreenUtil;
@@ -39,8 +42,11 @@ import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.service.whiteboard.WhiteBoardHandle;
 import cube.ware.service.whiteboard.WhiteBoardStateListener;
 import cube.ware.service.whiteboard.manager.WBCallManager;
+import cube.ware.ui.chat.activity.file.FileActivity;
+import cube.ware.ui.chat.activity.group.GroupChatActivity;
 import cube.ware.ui.whiteboard.adapter.RVJoinedMemAdapter;
 import cube.ware.utils.SpUtil;
+import rx.functions.Action1;
 
 @Route(path = AppConstants.Router.WhiteBoardActivity)
 public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements WhiteContract.View,View.OnClickListener, WhiteBoardStateListener {
@@ -99,6 +105,11 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     private boolean hasJoined;
     private ProgressDialog mProgressDialog;
     private ImageView imag_back;
+    private LinearLayout mLlFileLayout;
+    private ImageView mIvPageUp;
+    private ImageView mIvPageDown;
+    private TextView mTvCurrentPage;
+    private TextView mTvTotalPage;
 
     @Override
     protected int getContentViewId() {
@@ -235,6 +246,13 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
             wipeLayout = inflateView.findViewById(R.id.wipe_layout);//箭头
             eraserLayout = inflateView.findViewById(R.id.wb_eraser_ll);//擦除
             mLlPainContain = inflateView.findViewById(R.id.paint_attr_ll);
+            mLlFileLayout = inflateView.findViewById(R.id.wb_more_pop_save_ll);
+            //next page
+            mIvPageUp = inflateView.findViewById(R.id.page_up);
+            mIvPageDown = inflateView.findViewById(R.id.page_up);
+            mTvCurrentPage = inflateView.findViewById(R.id.current_page);
+            mTvTotalPage = inflateView.findViewById(R.id.total_pages);
+
 //            mIvPainThin = inflateView.findViewById(R.id.paint_weight_thin);
 //            mIvPainMiddle = inflateView.findViewById(R.id.paint_weight_middle);
 //            mIvPainLarge = inflateView.findViewById(R.id.paint_weight_large);
@@ -369,6 +387,10 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
             revokeLayout.setOnClickListener(this);
             recoverLayout.setOnClickListener(this);
             wipeLayout.setOnClickListener(this);
+            mLlFileLayout.setOnClickListener(this);
+            //next page
+            mIvPageUp.setOnClickListener(this);
+            mIvPageDown.setOnClickListener(this);
             //画笔工具
 //            mIvPainThin.setOnClickListener(this);
 //            mIvPainMiddle.setOnClickListener(this);
@@ -431,6 +453,15 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
             case R.id.wb_eraser_ll: //擦除
                 CubeEngine.getInstance().getWhiteboardService().cleanup();
                 break;
+            case R.id.wb_more_pop_save_ll: //文件
+                openFileSelector();
+                break;
+            case R.id.page_up: //page up
+                CubeEngine.getInstance().getWhiteboardService().nextPage();
+                break;
+            case R.id.page_down: //pagedown
+                CubeEngine.getInstance().getWhiteboardService().prevPage();
+                break;
                 //画笔粗细
 //            case R.id.paint_weight_thin:
 //                setPencilWeight(2);
@@ -455,6 +486,26 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
 //                setPencilColor("#009944",R.drawable.wb_paint_color_green_selector);
 //                break;
         }
+    }
+
+    /**
+     * 选择文件
+     */
+    private void openFileSelector() {
+        RxPermissionUtil.requestStoragePermission(this).compose(RxSchedulers.<Boolean>io_main()).subscribe(new Action1<Boolean>() {
+            @Override
+            public void call(Boolean aBoolean) {
+                if (aBoolean) {
+                    Intent intent = new Intent(WhiteBoardActivity.this, FileActivity.class);
+                    intent.putExtra(FileActivity.REQUEST_CODE, AppConstants.REQUEST_CODE_LOCAL_FILE);
+                    startActivityForResult(intent, AppConstants.REQUEST_CODE_LOCAL_FILE);
+                    overridePendingTransition(R.anim.activity_open, 0);
+                }
+                else {
+                    ToastUtil.showToast(WhiteBoardActivity.this,getResources().getString(R.string.request_storage_permission));
+                }
+            }
+        });
     }
 
     //二次邀请成员
@@ -497,6 +548,24 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     //画笔粗细
     private void setPencilWeight(int wide) {
         CubeEngine.getInstance().getWhiteboardService().setLineWeight(wide);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case AppConstants.REQUEST_CODE_LOCAL_FILE: { // 发送文件
+                if (resultCode == FileActivity.TAKE_FILE_CODE && null != data) {
+                    ArrayList<String> filePathList = data.getStringArrayListExtra(FileActivity.TAKE_FILE_LIST);
+
+                }
+                break;
+            }
+            case AppConstants.REQUEST_CODE_LOCAL_IMAGE: {    // 发送本地图片
+
+                break;
+            }
+        }
     }
 
 
