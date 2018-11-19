@@ -27,11 +27,14 @@ import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.glide.GlideUtil;
 import com.common.utils.utils.log.LogUtil;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.common.model.CubeErrorCode;
+import cube.service.file.model.FileInfo;
 import cube.service.group.model.Member;
 import cube.service.user.model.User;
 import cube.service.whiteboard.model.Whiteboard;
@@ -39,6 +42,8 @@ import cube.service.whiteboard.model.WhiteboardSlide;
 import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
+import cube.ware.service.file.FileHandle;
+import cube.ware.service.file.FileManagerStateListener;
 import cube.ware.service.whiteboard.WhiteBoardHandle;
 import cube.ware.service.whiteboard.WhiteBoardStateListener;
 import cube.ware.service.whiteboard.manager.WBCallManager;
@@ -49,7 +54,7 @@ import cube.ware.utils.SpUtil;
 import rx.functions.Action1;
 
 @Route(path = AppConstants.Router.WhiteBoardActivity)
-public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements WhiteContract.View,View.OnClickListener, WhiteBoardStateListener {
+public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements WhiteContract.View,View.OnClickListener, WhiteBoardStateListener, FileManagerStateListener {
 
     private int callState;
     private ViewStub mVSWhiteReceiveallLayout;  // 受邀
@@ -124,6 +129,7 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     @Override
     protected void initView() {
         WhiteBoardHandle.getInstance().addWhiteBoardStateListeners(this);
+        FileHandle.getInstance().addFileManagerStateListener(this);
         getArgment();
         switchViewStub();
         mProgressDialog = new ProgressDialog(this);
@@ -743,6 +749,7 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
         super.onDestroy();
         //自己是创建者
         WhiteBoardHandle.getInstance().removeWhiteBoardStateListeners(this);
+        FileHandle.getInstance().removeFileManagerStateListener(this);
         //退出，isCall==false
         WBCallManager.getInstance().restCalling();
     }
@@ -765,5 +772,81 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
             }
         }
         return cubeIds;
+    }
+
+    /**
+     * file 上传回调
+     * @param fileInfo
+     * @param fileInfo1
+     */
+    @Override
+    public void onFileAdded(FileInfo fileInfo, FileInfo fileInfo1) {
+
+    }
+
+    @Override
+    public void onFileDeleted(List<FileInfo> list, FileInfo fileInfo) {
+
+    }
+
+    @Override
+    public void onFileRenamed(FileInfo fileInfo, FileInfo fileInfo1) {
+
+    }
+
+    @Override
+    public void onFileMoved(List<FileInfo> list, FileInfo fileInfo) {
+
+    }
+
+    @Override
+    public void onFileUploading(FileInfo fileInfo, long l, long l1) {
+
+    }
+
+    @Override
+    public void onFilePaused(FileInfo fileInfo, long l, long l1) {
+
+    }
+
+    @Override
+    public void onFileResumed(FileInfo fileInfo, long l, long l1) {
+
+    }
+
+    private File FileInfoToFile() {
+        File file= new File("");
+        return file;
+    }
+    /**
+     * 上传成功
+     * @param fileInfo
+     */
+    @Override
+    public void onFileUploadCompleted(FileInfo fileInfo) {
+        File file = FileInfoToFile();
+        CubeEngine.getInstance().getWhiteboardService().shareFile(file);
+    }
+
+
+
+    @Override
+    public void onFileDownloading(FileInfo fileInfo, long l, long l1) {
+
+    }
+
+    @Override
+    public void onFileDownloadCompleted(FileInfo fileInfo) {
+
+    }
+
+    @Override
+    public void onFileCanceled(FileInfo fileInfo) {
+
+    }
+
+    @Override
+    public void onFileManagerFailed(FileInfo fileInfo, CubeError cubeError) {
+
     }
 }
