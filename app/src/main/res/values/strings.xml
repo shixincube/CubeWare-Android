@@ -147,6 +147,7 @@
     <string name="call_not_accept">通话未接听</string>
     <string name="call_completed">通话已结束</string>
     <string name="other_terminal_has_answered">其它终端已接听</string>
+    <string name="other_terminal_has_cancle">其它终端已拒绝</string>
 
 
     <!-- 屏幕分享 -->
