@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.common.utils.utils.log.LogUtil;
 
+import java.io.IOException;
 import java.util.List;
 
 import cube.ware.AppManager;
@@ -59,12 +60,18 @@ public class CubeIdListPresenter extends CubeIdListContract.Presenter{
                         LogUtil.i(response.body().data.cubeToken);
                         mView.getCubeToken(response.body().data.cubeToken);
                     }
+                }else {
+                    try {
+                        mView.showToast(response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<ResultData<LoginData>> call, Throwable t) {
-                LogUtil.i(t.getStackTrace().toString());
+                LogUtil.i(t.toString());
             }
         });
     }
