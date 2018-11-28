@@ -1,8 +1,11 @@
 package cube.ware.ui.whiteboard;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,6 +53,7 @@ import cube.ware.service.whiteboard.manager.WBCallManager;
 import cube.ware.ui.chat.activity.file.FileActivity;
 import cube.ware.ui.chat.activity.group.GroupChatActivity;
 import cube.ware.ui.whiteboard.adapter.RVJoinedMemAdapter;
+import cube.ware.utils.FileUtil;
 import cube.ware.utils.SpUtil;
 import rx.functions.Action1;
 
@@ -502,10 +506,10 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
             @Override
             public void call(Boolean aBoolean) {
                 if (aBoolean) {
-                    Intent intent = new Intent(WhiteBoardActivity.this, FileActivity.class);
-                    intent.putExtra(FileActivity.REQUEST_CODE, AppConstants.REQUEST_CODE_LOCAL_FILE);
-                    startActivityForResult(intent, AppConstants.REQUEST_CODE_LOCAL_FILE);
-                    overridePendingTransition(R.anim.activity_open, 0);
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    startActivityForResult(intent,AppConstants.REQUEST_CODE_LOCAL_FILE);
                 }
                 else {
                     ToastUtil.showToast(WhiteBoardActivity.this,getResources().getString(R.string.request_storage_permission));
@@ -559,19 +563,34 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case AppConstants.REQUEST_CODE_LOCAL_FILE: { // 发送文件
-                if (resultCode == FileActivity.TAKE_FILE_CODE && null != data) {
-                    ArrayList<String> filePathList = data.getStringArrayListExtra(FileActivity.TAKE_FILE_LIST);
+        switch (resultCode) {
+            case Activity.RESULT_OK: { // 发送文件
+                if (requestCode == AppConstants.REQUEST_CODE_LOCAL_FILE && null != data) {
+                    Uri uri = data.getData();
 
+                    String path = uri.getPath().toString();
+                    LogUtil.i("path:",FileUtil.uriToFile(this,uri).getPath()+"");
+                    if(!TextUtils.isEmpty(path)){
+                        FileInfo fileInfo=createFileInfo(FileUtil.uriToFile(this,uri));
+                        CubeEngine.getInstance().getFileManagerService().upload(fileInfo,fileInfo.parentId);
+                    }
+//                    mProgressDialog.setMessage("上传中。。。");
+//                    mProgressDialog.show();
+//                    ArrayList<String> filePathList = data.getStringArrayListExtra(FileActivity.TAKE_FILE_LIST);
+//                    FileInfo fileInfo=createFileInfo(new File(filePathList.get(0)));
+//                    CubeEngine.getInstance().getFileManagerService().upload(fileInfo,fileInfo.parentId);
                 }
                 break;
             }
-            case AppConstants.REQUEST_CODE_LOCAL_IMAGE: {    // 发送本地图片
-
-                break;
-            }
         }
+    }
+    private FileInfo createFileInfo(File file) {
+        FileInfo fileInfo=new FileInfo();
+        fileInfo.path=file.getPath();
+        fileInfo.name= System.currentTimeMillis()+file.getName();
+        fileInfo.createTime=System.currentTimeMillis();
+        fileInfo.isUpload = true;
+        return fileInfo;
     }
 
 
@@ -824,11 +843,12 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
      */
     @Override
     public void onFileUploadCompleted(FileInfo fileInfo) {
+//        mProgressDialog.dismiss();
+        ToastUtil.showToast(this,"上传完成");
+        LogUtil.i(fileInfo.toString());
         File file = FileInfoToFile();
         CubeEngine.getInstance().getWhiteboardService().shareFile(file);
     }
-
-
 
     @Override
     public void onFileDownloading(FileInfo fileInfo, long l, long l1) {
@@ -847,6 +867,8 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
 
     @Override
     public void onFileManagerFailed(FileInfo fileInfo, CubeError cubeError) {
-
+//        mProgressDialog.dismiss();
+        ToastUtil.showToast(this,cubeError.desc+" 上传失败");
+        LogUtil.i(fileInfo.toString());
     }
 }

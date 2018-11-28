@@ -1,10 +1,14 @@
 package cube.ware.service.file;
 
 import android.content.Context;
+import android.util.Log;
+
+import com.common.utils.utils.log.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cube.impl.license.CubeLicense;
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.file.FileManagerListener;
@@ -24,8 +28,6 @@ public class FileHandle implements FileManagerListener {
 
     }
 
-
-
     public static FileHandle getInstance() {
         return instance;
     }
@@ -34,6 +36,7 @@ public class FileHandle implements FileManagerListener {
      * 启动监听
      */
     public void start(Context context) {
+        LogUtil.i("start FileManagerService");
         CubeEngine.getInstance().getFileManagerService().addFileManagerListener(this);
         this.mContext=context;
     }
@@ -47,6 +50,7 @@ public class FileHandle implements FileManagerListener {
 
     public void addFileManagerStateListener(FileManagerStateListener fileManagerStateListener){
         if(fileManagerStateListener!=null){
+            LogUtil.i("=============","addFileManagerStateListener");
             mFileManagerStateListeners.add(fileManagerStateListener);
         }
     }
@@ -54,7 +58,8 @@ public class FileHandle implements FileManagerListener {
     public void removeFileManagerStateListener(FileManagerStateListener fileManagerStateListener){
         if(fileManagerStateListener!=null&&mFileManagerStateListeners!=null){
             if(mFileManagerStateListeners.contains(fileManagerStateListener)){
-                mFileManagerStateListeners.add(fileManagerStateListener);
+                LogUtil.i("=============","removeFileManagerStateListener");
+                mFileManagerStateListeners.remove(fileManagerStateListener);
             }
         }
     }

@@ -59,12 +59,10 @@ public class WhiteboardFunction extends BaseFunction implements CreateCallback {
                 createWhiteBoard();
             }
         }else {//群聊
-            if(ClickUtil.isFastClick()){
-                if (CubeUI.getInstance().isCalling()){
-                    ToastUtil.showToast(getActivity(),R.string.calling_please_try_again_later);
-                }else{
-                    isHasConference();
-                }
+            if (CubeUI.getInstance().isCalling()){
+                ToastUtil.showToast(getActivity(),R.string.calling_please_try_again_later);
+            }else{
+                isHasConference();
             }
         }
     }
