@@ -108,12 +108,13 @@ public class GroupMessageFragment extends MessageFragment{
         typesList.add(GroupType.SHARE_SCREEN);
         typesList.add(GroupType.VIDEO_CALL);
         typesList.add(GroupType.VOICE_CALL);
-        CubeEngine.getInstance().getConferenceService().queryConferenceByGroupId(groupIds, typesList, new CubeCallback<ConferenceData>() {
+
+        CubeEngine.getInstance().getConferenceService().queryConferencesByGroupIds(groupIds, new CubeCallback<List<Conference>>() {
             @Override
-            public void onSucceed(ConferenceData conferenceData) {
-                if (conferenceData.conferences.size() !=0){
+            public void onSucceed(List<Conference> conferenceList) {
+                if (conferenceList.size() !=0){
                     //表示有会议
-                    handleQureyedConference(conferenceData.conferences);
+                    handleQureyedConference(conferenceList);
                 }else{
                     //表示没有会议
                     queryWhiteBoardByGroupId(groupIds);
@@ -127,6 +128,26 @@ public class GroupMessageFragment extends MessageFragment{
                 queryWhiteBoardByGroupId(groupIds);
             }
         });
+
+//        CubeEngine.getInstance().getConferenceService().queryConferenceByGroupId(groupIds, typesList, new CubeCallback<ConferenceData>() {
+//            @Override
+//            public void onSucceed(ConferenceData conferenceData) {
+//                if (conferenceData.conferences.size() !=0){
+//                    //表示有会议
+//                    handleQureyedConference(conferenceData.conferences);
+//                }else{
+//                    //表示没有会议
+//                    queryWhiteBoardByGroupId(groupIds);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailed(CubeError error) {
+//                LogUtil.d("===查询群组会议失败=="+error.desc);
+//                mTipView.setVisibility(View.GONE);
+//                queryWhiteBoardByGroupId(groupIds);
+//            }
+//        });
     }
     private void queryWhiteBoardByGroupId(List<String> groupIds ){
         //查询白板

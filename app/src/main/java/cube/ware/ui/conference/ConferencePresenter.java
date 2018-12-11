@@ -2,12 +2,15 @@ package cube.ware.ui.conference;
 
 import android.content.Context;
 
+import com.common.utils.utils.log.LogUtil;
+
 import java.util.List;
 
 import cube.data.model.reponse.ConferenceData;
 import cube.service.CubeEngine;
 import cube.service.common.CubeCallback;
 import cube.service.common.model.CubeError;
+import cube.service.conference.model.Conference;
 import cube.service.group.GroupType;
 
 /**
@@ -34,11 +37,29 @@ public class ConferencePresenter extends ConferenceContract.Presenter{
      */
     @Override
     public void getConferenceList(String cubeid, List<GroupType> groupTypes) {
-        CubeEngine.getInstance().getConferenceService().queryConferenceByCubeId(cubeid, groupTypes, new CubeCallback<ConferenceData>() {
+        //查询
+//        CubeEngine.getInstance().getConferenceService().queryConferenceByCubeId(cubeid, groupTypes, new CubeCallback<ConferenceData>() {
+//            @Override
+//            public void onSucceed(ConferenceData conferenceData) {
+//                if(conferenceData!=null){
+//                    mView.getConference(conferenceData.conferences);
+//                    LogUtil.i("q-----------------------query_ori",conferenceData.conferences.toString());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailed(CubeError error) {
+//                if(error!=null){
+//                    mView.getConferenceFail(error);
+//                }
+//            }
+//        });
+
+        CubeEngine.getInstance().getConferenceService().queryConferences(groupTypes, new CubeCallback<List<Conference>>() {
             @Override
-            public void onSucceed(ConferenceData conferenceData) {
-                if(conferenceData!=null){
-                    mView.getConference(conferenceData.conferences);
+            public void onSucceed(List<Conference> conferenceList) {
+                if(conferenceList!=null){
+                    mView.getConference(conferenceList);
                 }
             }
 
@@ -49,5 +70,7 @@ public class ConferencePresenter extends ConferenceContract.Presenter{
                 }
             }
         });
+
+
     }
 }
