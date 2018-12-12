@@ -112,7 +112,7 @@ public class GroupMessageFragment extends MessageFragment{
         CubeEngine.getInstance().getConferenceService().queryConferencesByGroupIds(groupIds, new CubeCallback<List<Conference>>() {
             @Override
             public void onSucceed(List<Conference> conferenceList) {
-                if (conferenceList.size() !=0){
+                if (conferenceList!=null && conferenceList.size()>0){
                     //表示有会议
                     handleQureyedConference(conferenceList);
                 }else{

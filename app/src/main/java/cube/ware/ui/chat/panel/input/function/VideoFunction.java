@@ -72,6 +72,8 @@ public class VideoFunction extends BaseFunction {
             public void onSucceed(List<Conference> conferenceList) {
                 if(conferenceList!=null&&conferenceList.size()>0){
                     ToastUtil.showToast(getActivity(),"当前存在会议");
+                }else {
+                    isHasWhiteBoard();
                 }
             }
 

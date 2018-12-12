@@ -80,9 +80,10 @@ public class AudioFunction extends BaseFunction {
         CubeEngine.getInstance().getConferenceService().queryConferencesByGroupIds(list, new CubeCallback<List<Conference>>() {
             @Override
             public void onSucceed(List<Conference> conferenceList) {
-                LogUtil.i("q-----------------",conferenceList.toString());
                 if(conferenceList!=null&&conferenceList.size()>0){
                     ToastUtil.showToast(getActivity(),"当前存在会议");
+                }else {
+                    isHasWhiteBoard();
                 }
             }
 

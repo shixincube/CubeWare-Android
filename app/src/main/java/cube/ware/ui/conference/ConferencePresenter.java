@@ -58,9 +58,7 @@ public class ConferencePresenter extends ConferenceContract.Presenter{
         CubeEngine.getInstance().getConferenceService().queryConferences(groupTypes, new CubeCallback<List<Conference>>() {
             @Override
             public void onSucceed(List<Conference> conferenceList) {
-                if(conferenceList!=null){
-                    mView.getConference(conferenceList);
-                }
+                mView.getConference(conferenceList);
             }
 
             @Override
