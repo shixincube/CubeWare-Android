@@ -26,7 +26,7 @@ import cube.service.user.model.User;
 import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.data.room.AppDataBase;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.eventbus.Event;
 import cube.ware.service.user.UserHandle;
 import cube.ware.service.user.UserStateListener;
 import cube.ware.ui.conference.ConferenceFragment;
@@ -125,7 +125,7 @@ public class MainActivity extends BaseActivity implements UserStateListener {
             }
         });
 
-        mRxManager.on(CubeEvent.EVENT_UNREAD_MESSAGE_SUM, new Action1<Object>() {
+        mRxManager.on(Event.EVENT_UNREAD_MESSAGE_SUM, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 mNavigateTabBar.setRedNum(0, (Integer) o);

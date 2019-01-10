@@ -18,7 +18,7 @@ import cube.service.message.model.Sender;
 import cube.service.user.model.User;
 import cube.ware.data.model.dataModel.enmu.CubeCustomMessageType;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.eventbus.Event;
 import cube.ware.manager.MessageManager;
 import cube.ware.ui.group.adapter.GroupListenerAdapter;
 import cube.ware.ui.recent.manager.RecentSessionManager;
@@ -143,7 +143,7 @@ public class GroupHandle implements GroupListener {
         customMessage.setHeader("operate", CubeCustomMessageType.UpdateGroupName.type);
         customMessage.setReceipted(true);
         MessageManager.getInstance().addMessageInLocal(customMessage).subscribe();
-        RxBus.getInstance().post(CubeEvent.EVENT_UPDATE_GROUP,group.displayName);
+        RxBus.getInstance().post(Event.EVENT_UPDATE_GROUP, group.displayName);
     }
 
     /**

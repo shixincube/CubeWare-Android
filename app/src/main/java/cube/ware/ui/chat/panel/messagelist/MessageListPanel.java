@@ -47,7 +47,7 @@ import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.eventbus.Event;
 import cube.ware.manager.MessageManager;
 import cube.ware.manager.PlayerManager;
 import cube.ware.ui.chat.BaseChatActivity;
@@ -288,7 +288,7 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener{
             queryHistoryList(true, true);
         }
 
-        mRxManager.on(CubeEvent.EVENT_REFRESH_CUBE_AVATAR, new Action1<Object>() {
+        mRxManager.on(Event.EVENT_REFRESH_CUBE_AVATAR, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 mChatMessageAdapter.notifyDataSetChanged();

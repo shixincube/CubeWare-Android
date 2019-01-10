@@ -16,7 +16,7 @@ import cube.service.user.UserListener;
 import cube.service.user.model.User;
 import cube.ware.data.repository.CubeUserRepository;
 import cube.ware.data.room.model.CubeUser;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.eventbus.Event;
 import cube.ware.utils.SpUtil;
 import rx.functions.Action1;
 
@@ -117,7 +117,7 @@ public class UserHandle implements UserListener {
         CubeUserRepository.getInstance().saveUser(cubeUser).subscribe(new Action1<CubeUser>() {
             @Override
             public void call(CubeUser cubeUser) {
-                RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_CUBE_USER,cubeUser);
+                RxBus.getInstance().post(Event.EVENT_REFRESH_CUBE_USER, cubeUser);
             }
         });
     }

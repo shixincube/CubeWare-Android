@@ -64,7 +64,7 @@ import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.repository.CubeMessageRepository;
 import cube.ware.data.room.model.CubeMessage;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.eventbus.Event;
 import cube.ware.ui.chat.ChatContainer;
 import cube.ware.ui.recent.manager.RecentSessionManager;
 import cube.ware.utils.FileUtil;
@@ -221,7 +221,7 @@ public class MessageManager {
                     .subscribe(new Action1<List<CubeMessage>>() {
                         @Override
                         public void call(List<CubeMessage> cubeMessages) {
-                            RxBus.getInstance().post(CubeEvent.EVENT_SYNCING_MESSAGE, cubeMessages);
+                            RxBus.getInstance().post(Event.EVENT_SYNCING_MESSAGE, cubeMessages);
 //                            MessageBufferPool.getInstance().setNewMessageViewModelList(cubeMessages);
                         }
                     });
@@ -1058,7 +1058,7 @@ public class MessageManager {
                 //如果是验证消息 通知刷新最近列表
                 if (SystemMessageManage.getInstance().isFromVerify(messageEntity) && !isSync) {
                     LogUtil.i("EVENT_REFRESH_SYSTEM_MESSAGE");
-                    RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_SYSTEM_MESSAGE, true);
+                    RxBus.getInstance().post(Event.EVENT_REFRESH_SYSTEM_MESSAGE, true);
                 }
                 CustomMessage customMessage = (CustomMessage) messageEntity;
                 String operate = customMessage.getHeader("operate");

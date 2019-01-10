@@ -23,7 +23,7 @@ import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.repository.CubeRecentSessionRepository;
 import cube.ware.data.room.model.CubeRecentSession;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.eventbus.Event;
 import cube.ware.manager.MessageManager;
 import cube.ware.manager.SystemMessageManage;
 import cube.ware.utils.SpUtil;
@@ -81,7 +81,7 @@ public class RecentSessionManager {
                     public void call(CubeRecentSession cubeRecentSession) {
                         // 刷新最近会话列表
 
-                        RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_RECENT_SESSION_SINGLE,cubeRecentSession.getSessionId());
+                        RxBus.getInstance().post(Event.EVENT_REFRESH_RECENT_SESSION_SINGLE, cubeRecentSession.getSessionId());
                     }
                 });
 
@@ -137,9 +137,9 @@ public class RecentSessionManager {
                         // 刷新最近会话列表
 
                         if (cubeRecentSessions.size() == 1) {
-                            RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_RECENT_SESSION_SINGLE,cubeRecentSessions.get(0).getSessionId());
+                            RxBus.getInstance().post(Event.EVENT_REFRESH_RECENT_SESSION_SINGLE, cubeRecentSessions.get(0).getSessionId());
                         } else {
-                            RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_RECENT_SESSION_LIST,cubeRecentSessions);
+                            RxBus.getInstance().post(Event.EVENT_REFRESH_RECENT_SESSION_LIST, cubeRecentSessions);
                         }
                     }
                 });
@@ -158,7 +158,7 @@ public class RecentSessionManager {
                     @Override
                     public void call(CubeRecentSession cubeRecentSession) {
                         if(cubeRecentSession == null)return;
-                        RxBus.getInstance().post(CubeEvent.EVENT_REMOVE_RECENT_SESSION_SINGLE,cubeRecentSession.getSessionId());
+                        RxBus.getInstance().post(Event.EVENT_REMOVE_RECENT_SESSION_SINGLE, cubeRecentSession.getSessionId());
                     }
                 });
     }

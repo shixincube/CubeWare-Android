@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -33,7 +32,7 @@ import cube.ware.R;
 import cube.ware.data.api.ApiFactory;
 import cube.ware.data.api.ResultData;
 import cube.ware.data.model.dataModel.CubeAvator;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.eventbus.Event;
 import cube.ware.eventbus.MessageEvent;
 import cube.ware.ui.mine.dialog.BottomChooseDialog;
 import cube.ware.utils.SpUtil;
@@ -132,7 +131,7 @@ public class ChangeAvatorActivity extends AppCompatActivity {
                         CubeEngine.getInstance().getUserService().update(user);
                         SpUtil.setUserAvator(response.body().data.getUrl());
                         GlideUtil.loadImage(response.body().data.getUrl(),ChangeAvatorActivity.this,mIvAvator, DiskCacheStrategy.NONE,true, R.drawable.default_head_user);
-                        EventBus.getDefault().post(new MessageEvent<>(CubeEvent.EVENT_REFRESH_CUBE_USER,user));
+                        EventBus.getDefault().post(new MessageEvent<>(Event.EVENT_REFRESH_CUBE_USER, user));
                     }else {
                         ToastUtil.showToast(ChangeAvatorActivity.this,response.body().state.desc);
                     }

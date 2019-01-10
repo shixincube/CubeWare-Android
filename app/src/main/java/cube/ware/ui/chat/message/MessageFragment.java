@@ -20,7 +20,7 @@ import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.eventbus.Event;
 import cube.ware.manager.MessageManager;
 import cube.ware.ui.chat.ChatContainer;
 import cube.ware.ui.chat.ChatCustomization;
@@ -241,7 +241,7 @@ public class MessageFragment extends Fragment implements InputPanelProxy, Messag
         }
 
 
-        mRxManager.on(CubeEvent.EVENT_SYNCING_MESSAGE, new Action1<Object>() {
+        mRxManager.on(Event.EVENT_SYNCING_MESSAGE, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 if (!(o instanceof List)) {
@@ -253,7 +253,7 @@ public class MessageFragment extends Fragment implements InputPanelProxy, Messag
             }
         });
 
-        mRxManager.on(CubeEvent.EVENT_REMOVE_RECENT_SESSION_SINGLE, new Action1<Object>() {
+        mRxManager.on(Event.EVENT_REMOVE_RECENT_SESSION_SINGLE, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 if(o == null)return;
@@ -261,7 +261,7 @@ public class MessageFragment extends Fragment implements InputPanelProxy, Messag
             }
         });
 
-        mRxManager.on(CubeEvent.EVENT_UPDATE_GROUP, new Action1<Object>() {
+        mRxManager.on(Event.EVENT_UPDATE_GROUP, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 if(o == null)return;

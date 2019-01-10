@@ -41,7 +41,7 @@ import cube.ware.AppConstants;
 import cube.ware.CubeUI;
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.eventbus.Event;
 import cube.ware.eventbus.UpdateRecentListAboutGroup;
 import cube.ware.service.engine.CubeEngineWorkerListener;
 import cube.ware.ui.chat.activity.group.GroupChatCustomization;
@@ -244,7 +244,7 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
             public void onSucceed(List<RecentSession> recentSessions) {
                 LogUtil.i("queryRecentSessions: " + recentSessions);
                 mRecentSessionAdapter.setNewData(recentSessions);
-                RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM,calcAllUnreadCount(recentSessions));
+                RxBus.getInstance().post(Event.EVENT_UNREAD_MESSAGE_SUM, calcAllUnreadCount(recentSessions));
             }
 
             @Override
@@ -309,7 +309,7 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
                 mEmptyView.setEmptyText(CubeUI.getInstance().getContext().getString(R.string.no_data_message));
             }
             mNoNetworkTipLl.setVisibility(View.GONE);
-            RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_SYSTEM_MESSAGE, true);
+            RxBus.getInstance().post(Event.EVENT_REFRESH_SYSTEM_MESSAGE, true);
             //            queryOtherPlayLoginTip();
         }
         else {
@@ -396,7 +396,7 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
 
         mRecentSessionAdapter.getData().removeAll(recentSessions);
         mRecentSessionAdapter.notifyDataSetChanged();
-        RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM,calcAllUnreadCount(mRecentSessionAdapter.getData()));
+        RxBus.getInstance().post(Event.EVENT_UNREAD_MESSAGE_SUM, calcAllUnreadCount(mRecentSessionAdapter.getData()));
     }
 
     @Override
@@ -407,7 +407,7 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
                 @Override
                 public void onSucceed(List<RecentSession> recentSessions) {
                     mRecentSessionAdapter.replaceData(recentSessions);
-                    RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM,calcAllUnreadCount(recentSessions));
+                    RxBus.getInstance().post(Event.EVENT_UNREAD_MESSAGE_SUM, calcAllUnreadCount(recentSessions));
                 }
 
                 @Override
@@ -426,7 +426,7 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
             } else {
                 mRecentSessionAdapter.addData(0,recentSession);
             }
-            RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM,calcAllUnreadCount(data));
+            RxBus.getInstance().post(Event.EVENT_UNREAD_MESSAGE_SUM, calcAllUnreadCount(data));
 //            ThreadUtil.request(new Runnable() {
 //                @Override
 //                public void run() {

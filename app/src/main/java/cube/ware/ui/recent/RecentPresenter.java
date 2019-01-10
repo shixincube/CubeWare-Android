@@ -10,7 +10,7 @@ import java.util.List;
 
 import cube.ware.data.model.dataModel.CubeRecentViewModel;
 import cube.ware.data.repository.CubeRecentSessionRepository;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.eventbus.Event;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -54,7 +54,7 @@ public class RecentPresenter extends RecentContract.Presenter{
 
     @Override
     public void subscribeChange() {
-        mRxManager.on(CubeEvent.EVENT_REFRESH_RECENT_SESSION_LIST, new Action1<Object>() {
+        mRxManager.on(Event.EVENT_REFRESH_RECENT_SESSION_LIST, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 CubeRecentSessionRepository.getInstance().queryAllUnReadCubeRecentSession()
@@ -70,7 +70,7 @@ public class RecentPresenter extends RecentContract.Presenter{
             }
         });
 
-        mRxManager.on(CubeEvent.EVENT_REFRESH_RECENT_SESSION_SINGLE, new Action1<Object>() {
+        mRxManager.on(Event.EVENT_REFRESH_RECENT_SESSION_SINGLE, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 CubeRecentSessionRepository.getInstance().queryUnReadCubeRecentSession((String) o)
@@ -86,7 +86,7 @@ public class RecentPresenter extends RecentContract.Presenter{
             }
         });
 
-        mRxManager.on(CubeEvent.EVENT_REMOVE_RECENT_SESSION_SINGLE, new Action1<Object>() {
+        mRxManager.on(Event.EVENT_REMOVE_RECENT_SESSION_SINGLE, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 if(o == null)return;
@@ -96,7 +96,7 @@ public class RecentPresenter extends RecentContract.Presenter{
             }
         });
 
-        mRxManager.on(CubeEvent.EVENT_REFRESH_CUBE_AVATAR, new Action1<Object>() {
+        mRxManager.on(Event.EVENT_REFRESH_CUBE_AVATAR, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 mView.onRefreshListAvatar();
@@ -112,7 +112,7 @@ public class RecentPresenter extends RecentContract.Presenter{
                     @Override
                     public void call(Integer integer) {
                         LogUtil.i("queryUnredadAllCout: "+integer);
-                        RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM,integer);
+                        RxBus.getInstance().post(Event.EVENT_UNREAD_MESSAGE_SUM, integer);
                     }
                 });
     }

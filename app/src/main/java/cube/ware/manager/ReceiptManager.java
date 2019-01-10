@@ -10,7 +10,7 @@ import cube.service.common.model.DeviceInfo;
 import cube.service.message.model.MessageEntity;
 import cube.ware.data.repository.CubeMessageRepository;
 import cube.ware.data.room.model.CubeMessage;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.eventbus.Event;
 import cube.ware.utils.SpUtil;
 import rx.functions.Action1;
 
@@ -67,7 +67,7 @@ public class ReceiptManager {
             @Override
             public void call(List<CubeMessage> cubeMessages) {
                 // 消息变化通知最近消息界面
-                RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_RECENT_SESSION_SINGLE, chatId);
+                RxBus.getInstance().post(Event.EVENT_REFRESH_RECENT_SESSION_SINGLE, chatId);
             }
         });
     }

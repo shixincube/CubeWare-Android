@@ -22,7 +22,7 @@ import cube.service.group.model.Group;
 import cube.service.user.model.User;
 import cube.ware.AppConstants;
 import cube.ware.R;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.eventbus.Event;
 import cube.ware.utils.SpUtil;
 import rx.functions.Action1;
 
@@ -80,14 +80,14 @@ public class ModifyNameActivity extends AppCompatActivity implements View.OnClic
         mTvCancel.setOnClickListener(this);
         mTvSave.setOnClickListener(this);
         mEtName.addTextChangedListener(this);
-        rxManager.on(CubeEvent.EVENT_REFRESH_CUBE_USER, new Action1<Object>() {
+        rxManager.on(Event.EVENT_REFRESH_CUBE_USER, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 finish();
             }
         });
 
-        rxManager.on(CubeEvent.EVENT_UPDATE_GROUP, new Action1<Object>() {
+        rxManager.on(Event.EVENT_UPDATE_GROUP, new Action1<Object>() {
             @Override
             public void call(Object o) {
                finish();

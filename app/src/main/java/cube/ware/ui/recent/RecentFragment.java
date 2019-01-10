@@ -39,7 +39,7 @@ import cube.ware.R;
 import cube.ware.data.model.dataModel.CubeRecentViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeRecentSession;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.eventbus.Event;
 import cube.ware.eventbus.UpdateRecentListAboutGroup;
 import cube.ware.service.engine.CubeEngineWorkerListener;
 import cube.ware.ui.chat.activity.group.GroupChatCustomization;
@@ -318,7 +318,7 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
                 mEmptyView.setEmptyText(CubeUI.getInstance().getContext().getString(R.string.no_data_message));
             }
             mNoNetworkTipLl.setVisibility(View.GONE);
-            RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_SYSTEM_MESSAGE, true);
+            RxBus.getInstance().post(Event.EVENT_REFRESH_SYSTEM_MESSAGE, true);
 //            queryOtherPlayLoginTip();
         }
         else {
