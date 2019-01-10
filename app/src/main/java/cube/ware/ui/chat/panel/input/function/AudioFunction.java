@@ -1,8 +1,6 @@
 package cube.ware.ui.chat.panel.input.function;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.common.sdk.RouterUtil;
@@ -18,13 +16,11 @@ import cube.service.CubeEngine;
 import cube.service.common.CubeCallback;
 import cube.service.common.model.CubeError;
 import cube.service.conference.model.Conference;
-import cube.service.whiteboard.model.Whiteboard;
 import cube.ware.AppConstants;
 import cube.ware.CubeUI;
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
-import cube.ware.service.call.manager.OneOnOneCallManager;
 import cube.ware.ui.chat.ChatContainer;
 import cube.ware.utils.SpUtil;
 
@@ -52,7 +48,7 @@ public class AudioFunction extends BaseFunction {
     @Override
     public void onClick() {
         if(mCubeSessionType.equals(CubeSessionType.P2P)){//单聊
-            if (OneOnOneCallManager.getInstance().isCalling()){
+            if (CubeUI.getInstance().isCalling()){
                 ToastUtil.showToast(getActivity(),R.string.calling_please_try_again_later);
             }else{
                 Bundle bundle = new Bundle();

@@ -2,15 +2,9 @@ package cube.ware;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-
 import com.common.utils.alive.DaemonEnv;
 import com.common.utils.utils.log.LogUtil;
 import com.umeng.analytics.MobclickAgent;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
-
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeConfig;
 import cube.service.common.model.CubeError;
@@ -20,7 +14,8 @@ import cube.service.user.UserState;
 import cube.ware.service.core.CoreAliveService;
 import cube.ware.service.engine.CubeEngineWorkerListener;
 import cube.ware.ui.chat.ChatEventListener;
-import cube.ware.ui.recent.listener.UnreadMessageCountListener;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * CubeWare全局管理类
@@ -34,11 +29,9 @@ public class CubeUI {
 
     private Context mContext;
 
-    private final StringBuilder buffer = new StringBuilder();
-    private List<CubeEngineWorkerListener> mCubeEngineWorkerListenerList = new ArrayList<>(); // CubeEngine工作状态监听
-    private List<ChatEventListener> sChatEventListeners = new ArrayList<>(); // 会话窗口消息列表一些点击事件的响应处理回调
-
-    private List<WeakReference<UnreadMessageCountListener>> mUnreadMessageCountListeners = new ArrayList<>();//未读消息总数监听器
+    private final StringBuilder                  buffer                        = new StringBuilder();
+    private       List<CubeEngineWorkerListener> mCubeEngineWorkerListenerList = new ArrayList<>(); // CubeEngine工作状态监听
+    private       List<ChatEventListener>        sChatEventListeners           = new ArrayList<>(); // 会话窗口消息列表一些点击事件的响应处理回调
 
     /**
      * 私有化构造方法
@@ -109,13 +102,12 @@ public class CubeUI {
     public boolean startupCube(Context context) {
         if (CubeEngine.getInstance().startup(context)) {
             // 启动CubeService
-//            CoreService.start(context);
+            //            CoreService.start(context);
 
             //启动尝试保活的service
-            DaemonEnv.initialize(
-                    context,  //Application Context.
-                    CoreAliveService.class, //Service 对应的 Class 对象.
-                    3 * 1000);  //定时唤醒的时间间隔(ms), 默认 6 分钟.
+            DaemonEnv.initialize(context,  //Application Context.
+                                 CoreAliveService.class, //Service 对应的 Class 对象.
+                                 3 * 1000);  //定时唤醒的时间间隔(ms), 默认 6 分钟.
             CoreAliveService.start(context);
             return true;
         }
@@ -143,8 +135,8 @@ public class CubeUI {
     /**
      * 是否登录引擎
      */
-    public boolean isLoginSucceedOrLoginProgress() {
-        return isStarted() && (getAccountState() == UserState.LoginSucceed || getAccountState() == UserState.LoginProgress);
+    public boolean isLoginSucceed() {
+        return isStarted() && getAccountState() == UserState.LoginSucceed;
     }
 
     /**
@@ -171,7 +163,6 @@ public class CubeUI {
      * @return
      */
     public boolean isCalling() {
-        LogUtil.i("是否正在通话中：" + CubeEngine.getInstance().getSession().isCalling());
         return CubeEngine.getInstance().getSession().isCalling();
     }
 
@@ -181,7 +172,6 @@ public class CubeUI {
      * @return
      */
     public boolean isConference() {
-        LogUtil.i("是否正在多人音视频：" + CubeEngine.getInstance().getSession().isConference());
         return CubeEngine.getInstance().getSession().isConference();
     }
 
@@ -232,7 +222,7 @@ public class CubeUI {
         buffer.append("\n");
         buffer.append(desc);
 
-        MobclickAgent.reportError(CubeUI.getInstance().getContext(), buffer.toString());
+        MobclickAgent.reportError(mContext, buffer.toString());
 
         buffer.delete(0, buffer.length());
     }
@@ -250,6 +240,7 @@ public class CubeUI {
 
     /**
      * 移除CubeEngine监听器
+     *
      * @param cubeEngineWorkerListener
      */
     public void removeCubeEngineWorkerListener(CubeEngineWorkerListener cubeEngineWorkerListener) {
@@ -291,42 +282,5 @@ public class CubeUI {
         if (chatEventListener != null && sChatEventListeners.contains(chatEventListener)) {
             sChatEventListeners.remove(chatEventListener);
         }
-    }
-
-    /**
-     * 设置未读消息总数监听器
-     *
-     * @param listener
-     */
-    public void addUnreadMessageCountListener(UnreadMessageCountListener listener) {
-        for (WeakReference<UnreadMessageCountListener> unreadMessageCountListener : mUnreadMessageCountListeners) {
-            if (unreadMessageCountListener != null && unreadMessageCountListener.get() == listener) {
-                return;
-            }
-        }
-        this.mUnreadMessageCountListeners.add(new WeakReference<UnreadMessageCountListener>(listener));
-    }
-
-    /**
-     * 设置未读消息总数监听器
-     *
-     * @param listener
-     */
-    public void removeUnreadMessageCountListener(UnreadMessageCountListener listener) {
-        for (WeakReference<UnreadMessageCountListener> unreadMessageCountListener : mUnreadMessageCountListeners) {
-            if (unreadMessageCountListener != null && unreadMessageCountListener.get() == listener) {
-                this.mUnreadMessageCountListeners.remove(unreadMessageCountListener);
-                return;
-            }
-        }
-    }
-
-    /**
-     * 获取未读消息总数监听器
-     *
-     * @return
-     */
-    public List<WeakReference<UnreadMessageCountListener>> getUnreadMessageCountListener() {
-        return this.mUnreadMessageCountListeners;
     }
 }

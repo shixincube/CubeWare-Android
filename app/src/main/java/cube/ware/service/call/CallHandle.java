@@ -17,10 +17,10 @@ import cube.service.common.model.CubeErrorCode;
 import cube.service.user.UserState;
 import cube.service.user.model.User;
 import cube.ware.AppConstants;
+import cube.ware.CubeUI;
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.manager.MessageManager;
-import cube.ware.service.call.manager.OneOnOneCallManager;
 import cube.ware.service.listener.CallStateListener;
 
 import java.util.ArrayList;
@@ -75,10 +75,9 @@ public class CallHandle implements CallListener {
 
         LogUtil.d("===收到了邀请通知"+from.cubeId);
         LogUtil.i("CoreService ===> onCall callDirection=" + session + session.isVideoEnabled());
-        if (OneOnOneCallManager.getInstance().isCalling() || CubeEngine.getInstance().getSession().userState != UserState.LoginSucceed) {
+        if (CubeUI.getInstance().isCalling()) {
             return;
         }
-        OneOnOneCallManager.getInstance().setCalling(true);
 
         String callId = session.getCaller().cubeId;    // 通话id
         CallStatus callState;    // 通话状态
@@ -167,9 +166,6 @@ public class CallHandle implements CallListener {
      */
     @Override
     public void onCallEnded(CallSession session, User from) {
-        // TODO: 2017/7/15
-        OneOnOneCallManager.getInstance().restCalling();
-
         LogUtil.i("CoreService ===> onCallEnded---session action =="+session.getAction());
         LogUtil.i("CoreService ===> onCallEnded---session 描述 =="+session.getCallDirection());
         // 释放铃声
@@ -209,8 +205,6 @@ public class CallHandle implements CallListener {
      */
     @Override
     public void onCallFailed(CallSession session, CubeError error, User from) {
-        LogUtil.d("===走到了这里了==呼叫失败");
-        OneOnOneCallManager.getInstance().restCalling();
         // 释放铃声
         RingtoneUtil.release();
         if (error.code == CubeErrorCode.RequestTerminated.code || error.code == CubeErrorCode.DoNotDisturb.code) {

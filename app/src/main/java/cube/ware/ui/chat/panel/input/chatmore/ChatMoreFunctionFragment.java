@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.ToastUtil;
-import com.common.utils.utils.log.LogUtil;
 
+import cube.ware.CubeUI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +25,11 @@ import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
-import cube.ware.service.call.manager.OneOnOneCallManager;
 import cube.ware.service.conference.manager.ConferenceCallManager;
 import cube.ware.service.whiteboard.WhiteBoardHandle;
 import cube.ware.service.whiteboard.manager.WBCallManager;
 import cube.ware.ui.chat.BaseChatActivity;
 import cube.ware.ui.chat.ChatContainer;
-import cube.ware.ui.conference.listener.ConferenceCreateListener;
 import cube.ware.ui.whiteboard.listener.CreateCallback;
 import cube.ware.ui.whiteboard.listener.WBListener;
 import cube.ware.utils.SpUtil;
@@ -103,7 +101,7 @@ public class ChatMoreFunctionFragment extends Fragment implements View.OnClickLi
         switch (view.getId()){
             case R.id.video_call_layout:
                 if(mChatType.equals(CubeSessionType.P2P)){ //单聊
-                    if (OneOnOneCallManager.getInstance().isCalling()){
+                    if (CubeUI.getInstance().isCalling()){
                         ToastUtil.showToast(mChatActivity,R.string.calling_please_try_again_later);
                     }else{
                         Bundle bundle = new Bundle();
@@ -112,7 +110,7 @@ public class ChatMoreFunctionFragment extends Fragment implements View.OnClickLi
                         bundle.putLong("call_time",0l);
                         ARouter.getInstance().build(AppConstants.Router.P2PCallActivity).withBundle("call_data",bundle).navigation();
                     }}else { //群聊
-                    if (ConferenceCallManager.getInstance().isCalling()){
+                    if (CubeUI.getInstance().isCalling()){
                         ToastUtil.showToast(mChatActivity,R.string.calling_please_try_again_later);
                     }else{
                         Bundle bundle=new Bundle();
@@ -124,7 +122,7 @@ public class ChatMoreFunctionFragment extends Fragment implements View.OnClickLi
                 break;
             case R.id.audio_call_layout:
                 if(mChatType.equals(CubeSessionType.P2P)){//单聊
-                    if (OneOnOneCallManager.getInstance().isCalling()){
+                    if (CubeUI.getInstance().isCalling()){
                         ToastUtil.showToast(mChatActivity,R.string.calling_please_try_again_later);
                     }else{
                         Bundle bundle = new Bundle();
@@ -134,7 +132,7 @@ public class ChatMoreFunctionFragment extends Fragment implements View.OnClickLi
                         ARouter.getInstance().build(AppConstants.Router.P2PCallActivity).withBundle("call_data",bundle).navigation();
                     }
                 }else {//群聊
-                    if (ConferenceCallManager.getInstance().isCalling()){
+                    if (CubeUI.getInstance().isCalling()){
                         ToastUtil.showToast(mChatActivity,R.string.calling_please_try_again_later);
                     }else{
                         Bundle bundle=new Bundle();
