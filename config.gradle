@@ -109,6 +109,7 @@ ext {
                              // 阿里路由工具
                              "arouter_api"           : "com.alibaba:arouter-api:1.4.1",
                              "arouter_annotation"    : "com.alibaba:arouter-annotation:1.0.6",
+                             "arouter_compiler"      : "com.alibaba:arouter-compiler:1.2.2",
 
                              // EventBus
                              eventbus                : "org.greenrobot:eventbus:${eventbusVersion}",
@@ -118,7 +119,4 @@ ext {
   testDependencies = [junit          : "junit:junit:${junitVersion}",
                       mockito        : "org.mockito:mockito-core:${mockitoVersion}",
                       mockito_android: "org.mockito:mockito-android:${mockitoVersion}"]
-
-  // 注解处理依赖
-  processorDependencies = [arouter_compiler: "com.alibaba:arouter-compiler:1.2.2"]
 }

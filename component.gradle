@@ -3,7 +3,6 @@ project.apply plugin: 'cc-register'
 def appDependencies = rootProject.ext.android
 def developmentDependencies = rootProject.ext.developmentDependencies
 def testDependencies = rootProject.ext.testDependencies
-def processorDependencies = rootProject.ext.processorDependencies
 
 android {
   compileSdkVersion appDependencies.compileSdkVersion
@@ -61,7 +60,7 @@ dependencies {
   implementation project(path: ':CommonMvp')
   implementation developmentDependencies.arouter_api
   implementation developmentDependencies.arouter_annotation
-  annotationProcessor processorDependencies.arouter_compiler
+  annotationProcessor developmentDependencies.arouter_compiler
   implementation 'com.billy.android:cc:2.1.1'
 
   // 添加全局拦截器

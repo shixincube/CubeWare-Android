@@ -34,5 +34,5 @@ dependencies {
   api project(path: ':CommonUtils')
   implementation 'com.billy.android:cc:2.1.1'
   implementation developmentDependencies.arouter_api
-  annotationProcessor processorDependencies.arouter_compiler
+  annotationProcessor developmentDependencies.arouter_compiler
 }
