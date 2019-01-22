@@ -145,7 +145,6 @@ public class CoreService extends Service {
      * 初始化监听
      */
     private void initListener() {
-
         if (!CubeEngine.getInstance().isStarted()) {
             boolean startup = CubeEngine.getInstance().startup(getApplicationContext());
             LogUtil.i("引擎是否启动成功： " + startup);
@@ -154,15 +153,14 @@ public class CoreService extends Service {
 
         CubeEngineHandle.getInstance().start();
         UserHandle.getInstance().start();
-        FileHandle.getInstance().start(this);
+        FileHandle.getInstance().start();
         MessageHandle.getInstance().start();
-        CallHandle.getInstance().start(this);
-        ConferenceHandle.getInstance().start(this);
+        CallHandle.getInstance().start();
+        ConferenceHandle.getInstance().start();
         GroupHandle.getInstance().start();
-        RemoteDesktopHandle.getInstance().start(this);
-        WhiteBoardHandle.getInstance().start(this);
+        RemoteDesktopHandle.getInstance().start();
+        WhiteBoardHandle.getInstance().start();
         SettingHandle.getInstance().start();
-
     }
 
     @Override
@@ -177,7 +175,7 @@ public class CoreService extends Service {
         CubeEngineHandle.getInstance().stop();
         UserHandle.getInstance().stop();
         FileHandle.getInstance().stop();
-//        MessageHandle.getInstance().stop();
+        MessageHandle.getInstance().stop();
         CallHandle.getInstance().stop();
         ConferenceHandle.getInstance().stop();
         GroupHandle.getInstance().stop();

@@ -4,6 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.text.TextUtils;
 
+import com.common.utils.utils.GsonUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -514,7 +515,7 @@ public class CubeMessage implements Serializable, MultiItemEntity {
         if (TextUtils.isEmpty(customHeaders)) {
             return new ArrayList<HeaderMap>();
         }
-        return new Gson().fromJson(customHeaders, new TypeToken<ArrayList<HeaderMap>>() {}.getType());
+        return GsonUtil.toBean(customHeaders, new TypeToken<ArrayList<HeaderMap>>() {}.getType());
     }
 
     public void setCustomHeaders(String customHeaders) {

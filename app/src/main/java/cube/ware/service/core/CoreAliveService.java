@@ -5,11 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-
 import com.common.utils.alive.AbsWorkService;
 import com.common.utils.alive.IntentWrapper;
 import com.common.utils.utils.log.LogUtil;
-
 import cube.service.CubeEngine;
 import cube.ware.CubeUI;
 import cube.ware.service.call.CallHandle;
@@ -25,9 +23,9 @@ import cube.ware.service.whiteboard.WhiteBoardHandle;
 /**
  * Created by dth
  * Des: keep-alive service 需要引导用户打开白名单 {@link IntentWrapper#whiteListMatters(Activity, String)}}
- *      否则app被杀时service不能拉起来。不同机型效果不敢保证。
- *      如果只需要保证引擎的生命周期和application生命周期一样，可以考虑将各个Handle注册到CubeUI中，不采用service方式注册
- *      通知栏消息接第三方推送，保证消息到达
+ * 否则app被杀时service不能拉起来。不同机型效果不敢保证。
+ * 如果只需要保证引擎的生命周期和application生命周期一样，可以考虑将各个Handle注册到CubeUI中，不采用service方式注册
+ * 通知栏消息接第三方推送，保证消息到达
  * Date: 2018/10/19.
  */
 
@@ -60,12 +58,12 @@ public class CoreAliveService extends AbsWorkService {
             CubeEngineHandle.getInstance().start();
             UserHandle.getInstance().start();
             MessageHandle.getInstance().start();
-            CallHandle.getInstance().start(this);
-            ConferenceHandle.getInstance().start(this);
-            FileHandle.getInstance().start(this);
+            CallHandle.getInstance().start();
+            ConferenceHandle.getInstance().start();
+            FileHandle.getInstance().start();
             GroupHandle.getInstance().start();
-            RemoteDesktopHandle.getInstance().start(this);
-            WhiteBoardHandle.getInstance().start(this);
+            RemoteDesktopHandle.getInstance().start();
+            WhiteBoardHandle.getInstance().start();
             SettingHandle.getInstance().start();
         }
     }

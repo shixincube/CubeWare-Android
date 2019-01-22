@@ -4,10 +4,7 @@ import cube.ware.data.model.dataModel.CubeAvator;
 import cube.ware.data.model.dataModel.LoginCubeData;
 import cube.ware.data.model.dataModel.LoginData;
 import cube.ware.data.model.dataModel.TotalData;
-
-import java.io.File;
 import java.util.Map;
-
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -18,12 +15,32 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 
+/**
+ * 网络请求接口
+ *
+ * @author LiuFeng
+ * @data 2019/1/22 14:29
+ */
 public interface ApiService {
 
+    /**
+     * 登陆
+     *
+     * @param params
+     *
+     * @return
+     */
     @POST("user/created")
     @FormUrlEncoded
     Call<ResultData<LoginCubeData>> login(@FieldMap Map<String, String> params);
 
+    /**
+     * 获取cubeToken
+     *
+     * @param params
+     *
+     * @return
+     */
     @POST("user/login")
     @FormUrlEncoded
     Call<ResultData<LoginData>> getCubeToken(@FieldMap Map<String, String> params);
@@ -33,7 +50,7 @@ public interface ApiService {
     Call<ResultData<TotalData>> find(@FieldMap Map<String, String> params);
 
     @Multipart
-//     @POST("https://upload.shixincube.com/v3/file/uploadAvatar")//正式服
+    //     @POST("https://upload.shixincube.com/v3/file/uploadAvatar")//正式服
     //目前只有测试服，正式服还没有部署
     @POST("https://dev.upload.shixincube.cn/v3/file/uploadAvatar")
     Call<ResultData<CubeAvator>> uploadAvatar(@PartMap Map<String, RequestBody> params, @Part MultipartBody.Part file);

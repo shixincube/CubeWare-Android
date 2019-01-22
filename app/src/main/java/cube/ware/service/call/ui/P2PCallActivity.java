@@ -16,54 +16,47 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.common.mvp.base.BaseActivity;
+import com.common.mvp.base.BasePresenter;
 import com.common.utils.utils.NetworkUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.glide.GlideUtil;
 import com.common.utils.utils.log.LogUtil;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import cube.service.CubeEngine;
 import cube.service.call.CallAction;
 import cube.service.call.CallDirection;
 import cube.service.call.model.CallSession;
 import cube.service.common.model.CubeErrorCode;
 import cube.service.media.MediaService;
-import cube.service.user.model.User;
 import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.data.repository.CubeUserRepository;
 import cube.ware.data.room.model.CubeUser;
 import cube.ware.service.call.CallHandle;
-import cube.ware.service.call.adapter.P2PCallContract;
-import cube.ware.service.call.adapter.P2PCallPresenter;
-import cube.ware.service.call.adapter.P2PmemberAdapter;
 import cube.ware.service.listener.CallStateListener;
 import cube.ware.utils.SpUtil;
+import java.util.ArrayList;
+import java.util.List;
 import rx.functions.Action1;
-
 
 /**
  * 一对一音视频通话页面
  * Created by zzy on 2018/8/28.
  */
 @Route(path = AppConstants.Router.P2PCallActivity)
-public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements CallStateListener,P2PCallContract.View {
-    private String         mCallId;
-    private CallStatus     mCallState = CallStatus.NO_CALL; //通话形式，据此判断显示view（视频或者语音)
-    private long           mCallTime  = 0; //通话时间
-    private ViewStub       mCallAudioOutgoingVs;    // 语音呼叫的UI
-    private ViewStub       mCallAudioIncomingVs;    // 语音来电的UI
-    private ViewStub       mCallAudioCallVs;    // 语音通话的UI
-    private ViewStub       mCallVideoOutgoingVs;    // 视频呼叫的UI
-    private ViewStub       mCallVideoIncomingVs;    // 视频来电的UI
-    private ViewStub       mCallVideoCallVs;    // 视频通话的UI
+public class P2PCallActivity extends BaseActivity implements CallStateListener {
+    private String mCallId;
+    private CallStatus mCallState = CallStatus.NO_CALL; //通话形式，据此判断显示view（视频或者语音)
+    private long       mCallTime  = 0; //通话时间
+    private ViewStub mCallAudioOutgoingVs;    // 语音呼叫的UI
+    private ViewStub mCallAudioIncomingVs;    // 语音来电的UI
+    private ViewStub mCallAudioCallVs;    // 语音通话的UI
+    private ViewStub mCallVideoOutgoingVs;    // 视频呼叫的UI
+    private ViewStub mCallVideoIncomingVs;    // 视频来电的UI
+    private ViewStub mCallVideoCallVs;    // 视频通话的UI
 
     private ImageView      mPeerHeadIv;    // 对方的头像
     private TextView       mPeerNameTv;    // 对方的名字
@@ -84,17 +77,15 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
     private LinearLayout   mPeerVideoLayout;    // 对方的视频布局
     private LinearLayout   mMyVideoLayout;    // 自己的视频布局
 
-    private View           mMyVideoView;    // 自己的视频view
-    private View           mPeerVideoView;    // 对方的视频view
+    private View mMyVideoView;    // 自己的视频view
+    private View mPeerVideoView;    // 对方的视频view
 
     private PowerManager.WakeLock mWakeLock;
-    private final Object   mWakeLockSync = new Object();
+    private final Object mWakeLockSync = new Object();
 
-    private RecyclerView   members_recycleview;
-    private P2PmemberAdapter joinedMemberAdapter ;//已加入成员适配器
-    private List<String>   memberList ;             //加入成员集合
-
-
+    private RecyclerView     members_recycleview;
+    private P2PmemberAdapter joinedMemberAdapter;//已加入成员适配器
+    private List<String>     memberList;             //加入成员集合
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,14 +93,15 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
         CallHandle.getInstance().addCallStateListener(this);
         this.showViewStub();
     }
+
     @Override
     protected int getContentViewId() {
         return R.layout.activity_call;
     }
 
     @Override
-    protected P2PCallPresenter createPresenter() {
-         return  new P2PCallPresenter(this,this);
+    protected BasePresenter createPresenter() {
+        return null;
     }
 
     @Override
@@ -172,9 +164,9 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
     public void onNetworkStateChanged(boolean isNetAvailable) {
         super.onNetworkStateChanged(isNetAvailable);
         //当在通话界面中
-//        ToastUtil.showToast(this,R.string.network_not_available_please_try_again_later);
-//        CubeEngine.getInstance().getCallService().terminateCall(getPeerCubeId());
-//        release();
+        //        ToastUtil.showToast(this,R.string.network_not_available_please_try_again_later);
+        //        CubeEngine.getInstance().getCallService().terminateCall(getPeerCubeId());
+        //        release();
     }
 
     @Override
@@ -203,14 +195,15 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
                 if (ms.isVideoEnabled()) {
                     ms.setVideoEnabled(false);
                     mCallSwitchAudioBtn.setText(R.string.switch_to_video);
-                }else{
+                }
+                else {
                     ms.setVideoEnabled(true);
                     mCallSwitchAudioBtn.setText(R.string.switch_to_voice);
                 }
             }
-//            //切换到语音通话视图
-//            hideVideoCallViewStub();
-//            showAudioCallViewStub();
+            //            //切换到语音通话视图
+            //            hideVideoCallViewStub();
+            //            showAudioCallViewStub();
         }
         else if (i == R.id.call_switch_speaker_btn) {
             MediaService ms = CubeEngine.getInstance().getMediaService();
@@ -263,6 +256,7 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
             }
         }
     }
+
     private static String getPeerCubeId() {
         CallSession call = CubeEngine.getInstance().getSession().call;
         String cubeId;
@@ -272,7 +266,7 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
         else {
             cubeId = call.callee.cubeId;
         }
-        LogUtil.d("===获取cueID==="+cubeId);
+        LogUtil.d("===获取cueID===" + cubeId);
         return cubeId;
     }
 
@@ -285,12 +279,13 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
         this.mCallState = (CallStatus) data.getSerializable("call_state");
         this.mCallTime = data.getLong("call_time");
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-//        if (this.mCallState == CallStatus.AUDIO_OUTGOING || mCallState == CallStatus.AUDIO_INCOMING || mCallState == CallStatus.VIDEO_OUTGOING || mCallState == CallStatus.VIDEO_INCOMING) {
-//            this.release();
-//        }
+        //        if (this.mCallState == CallStatus.AUDIO_OUTGOING || mCallState == CallStatus.AUDIO_INCOMING || mCallState == CallStatus.VIDEO_OUTGOING || mCallState == CallStatus.VIDEO_INCOMING) {
+        //            this.release();
+        //        }
         CubeEngine.getInstance().getCallService().terminateCall(getPeerCubeId());
         release();
     }
@@ -301,12 +296,14 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
             public void call(CubeUser cubeUser) {
                 if (!cubeUser.getDisplayName().equals("") && null != cubeUser.getDisplayName()) {
                     mPeerNameTv.setText(cubeUser.getDisplayName());
-                } else {
+                }
+                else {
                     mPeerNameTv.setText(cubeId);
                 }
             }
         });
     }
+
     /**
      * 显示语音呼叫视图
      */
@@ -322,16 +319,18 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
             this.mCallCancelBtn = (Button) inflateView.findViewById(R.id.call_cancel_btn);
             this.mCallSwitchSpeakerBtn = (Button) inflateView.findViewById(R.id.call_switch_speaker_btn);
             this.mCallSwitchMuteBtn = (Button) inflateView.findViewById(R.id.call_switch_mute_btn);
-        } else {
+        }
+        else {
             this.mCallAudioOutgoingVs.setVisibility(View.VISIBLE);
         }
         if (this.mCallSwitchMuteBtn != null) {
             this.mCallSwitchMuteBtn.setSelected(CubeEngine.getInstance().getMediaService().isAudioEnabled());
         }
         getUserNickName(this.mCallId);
-        GlideUtil.loadCircleImage(AppConstants.AVATAR_URL+ this.mCallId,this,mPeerHeadIv, DiskCacheStrategy.NONE,true,R.drawable.default_head_user);
+        GlideUtil.loadCircleImage(AppConstants.AVATAR_URL + this.mCallId, this, mPeerHeadIv, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
         this.initListener();
     }
+
     /**
      * 隐藏语音呼叫视图
      */
@@ -340,6 +339,7 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
             this.mCallAudioOutgoingVs.setVisibility(View.GONE);
         }
     }
+
     /**
      * 显示语音来电视图
      */
@@ -361,7 +361,7 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
         }
         this.mPeerNameTv.setText(this.mCallId);
         getUserNickName(this.mCallId);
-        GlideUtil.loadCircleImage(AppConstants.AVATAR_URL+this.mCallId,this,mPeerHeadIv, DiskCacheStrategy.NONE,true,R.drawable.default_head_user);
+        GlideUtil.loadCircleImage(AppConstants.AVATAR_URL + this.mCallId, this, mPeerHeadIv, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
         this.initListener();
     }
 
@@ -373,6 +373,7 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
             this.mCallAudioIncomingVs.setVisibility(View.GONE);
         }
     }
+
     /**
      * 显示语音通话视图
      */
@@ -413,15 +414,15 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
         //已加入成员列表
         //对端成员通过id获取头像，目前没有接口
         List<String> avatarList = new ArrayList<>();
-        avatarList.add(AppConstants.AVATAR_URL+SpUtil.getCubeId());
-        avatarList.add(AppConstants.AVATAR_URL+this.mCallId);
-        P2PmemberAdapter adapter = new P2PmemberAdapter(avatarList,this);
-        LinearLayoutManager ms= new LinearLayoutManager(this);
+        avatarList.add(AppConstants.AVATAR_URL + SpUtil.getCubeId());
+        avatarList.add(AppConstants.AVATAR_URL + this.mCallId);
+        P2PmemberAdapter adapter = new P2PmemberAdapter(avatarList, this);
+        LinearLayoutManager ms = new LinearLayoutManager(this);
         ms.setOrientation(LinearLayoutManager.HORIZONTAL);// 设置 recyclerview 布局方式为横向布局
         members_recycleview.setLayoutManager(ms);
         members_recycleview.setAdapter(adapter);
-
     }
+
     /**
      * 隐藏语音通话视图
      */
@@ -430,6 +431,7 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
             this.mCallAudioCallVs.setVisibility(View.GONE);
         }
     }
+
     /**
      * 显示视频呼叫视图
      */
@@ -454,7 +456,7 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
         }
         //初始化用户信息
         this.mPeerNameTv.setText(this.mCallId);
-        GlideUtil.loadCircleImage(AppConstants.AVATAR_URL+ SpUtil.getCubeId(),this,mPeerHeadIv, DiskCacheStrategy.NONE,true,R.drawable.default_head_user);
+        GlideUtil.loadCircleImage(AppConstants.AVATAR_URL + SpUtil.getCubeId(), this, mPeerHeadIv, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
 
         // 初始化事件
         this.initListener();
@@ -482,14 +484,14 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
             this.mCallHintTv = (TextView) inflateView.findViewById(R.id.call_hint_tv);
             this.mCallRefuseBtn = (Button) inflateView.findViewById(R.id.call_refuse_btn);
             this.mCallAnswerBtn = (Button) inflateView.findViewById(R.id.call_answer_btn);
-            this.mCallHintTv .setText(R.string.someone_wanted_to_talk_to_you_video_calls);
+            this.mCallHintTv.setText(R.string.someone_wanted_to_talk_to_you_video_calls);
         }
         else {
             this.mCallVideoIncomingVs.setVisibility(View.VISIBLE);
         }
         //初始化用户信息
         this.mPeerNameTv.setText(this.mCallId);
-        GlideUtil.loadCircleImage(AppConstants.AVATAR_URL+this.mCallId,this,mPeerHeadIv, DiskCacheStrategy.NONE,true,R.drawable.default_head_user);
+        GlideUtil.loadCircleImage(AppConstants.AVATAR_URL + this.mCallId, this, mPeerHeadIv, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
 
         // 初始化事件
         this.initListener();
@@ -530,9 +532,9 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
         }
         //已加入成员头像显示
         List<String> avatarList = new ArrayList<>();
-        avatarList.add(AppConstants.AVATAR_URL+SpUtil.getCubeId());
-        avatarList.add(AppConstants.AVATAR_URL+this.mCallId);
-        P2PmemberAdapter adapter = new P2PmemberAdapter(avatarList,this);
+        avatarList.add(AppConstants.AVATAR_URL + SpUtil.getCubeId());
+        avatarList.add(AppConstants.AVATAR_URL + this.mCallId);
+        P2PmemberAdapter adapter = new P2PmemberAdapter(avatarList, this);
         members_recycleview.setAdapter(adapter);
         if (this.mCallSwitchMuteBtn != null) {
             this.mCallSwitchMuteBtn.setSelected(CubeEngine.getInstance().getMediaService().isAudioEnabled());
@@ -553,10 +555,10 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
         //已加入成员列表
         memberList = new ArrayList<>();
         List<String> memberList = new ArrayList<>();
-        memberList.add(AppConstants.AVATAR_URL+SpUtil.getCubeId());
-        memberList.add(AppConstants.AVATAR_URL+this.mCallId);
-        joinedMemberAdapter = new P2PmemberAdapter(memberList,this);
-        LinearLayoutManager ms= new LinearLayoutManager(this);
+        memberList.add(AppConstants.AVATAR_URL + SpUtil.getCubeId());
+        memberList.add(AppConstants.AVATAR_URL + this.mCallId);
+        joinedMemberAdapter = new P2PmemberAdapter(memberList, this);
+        LinearLayoutManager ms = new LinearLayoutManager(this);
         ms.setOrientation(LinearLayoutManager.HORIZONTAL);// 设置 recyclerview 布局方式为横向布局
         members_recycleview.setLayoutManager(ms);
         members_recycleview.setAdapter(joinedMemberAdapter);
@@ -592,7 +594,6 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
             this.mWakeLock.acquire();
         }
     }
-
 
     private void releaseScreenOn() {
         synchronized (this.mWakeLockSync) {
@@ -646,6 +647,7 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
             this.showVideoCallViewStub();
         }
     }
+
     /**
      * 切换ViewStub
      */
@@ -671,7 +673,8 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
     }
 
     /**
-     *  //通话状态监听器
+     * //通话状态监听器
+     *
      * @param session
      */
     @Override
@@ -687,7 +690,7 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
     @Override
     public void onCallConnected(CallSession session) {
         boolean isVideoCall = session.videoEnabled;
-        LogUtil.i("===回调了这里了===> onCallConnected"+isVideoCall);
+        LogUtil.i("===回调了这里了===> onCallConnected" + isVideoCall);
         if (isVideoCall) {
             // 切换到视频通话页面
             this.mCallState = CallStatus.VIDEO_CALLING;
@@ -700,7 +703,7 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
         }
 
         CubeEngine.getInstance().getMediaService().setSpeakerEnabled(isVideoCall);
-         //默认打开免提
+        //默认打开免提
         if (this.mCallSwitchSpeakerBtn != null) {
             this.mCallSwitchSpeakerBtn.setSelected(CubeEngine.getInstance().getMediaService().isSpeakerEnabled());
         }
@@ -710,13 +713,11 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
 
         // 屏幕常亮
         this.keepScreenOn();
-
     }
 
     @Override
     public void onCallEnded(CallSession session, CallAction action) {
         release();
-
     }
 
     @Override
@@ -729,7 +730,7 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
             ToastUtil.showToast(this, 0, getString(R.string.connection_failure_please_try_again_later));
         }
         else if (errorCode == CubeErrorCode.NetworkNotReachable) {
-          ToastUtil.showToast(this,0,getString(R.string.connection_failure));
+            ToastUtil.showToast(this, 0, getString(R.string.connection_failure));
         }
         else if (errorCode == CubeErrorCode.BusyHere) {
             ToastUtil.showToast(this, 0, getString(R.string.call_user_busy));
@@ -742,27 +743,11 @@ public class P2PCallActivity extends BaseActivity <P2PCallPresenter> implements 
         }
         else if (errorCode == CubeErrorCode.AlreadyInCalling) {
             ToastUtil.showToast(this, "您已经在通话中！");
-        }else{
+        }
+        else {
             ToastUtil.showToast(this, "对方正在通话中,请稍后再拨");
         }
         this.release();
-
-    }
-
-//获取通话用户成功
-    @Override
-    public void getCallUserSuccess(User callUser ) {
-        if (null != callUser) {
-            GlideUtil.loadCircleImage(callUser.avatar, P2PCallActivity.this, mPeerHeadIv, R.drawable.default_head_user);
-            mPeerNameTv.setText(callUser.displayName);
-            if (mCallState == CallStatus.AUDIO_INCOMING) {    // 语音来电
-                mCallHintTv.setText(getResources().getString(R.string.someone_wanted_to_talk_to_you_voice_calls));
-            }
-            else if (mCallState == CallStatus.VIDEO_INCOMING) {    // 视频来电
-                mCallHintTv.setText(getResources().getString(R.string.someone_wanted_to_talk_to_you_video_calls));
-            }
-        }
-
     }
 }
 

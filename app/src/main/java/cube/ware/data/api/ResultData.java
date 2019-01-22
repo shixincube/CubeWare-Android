@@ -20,18 +20,12 @@ public class ResultData<T extends BaseData> {
 
         @Override
         public String toString() {
-            return "State{" +
-                    "code=" + code +
-                    ", desc='" + desc + '\'' +
-                    '}';
+            return "State{" + "code=" + code + ", desc='" + desc + '\'' + '}';
         }
     }
 
     @Override
     public String toString() {
-        return "ResultData{" +
-                "data=" + data +
-                ", state=" + state +
-                '}';
+        return "ResultData{" + "data=" + data + ", state=" + state + '}';
     }
 }

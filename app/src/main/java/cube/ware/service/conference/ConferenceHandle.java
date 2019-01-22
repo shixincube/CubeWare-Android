@@ -72,8 +72,8 @@ public class ConferenceHandle implements ConferenceListener {
      *
      * @param
      */
-    public void start(Context context) {
-        this.mContext = context;
+    public void start() {
+        this.mContext = CubeUI.getInstance().getContext();
         CubeEngine.getInstance().getConferenceService().addConferenceListener(this);
     }
 

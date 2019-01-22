@@ -55,8 +55,8 @@ public class WhiteBoardHandle implements WhiteboardListener {
      * 启动监听
      * @param
      */
-    public void start(Context context) {
-        mContext = context;
+    public void start() {
+        mContext = CubeUI.getInstance().getContext();
         CubeEngine.getInstance().getWhiteboardService().addWhiteboardListener(this);
     }
 

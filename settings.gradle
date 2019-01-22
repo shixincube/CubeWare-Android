@@ -1,1 +1,1 @@
-include ':app', ':CommonMvp', ':CommonUtils', ':CommonSdk', ':CommonRes', ':Message', ':Interceptors'
+include ':app', ':CommonMvp', ':CommonUtils', ':CommonSdk', ':CommonRes', ':Message', ':Interceptors', ':CubeEngine', ':GenieAndroid', 'CubeRTC', 'CubeSIP'

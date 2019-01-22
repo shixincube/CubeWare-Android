@@ -1,4 +1,4 @@
-package cube.ware.service.call.adapter;
+package cube.ware.service.call.ui;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.common.utils.utils.glide.GlideUtil;
-import com.common.utils.utils.log.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;

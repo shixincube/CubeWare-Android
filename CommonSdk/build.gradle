@@ -33,6 +33,6 @@ dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
   api project(path: ':CommonUtils')
   implementation 'com.billy.android:cc:2.1.1'
-  api developmentDependencies.arouter_api
+  implementation developmentDependencies.arouter_api
   annotationProcessor processorDependencies.arouter_compiler
 }

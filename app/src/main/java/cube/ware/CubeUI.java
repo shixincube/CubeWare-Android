@@ -29,9 +29,10 @@ public class CubeUI {
 
     private Context mContext;
 
-    private final StringBuilder                  buffer                        = new StringBuilder();
-    private       List<CubeEngineWorkerListener> mCubeEngineWorkerListenerList = new ArrayList<>(); // CubeEngine工作状态监听
-    private       List<ChatEventListener>        sChatEventListeners           = new ArrayList<>(); // 会话窗口消息列表一些点击事件的响应处理回调
+    private final StringBuilder buffer = new StringBuilder();
+
+    private List<CubeEngineWorkerListener> mCubeEngineWorkerListenerList = new ArrayList<>(); // CubeEngine工作状态监听
+    private List<ChatEventListener>        sChatEventListeners           = new ArrayList<>(); // 会话窗口消息列表一些点击事件的响应处理回调
 
     /**
      * 私有化构造方法

@@ -13,16 +13,20 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * api网络请求管理器
+ * 网络请求管理器
+ *
+ * @author LiuFeng
+ * @data 2019/1/22 14:30
  */
 public class ApiManager {
+    private static ApiManager mInstance = new ApiManager();
+
+    private Retrofit     mRetrofit;         // Retrofit实例
+    private OkHttpClient mOkHttpClient;     // OkHttpClient实例
+    private ApiService   mApiService;       // api接口
+
     private static final int READ_TIME_OUT    = 15;      // 读取超时时间为15秒
     private static final int CONNECT_TIME_OUT = 15;      // 连接超时时间为15秒
-
-    private static ApiManager mInstance = new ApiManager();
-    private Retrofit     mRetrofit;         // Retrofit实例
-    private OkHttpClient mOkHttpClient; // OkHttpClient实例
-    private ApiService   mApiService;       // api接口
 
     /**
      * 单例
@@ -77,17 +81,25 @@ public class ApiManager {
      */
     private void initRetrofit() {
         Retrofit.Builder builder = new Retrofit.Builder();
-        // base地址
-        if (AppManager.isDebug()) {
-            builder.baseUrl(AppConstants.Debug.BASE_URL);
-        }
-        else {
-            builder.baseUrl(AppConstants.Release.BASE_URL);
-        }
+        builder.baseUrl(getBaseUrl());
         builder.client(this.mOkHttpClient);
         builder.addConverterFactory(GsonConverterFactory.create());
         builder.addCallAdapterFactory(RxJavaCallAdapterFactory.create());
         this.mRetrofit = builder.build();
+    }
+
+    /**
+     * base地址
+     *
+     * @return
+     */
+    private String getBaseUrl() {
+        if (AppManager.isDebug()) {
+            return AppConstants.Debug.BASE_URL;
+        }
+        else {
+            return AppConstants.Release.BASE_URL;
+        }
     }
 
     /**

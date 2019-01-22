@@ -59,6 +59,9 @@ android {
  */
 dependencies {
   implementation project(path: ':CommonMvp')
+  implementation developmentDependencies.arouter_api
+  implementation developmentDependencies.arouter_annotation
+  annotationProcessor processorDependencies.arouter_compiler
   implementation 'com.billy.android:cc:2.1.1'
 
   // 添加全局拦截器

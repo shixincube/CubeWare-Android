@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.common.utils.utils.log.LogUtil;
 
+import cube.ware.CubeUI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,10 +36,9 @@ public class FileHandle implements FileManagerListener {
     /**
      * 启动监听
      */
-    public void start(Context context) {
-        LogUtil.i("start FileManagerService");
+    public void start() {
+        this.mContext= CubeUI.getInstance().getContext();
         CubeEngine.getInstance().getFileManagerService().addFileManagerListener(this);
-        this.mContext=context;
     }
 
     /**
