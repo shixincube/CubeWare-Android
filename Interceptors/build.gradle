@@ -1,0 +1,3 @@
+// 一直作为library编译
+ext.alwaysLib = true
+apply from: rootProject.file('component.gradle')

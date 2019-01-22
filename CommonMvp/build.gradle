@@ -24,14 +24,13 @@ android {
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
-  implementation developmentDependencies.support_appcompat_v7
-  implementation developmentDependencies.multidex
-  implementation developmentDependencies.rxjava
-  implementation developmentDependencies.rxandroid
-  implementation developmentDependencies.rxpermissions
-  implementation developmentDependencies.umeng
-  implementation developmentDependencies.umeng_common
-
-  implementation project(path: ':CommonUtils')
-  implementation project(path: ':CommonSdk')
+  api project(path: ':CommonSdk')
+  api project(path: ':CommonRes')
+  api developmentDependencies.support_appcompat_v7
+  api developmentDependencies.multidex
+  api developmentDependencies.rxjava
+  api developmentDependencies.rxandroid
+  api developmentDependencies.rxpermissions
+  api developmentDependencies.umeng
+  api developmentDependencies.umeng_common
 }

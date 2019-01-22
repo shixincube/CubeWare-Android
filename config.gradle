@@ -39,6 +39,7 @@ ext {
                              support_recyclerview_v7 : "com.android.support:recyclerview-v7:${supportVersion}",
                              support_design          : "com.android.support:design:26.1.0",
                              support_cardview_v7     : "com.android.support:cardview-v7:${supportVersion}",
+                             "androidJUnitRunner"    : "android.support.test.runner.AndroidJUnitRunner",
 
                              // multidex
                              multidex                : "com.android.support:multidex:${multidexVersion}",
@@ -105,19 +106,19 @@ ext {
                              timber                  : "com.jakewharton.timber:timber:4.7.1",
                              logger                  : "com.orhanobut:logger:2.2.0",
 
-                             // 路由工具
-                             "arouter"                  : "com.alibaba:arouter-api:1.3.1",
-                             "arouter_compiler"         : "com.alibaba:arouter-compiler:1.1.4",
-                             "arouter_annotation"         : "com.alibaba:arouter-annotation:1.0.4",
+                             // 阿里路由工具
+                             "arouter_api"           : "com.alibaba:arouter-api:1.4.1",
+                             "arouter_annotation"    : "com.alibaba:arouter-annotation:1.0.6",
 
                              // EventBus
                              eventbus                : "org.greenrobot:eventbus:${eventbusVersion}",
                              smartrefresh            : "com.scwang.smartrefresh:SmartRefreshLayout:${smartrefreshVersion}",
-                             smartrefresheader       : "com.scwang.smartrefresh:SmartRefreshHeader:${smartrefreshVersion}",
-  ]
+                             smartrefresheader       : "com.scwang.smartrefresh:SmartRefreshHeader:${smartrefreshVersion}",]
 
   testDependencies = [junit          : "junit:junit:${junitVersion}",
                       mockito        : "org.mockito:mockito-core:${mockitoVersion}",
                       mockito_android: "org.mockito:mockito-android:${mockitoVersion}"]
 
+  // 注解处理依赖
+  processorDependencies = [arouter_compiler: "com.alibaba:arouter-compiler:1.2.2"]
 }

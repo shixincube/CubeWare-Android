@@ -26,7 +26,7 @@ import cube.ware.utils.SpUtil;
  * Des: 数据库操作类
  * Date: 2018/8/30.
  */
-@Database(entities = {CubeRecentSession.class, CubeMessage.class, CubeUser.class, CubeConference.class}, version = AppDataBase.DB_VERSION)
+@Database(entities = {CubeRecentSession.class, CubeMessage.class, CubeUser.class, CubeConference.class}, version = AppDataBase.DB_VERSION, exportSchema = false)
 public abstract class AppDataBase extends RoomDatabase {
 
     private static final String TAG = "AppDataBase";

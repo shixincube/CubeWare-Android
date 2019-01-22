@@ -1,5 +1,6 @@
-apply plugin: 'com.android.application'
-
+// 以application方式编译
+ext.mainApp = true
+apply from: rootProject.file('component.gradle')
 
 def appDependencies = rootProject.ext.android
 def developmentDependencies = rootProject.ext.developmentDependencies
@@ -23,11 +24,6 @@ android {
             abiFilters "armeabi-v7a"
         }
 
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [moduleName: project.getName(),"room.schemaLocation": "$projectDir/schemas".toString()]
-            }
-        }
         // Enabling multidex support.
         multiDexEnabled true
     }
@@ -70,19 +66,12 @@ android {
             outputFileName = "CubeWare_v${defaultConfig.versionName}.apk"
         }
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation developmentDependencies.support_appcompat_v7
     implementation developmentDependencies.support_v4
     implementation developmentDependencies.support_recyclerview_v7
-    implementation developmentDependencies.multidex
     implementation developmentDependencies.constraint_layout
     implementation developmentDependencies.support_design
     implementation developmentDependencies.support_cardview_v7
@@ -90,18 +79,9 @@ dependencies {
     implementation developmentDependencies.retrofit_gson
     implementation developmentDependencies.retrofit_rxjava
     implementation developmentDependencies.okhttp_logging
-    implementation developmentDependencies.gson
-    implementation developmentDependencies.rxjava
-    implementation developmentDependencies.rxandroid
-    implementation developmentDependencies.rxpermissions
     implementation developmentDependencies.eventbus
-    implementation developmentDependencies.umeng
-    implementation developmentDependencies.umeng_common
     implementation developmentDependencies.recyclerview_helper
     implementation developmentDependencies.smartrefresh
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation developmentDependencies.arouter
-    annotationProcessor developmentDependencies.arouter_compiler
     implementation developmentDependencies.arouter_annotation
     implementation 'com.lzy.widget:imagepicker:0.6.1'
     implementation 'top.zibin:Luban:1.1.8'
@@ -113,8 +93,7 @@ dependencies {
 //    implementation 'com.shixincube:genie:2.0.21'
 //    implementation 'com.shixincube:rtc:2.1.4'
 //    implementation 'com.shixincube:sip:1.1.13'
-    implementation project(path: ':CommonMvp')
-    implementation project(path: ':CommonSdk')
-    implementation project(path: ':CommonUtils')
 
+    // 组件依赖
+    addComponent 'Message', project(':Message')
 }

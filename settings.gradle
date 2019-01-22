@@ -1,1 +1,1 @@
-include ':app', ':CommonMvp', ':CommonUtils', ':CommonSdk'
+include ':app', ':CommonMvp', ':CommonUtils', ':CommonSdk', ':CommonRes', ':Message', ':Interceptors'

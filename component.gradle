@@ -1,0 +1,80 @@
+project.apply plugin: 'cc-register'
+
+def appDependencies = rootProject.ext.android
+def developmentDependencies = rootProject.ext.developmentDependencies
+def testDependencies = rootProject.ext.testDependencies
+def processorDependencies = rootProject.ext.processorDependencies
+
+android {
+  compileSdkVersion appDependencies.compileSdkVersion
+
+  defaultConfig {
+    minSdkVersion appDependencies.minSdkVersion
+    targetSdkVersion appDependencies.targetSdkVersion
+    versionCode appDependencies.versionCode
+    versionName appDependencies.versionName
+    testInstrumentationRunner developmentDependencies.androidJUnitRunner
+
+    javaCompileOptions {
+      annotationProcessorOptions {
+        arguments = [AROUTER_MODULE_NAME: project.getName()]
+        includeCompileClasspath true
+      }
+    }
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  buildTypes {
+    debug {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+
+    release {
+      zipAlignEnabled true
+      minifyEnabled true
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  lintOptions {
+    disable 'InvalidPackage'
+    disable "ResourceType"
+    abortOnError false
+  }
+
+  sourceSets {
+    main {
+      jniLibs.srcDirs = ['libs']
+    }
+  }
+}
+
+/**
+ * 公用组件依赖
+ */
+dependencies {
+  implementation project(path: ':CommonMvp')
+  implementation 'com.billy.android:cc:2.1.1'
+
+  // 添加全局拦截器
+  if (project.ext.has('runAsApp') && project.ext.runAsApp) {
+    implementation project(':Interceptors')
+  }
+}
+
+/*ccregister.registerInfo.add([
+    //在自动注册组件的基础上增加：自动注册组件B的processor
+    'scanInterface'             : 'com.alex.lenovo.processor.IActionProcessor'
+    , 'codeInsertToClassName'   : 'com.alex.lenovo.ComponentLenovo'
+    , 'codeInsertToMethodName'  : 'initProcessors'
+    , 'registerMethodName'      : 'add'
+])*/
+//也可以按照上述格式继续添加你自己的自动注册需求，俗称：搭顺风车
+
+//开启app内部多进程组件调用
+ccregister.multiProcessEnabled = true

@@ -23,8 +23,8 @@ android {
 }
 
 dependencies {
-  implementation fileTree(dir: 'libs', include: ['*.jar'])
-  implementation developmentDependencies.support_appcompat_v7
-  implementation developmentDependencies.gson
+  api fileTree(dir: 'libs', include: ['*.jar'])
+  api developmentDependencies.support_appcompat_v7
+  api developmentDependencies.gson
   api developmentDependencies.glide
 }

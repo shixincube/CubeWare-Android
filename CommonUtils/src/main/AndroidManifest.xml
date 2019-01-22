@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
 
-    <application android:label="@string/app_name">
+    <application>
         <receiver
             android:name=".alive.WakeUpReceiver"
             android:process=":watch">

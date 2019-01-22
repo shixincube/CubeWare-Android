@@ -15,7 +15,8 @@ android {
 
     javaCompileOptions {
       annotationProcessorOptions {
-        arguments = [moduleName: project.getName()]
+        arguments = [AROUTER_MODULE_NAME: project.getName()]
+        includeCompileClasspath true
       }
     }
   }
@@ -30,6 +31,8 @@ android {
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
-  implementation developmentDependencies.arouter
-  annotationProcessor developmentDependencies.arouter_compiler
+  api project(path: ':CommonUtils')
+  implementation 'com.billy.android:cc:2.1.1'
+  api developmentDependencies.arouter_api
+  annotationProcessor processorDependencies.arouter_compiler
 }

@@ -1,0 +1,10 @@
+apply from: rootProject.file('component.gradle')
+
+android {
+  //给资源名增加前缀, 避免资源名冲突
+  resourcePrefix "message_"
+}
+
+dependencies {
+
+}

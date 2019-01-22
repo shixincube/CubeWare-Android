@@ -9,6 +9,18 @@ package com.common.sdk;
 public interface RouterHub {
 
     /**
+     * 组件名
+     */
+    interface ComponentName {
+
+        // 设置
+        String Settings = "ComponentSettings";
+
+        // 消息
+        String Message = "ComponentMessage";
+    }
+
+    /**
      * 组名-app
      */
     interface App {
