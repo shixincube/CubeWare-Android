@@ -24,13 +24,11 @@ public interface AppConstants {
      * 测试服环境
      */
     public interface Debug {
-//        String APP_ID      = "09eab471bc1d4a1b855f6b8f87b01caf800";         // 引擎id
-//        String APP_KEY     = "cc9793d0dd534cfc8c8f74e2f2ab1baf800";         // 引擎key
-//        String APP_KEY      = "5df6d5495fb74b35ad157c94977527ff005";         // web引擎id
-//        String APP_ID       = "9c2ed36ae5d34131b3768ea432da6cea005";         // web引擎key
-        String APP_ID      = "6365f0cafd8a47b984bdc08a64327881";         // 引擎id
-        String APP_KEY     = "9074ad1395f24fbd83a92ddc80facb1f";         // 引擎key
-//        String BASE_URL    = "https://dev.user.shixincube.cn";                    // 服务器接口地址
+        String APP_ID      = "b0e73ecdfb6b4f66af04186a62405f79";            // 引擎id
+        String APP_KEY     = "eb6e05690a2542ce8ee7f957b0df2e2b ";
+//        String APP_ID      = "6365f0cafd8a47b984bdc08a64327881";         // 引擎id
+//        String APP_KEY     = "9074ad1395f24fbd83a92ddc80facb1f";         // 引擎key
+//        String BASE_URL    = "https://dev.user.shixincube.cn";              // 服务器接口地址
         String BASE_URL    = "http://114.112.101.157:4000/";                    // 服务器接口地址 2019/1/24
 //        String LICENSE_URL = "https://dev.license.shixincube.cn/auth/license/get";   // 服务license地址、
         String LICENSE_URL = "https://test-license.shixincube.cn/auth/license/get";   // 服务license地址 2019/1/24
