@@ -56,12 +56,13 @@ public class AppManager {
      * @return
      */
     public static String getAppId() {
-        if (isDebug()) {
-            return AppConstants.Debug.APP_ID;
-        }
-        else {
-            return AppConstants.Release.APP_ID;
-        }
+//        if (isDebug()) {
+//            return AppConstants.Debug.APP_ID;
+//        }
+//        else {
+//            return AppConstants.Release.APP_ID;
+//        }
+        return AppConstants.Release.APP_ID;
     }
 
     /**
@@ -70,12 +71,13 @@ public class AppManager {
      * @return
      */
     public static String getAppKey() {
-        if (isDebug()) {
-            return AppConstants.Debug.APP_KEY;
-        }
-        else {
-            return AppConstants.Release.APP_KEY;
-        }
+//        if (isDebug()) {
+//            return AppConstants.Debug.APP_KEY;
+//        }
+//        else {
+//            return AppConstants.Release.APP_KEY;
+//        }
+        return AppConstants.Release.APP_KEY;
     }
 
     /**
