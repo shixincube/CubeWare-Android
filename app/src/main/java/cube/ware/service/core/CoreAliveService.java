@@ -10,6 +10,7 @@ import com.common.utils.alive.IntentWrapper;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
 import cube.ware.CubeUI;
+import cube.ware.ReportService;
 import cube.ware.service.call.CallHandle;
 import cube.ware.service.conference.ConferenceHandle;
 import cube.ware.service.engine.CubeEngineHandle;
@@ -49,7 +50,7 @@ public class CoreAliveService extends AbsWorkService {
         if (!CubeEngine.getInstance().isStarted()) {
             boolean startup = CubeEngine.getInstance().startup(getApplicationContext());
             LogUtil.i("引擎是否启动成功： " + startup);
-            CubeUI.getInstance().reportError("no start engine!");
+            ReportService.reportError("no start engine!");
         }
 
         if (!isStarted) {

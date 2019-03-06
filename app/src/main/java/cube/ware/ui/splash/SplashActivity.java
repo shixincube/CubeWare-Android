@@ -7,7 +7,6 @@ import android.widget.FrameLayout;
 import com.common.mvp.base.BaseActivity;
 import com.common.mvp.base.BasePresenter;
 import com.common.sdk.RouterUtil;
-import com.common.utils.utils.GsonUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
 

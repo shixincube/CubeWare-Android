@@ -71,7 +71,7 @@ public abstract class BaseChatActivity extends BaseToolBarActivity implements Se
         super.onCreate(savedInstanceState);
         mMessageFragment = (MessageFragment) switchContent(buildFragment(), false, "MessageFragment");
         parseIntent();
-        CubeUI.getInstance().addChatEventListener(this);
+        ChatEventHandle.getInstance().addChatEventListener(this);
     }
 
     /**
@@ -130,7 +130,7 @@ public abstract class BaseChatActivity extends BaseToolBarActivity implements Se
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        CubeUI.getInstance().removeChatEventListener(this);
+        ChatEventHandle.getInstance().removeChatEventListener(this);
     }
 
     @Override

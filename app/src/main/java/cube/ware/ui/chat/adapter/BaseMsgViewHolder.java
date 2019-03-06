@@ -18,6 +18,8 @@ import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.glide.GlideUtil;
 import com.common.utils.utils.log.LogUtil;
 
+import cube.ware.ui.chat.ChatEventHandle;
+import cube.ware.ui.chat.ChatEventListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -410,12 +412,13 @@ public abstract class BaseMsgViewHolder implements MessagePopupManager.OnPopMenu
         });
 
         // 头像点击事件响应
-        if (CubeUI.getInstance().getChatEventListeners().size() > 0) {
+        List<ChatEventListener> mListeners = ChatEventHandle.getInstance().getChatEventListeners();
+        if (mListeners.size() > 0) {
             View.OnClickListener portraitListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    for (int i = 0; i < CubeUI.getInstance().getChatEventListeners().size(); i++) {
-                        CubeUI.getInstance().getChatEventListeners().get(i).onAvatarClicked(mViewHolder.getConvertView().getContext(), mData.mMessage);
+                    for (int i = 0; i < mListeners.size(); i++) {
+                        mListeners.get(i).onAvatarClicked(mViewHolder.getConvertView().getContext(), mData.mMessage);
                     }
                 }
             };
@@ -445,12 +448,13 @@ public abstract class BaseMsgViewHolder implements MessagePopupManager.OnPopMenu
         }
 
         // 头像长按事件响应处理
-        if (CubeUI.getInstance().getChatEventListeners().size() > 0) {
+        List<ChatEventListener> mListeners = ChatEventHandle.getInstance().getChatEventListeners();
+        if (mListeners.size() > 0) {
             View.OnLongClickListener longClickListener = new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    for (int i = 0; i < CubeUI.getInstance().getChatEventListeners().size(); i++) {
-                        CubeUI.getInstance().getChatEventListeners().get(i).onAvatarLongClicked(v.getContext(), mData.mMessage);
+                    for (int i = 0; i < mListeners.size(); i++) {
+                        mListeners.get(i).onAvatarLongClicked(v.getContext(), mData.mMessage);
                     }
                     return true;
                 }

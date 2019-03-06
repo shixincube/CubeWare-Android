@@ -62,6 +62,24 @@ public class CallHandle implements CallListener {
     }
 
     /**
+     * 添加一个通话状态监听器
+     *
+     * @param listener
+     */
+    public void addCallStateListener(CallStateListener listener) {
+        this.mCallStateListenerList.add(listener);
+    }
+
+    /**
+     * 移除一个通话状态监听器
+     *
+     * @param listener
+     */
+    public void removeCallStateListener(CallStateListener listener) {
+        this.mCallStateListenerList.remove(listener);
+    }
+
+    /**
      * 收到/发起呼叫（第一个呼叫）
      *
      * @param session
@@ -229,23 +247,5 @@ public class CallHandle implements CallListener {
                 }
             }
         }
-    }
-
-    /**
-     * 添加一个通话状态监听器
-     *
-     * @param listener
-     */
-    public void addCallStateListener(CallStateListener listener) {
-        this.mCallStateListenerList.add(listener);
-    }
-
-    /**
-     * 移除一个通话状态监听器
-     *
-     * @param listener
-     */
-    public void removeCallStateListener(CallStateListener listener) {
-        this.mCallStateListenerList.remove(listener);
     }
 }

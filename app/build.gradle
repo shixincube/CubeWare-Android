@@ -93,10 +93,12 @@ dependencies {
 //    implementation 'com.shixincube:rtc:2.1.4'
 //    implementation 'com.shixincube:sip:1.1.13'
 
-    api project(':CubeEngine')
-    api project(':CubeRTC')
-    api project(':CubeSIP')
+//    api project(':CubeEngine')
+//    api project(':CubeRTC')
+//    api project(':CubeSIP')
 
     // 组件依赖
     addComponent 'Message', project(':Message')
+
+    api project(':CubeBase')
 }

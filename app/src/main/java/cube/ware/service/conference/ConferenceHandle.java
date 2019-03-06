@@ -15,7 +15,6 @@ import cube.service.conference.ConferenceListener;
 import cube.service.conference.model.Conference;
 import cube.service.group.GroupType;
 import cube.service.group.model.Member;
-import cube.service.sharedesktop.ShareDesktopExtListener;
 import cube.service.user.model.User;
 import cube.ware.AppConstants;
 import cube.ware.CubeUI;

@@ -10,7 +10,6 @@ import org.json.JSONException;
 import java.util.HashMap;
 import java.util.Map;
 
-import cube.service.group.GroupType;
 import cube.service.message.model.CustomMessage;
 import cube.service.message.model.Receiver;
 import cube.service.message.model.Sender;

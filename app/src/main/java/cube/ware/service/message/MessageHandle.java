@@ -17,6 +17,7 @@ import cube.service.message.model.FileMessage;
 import cube.service.message.model.MessageEntity;
 import cube.service.message.model.ReceiptMessage;
 import cube.ware.CubeUI;
+import cube.ware.ReportService;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.manager.MessageManager;
@@ -316,7 +317,7 @@ public class MessageHandle implements MessageListener {
             MessageManager.getInstance().updateMessageInLocal(message).subscribe();
         }
 
-        CubeUI.getInstance().reportError(message, cubeError);
+        ReportService.reportError(message, cubeError);
     }
 
     /**

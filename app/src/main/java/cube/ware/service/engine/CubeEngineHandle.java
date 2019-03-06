@@ -1,14 +1,12 @@
 package cube.ware.service.engine;
 
 import com.common.utils.utils.log.LogUtil;
-
-import java.util.List;
-
 import cube.service.CubeEngine;
 import cube.service.common.CubeEngineListener;
 import cube.service.common.CubeState;
 import cube.service.common.model.CubeError;
-import cube.ware.CubeUI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 引擎状态处理
@@ -19,6 +17,8 @@ import cube.ware.CubeUI;
 public class CubeEngineHandle implements CubeEngineListener {
 
     private static CubeEngineHandle instance = new CubeEngineHandle();
+
+    private List<CubeEngineListener> mListeners = new ArrayList<>();
 
     private CubeEngineHandle() {}
 
@@ -41,13 +41,30 @@ public class CubeEngineHandle implements CubeEngineListener {
     }
 
     /**
+     * 添加状态监听器
+     *
+     * @param listener
+     */
+    public void addListener(CubeEngineListener listener) {
+        this.mListeners.add(listener);
+    }
+
+    /**
+     * 移除状态监听器
+     *
+     * @param listener
+     */
+    public void removeListener(CubeEngineListener listener) {
+        this.mListeners.remove(listener);
+    }
+
+    /**
      * 引擎启动完成
      */
     @Override
     public void onStarted() {
         LogUtil.i("onStarted:---------");
-        List<CubeEngineWorkerListener> cubeEngineWorkerListener = CubeUI.getInstance().getCubeEngineWorkerListener();
-        for (CubeEngineWorkerListener engineWorkerListener : cubeEngineWorkerListener) {
+        for (CubeEngineListener engineWorkerListener : mListeners) {
             engineWorkerListener.onStarted();
         }
     }
@@ -59,9 +76,8 @@ public class CubeEngineHandle implements CubeEngineListener {
      */
     @Override
     public void onStateChange(CubeState state) {
-        LogUtil.i("onStateChange:--------- " +state);
-        List<CubeEngineWorkerListener> cubeEngineWorkerListener = CubeUI.getInstance().getCubeEngineWorkerListener();
-        for (CubeEngineWorkerListener engineWorkerListener : cubeEngineWorkerListener) {
+        LogUtil.i("onStateChange:--------- " + state);
+        for (CubeEngineListener engineWorkerListener : mListeners) {
             engineWorkerListener.onStateChange(state);
         }
     }
@@ -72,8 +88,7 @@ public class CubeEngineHandle implements CubeEngineListener {
     @Override
     public void onStopped() {
         LogUtil.i("onStopped:--------- ");
-        List<CubeEngineWorkerListener> cubeEngineWorkerListener = CubeUI.getInstance().getCubeEngineWorkerListener();
-        for (CubeEngineWorkerListener engineWorkerListener : cubeEngineWorkerListener) {
+        for (CubeEngineListener engineWorkerListener : mListeners) {
             engineWorkerListener.onStopped();
         }
     }
@@ -85,9 +100,8 @@ public class CubeEngineHandle implements CubeEngineListener {
      */
     @Override
     public void onFailed(CubeError error) {
-        LogUtil.e("onFailed:--------- "+error);
-        List<CubeEngineWorkerListener> cubeEngineWorkerListener = CubeUI.getInstance().getCubeEngineWorkerListener();
-        for (CubeEngineWorkerListener engineWorkerListener : cubeEngineWorkerListener) {
+        LogUtil.e("onFailed:--------- " + error);
+        for (CubeEngineListener engineWorkerListener : mListeners) {
             engineWorkerListener.onFailed(error);
         }
     }

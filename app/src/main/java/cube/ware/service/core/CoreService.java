@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
 import cube.ware.CubeUI;
+import cube.ware.ReportService;
 import cube.ware.service.call.CallHandle;
 import cube.ware.service.conference.ConferenceHandle;
 import cube.ware.service.engine.CubeEngineHandle;
@@ -148,7 +149,7 @@ public class CoreService extends Service {
         if (!CubeEngine.getInstance().isStarted()) {
             boolean startup = CubeEngine.getInstance().startup(getApplicationContext());
             LogUtil.i("引擎是否启动成功： " + startup);
-            CubeUI.getInstance().reportError("no start engine!");
+            ReportService.reportError("no start engine!");
         }
 
         CubeEngineHandle.getInstance().start();

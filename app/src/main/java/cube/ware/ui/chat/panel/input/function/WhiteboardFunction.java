@@ -1,7 +1,6 @@
 package cube.ware.ui.chat.panel.input.function;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.ClickUtil;
@@ -19,7 +18,6 @@ import cube.service.conference.model.Conference;
 import cube.service.group.GroupType;
 import cube.service.whiteboard.model.Whiteboard;
 import cube.service.whiteboard.model.WhiteboardConfig;
-import cube.ware.App;
 import cube.ware.AppConstants;
 import cube.ware.CubeUI;
 import cube.ware.R;

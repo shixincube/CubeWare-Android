@@ -4,18 +4,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import com.common.utils.alive.DaemonEnv;
 import com.common.utils.utils.log.LogUtil;
-import com.umeng.analytics.MobclickAgent;
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeConfig;
-import cube.service.common.model.CubeError;
-import cube.service.common.model.Version;
-import cube.service.message.model.MessageEntity;
 import cube.service.user.UserState;
 import cube.ware.service.core.CoreAliveService;
-import cube.ware.service.engine.CubeEngineWorkerListener;
-import cube.ware.ui.chat.ChatEventListener;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * CubeWare全局管理类
@@ -28,11 +20,6 @@ public class CubeUI {
     private static CubeUI mInstance = new CubeUI();
 
     private Context mContext;
-
-    private final StringBuilder buffer = new StringBuilder();
-
-    private List<CubeEngineWorkerListener> mCubeEngineWorkerListenerList = new ArrayList<>(); // CubeEngine工作状态监听
-    private List<ChatEventListener>        sChatEventListeners           = new ArrayList<>(); // 会话窗口消息列表一些点击事件的响应处理回调
 
     /**
      * 私有化构造方法
@@ -174,114 +161,5 @@ public class CubeUI {
      */
     public boolean isConference() {
         return CubeEngine.getInstance().getSession().isConference();
-    }
-
-    /**
-     * 上传错误到友盟
-     *
-     * @param messageEntity
-     * @param cubeError
-     */
-    public void reportError(MessageEntity messageEntity, CubeError cubeError) {
-        String desc = (messageEntity != null ? ("sn:" + messageEntity.getSerialNumber() + " type:" + messageEntity.getType() + " sendTime:" + messageEntity.getSendTimestamp() + " time:" + messageEntity.getTimestamp()) : null);
-        reportError(desc, cubeError);
-    }
-
-    /**
-     * 上传错误到友盟
-     *
-     * @param desc
-     */
-    public void reportError(String desc) {
-        reportError(desc, null);
-    }
-
-    /**
-     * 上传错误到友盟
-     *
-     * @param cubeError
-     */
-    public void reportError(CubeError cubeError) {
-        reportError("", cubeError);
-    }
-
-    /**
-     * 上传错误到友盟
-     *
-     * @param desc
-     * @param cubeError
-     */
-    public void reportError(String desc, CubeError cubeError) {
-        buffer.append("onFailed: Version:");
-        buffer.append(Version.getDescription());
-        buffer.append("WB:");
-        buffer.append(Version.WB_V);
-        buffer.append(" CC:");
-        buffer.append(genie.api.Version.getNumbers());
-        buffer.append("\n");
-        buffer.append(cubeError != null ? cubeError.toString() : "");
-        buffer.append("\n");
-        buffer.append(desc);
-
-        MobclickAgent.reportError(mContext, buffer.toString());
-
-        buffer.delete(0, buffer.length());
-    }
-
-    /**
-     * 添加CubeEngine监听器
-     *
-     * @param cubeEngineWorkerListener
-     */
-    public void addCubeEngineWorkerListener(CubeEngineWorkerListener cubeEngineWorkerListener) {
-        if (cubeEngineWorkerListener != null) {
-            mCubeEngineWorkerListenerList.add(cubeEngineWorkerListener);
-        }
-    }
-
-    /**
-     * 移除CubeEngine监听器
-     *
-     * @param cubeEngineWorkerListener
-     */
-    public void removeCubeEngineWorkerListener(CubeEngineWorkerListener cubeEngineWorkerListener) {
-        if (cubeEngineWorkerListener != null && mCubeEngineWorkerListenerList.contains(cubeEngineWorkerListener)) {
-            mCubeEngineWorkerListenerList.remove(cubeEngineWorkerListener);
-        }
-    }
-
-    public List<CubeEngineWorkerListener> getCubeEngineWorkerListener() {
-        return mCubeEngineWorkerListenerList;
-    }
-
-    /**
-     * 获取聊天界面事件监听器
-     *
-     * @return
-     */
-    public List<ChatEventListener> getChatEventListeners() {
-        return sChatEventListeners;
-    }
-
-    /**
-     * 设置聊天界面的事件监听器
-     *
-     * @param chatEventListener
-     */
-    public void addChatEventListener(ChatEventListener chatEventListener) {
-        if (chatEventListener != null && !sChatEventListeners.contains(chatEventListener)) {
-            sChatEventListeners.add(chatEventListener);
-        }
-    }
-
-    /**
-     * 删除聊天界面的事件监听器
-     *
-     * @param chatEventListener
-     */
-    public void removeChatEventListener(ChatEventListener chatEventListener) {
-        if (chatEventListener != null && sChatEventListeners.contains(chatEventListener)) {
-            sChatEventListeners.remove(chatEventListener);
-        }
     }
 }

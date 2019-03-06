@@ -59,7 +59,7 @@ public class App extends BaseApplication {
         NetworkStateReceiver.getInstance().register(this);
 
         // 初始化CubeUI
-        CubeUI.getInstance().init(this, AppManager.getAppId(), AppManager.getAppKey(),  AppManager.getLicenceUrl(), SpUtil.getResourcePath());
+        CubeUI.getInstance().init(this, AppManager.getAppId(), AppManager.getAppKey(), AppManager.getLicenceUrl(), SpUtil.getResourcePath());
 
         // 启动cube引擎
         CubeUI.getInstance().startupCube(this);
