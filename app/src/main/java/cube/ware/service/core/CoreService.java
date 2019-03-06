@@ -22,7 +22,7 @@ import cube.ware.service.engine.CubeEngineHandle;
 import cube.ware.service.file.FileHandle;
 import cube.ware.service.group.GroupHandle;
 import cube.ware.service.message.MessageHandle;
-import cube.ware.service.remoteDesktop.RemoteDesktopHandle;
+import cube.ware.service.remoteDesktop.ShareDesktopHandle;
 import cube.ware.service.user.UserHandle;
 import cube.ware.service.whiteboard.WhiteBoardHandle;
 
@@ -158,7 +158,7 @@ public class CoreService extends Service {
         CallHandle.getInstance().start();
         ConferenceHandle.getInstance().start();
         GroupHandle.getInstance().start();
-        RemoteDesktopHandle.getInstance().start();
+        ShareDesktopHandle.getInstance().start();
         WhiteBoardHandle.getInstance().start();
         SettingHandle.getInstance().start();
     }
@@ -179,7 +179,7 @@ public class CoreService extends Service {
         CallHandle.getInstance().stop();
         ConferenceHandle.getInstance().stop();
         GroupHandle.getInstance().stop();
-        RemoteDesktopHandle.getInstance().stop();
+        ShareDesktopHandle.getInstance().stop();
         WhiteBoardHandle.getInstance().stop();
         SettingHandle.getInstance().stop();
         CubeEngine.getInstance().shutdown();

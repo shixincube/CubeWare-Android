@@ -57,6 +57,7 @@ public class CallHandle implements CallListener {
      * 停止监听
      */
     public void stop() {
+        mCallStateListenerList.clear();
         CubeEngine.getInstance().getCallService().removeCallListener(this);
     }
 

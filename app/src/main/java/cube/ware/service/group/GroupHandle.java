@@ -1,13 +1,8 @@
 package cube.ware.service.group;
 
 import android.text.TextUtils;
-
 import com.common.mvp.rx.RxBus;
 import com.common.utils.utils.log.LogUtil;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.group.GroupListener;
@@ -23,6 +18,8 @@ import cube.ware.manager.MessageManager;
 import cube.ware.ui.group.adapter.GroupListenerAdapter;
 import cube.ware.ui.recent.manager.RecentSessionManager;
 import cube.ware.utils.SpUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 引擎群组服务处理
@@ -33,7 +30,8 @@ import cube.ware.utils.SpUtil;
 public class GroupHandle implements GroupListener {
 
     private static GroupHandle instance = new GroupHandle();
-    List<GroupListenerAdapter> mGroupListenerAdapters = new ArrayList<>();
+
+    private List<GroupListenerAdapter> mGroupListenerAdapters = new ArrayList<>();
 
     private GroupHandle() {}
 
@@ -57,6 +55,7 @@ public class GroupHandle implements GroupListener {
      * 停止监听
      */
     public void stop() {
+        mGroupListenerAdapters.clear();
         CubeEngine.getInstance().getGroupService().removeGroupListener(this);
     }
 
@@ -86,9 +85,9 @@ public class GroupHandle implements GroupListener {
      */
     @Override
     public void onGroupCreated(Group group, User from) {
-        LogUtil.i("onGroupCreated: ------群组创建" );
+        LogUtil.i("onGroupCreated: ------群组创建");
         for (GroupListenerAdapter groupListenerAdapter : mGroupListenerAdapters) {
-            groupListenerAdapter.onGroupCreated(group,from);
+            groupListenerAdapter.onGroupCreated(group, from);
         }
     }
 
@@ -100,22 +99,22 @@ public class GroupHandle implements GroupListener {
      */
     @Override
     public void onGroupDestroyed(Group group, User from) {
-        LogUtil.i("onGroupDestroyed: ------群组销毁" );
+        LogUtil.i("onGroupDestroyed: ------群组销毁");
         RecentSessionManager.getInstance().removeRecentSession(group.groupId);
         for (GroupListenerAdapter groupListenerAdapter : mGroupListenerAdapters) {
-            groupListenerAdapter.onGroupDestroyed(group,from);
+            groupListenerAdapter.onGroupDestroyed(group, from);
         }
     }
 
     @Override
     public void onGroupQuited(Group group, User from) {
-        LogUtil.i("onGroupQuited: ------群组退出" );
+        LogUtil.i("onGroupQuited: ------群组退出");
         if (TextUtils.equals(from.cubeId, SpUtil.getCubeId())) {
             //如果是自己的退出 删除最近会话
             RecentSessionManager.getInstance().removeRecentSession(group.groupId);
         }
         for (GroupListenerAdapter groupListenerAdapter : mGroupListenerAdapters) {
-            groupListenerAdapter.onGroupQuited(group,from);
+            groupListenerAdapter.onGroupQuited(group, from);
         }
     }
 
@@ -127,16 +126,17 @@ public class GroupHandle implements GroupListener {
      */
     @Override
     public void onGroupUpdated(Group group, User from) {
-        LogUtil.i("onGroupUpdated: ------群组更新" );
+        LogUtil.i("onGroupUpdated: ------群组更新");
         for (GroupListenerAdapter groupListenerAdapter : mGroupListenerAdapters) {
-            groupListenerAdapter.onGroupUpdated(group,from);
+            groupListenerAdapter.onGroupUpdated(group, from);
         }
 
         //发送更改群名自定义消息
         Sender sender;
         if (from != null && !TextUtils.equals(from.cubeId, SpUtil.getCubeId())) {
             sender = new Sender(from.cubeId, from.displayName);
-        } else {
+        }
+        else {
             sender = new Sender(SpUtil.getCubeId(), SpUtil.getUserName());
         }
         CustomMessage customMessage = MessageManager.getInstance().buildCustomMessage(CubeSessionType.Group, sender, new Receiver(group.groupId, group.displayName), "");
@@ -155,9 +155,9 @@ public class GroupHandle implements GroupListener {
      */
     @Override
     public void onMemberAdded(Group group, User from, List<User> addedMembers) {
-        LogUtil.i("onMemberAdded: ------添加群成员" );
+        LogUtil.i("onMemberAdded: ------添加群成员");
         for (GroupListenerAdapter groupListenerAdapter : mGroupListenerAdapters) {
-            groupListenerAdapter.onMemberAdded(group,from,addedMembers);
+            groupListenerAdapter.onMemberAdded(group, from, addedMembers);
         }
     }
 
@@ -170,9 +170,9 @@ public class GroupHandle implements GroupListener {
      */
     @Override
     public void onMemberRemoved(Group group, User from, List<User> removedMembers) {
-        LogUtil.i("onMemberRemoved: ------删除群成员" );
+        LogUtil.i("onMemberRemoved: ------删除群成员");
         for (GroupListenerAdapter groupListenerAdapter : mGroupListenerAdapters) {
-            groupListenerAdapter.onMemberRemoved(group,from,removedMembers);
+            groupListenerAdapter.onMemberRemoved(group, from, removedMembers);
         }
     }
 
@@ -185,7 +185,7 @@ public class GroupHandle implements GroupListener {
      */
     @Override
     public void onMasterAdded(Group group, User from, List<User> addedMasters) {
-        LogUtil.i("onMasterAdded: ------添加管理员" );
+        LogUtil.i("onMasterAdded: ------添加管理员");
     }
 
     /**
@@ -197,7 +197,7 @@ public class GroupHandle implements GroupListener {
      */
     @Override
     public void onMasterRemoved(Group group, User from, List<User> removedMasters) {
-        LogUtil.i("onMasterRemoved: ------删除管理员" );
+        LogUtil.i("onMasterRemoved: ------删除管理员");
     }
 
     /**
@@ -209,7 +209,7 @@ public class GroupHandle implements GroupListener {
      */
     @Override
     public void onGroupApplied(Group group, User from, User applier) {
-        LogUtil.i("onGroupApplied: ------申请入群" );
+        LogUtil.i("onGroupApplied: ------申请入群");
     }
 
     /**
@@ -221,7 +221,7 @@ public class GroupHandle implements GroupListener {
      */
     @Override
     public void onGroupApplyJoined(Group group, User from, User applier) {
-        LogUtil.i("onGroupApplyJoined: ------同意申请入群" );
+        LogUtil.i("onGroupApplyJoined: ------同意申请入群");
     }
 
     /**
@@ -233,7 +233,7 @@ public class GroupHandle implements GroupListener {
      */
     @Override
     public void onGroupRejectApplied(Group group, User from, User applier) {
-        LogUtil.i("onGroupRejectApplied: ------拒绝申请入群" );
+        LogUtil.i("onGroupRejectApplied: ------拒绝申请入群");
     }
 
     /**
@@ -245,7 +245,7 @@ public class GroupHandle implements GroupListener {
      */
     @Override
     public void onGroupInvited(Group group, User from, List<User> invites) {
-        LogUtil.i("onGroupInvited: ------收到邀请入群" );
+        LogUtil.i("onGroupInvited: ------收到邀请入群");
     }
 
     /**
@@ -257,7 +257,7 @@ public class GroupHandle implements GroupListener {
      */
     @Override
     public void onGroupRejectInvited(Group group, User from, User rejectMember) {
-        LogUtil.i("onGroupRejectInvited: ------拒绝邀请入群" );
+        LogUtil.i("onGroupRejectInvited: ------拒绝邀请入群");
     }
 
     /**
@@ -269,7 +269,7 @@ public class GroupHandle implements GroupListener {
      */
     @Override
     public void onGroupInviteJoined(Group group, User from, User joinedMember) {
-        LogUtil.i("onGroupRejectInvited: ------同意邀请入群" );
+        LogUtil.i("onGroupRejectInvited: ------同意邀请入群");
     }
 
     /**
@@ -280,9 +280,9 @@ public class GroupHandle implements GroupListener {
      */
     @Override
     public void onGroupFailed(Group group, CubeError error) {
-        LogUtil.i("onGroupFailed: ------" );
+        LogUtil.i("onGroupFailed: ------");
         for (GroupListenerAdapter groupListenerAdapter : mGroupListenerAdapters) {
-            groupListenerAdapter.onGroupFailed(group,error);
+            groupListenerAdapter.onGroupFailed(group, error);
         }
     }
 }

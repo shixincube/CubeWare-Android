@@ -39,23 +39,21 @@ import org.greenrobot.eventbus.EventBus;
  */
 public class ConferenceHandle implements ConferenceListener {
 
-    private static ConferenceHandle              instance                  = new ConferenceHandle();
-    private        List<ShareDesktopExtListener> mShareDesktopExtListeners = new ArrayList<>();
+    private static ConferenceHandle instance = new ConferenceHandle();
 
-    private User    joineduser;//暂存成功加入的user
     private Context mContext;
 
-    private ConferenceHandle() {
-    }
+    public List<ConferenceStateListener> mConferenceStateListeners = new ArrayList<>();
+
+    private ConferenceHandle() {}
 
     public static ConferenceHandle getInstance() {
         return instance;
     }
 
-    public List<ConferenceStateListener> mConferenceStateListeners = new ArrayList<>();
+
 
     public void addConferenceStateListener(ConferenceStateListener conferenceStateListener) {
-
         if (conferenceStateListener != null && !mConferenceStateListeners.contains(conferenceStateListener)) {
             mConferenceStateListeners.add(conferenceStateListener);
         }
@@ -81,6 +79,7 @@ public class ConferenceHandle implements ConferenceListener {
      * 停止监听
      */
     public void stop() {
+        mConferenceStateListeners.clear();
         CubeEngine.getInstance().getConferenceService().removeConferenceListener(this);
     }
 

@@ -16,7 +16,7 @@ import cube.ware.service.engine.CubeEngineHandle;
 import cube.ware.service.file.FileHandle;
 import cube.ware.service.group.GroupHandle;
 import cube.ware.service.message.MessageHandle;
-import cube.ware.service.remoteDesktop.RemoteDesktopHandle;
+import cube.ware.service.remoteDesktop.ShareDesktopHandle;
 import cube.ware.service.user.UserHandle;
 import cube.ware.service.whiteboard.WhiteBoardHandle;
 
@@ -62,7 +62,7 @@ public class CoreAliveService extends AbsWorkService {
             ConferenceHandle.getInstance().start();
             FileHandle.getInstance().start();
             GroupHandle.getInstance().start();
-            RemoteDesktopHandle.getInstance().start();
+            ShareDesktopHandle.getInstance().start();
             WhiteBoardHandle.getInstance().start();
             SettingHandle.getInstance().start();
         }
@@ -78,7 +78,7 @@ public class CoreAliveService extends AbsWorkService {
         ConferenceHandle.getInstance().stop();
         FileHandle.getInstance().stop();
         GroupHandle.getInstance().stop();
-        RemoteDesktopHandle.getInstance().stop();
+        ShareDesktopHandle.getInstance().stop();
         WhiteBoardHandle.getInstance().stop();
         SettingHandle.getInstance().stop();
         isStarted = false;
@@ -104,7 +104,7 @@ public class CoreAliveService extends AbsWorkService {
         CallHandle.getInstance().stop();
         ConferenceHandle.getInstance().stop();
         GroupHandle.getInstance().stop();
-        RemoteDesktopHandle.getInstance().stop();
+        ShareDesktopHandle.getInstance().stop();
         WhiteBoardHandle.getInstance().stop();
         SettingHandle.getInstance().stop();
         isStarted = false;

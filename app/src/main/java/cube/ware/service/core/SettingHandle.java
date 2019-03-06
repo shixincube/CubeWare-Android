@@ -29,9 +29,7 @@ public class SettingHandle implements SettingListener{
         public static final SettingHandle INSTANCE = new SettingHandle();
     }
 
-    private SettingHandle() {
-
-    }
+    private SettingHandle() {}
 
     public void start() {
         CubeEngine.getInstance().getSettingService().addSettingListener(this);

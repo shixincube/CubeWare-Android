@@ -54,6 +54,7 @@ public class UserHandle implements UserListener {
      * 停止监听
      */
     public void stop() {
+        userStateListeners.clear();
         CubeEngine.getInstance().getUserService().removeUserListener(this);
     }
 

@@ -1,18 +1,10 @@
 package cube.ware.service.message;
 
 import android.text.TextUtils;
-
 import com.common.mvp.rx.RxSchedulers;
 import com.common.utils.utils.EmptyUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.common.model.CubeErrorCode;
@@ -33,6 +25,11 @@ import cube.ware.ui.chat.message.Listener.FileMessageDownloadListener;
 import cube.ware.ui.chat.message.Listener.FileMessageUploadListener;
 import cube.ware.ui.chat.message.MessageHandler;
 import cube.ware.utils.SpUtil;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import rx.schedulers.Schedulers;
 
 /**
@@ -44,11 +41,11 @@ import rx.schedulers.Schedulers;
 public class MessageHandle implements MessageListener {
 
     private static MessageHandle instance = new MessageHandle();
+
     private Map<Long, Map<String, FileMessageUploadListener>>   uploadListenerMap   = new HashMap<>();   // 文件上传监听
     private Map<Long, Map<String, FileMessageDownloadListener>> downloadListenerMap = new HashMap<>();   // 文件下载监听
 
-    private MessageHandle() {
-    }
+    private MessageHandle() {}
 
     public static MessageHandle getInstance() {
         return instance;
@@ -73,6 +70,8 @@ public class MessageHandle implements MessageListener {
      * 停止监听
      */
     public void stop() {
+        uploadListenerMap.clear();
+        downloadListenerMap.clear();
         CubeEngine.getInstance().getMessageService().removeMessageListener(this);
         MessageHandler.getInstance().onDestroy();
     }
@@ -85,7 +84,7 @@ public class MessageHandle implements MessageListener {
     @Override
     public void onMessageSent(MessageEntity message) {
         LogUtil.i("发送的消息: " + message.toString());
-        if (message instanceof ReceiptMessage){
+        if (message instanceof ReceiptMessage) {
             ReceiptManager.getInstance().onReceiptedAll(message, message.getFromDevice());
             return;
         }
@@ -172,7 +171,7 @@ public class MessageHandle implements MessageListener {
 
         if (message.getType().equals(MessageType.File) && !message.isGroupMessage() && !message.getSender().getCubeId().equals(SpUtil.getCubeId())) {
             FileMessage fileMessage = (FileMessage) message;
-            CustomMessage customMessage = MessageManager.getInstance().buildCustomMessage(CubeSessionType.P2P,SpUtil.getCubeId(), message.getSender().getCubeId(), "");
+            CustomMessage customMessage = MessageManager.getInstance().buildCustomMessage(CubeSessionType.P2P, SpUtil.getCubeId(), message.getSender().getCubeId(), "");
             customMessage.setHeader("operate", "download");
             customMessage.setHeader("type", "notify");
             customMessage.setHeader("sn", String.valueOf(message.getSerialNumber()));
@@ -218,7 +217,7 @@ public class MessageHandle implements MessageListener {
     @Override
     public void onMessageReceived(MessageEntity message) {
         LogUtil.i("接收的消息: " + message.toString());
-        if (message instanceof ReceiptMessage){
+        if (message instanceof ReceiptMessage) {
             //收到的回执消息，表示会话对端已回执（已读），无需求暂时不处理。
             ReceiptManager.getInstance().onReceiptedAll(message, message.getFromDevice());
             return;
