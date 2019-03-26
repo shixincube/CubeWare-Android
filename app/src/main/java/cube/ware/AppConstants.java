@@ -24,14 +24,12 @@ public interface AppConstants {
      * 测试服环境
      */
     public interface Debug {
-        String APP_ID      = "b0e73ecdfb6b4f66af04186a62405f79";            // 引擎id
-        String APP_KEY     = "eb6e05690a2542ce8ee7f957b0df2e2b ";
-//        String APP_ID      = "6365f0cafd8a47b984bdc08a64327881";         // 引擎id
-//        String APP_KEY     = "9074ad1395f24fbd83a92ddc80facb1f";         // 引擎key
+        String APP_ID      = "6365f0cafd8a47b984bdc08a64327881";         // 引擎id
+        String APP_KEY     = "9074ad1395f24fbd83a92ddc80facb1f";         // 引擎key
 //        String BASE_URL    = "https://dev.user.shixincube.cn";              // 服务器接口地址
         String BASE_URL    = "http://114.112.101.157:4000/";                    // 服务器接口地址 2019/1/24
+        String LICENSE_URL = "http://114.112.101.157:9000/auth/license/get";   // 服务license地址 2019/1/24
 //        String LICENSE_URL = "https://dev.license.shixincube.cn/auth/license/get";   // 服务license地址、
-        String LICENSE_URL = "https://test-license.shixincube.cn/auth/license/get";   // 服务license地址 2019/1/24
     }
 
     //超时时间常量
