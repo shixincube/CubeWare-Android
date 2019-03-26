@@ -112,7 +112,9 @@ public class WhiteBoardHandle implements WhiteboardListener {
             for (int i = 0; i < mWhiteBoardStateListeners.size(); i++) {
                 mWhiteBoardStateListeners.get(i).onWhiteboardCreated(whiteboard,user);
             }
-            WBCallManager.getInstance().setCalling(true);
+            if(user.cubeId.endsWith(SpUtil.getCubeId())){
+                WBCallManager.getInstance().setCalling(true);
+            }
         }
     }
 
