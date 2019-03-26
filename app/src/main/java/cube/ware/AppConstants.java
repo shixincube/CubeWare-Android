@@ -18,7 +18,7 @@ public interface AppConstants {
 //        String APP_KEY     = "eb6e05690a2542ce8ee7f957b0df2e2b ";           // 引擎key
         String APP_ID      = "5d5fe3a5637d4bfda644b0933336865c";
         String APP_KEY     = "0fac82c9b98f4973afc244800122b48e";         // 引擎key
-        String BASE_URL    = "http://user.shixincube.com";                  // 服务器接口地址
+        String BASE_URL    = "http://aws.user.engine.spap.com";                  // 服务器接口地址
         String LICENSE_URL = "http://license.getcube.cn/auth/license/get";  // 服务license地址
     }
 
