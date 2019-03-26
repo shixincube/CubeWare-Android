@@ -32,6 +32,7 @@ import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.manager.MessageManager;
 import cube.ware.manager.MessagePopupManager;
+import cube.ware.utils.SpUtil;
 import cube.ware.widget.CountdownChronometer;
 import cube.ware.widget.InterceptRelativeLayout;
 import cube.ware.widget.recyclerview.BaseRecyclerViewHolder;
@@ -165,7 +166,7 @@ public abstract class BaseMsgViewHolder implements MessagePopupManager.OnPopMenu
      * @return
      */
     public boolean isReceivedMessage() {
-        return this.mData.isReceivedMessage();
+        return this.mData.isReceivedMessage() && !mData.mMessage.getSenderId().equals(SpUtil.getCubeId());
     }
 
     /**

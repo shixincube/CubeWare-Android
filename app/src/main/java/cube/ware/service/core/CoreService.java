@@ -19,6 +19,7 @@ import cube.ware.CubeUI;
 import cube.ware.service.call.CallHandle;
 import cube.ware.service.conference.ConferenceHandle;
 import cube.ware.service.engine.CubeEngineHandle;
+import cube.ware.service.file.FileHandle;
 import cube.ware.service.group.GroupHandle;
 import cube.ware.service.message.MessageHandle;
 import cube.ware.service.remoteDesktop.RemoteDesktopHandle;
@@ -144,6 +145,7 @@ public class CoreService extends Service {
      * 初始化监听
      */
     private void initListener() {
+
         if (!CubeEngine.getInstance().isStarted()) {
             boolean startup = CubeEngine.getInstance().startup(getApplicationContext());
             LogUtil.i("引擎是否启动成功： " + startup);
@@ -152,6 +154,7 @@ public class CoreService extends Service {
 
         CubeEngineHandle.getInstance().start();
         UserHandle.getInstance().start();
+        FileHandle.getInstance().start(this);
         MessageHandle.getInstance().start();
         CallHandle.getInstance().start(this);
         ConferenceHandle.getInstance().start(this);
@@ -159,6 +162,7 @@ public class CoreService extends Service {
         RemoteDesktopHandle.getInstance().start(this);
         WhiteBoardHandle.getInstance().start(this);
         SettingHandle.getInstance().start();
+
     }
 
     @Override
@@ -172,7 +176,8 @@ public class CoreService extends Service {
         super.onDestroy();
         CubeEngineHandle.getInstance().stop();
         UserHandle.getInstance().stop();
-        MessageHandle.getInstance().stop();
+        FileHandle.getInstance().stop();
+//        MessageHandle.getInstance().stop();
         CallHandle.getInstance().stop();
         ConferenceHandle.getInstance().stop();
         GroupHandle.getInstance().stop();

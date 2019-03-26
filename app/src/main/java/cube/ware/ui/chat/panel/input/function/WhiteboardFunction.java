@@ -59,29 +59,47 @@ public class WhiteboardFunction extends BaseFunction implements CreateCallback {
                 createWhiteBoard();
             }
         }else {//群聊
-            if(ClickUtil.isFastClick()){
-                if (CubeUI.getInstance().isCalling()){
-                    ToastUtil.showToast(getActivity(),R.string.calling_please_try_again_later);
-                }else{
-                    isHasConference();
-                }
+            if (CubeUI.getInstance().isCalling()){
+                ToastUtil.showToast(getActivity(),R.string.calling_please_try_again_later);
+            }else{
+                isHasConference();
             }
         }
     }
     private void isHasConference(){
-        CubeEngine.getInstance().getConferenceService().queryConferenceDetails(getChatId(), new CubeCallback<Conference>() {
+        List<String> list=new ArrayList<>();
+        list.add(getChatId());
+        CubeEngine.getInstance().getConferenceService().queryConferencesByGroupIds(list, new CubeCallback<List<Conference>>() {
             @Override
-            public void onSucceed(Conference conference) {
-                if(conference!=null){
+            public void onSucceed(List<Conference> conferenceList) {
+                if(conferenceList!=null&&conferenceList.size()>0){
                     ToastUtil.showToast(getActivity(),"当前存在会议");
+                }else {
+                    isHasWhiteBoard();
                 }
             }
 
             @Override
             public void onFailed(CubeError error) {
+                //当前群组没有会议
+                LogUtil.d("====查询会议没有===");
                 isHasWhiteBoard();
             }
         });
+
+//        CubeEngine.getInstance().getConferenceService().queryConferenceDetails(getChatId(), new CubeCallback<Conference>() {
+//            @Override
+//            public void onSucceed(Conference conference) {
+//                if(conference!=null){
+//                    ToastUtil.showToast(getActivity(),"当前存在会议");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailed(CubeError error) {
+//                isHasWhiteBoard();
+//            }
+//        });
     }
 
     private void isHasWhiteBoard(){

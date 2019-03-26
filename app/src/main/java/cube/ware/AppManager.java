@@ -62,6 +62,7 @@ public class AppManager {
         else {
             return AppConstants.Release.APP_ID;
         }
+//        return AppConstants.Release.APP_ID;
     }
 
     /**
@@ -76,6 +77,7 @@ public class AppManager {
         else {
             return AppConstants.Release.APP_KEY;
         }
+//        return AppConstants.Release.APP_KEY;
     }
 
     /**

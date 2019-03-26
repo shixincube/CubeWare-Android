@@ -167,6 +167,7 @@ public class ConferenceFragment extends BaseFragment<ConferenceContract.Presente
     }
 
     private void showDialog(Conference conference, int position) {
+        // todo 会议创建者为后台 10000 ，调用destory会出现 {"code":1511,"desc":"CloseConference not the conference master"}
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("删除会议").setMessage("是否删除会议").setPositiveButton("删除", new DialogInterface.OnClickListener() {
             @Override

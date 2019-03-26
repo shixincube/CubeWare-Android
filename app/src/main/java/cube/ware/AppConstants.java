@@ -14,8 +14,10 @@ public interface AppConstants {
      * 正式服环境
      */
     public interface Release {
-        String APP_ID      = "5d5fe3a5637d4bfda644b0933336865c";            // 引擎id
-        String APP_KEY     = "0fac82c9b98f4973afc244800122b48e ";           // 引擎key
+        //        String APP_ID      = "b0e73ecdfb6b4f66af04186a62405f79";            // 引擎id
+//        String APP_KEY     = "eb6e05690a2542ce8ee7f957b0df2e2b ";           // 引擎key
+        String APP_ID      = "5d5fe3a5637d4bfda644b0933336865c";
+        String APP_KEY     = "0fac82c9b98f4973afc244800122b48e";         // 引擎key
         String BASE_URL    = "http://user.shixincube.com";                  // 服务器接口地址
         String LICENSE_URL = "http://license.getcube.cn/auth/license/get";  // 服务license地址
     }
@@ -24,10 +26,13 @@ public interface AppConstants {
      * 测试服环境
      */
     public interface Debug {
-        String APP_ID      = "";         // 引擎id
-        String APP_KEY     = "";         // 引擎key
-        String BASE_URL    = "https://dev.user.shixincube.cn";                    // 服务器接口地址
-        String LICENSE_URL = "http://dev.license.shixincube.cn/auth/license/get";   // 服务license地址
+        String APP_ID      = "6365f0cafd8a47b984bdc08a64327881";         // 引擎id
+        String APP_KEY     = "9074ad1395f24fbd83a92ddc80facb1f";         // 引擎key
+
+        //        String BASE_URL    = "https://dev.user.shixincube.cn";              // 服务器接口地址
+        String BASE_URL    = "http://114.112.101.157:4000/";                    // 服务器接口地址 2019/1/24
+        String LICENSE_URL = "http://114.112.101.157:9000/auth/license/get";   // 服务license地址 2019/1/24
+//        String LICENSE_URL = "https://dev.license.shixincube.cn/auth/license/get";   // 服务license地址、
     }
 
     //超时时间常量
@@ -89,10 +94,10 @@ public interface AppConstants {
         String USER_JSON ="userJson";              //userAvator
 
 
-         String SP_CUBE               = SpUtil.getCubeId();
-         String SP_CUBE_AT            = "sp_cube_at" + SP_CUBE;
-         String SP_CUBE_AT_ALL        = "sp_cube_at_all" + SP_CUBE;    // @全体成员的数量
-         String SP_CUBE_RECEIVE_ATALL = "sp_cube_receive_at_all" + SP_CUBE;//接收到的@All
+        String SP_CUBE               = SpUtil.getCubeId();
+        String SP_CUBE_AT            = "sp_cube_at" + SP_CUBE;
+        String SP_CUBE_AT_ALL        = "sp_cube_at_all" + SP_CUBE;    // @全体成员的数量
+        String SP_CUBE_RECEIVE_ATALL = "sp_cube_receive_at_all" + SP_CUBE;//接收到的@All
     }
 
     /**

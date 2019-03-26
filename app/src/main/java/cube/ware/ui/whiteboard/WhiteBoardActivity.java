@@ -1,7 +1,11 @@
 package cube.ware.ui.whiteboard;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,17 +22,22 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.common.mvp.base.BaseActivity;
+import com.common.mvp.rx.RxPermissionUtil;
+import com.common.mvp.rx.RxSchedulers;
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.RingtoneUtil;
 import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.glide.GlideUtil;
 import com.common.utils.utils.log.LogUtil;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.common.model.CubeErrorCode;
+import cube.service.file.model.FileInfo;
 import cube.service.group.model.Member;
 import cube.service.user.model.User;
 import cube.service.whiteboard.model.Whiteboard;
@@ -36,14 +45,20 @@ import cube.service.whiteboard.model.WhiteboardSlide;
 import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
+import cube.ware.service.file.FileHandle;
+import cube.ware.service.file.FileManagerStateListener;
 import cube.ware.service.whiteboard.WhiteBoardHandle;
 import cube.ware.service.whiteboard.WhiteBoardStateListener;
 import cube.ware.service.whiteboard.manager.WBCallManager;
+import cube.ware.ui.chat.activity.file.FileActivity;
+import cube.ware.ui.chat.activity.group.GroupChatActivity;
 import cube.ware.ui.whiteboard.adapter.RVJoinedMemAdapter;
+import cube.ware.utils.FileUtil;
 import cube.ware.utils.SpUtil;
+import rx.functions.Action1;
 
 @Route(path = AppConstants.Router.WhiteBoardActivity)
-public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements WhiteContract.View,View.OnClickListener, WhiteBoardStateListener {
+public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements WhiteContract.View,View.OnClickListener, WhiteBoardStateListener, FileManagerStateListener {
 
     private int callState;
     private ViewStub mVSWhiteReceiveallLayout;  // 受邀
@@ -99,6 +114,11 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     private boolean hasJoined;
     private ProgressDialog mProgressDialog;
     private ImageView imag_back;
+    private LinearLayout mLlFileLayout;
+    private ImageView mIvPageUp;
+    private ImageView mIvPageDown;
+    private TextView mTvCurrentPage;
+    private TextView mTvTotalPage;
 
     @Override
     protected int getContentViewId() {
@@ -113,6 +133,7 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     @Override
     protected void initView() {
         WhiteBoardHandle.getInstance().addWhiteBoardStateListeners(this);
+        FileHandle.getInstance().addFileManagerStateListener(this);
         getArgment();
         switchViewStub();
         mProgressDialog = new ProgressDialog(this);
@@ -235,6 +256,13 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
             wipeLayout = inflateView.findViewById(R.id.wipe_layout);//箭头
             eraserLayout = inflateView.findViewById(R.id.wb_eraser_ll);//擦除
             mLlPainContain = inflateView.findViewById(R.id.paint_attr_ll);
+            mLlFileLayout = inflateView.findViewById(R.id.wb_more_pop_save_ll);
+            //next page
+            mIvPageUp = inflateView.findViewById(R.id.page_up);
+            mIvPageDown = inflateView.findViewById(R.id.page_up);
+            mTvCurrentPage = inflateView.findViewById(R.id.current_page);
+            mTvTotalPage = inflateView.findViewById(R.id.total_pages);
+
 //            mIvPainThin = inflateView.findViewById(R.id.paint_weight_thin);
 //            mIvPainMiddle = inflateView.findViewById(R.id.paint_weight_middle);
 //            mIvPainLarge = inflateView.findViewById(R.id.paint_weight_large);
@@ -369,6 +397,10 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
             revokeLayout.setOnClickListener(this);
             recoverLayout.setOnClickListener(this);
             wipeLayout.setOnClickListener(this);
+            mLlFileLayout.setOnClickListener(this);
+            //next page
+            mIvPageUp.setOnClickListener(this);
+            mIvPageDown.setOnClickListener(this);
             //画笔工具
 //            mIvPainThin.setOnClickListener(this);
 //            mIvPainMiddle.setOnClickListener(this);
@@ -431,6 +463,15 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
             case R.id.wb_eraser_ll: //擦除
                 CubeEngine.getInstance().getWhiteboardService().cleanup();
                 break;
+            case R.id.wb_more_pop_save_ll: //文件
+                openFileSelector();
+                break;
+            case R.id.page_up: //page up
+                CubeEngine.getInstance().getWhiteboardService().nextPage();
+                break;
+            case R.id.page_down: //pagedown
+                CubeEngine.getInstance().getWhiteboardService().prevPage();
+                break;
                 //画笔粗细
 //            case R.id.paint_weight_thin:
 //                setPencilWeight(2);
@@ -455,6 +496,26 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
 //                setPencilColor("#009944",R.drawable.wb_paint_color_green_selector);
 //                break;
         }
+    }
+
+    /**
+     * 选择文件
+     */
+    private void openFileSelector() {
+        RxPermissionUtil.requestStoragePermission(this).compose(RxSchedulers.<Boolean>io_main()).subscribe(new Action1<Boolean>() {
+            @Override
+            public void call(Boolean aBoolean) {
+                if (aBoolean) {
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    startActivityForResult(intent,AppConstants.REQUEST_CODE_LOCAL_FILE);
+                }
+                else {
+                    ToastUtil.showToast(WhiteBoardActivity.this,getResources().getString(R.string.request_storage_permission));
+                }
+            }
+        });
     }
 
     //二次邀请成员
@@ -497,6 +558,39 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     //画笔粗细
     private void setPencilWeight(int wide) {
         CubeEngine.getInstance().getWhiteboardService().setLineWeight(wide);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case Activity.RESULT_OK: { // 发送文件
+                if (requestCode == AppConstants.REQUEST_CODE_LOCAL_FILE && null != data) {
+                    Uri uri = data.getData();
+
+                    String path = uri.getPath().toString();
+                    LogUtil.i("path:",FileUtil.uriToFile(this,uri).getPath()+"");
+                    if(!TextUtils.isEmpty(path)){
+                        FileInfo fileInfo=createFileInfo(FileUtil.uriToFile(this,uri));
+                        CubeEngine.getInstance().getFileManagerService().upload(fileInfo,fileInfo.parentId);
+                    }
+//                    mProgressDialog.setMessage("上传中。。。");
+//                    mProgressDialog.show();
+//                    ArrayList<String> filePathList = data.getStringArrayListExtra(FileActivity.TAKE_FILE_LIST);
+//                    FileInfo fileInfo=createFileInfo(new File(filePathList.get(0)));
+//                    CubeEngine.getInstance().getFileManagerService().upload(fileInfo,fileInfo.parentId);
+                }
+                break;
+            }
+        }
+    }
+    private FileInfo createFileInfo(File file) {
+        FileInfo fileInfo=new FileInfo();
+        fileInfo.path=file.getPath();
+        fileInfo.name= System.currentTimeMillis()+file.getName();
+        fileInfo.createTime=System.currentTimeMillis();
+        fileInfo.isUpload = true;
+        return fileInfo;
     }
 
 
@@ -674,6 +768,7 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
         super.onDestroy();
         //自己是创建者
         WhiteBoardHandle.getInstance().removeWhiteBoardStateListeners(this);
+        FileHandle.getInstance().removeFileManagerStateListener(this);
         //退出，isCall==false
         WBCallManager.getInstance().restCalling();
     }
@@ -696,5 +791,84 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
             }
         }
         return cubeIds;
+    }
+
+    /**
+     * file 上传回调
+     * @param fileInfo
+     * @param fileInfo1
+     */
+    @Override
+    public void onFileAdded(FileInfo fileInfo, FileInfo fileInfo1) {
+
+    }
+
+    @Override
+    public void onFileDeleted(List<FileInfo> list, FileInfo fileInfo) {
+
+    }
+
+    @Override
+    public void onFileRenamed(FileInfo fileInfo, FileInfo fileInfo1) {
+
+    }
+
+    @Override
+    public void onFileMoved(List<FileInfo> list, FileInfo fileInfo) {
+
+    }
+
+    @Override
+    public void onFileUploading(FileInfo fileInfo, long l, long l1) {
+
+    }
+
+    @Override
+    public void onFilePaused(FileInfo fileInfo, long l, long l1) {
+
+    }
+
+    @Override
+    public void onFileResumed(FileInfo fileInfo, long l, long l1) {
+
+    }
+
+    private File FileInfoToFile() {
+        File file= new File("");
+        return file;
+    }
+    /**
+     * 上传成功
+     * @param fileInfo
+     */
+    @Override
+    public void onFileUploadCompleted(FileInfo fileInfo) {
+//        mProgressDialog.dismiss();
+        ToastUtil.showToast(this,"上传完成");
+        LogUtil.i(fileInfo.toString());
+        File file = FileInfoToFile();
+        CubeEngine.getInstance().getWhiteboardService().shareFile(file);
+    }
+
+    @Override
+    public void onFileDownloading(FileInfo fileInfo, long l, long l1) {
+
+    }
+
+    @Override
+    public void onFileDownloadCompleted(FileInfo fileInfo) {
+
+    }
+
+    @Override
+    public void onFileCanceled(FileInfo fileInfo) {
+
+    }
+
+    @Override
+    public void onFileManagerFailed(FileInfo fileInfo, CubeError cubeError) {
+//        mProgressDialog.dismiss();
+        ToastUtil.showToast(this,cubeError.desc+" 上传失败");
+        LogUtil.i(fileInfo.toString());
     }
 }

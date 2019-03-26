@@ -123,6 +123,7 @@
     <string name="someone_wanted_to_talk_to_you_voice_calls">邀请您参与多人语音</string>
     <string name="someone_wanted_to_talk_to_you_video_calls">邀请您参与视频通话</string>
     <string name="someone_wanted_to_talk_to_you_share_desktop">邀请您加入屏幕分享</string>
+    <string name="someone_wanted_to_talk_to_you_voice_call">邀请您加入语音通话</string>
     <string name="someone_wanted_to_talk_to_you_wb_calls">邀请您参与白板演示</string>
     <string name="call_member">通话成员</string>
     <string name="waiting_for_the_other_answer">正在等待对方接受邀请…</string>
@@ -146,6 +147,7 @@
     <string name="call_not_accept">通话未接听</string>
     <string name="call_completed">通话已结束</string>
     <string name="other_terminal_has_answered">其它终端已接听</string>
+    <string name="other_terminal_has_cancle">其它终端已拒绝</string>
 
 
     <!-- 屏幕分享 -->

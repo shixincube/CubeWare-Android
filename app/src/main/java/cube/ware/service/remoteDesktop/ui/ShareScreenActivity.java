@@ -245,7 +245,7 @@ public class ShareScreenActivity extends BaseActivity implements ScreenSwitchUti
         }
         ConferenceHandle.getInstance().removeConferenceStateListener(this);
     }
-private void getUserNickName(String cubeId) {
+ private void getUserNickName(String cubeId) {
     CubeUserRepository.getInstance().queryUser(cubeId).subscribe(new Action1<CubeUser>() {
         @Override
         public void call(CubeUser cubeUser) {
@@ -367,7 +367,7 @@ private void getUserNickName(String cubeId) {
 
         // 默认打开免提
         if (this.switch_speaker_btn != null) {
-            this.switch_speaker_btn.setSelected(true);
+            this.switch_speaker_btn.setSelected(CubeEngine.getInstance().getMediaService().isSpeakerEnabled());
         }
         if (this.switch_mute_btn != null) {
             this.switch_mute_btn.setSelected(CubeEngine.getInstance().getMediaService().isAudioEnabled());

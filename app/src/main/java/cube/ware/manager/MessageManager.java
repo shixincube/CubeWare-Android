@@ -1122,7 +1122,7 @@ public class MessageManager {
             cubeMessage.setRead(messageEntity.getDirection() == MessageDirection.Sent || cubeMessage.getMessageType().equals(CubeMessageType.CustomTips.getType()) || messageEntity.isReceipted());
             cubeMessage.setReceipt(messageEntity.isReceipted());
             cubeMessage.setAnonymous(messageEntity.isAnonymous());
-            boolean alreadyReceiptedMessage = ReceiptManager.getInstance().isAlreadyReceiptedMessage(cubeMessage.getMessageSN());
+            boolean alreadyReceiptedMessage = ReceiptManager.getInstance().isAlreadyReceiptedMessage(cubeMessage.getTimestamp());
             if (alreadyReceiptedMessage) {
                 cubeMessage.setRead(true);
                 cubeMessage.setReceipt(true);
@@ -1319,8 +1319,10 @@ public class MessageManager {
                 content = context.getString(R.string.cancelled);
             }
             else if (session.getCallDirection() == CallDirection.Outgoing && CallAction.CANCEL_BY_OTHER.equals(callAction)) {
-
                 content = context.getString(R.string.call_voice_not_answer);
+            }
+            else if(session.getCallDirection() == CallDirection.Incoming && CallAction.CANCEL_BY_OTHER.equals(callAction)){
+                content = context.getString(R.string.other_terminal_has_cancle);
             }
             else if (session.getCallDirection() == CallDirection.Incoming && CallAction.CANCEL_ACK.equals(callAction)) {
                 content = context.getString(R.string.refused);
@@ -1330,6 +1332,8 @@ public class MessageManager {
                 if (session.getStartTime() != 0l) {
                     content = context.getString(R.string.call_completed);
                     isCall = true;
+
+
                 }
                 else {
                     content = context.getString(R.string.call_user_busy);

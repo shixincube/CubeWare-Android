@@ -220,7 +220,7 @@ public class MessageHandle implements MessageListener {
         LogUtil.i("接收的消息: " + message.toString());
         if (message instanceof ReceiptMessage){
             //收到的回执消息，表示会话对端已回执（已读），无需求暂时不处理。
-//            ReceiptManager.getInstance().onReceiptedAll(message, message.getFromDevice());
+            ReceiptManager.getInstance().onReceiptedAll(message, message.getFromDevice());
             return;
         }
         MessageHandler.getInstance().read(message);

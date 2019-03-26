@@ -32,10 +32,9 @@ public interface ApiService {
     @FormUrlEncoded
     Call<ResultData<TotalData>> find(@FieldMap Map<String, String> params);
 
-
     @Multipart
-    // @POST("http://upload.shixincube.com/v3/file/uploadAvatar")//正式服
+//     @POST("https://upload.shixincube.com/v3/file/uploadAvatar")//正式服
     //目前只有测试服，正式服还没有部署
-    @POST("http://125.208.1.67:6011/v3/file/uploadAvatar")
+    @POST("https://dev.upload.shixincube.cn/v3/file/uploadAvatar")
     Call<ResultData<CubeAvator>> uploadAvatar(@PartMap Map<String, RequestBody> params, @Part MultipartBody.Part file);
 }

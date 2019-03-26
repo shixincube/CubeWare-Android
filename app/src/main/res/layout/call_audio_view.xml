@@ -94,6 +94,13 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
             </LinearLayout>
+            <include android:layout_marginTop="@dimen/dp_10"
+                android:layout_width="wrap_content"
+                android:visibility="gone"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_height="wrap_content"
+                layout="@layout/wb_tab_next_page"
+                />
             <include
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_alignParentRight="true"
