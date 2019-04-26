@@ -78,7 +78,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+//    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation developmentDependencies.support_appcompat_v7
     implementation developmentDependencies.support_v4
     implementation developmentDependencies.support_recyclerview_v7
@@ -86,11 +86,6 @@ dependencies {
     implementation developmentDependencies.constraint_layout
     implementation developmentDependencies.support_design
     implementation developmentDependencies.support_cardview_v7
-    implementation developmentDependencies.retrofit
-    implementation developmentDependencies.retrofit_gson
-    implementation developmentDependencies.retrofit_rxjava
-    implementation developmentDependencies.okhttp_logging
-    implementation developmentDependencies.gson
     implementation developmentDependencies.rxjava
     implementation developmentDependencies.rxandroid
     implementation developmentDependencies.rxpermissions
@@ -110,11 +105,22 @@ dependencies {
     androidTestImplementation 'android.arch.persistence.room:testing:1.1.1'
     implementation 'com.contrarywind:Android-PickerView:4.1.6'
 //    implementation 'com.shixincube:engine:3.0.115'
-    implementation 'com.shixincube:genie:2.0.21'
-    implementation 'com.shixincube:rtc:2.1.4'
-    implementation 'com.shixincube:sip:1.1.13'
+//    implementation 'com.shixincube:genie:2.0.21'
+//    implementation 'com.shixincube:rtc:2.1.4'
+//    implementation 'com.shixincube:sip:1.1.13'
     implementation project(path: ':CommonMvp')
     implementation project(path: ':CommonSdk')
     implementation project(path: ':CommonUtils')
 
+    implementation project(path: ':cube-message')
+    implementation project(path: ':cube-call')
+    implementation project(path: ':cube-conference')
+    implementation project(path: ':cube-sharedesktop')
+    implementation project(path: ':cube-whiteboard')
+    implementation project(path: ':cube-instruction')
+    implementation project(path: ':cube-live')
+
+//    api project(':CubeEngine')
+    api project(':CubeRTC')
+    api project(':CubeSIP')
 }

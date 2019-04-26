@@ -10,6 +10,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.log.LogUtil;
 
+import cube.service.whiteboard.model.WhiteBoardInfo;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -103,7 +104,9 @@ public class GroupMessageFragment extends MessageFragment{
         queryWhiteBoardByGroupId(groupIds);
     }
     private void queryConferenceByFroupId(List<String> groupIds){
-        if(!isAdded())return;
+        if(!isAdded()) {
+            return;
+        }
         List<GroupType> typesList = new ArrayList<>();
         typesList.add(GroupType.SHARE_SCREEN);
         typesList.add(GroupType.VIDEO_CALL);
@@ -151,9 +154,9 @@ public class GroupMessageFragment extends MessageFragment{
     }
     private void queryWhiteBoardByGroupId(List<String> groupIds ){
         //查询白板
-        CubeEngine.getInstance().getWhiteboardService().queryWhiteboardByGroupId(groupIds, SpUtil.getCubeId(), new CubeCallback<WhiteBoardData>() {
+        CubeEngine.getInstance().getWhiteboardService().queryWhiteboardByGroupId(groupIds, SpUtil.getCubeId(), new CubeCallback<WhiteBoardInfo>() {
             @Override
-            public void onSucceed(WhiteBoardData whiteBoardData) {
+            public void onSucceed(WhiteBoardInfo whiteBoardData) {
                 if (whiteBoardData.whiteboards.size() != 0 && null != whiteBoardData.whiteboards.get(0)){
                     handleWhiteBoard(whiteBoardData.whiteboards);
                 }else {

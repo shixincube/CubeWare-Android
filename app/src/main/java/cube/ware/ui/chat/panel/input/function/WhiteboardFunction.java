@@ -8,6 +8,7 @@ import com.common.utils.utils.ClickUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
 
+import cube.service.whiteboard.model.WhiteBoardInfo;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,9 +106,9 @@ public class WhiteboardFunction extends BaseFunction implements CreateCallback {
     private void isHasWhiteBoard(){
         List<String> groupId = new ArrayList<>();
         groupId.add(getChatId());
-        CubeEngine.getInstance().getWhiteboardService().queryWhiteboardByGroupId(groupId, SpUtil.getCubeId(), new CubeCallback<WhiteBoardData>() {
+        CubeEngine.getInstance().getWhiteboardService().queryWhiteboardByGroupId(groupId, SpUtil.getCubeId(), new CubeCallback<WhiteBoardInfo>() {
             @Override
-            public void onSucceed(WhiteBoardData whiteBoardData) {
+            public void onSucceed(WhiteBoardInfo whiteBoardData) {
                 if (whiteBoardData.whiteboards.size() != 0 && null != whiteBoardData.whiteboards.get(0)){
                     ToastUtil.showToast(getActivity(),"当前存在白板");
                 }else if (whiteBoardData.whiteboards.size() == 0){

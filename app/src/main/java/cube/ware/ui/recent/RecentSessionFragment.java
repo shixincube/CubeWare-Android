@@ -14,7 +14,6 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.common.mvp.base.BaseFragment;
@@ -26,16 +25,11 @@ import com.common.utils.utils.DateUtil;
 import com.common.utils.utils.NetworkUtil;
 import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.log.LogUtil;
-
-import org.greenrobot.eventbus.Subscribe;
-
-import java.util.List;
-
-import cube.data.model.db.RecentSession;
 import cube.service.CubeEngine;
 import cube.service.common.CubeCallback;
 import cube.service.common.CubeState;
 import cube.service.common.model.CubeError;
+import cube.service.recent.RecentSession;
 import cube.service.recent.RecentSessionListener;
 import cube.ware.AppConstants;
 import cube.ware.CubeUI;
@@ -50,6 +44,8 @@ import cube.ware.ui.recent.adapter.RecentSessionAdapter;
 import cube.ware.widget.DividerItemDecoration;
 import cube.ware.widget.emptyview.EmptyView;
 import cube.ware.widget.emptyview.EmptyViewUtil;
+import java.util.List;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by dth
@@ -59,12 +55,12 @@ import cube.ware.widget.emptyview.EmptyViewUtil;
 
 public class RecentSessionFragment extends BaseFragment implements NetworkStateReceiver.NetworkStateChangedListener, CubeEngineWorkerListener, RecentSessionListener {
 
-    private RecyclerView   mMessageRecyclerView;
-    private ImageView      mToolbarSearch;
-    private ImageView      mToolbarAdd;
-    private TextView       mTitleTv;
-    private RelativeLayout mToolBarLayout;
-    private View           mHeaderView;
+    private RecyclerView         mMessageRecyclerView;
+    private ImageView            mToolbarSearch;
+    private ImageView            mToolbarAdd;
+    private TextView             mTitleTv;
+    private RelativeLayout       mToolBarLayout;
+    private View                 mHeaderView;
     private TextView             mRecentMessageTv;// 消息大文字标题
     private TextView             mRecentMessageErrorTv;// 引擎连接失败标题
     private ProgressBar          mRecentMessagePb;
@@ -123,7 +119,6 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
         mRecentSessionAdapter.addHeaderView(mHeaderView);//添加头视图
         mMessageRecyclerView.setAdapter(mRecentSessionAdapter);
 
-
         if (NetworkUtil.isNetworkConnected(getContext()) && NetworkUtil.isNetAvailable(getContext())) {
             //if (!CubeSpUtil.isFirstSync(CubeSpUtil.getCubeUser().getCubeId())) {
             //    设置无数据时显示内容
@@ -136,7 +131,6 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
             mEmptyView = EmptyViewUtil.EmptyViewBuilder.getInstance(getActivity()).setItemCountToShowEmptyView(1).setEmptyText(R.string.no_data_no_net_tip).setShowText(true).setIconSrc(R.drawable.ic_nodata_no_net).setShowIcon(true).bindView(this.mMessageRecyclerView);
             mNoNetworkTipLl.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override
@@ -170,22 +164,13 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
                 RecentSession recentSession = mRecentSessionAdapter.getData().get(position);
 
                 if (recentSession.sessionType == CubeSessionType.Group.getType()) {
-                    ARouter.getInstance().build(AppConstants.Router.GroupChatActivity)
-                            .withString(AppConstants.EXTRA_CHAT_ID, recentSession.sessionId)
-                            .withString(AppConstants.EXTRA_CHAT_NAME, TextUtils.isEmpty(recentSession.displayName) ? recentSession.sessionId : recentSession.displayName)
-                            .withSerializable(AppConstants.EXTRA_CHAT_CUSTOMIZATION, new GroupChatCustomization())
-                            .navigation();
-                } else {
-                    ARouter.getInstance().build(AppConstants.Router.P2PChatActivity)
-                            .withString(AppConstants.EXTRA_CHAT_ID,recentSession.sessionId)
-                            .withString(AppConstants.EXTRA_CHAT_NAME,TextUtils.isEmpty(recentSession.displayName) ? recentSession.sessionId : recentSession.displayName)
-                            .withSerializable(AppConstants.EXTRA_CHAT_CUSTOMIZATION,new P2PChatCustomization())
-                            .navigation();
+                    ARouter.getInstance().build(AppConstants.Router.GroupChatActivity).withString(AppConstants.EXTRA_CHAT_ID, recentSession.sessionId).withString(AppConstants.EXTRA_CHAT_NAME, TextUtils.isEmpty(recentSession.displayName) ? recentSession.sessionId : recentSession.displayName).withSerializable(AppConstants.EXTRA_CHAT_CUSTOMIZATION, new GroupChatCustomization()).navigation();
                 }
-
+                else {
+                    ARouter.getInstance().build(AppConstants.Router.P2PChatActivity).withString(AppConstants.EXTRA_CHAT_ID, recentSession.sessionId).withString(AppConstants.EXTRA_CHAT_NAME, TextUtils.isEmpty(recentSession.displayName) ? recentSession.sessionId : recentSession.displayName).withSerializable(AppConstants.EXTRA_CHAT_CUSTOMIZATION, new P2PChatCustomization()).navigation();
+                }
             }
         });
-
     }
 
     @Override
@@ -197,6 +182,7 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
                 break;
         }
     }
+
     /**
      * 弹出popWindow
      */
@@ -244,7 +230,7 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
             public void onSucceed(List<RecentSession> recentSessions) {
                 LogUtil.i("queryRecentSessions: " + recentSessions);
                 mRecentSessionAdapter.setNewData(recentSessions);
-                RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM,calcAllUnreadCount(recentSessions));
+                RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM, calcAllUnreadCount(recentSessions));
             }
 
             @Override
@@ -253,9 +239,7 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
                 LogUtil.e("queryRecentSessions failed: " + error.toString());
             }
         });
-
     }
-
 
     private int getScollYDistance(RecyclerView recyclerView) {
         LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -292,15 +276,16 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
 
     /**
      * 当列表中的群组有会议产生时，更新群组头，作为提示
+     *
      * @param updateRecentListAboutGroup
      */
     @Subscribe
-    private void updateGroupIcon(UpdateRecentListAboutGroup updateRecentListAboutGroup){
-        if (updateRecentListAboutGroup !=null){
-
+    private void updateGroupIcon(UpdateRecentListAboutGroup updateRecentListAboutGroup) {
+        if (updateRecentListAboutGroup != null) {
 
         }
     }
+
     @Override
     public void onNetworkStateChanged(boolean isNetAvailable) {
         if (isNetAvailable) {
@@ -373,7 +358,7 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
 
     @Override
     public void onFailed(CubeError cubeError) {
-        LogUtil.i("CubeEngine_onFailed ->  " +cubeError.toString());
+        LogUtil.i("CubeEngine_onFailed ->  " + cubeError.toString());
         if (mRecentMessagePb != null) {
             mRecentMessagePb.setVisibility(View.GONE);
             if (null != mRecentStatusTv) {
@@ -387,8 +372,6 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
     @Override
     public void onRecentSessionAdded(List<RecentSession> recentSessions) {
         LogUtil.i("onRecentSessionAdded: ----> " + recentSessions);
-
-
     }
 
     @Override
@@ -396,7 +379,7 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
 
         mRecentSessionAdapter.getData().removeAll(recentSessions);
         mRecentSessionAdapter.notifyDataSetChanged();
-        RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM,calcAllUnreadCount(mRecentSessionAdapter.getData()));
+        RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM, calcAllUnreadCount(mRecentSessionAdapter.getData()));
     }
 
     @Override
@@ -407,7 +390,7 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
                 @Override
                 public void onSucceed(List<RecentSession> recentSessions) {
                     mRecentSessionAdapter.replaceData(recentSessions);
-                    RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM,calcAllUnreadCount(recentSessions));
+                    RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM, calcAllUnreadCount(recentSessions));
                 }
 
                 @Override
@@ -415,25 +398,26 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
 
                 }
             });
-
-        } else if (recentSessions != null && recentSessions.size() == 1) {
+        }
+        else if (recentSessions != null && recentSessions.size() == 1) {
             List<RecentSession> data = mRecentSessionAdapter.getData();
             RecentSession recentSession = recentSessions.get(0);
             if (data.contains(recentSession)) {
                 data.remove(recentSession);
-                data.add(0,recentSession);
+                data.add(0, recentSession);
                 mRecentSessionAdapter.notifyDataSetChanged();
-            } else {
-                mRecentSessionAdapter.addData(0,recentSession);
             }
-            RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM,calcAllUnreadCount(data));
-//            ThreadUtil.request(new Runnable() {
-//                @Override
-//                public void run() {
-//                    int allUnreadCount = CubeEngine.getInstance().getRecentSessionService().getAllUnreadCount();
-//                    RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM,allUnreadCount);
-//                }
-//            });
+            else {
+                mRecentSessionAdapter.addData(0, recentSession);
+            }
+            RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM, calcAllUnreadCount(data));
+            //            ThreadUtil.request(new Runnable() {
+            //                @Override
+            //                public void run() {
+            //                    int allUnreadCount = CubeEngine.getInstance().getRecentSessionService().getAllUnreadCount();
+            //                    RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM,allUnreadCount);
+            //                }
+            //            });
         }
     }
 
@@ -445,5 +429,4 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
 
         return count;
     }
-
 }
