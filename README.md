@@ -145,7 +145,7 @@ CubeWare中白板演示可针对P2P或多人发起在线白板，发起方式同
 
 ![共享屏幕邀请](https://i.imgur.com/KtBUdi1.png) ![共享屏幕中](https://i.imgur.com/gGn1f1V.png)
 
-体验此功能前往[此处]()，下载PC端CubeWare。
+体验此功能前往[此处](https://github.com/shixincube/CubeWare-Web)，下载PC端CubeWare。
 
 ### 开源协议
 
