@@ -14,25 +14,20 @@ public interface AppConstants {
      * 正式服环境
      */
     public interface Release {
-        //        String APP_ID      = "b0e73ecdfb6b4f66af04186a62405f79";            // 引擎id
-//        String APP_KEY     = "eb6e05690a2542ce8ee7f957b0df2e2b ";           // 引擎key
-        String APP_ID      = "5d5fe3a5637d4bfda644b0933336865c";
-        String APP_KEY     = "0fac82c9b98f4973afc244800122b48e";         // 引擎key
-        String BASE_URL    = "http://aws.user.engine.spap.com";                  // 服务器接口地址
-        String LICENSE_URL = "http://license.getcube.cn/auth/license/get";  // 服务license地址
+        String APP_ID      = "b6830d7360d54c72aaffbd3785a1a884";                     // 引擎id
+        String APP_KEY     = "ad9c414718814830863171b88f1798c0";                     // 引擎key
+        String BASE_URL    = "https://aws-user.shixincube.com";                      // 服务器接口地址
+        String LICENSE_URL = "https://aws-license.shixincube.com/auth/license/get";  // 服务license地址
     }
 
     /**
      * 测试服环境
      */
     public interface Debug {
-        String APP_ID      = "6365f0cafd8a47b984bdc08a64327881";         // 引擎id
-        String APP_KEY     = "9074ad1395f24fbd83a92ddc80facb1f";         // 引擎key
-
-        //        String BASE_URL    = "https://dev.user.shixincube.cn";              // 服务器接口地址
-        String BASE_URL    = "http://114.112.101.157:4000/";                    // 服务器接口地址 2019/1/24
-        String LICENSE_URL = "http://114.112.101.157:9000/auth/license/get";   // 服务license地址 2019/1/24
-//        String LICENSE_URL = "https://dev.license.shixincube.cn/auth/license/get";   // 服务license地址、
+        String APP_ID      = "a0369a87a945475fb5fdbe07bc760d45";                     // 引擎id
+        String APP_KEY     = "f3eafec4b4e844e4acfe5ca91d62c2ef";                     // 引擎key
+        String BASE_URL    = "https://test-user.shixincube.cn";                      // 服务器接口地址
+        String LICENSE_URL = "https://test-license.shixincube.cn/auth/license/get";  // 服务license地址
     }
 
     //超时时间常量
@@ -62,14 +57,14 @@ public interface AppConstants {
     public static final long   EXTRA_CHAT_MANAGER_SN    = -1;
 
     //请求结果码
-    public static final int REQUEST_CODE_CAMERA_IMAGE    = 1; // 拍照图片
-    public static final int REQUEST_CODE_LOCAL_IMAGE     = 2;  // 本地图片
-    public static final int REQUEST_CODE_LOCAL_FILE      = 3;  // 本地文件
+    public static final int REQUEST_CODE_CAMERA_IMAGE = 1; // 拍照图片
+    public static final int REQUEST_CODE_LOCAL_IMAGE  = 2;  // 本地图片
+    public static final int REQUEST_CODE_LOCAL_FILE   = 3;  // 本地文件
 
     // 草稿消息
     String MESSAGE_DRAFT = "message_draft_";
     //测试环境用户头像固定地址拼接cubeid成完整地址
-    String AVATAR_URL = "https://dev.download.shixincube.cn/file/avatar/";
+    String AVATAR_URL    = "https://dev.download.shixincube.cn/file/avatar/";
 
     /**
      * SharedPreferences常量
@@ -87,12 +82,11 @@ public interface AppConstants {
         String PATH_FILE  = "file";                    // 文件目录
         String PATH_THUMB = ".thumb";                  // 缩略图目录，隐藏目录
 
-        String CUBE_TOKEN ="cubeToken";                 //cubeToken
-        String USER_CUBEID ="userCubeId";              //userCubeId
-        String CUBE_NAME ="cubeName";                 //cubeToken
-        String USER_AVATOR ="userAvator";              //userAvator
-        String USER_JSON ="userJson";              //userAvator
-
+        String CUBE_TOKEN  = "cubeToken";                 //cubeToken
+        String USER_CUBEID = "userCubeId";              //userCubeId
+        String CUBE_NAME   = "cubeName";                 //cubeToken
+        String USER_AVATOR = "userAvator";              //userAvator
+        String USER_JSON   = "userJson";              //userAvator
 
         String SP_CUBE               = SpUtil.getCubeId();
         String SP_CUBE_AT            = "sp_cube_at" + SP_CUBE;
@@ -110,25 +104,24 @@ public interface AppConstants {
     /**
      * 跳转传值字段
      */
-    public interface Value{
+    public interface Value {
         //白板字段
-        String BUNDLE="bundle";
-        String CALLSTATA_WHITE_BOARD="callState_white_board";
-        String WHITEBOARD="whiteboard";
-        String INVITE_ID="invite_id";
-        String  GROUP_ID="group_id";
-        String  CHAT_TYPE="chat_type";
-        String INVITE_LIST="invite_list";
-        int CALLSTATE_INVITE=1;
-        int CALLSTATE_CREATE=2;
-        int CALLSTATE_JOIN=3;
+        String BUNDLE                 = "bundle";
+        String CALLSTATA_WHITE_BOARD  = "callState_white_board";
+        String WHITEBOARD             = "whiteboard";
+        String INVITE_ID              = "invite_id";
+        String GROUP_ID               = "group_id";
+        String CHAT_TYPE              = "chat_type";
+        String INVITE_LIST            = "invite_list";
+        int    CALLSTATE_INVITE       = 1;
+        int    CALLSTATE_CREATE       = 2;
+        int    CALLSTATE_JOIN         = 3;
         //会议字段
-        String CONFERENCE_CALLSTATA="call_state";
-        String CONFERENCE_CONFERENCE="conference";
-        String CONFERENCE_INVITE_LIST="invite_list";
-        String CONFERENCE_INVITE_Id="invite_id";
-        String CONFERENCE_GROUP_ID="group_id";
-
+        String CONFERENCE_CALLSTATA   = "call_state";
+        String CONFERENCE_CONFERENCE  = "conference";
+        String CONFERENCE_INVITE_LIST = "invite_list";
+        String CONFERENCE_INVITE_Id   = "invite_id";
+        String CONFERENCE_GROUP_ID    = "group_id";
     }
 
     /**
@@ -181,19 +174,19 @@ public interface AppConstants {
         String GroupChatActivity = "/app/GroupChatActivity";
 
         //会议创建
-        String CreateConferenceActivity="/app/CreateConferenceActivity";
+        String CreateConferenceActivity = "/app/CreateConferenceActivity";
 
         //选择会议人员
-        String SelectMemberActivity="/app/SelectMemberActivity";
+        String SelectMemberActivity = "/app/SelectMemberActivity";
 
         //会议页面
-        String ConferenceActivity="/app/ConferenceActivity";
+        String ConferenceActivity = "/app/ConferenceActivity";
 
         //设置页面
-        String SettingActivity="/app/SettingActivity";
+        String SettingActivity = "/app/SettingActivity";
     }
 
-    public interface REGEX{
+    public interface REGEX {
         String REGEX_AT_MEMBER = "@\\{cube:[^,]*,name:[^\\}]*\\}"; // @成员
         String REGEX_AT_ALL    = "@\\{group:[^,]*,name:[^\\}]*\\}"; // @全体成员
     }

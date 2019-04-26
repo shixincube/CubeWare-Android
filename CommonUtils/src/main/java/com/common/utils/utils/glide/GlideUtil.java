@@ -4,16 +4,17 @@ import android.content.Context;
 import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.signature.StringSignature;
 import com.common.utils.R;
-
+import com.common.utils.utils.CommonUtils;
 import java.io.File;
+import java.io.InputStream;
 
 /**
  * glide工具类
@@ -24,6 +25,11 @@ import java.io.File;
 public class GlideUtil {
 
     private static long mAvatarSignature = System.currentTimeMillis();//用于加载头像,改变此值loadSignatureCircleImage方法会强制去网络获取头像
+
+    static {
+        // Glide加载https图片,忽略ssl证书验证
+        Glide.get(CommonUtils.getContext()).register(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory(SslSocketClient.getOkHttpClient()));
+    }
 
     public static void setAvatarSignature(long signature) {
         mAvatarSignature = signature;
@@ -172,7 +178,7 @@ public class GlideUtil {
         Glide.with(context).load(file).diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(defResourceId).error(R.drawable.ic_default_img_failed).into(imageView);
     }
 
-    public static void loadImage(String url, Context context, int w, int h, ImageView imageView){
+    public static void loadImage(String url, Context context, int w, int h, ImageView imageView) {
         Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).override(w, h).into(imageView);
     }
 
@@ -246,13 +252,14 @@ public class GlideUtil {
      */
     public static void loadCircleImage(String url, final Context context, final ImageView imageView, int defResourceId, boolean isCache) {
         try {
-            if(isCache){
+            if (isCache) {
                 Glide.with(context).load(url).placeholder(defResourceId).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(defResourceId).bitmapTransform(new GlideCircleTransform(context)).into(imageView);
             }
-            else{
+            else {
                 Glide.with(context).load(url).placeholder(defResourceId).error(defResourceId).bitmapTransform(new GlideCircleTransform(context)).into(imageView);
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     /**
@@ -275,7 +282,7 @@ public class GlideUtil {
      * @param imageView
      * @param defResourceId
      */
-    public static void loadCircleImage(String url, final Context context, final ImageView imageView, DiskCacheStrategy diskCacheStrategy,boolean skipMemoryCache,int defResourceId) {
+    public static void loadCircleImage(String url, final Context context, final ImageView imageView, DiskCacheStrategy diskCacheStrategy, boolean skipMemoryCache, int defResourceId) {
         Glide.with(context).load(url).skipMemoryCache(skipMemoryCache).diskCacheStrategy(diskCacheStrategy).placeholder(defResourceId).error(defResourceId).bitmapTransform(new GlideCircleTransform(context)).into(imageView);
     }
 
@@ -287,7 +294,7 @@ public class GlideUtil {
      * @param imageView
      * @param defResourceId
      */
-    public static void loadSignatureCircleImage(String url,Context context,ImageView imageView,int defResourceId) {
+    public static void loadSignatureCircleImage(String url, Context context, ImageView imageView, int defResourceId) {
         Glide.with(context).load(url).signature(new StringSignature(mAvatarSignature + "")).placeholder(defResourceId).error(defResourceId).bitmapTransform(new GlideCircleTransform(context)).into(imageView);
     }
 
