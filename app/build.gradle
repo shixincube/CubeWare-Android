@@ -104,9 +104,9 @@ dependencies {
     androidTestImplementation 'android.arch.persistence.room:testing:1.1.1'
     implementation 'com.contrarywind:Android-PickerView:4.1.6'
 //    implementation 'com.shixincube:engine:3.0.115'
-    implementation 'com.shixincube:genie:2.0.21'
-    implementation 'com.shixincube:rtc:2.1.4'
-    implementation 'com.shixincube:sip:1.1.13'
+//    implementation 'com.shixincube:genie:2.0.21'
+//    implementation 'com.shixincube:rtc:2.1.4'
+//    implementation 'com.shixincube:sip:1.1.13'
     implementation project(path: ':CommonMvp')
     implementation project(path: ':CommonSdk')
     implementation project(path: ':CommonUtils')
