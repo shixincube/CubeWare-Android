@@ -86,11 +86,6 @@ dependencies {
     implementation developmentDependencies.constraint_layout
     implementation developmentDependencies.support_design
     implementation developmentDependencies.support_cardview_v7
-    implementation developmentDependencies.retrofit
-    implementation developmentDependencies.retrofit_gson
-    implementation developmentDependencies.retrofit_rxjava
-    implementation developmentDependencies.okhttp_logging
-    implementation developmentDependencies.gson
     implementation developmentDependencies.rxjava
     implementation developmentDependencies.rxandroid
     implementation developmentDependencies.rxpermissions
@@ -99,7 +94,6 @@ dependencies {
     implementation developmentDependencies.umeng_common
     implementation developmentDependencies.recyclerview_helper
     implementation developmentDependencies.smartrefresh
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation developmentDependencies.arouter
     annotationProcessor developmentDependencies.arouter_compiler
     implementation developmentDependencies.arouter_annotation
@@ -116,5 +110,4 @@ dependencies {
     implementation project(path: ':CommonMvp')
     implementation project(path: ':CommonSdk')
     implementation project(path: ':CommonUtils')
-
 }
