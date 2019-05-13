@@ -1,17 +1,12 @@
 package cube.ware.ui.conference;
 
 import android.content.Context;
-
-import com.common.utils.utils.log.LogUtil;
-
-import java.util.List;
-
-import cube.data.model.reponse.ConferenceData;
 import cube.service.CubeEngine;
 import cube.service.common.CubeCallback;
 import cube.service.common.model.CubeError;
 import cube.service.conference.model.Conference;
 import cube.service.group.GroupType;
+import java.util.List;
 
 /**
  * Created by dth
@@ -19,7 +14,7 @@ import cube.service.group.GroupType;
  * Date: 2018/8/27.
  */
 
-public class ConferencePresenter extends ConferenceContract.Presenter{
+public class ConferencePresenter extends ConferenceContract.Presenter {
     /**
      * 构造方法
      *
@@ -32,28 +27,29 @@ public class ConferencePresenter extends ConferenceContract.Presenter{
 
     /**
      * 通过cubeId获取到与自己相关的会议列表
+     *
      * @param cubeid
      * @param groupTypes
      */
     @Override
     public void getConferenceList(String cubeid, List<GroupType> groupTypes) {
         //查询
-//        CubeEngine.getInstance().getConferenceService().queryConferenceByCubeId(cubeid, groupTypes, new CubeCallback<ConferenceData>() {
-//            @Override
-//            public void onSucceed(ConferenceData conferenceData) {
-//                if(conferenceData!=null){
-//                    mView.getConference(conferenceData.conferences);
-//                    LogUtil.i("q-----------------------query_ori",conferenceData.conferences.toString());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailed(CubeError error) {
-//                if(error!=null){
-//                    mView.getConferenceFail(error);
-//                }
-//            }
-//        });
+        //        CubeEngine.getInstance().getConferenceService().queryConferenceByCubeId(cubeid, groupTypes, new CubeCallback<ConferenceData>() {
+        //            @Override
+        //            public void onSucceed(ConferenceData conferenceData) {
+        //                if(conferenceData!=null){
+        //                    mView.getConference(conferenceData.conferences);
+        //                    LogUtil.i("q-----------------------query_ori",conferenceData.conferences.toString());
+        //                }
+        //            }
+        //
+        //            @Override
+        //            public void onFailed(CubeError error) {
+        //                if(error!=null){
+        //                    mView.getConferenceFail(error);
+        //                }
+        //            }
+        //        });
 
         CubeEngine.getInstance().getConferenceService().queryConferences(groupTypes, new CubeCallback<List<Conference>>() {
             @Override
@@ -63,12 +59,10 @@ public class ConferencePresenter extends ConferenceContract.Presenter{
 
             @Override
             public void onFailed(CubeError error) {
-                if(error!=null){
+                if (error != null) {
                     mView.getConferenceFail(error);
                 }
             }
         });
-
-
     }
 }

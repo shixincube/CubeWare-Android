@@ -1,26 +1,18 @@
 package cube.ware.ui.chat.panel.input.function;
 
 import android.os.Bundle;
-import android.widget.Toast;
-
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.ClickUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
-
-import cube.service.whiteboard.model.WhiteBoardInfo;
-import java.util.ArrayList;
-import java.util.List;
-
-import cube.data.model.reponse.WhiteBoardData;
 import cube.service.CubeEngine;
 import cube.service.common.CubeCallback;
 import cube.service.common.model.CubeError;
 import cube.service.conference.model.Conference;
 import cube.service.group.GroupType;
+import cube.service.whiteboard.model.WhiteBoardInfo;
 import cube.service.whiteboard.model.Whiteboard;
 import cube.service.whiteboard.model.WhiteboardConfig;
-import cube.ware.App;
 import cube.ware.AppConstants;
 import cube.ware.CubeUI;
 import cube.ware.R;
@@ -30,11 +22,14 @@ import cube.ware.service.whiteboard.manager.WBCallManager;
 import cube.ware.ui.whiteboard.listener.CreateCallback;
 import cube.ware.ui.whiteboard.listener.WBListener;
 import cube.ware.utils.SpUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WhiteboardFunction extends BaseFunction implements CreateCallback {
 
     private WBListener mWBListener;
-    List<String> mList=new ArrayList<>();
+    List<String> mList = new ArrayList<>();
+
     /**
      * 构造方法
      */
@@ -44,38 +39,43 @@ public class WhiteboardFunction extends BaseFunction implements CreateCallback {
 
     @Override
     public void onClick() {
-        if(!ClickUtil.isFastClick(1000)){
+        if (!ClickUtil.isFastClick(1000)) {
             return;
         }
-        if(getChatType().equals(CubeSessionType.P2P)){//单聊
-            if (WBCallManager.getInstance().isCalling()){
-                ToastUtil.showToast(getActivity(),R.string.calling_please_try_again_later);
-            }else{
+        if (getChatType().equals(CubeSessionType.P2P)) {//单聊
+            if (WBCallManager.getInstance().isCalling()) {
+                ToastUtil.showToast(getActivity(), R.string.calling_please_try_again_later);
+            }
+            else {
                 mList.clear();
                 mList.add(getChatId());
-                mWBListener = new WBListener(getActivity(), getChatType(), mList,"");//单人白板可以不传groupId，占位而已
+                mWBListener = new WBListener(getActivity(), getChatType(), mList, "");//单人白板可以不传groupId，占位而已
                 mWBListener.setCreateCallback(this);
                 //监听
                 WhiteBoardHandle.getInstance().addWhiteBoardStateListeners(mWBListener);
                 createWhiteBoard();
             }
-        }else {//群聊
-            if (CubeUI.getInstance().isCalling()){
-                ToastUtil.showToast(getActivity(),R.string.calling_please_try_again_later);
-            }else{
+        }
+        else {//群聊
+            if (CubeUI.getInstance().isCalling()) {
+                ToastUtil.showToast(getActivity(), R.string.calling_please_try_again_later);
+            }
+            else {
                 isHasConference();
             }
         }
     }
-    private void isHasConference(){
-        List<String> list=new ArrayList<>();
+
+    private void isHasConference() {
+        List<String> list = new ArrayList<>();
         list.add(getChatId());
         CubeEngine.getInstance().getConferenceService().queryConferencesByGroupIds(list, new CubeCallback<List<Conference>>() {
             @Override
             public void onSucceed(List<Conference> conferenceList) {
-                if(conferenceList!=null&&conferenceList.size()>0){
-                    ToastUtil.showToast(getActivity(),"当前存在会议");
-                }else {
+                if (conferenceList != null && conferenceList.size() > 0) {
+                    ToastUtil.showToast(getActivity(), "当前存在会议");
+                }
+                else {
                     isHasWhiteBoard();
                 }
             }
@@ -88,58 +88,59 @@ public class WhiteboardFunction extends BaseFunction implements CreateCallback {
             }
         });
 
-//        CubeEngine.getInstance().getConferenceService().queryConferenceDetails(getChatId(), new CubeCallback<Conference>() {
-//            @Override
-//            public void onSucceed(Conference conference) {
-//                if(conference!=null){
-//                    ToastUtil.showToast(getActivity(),"当前存在会议");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailed(CubeError error) {
-//                isHasWhiteBoard();
-//            }
-//        });
+        //        CubeEngine.getInstance().getConferenceService().queryConferenceDetails(getChatId(), new CubeCallback<Conference>() {
+        //            @Override
+        //            public void onSucceed(Conference conference) {
+        //                if(conference!=null){
+        //                    ToastUtil.showToast(getActivity(),"当前存在会议");
+        //                }
+        //            }
+        //
+        //            @Override
+        //            public void onFailed(CubeError error) {
+        //                isHasWhiteBoard();
+        //            }
+        //        });
     }
 
-    private void isHasWhiteBoard(){
+    private void isHasWhiteBoard() {
         List<String> groupId = new ArrayList<>();
         groupId.add(getChatId());
         CubeEngine.getInstance().getWhiteboardService().queryWhiteboardByGroupId(groupId, SpUtil.getCubeId(), new CubeCallback<WhiteBoardInfo>() {
             @Override
             public void onSucceed(WhiteBoardInfo whiteBoardData) {
-                if (whiteBoardData.whiteboards.size() != 0 && null != whiteBoardData.whiteboards.get(0)){
-                    ToastUtil.showToast(getActivity(),"当前存在白板");
-                }else if (whiteBoardData.whiteboards.size() == 0){
+                if (whiteBoardData.whiteboards.size() != 0 && null != whiteBoardData.whiteboards.get(0)) {
+                    ToastUtil.showToast(getActivity(), "当前存在白板");
+                }
+                else if (whiteBoardData.whiteboards.size() == 0) {
                     //表示当前群没有白板，跳入选择成员页面
-                    Bundle bundle=new Bundle();
-                    bundle.putInt("select_type",3);//白板首次创建
-                    bundle.putString("group_id",getChatId()); //mChatId 就是 groupId
-                    RouterUtil.navigation(AppConstants.Router.SelectMemberActivity,bundle);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("select_type", 3);//白板首次创建
+                    bundle.putString("group_id", getChatId()); //mChatId 就是 groupId
+                    RouterUtil.navigation(AppConstants.Router.SelectMemberActivity, bundle);
                 }
             }
+
             @Override
             public void onFailed(CubeError error) {
-                LogUtil.d("===查询白板失败了=="+error.code+"==="+error.desc);
-//                Bundle bundle=new Bundle();
-//                bundle.putInt("select_type",3);//白板首次创建
-//                bundle.putString("group_id",getChatId()); //mChatId 就是 groupId
-//                RouterUtil.navigation(AppConstants.Router.SelectMemberActivity,bundle);
+                LogUtil.d("===查询白板失败了==" + error.code + "===" + error.desc);
+                //                Bundle bundle=new Bundle();
+                //                bundle.putInt("select_type",3);//白板首次创建
+                //                bundle.putString("group_id",getChatId()); //mChatId 就是 groupId
+                //                RouterUtil.navigation(AppConstants.Router.SelectMemberActivity,bundle);
             }
         });
     }
 
-
     //开启白板
     private void createWhiteBoard() {
-        List<String> master=new ArrayList<>();
+        List<String> master = new ArrayList<>();
         master.add(SpUtil.getCubeId());
-        WhiteboardConfig whiteboardConfig=new WhiteboardConfig(GroupType.SHARE_WB,"");
-//        whiteboardConfig.bindGroupId="";
-        whiteboardConfig.maxNumber=2; //一对一单聊
-        whiteboardConfig.isOpen=true;
-        whiteboardConfig.masters=master;
+        WhiteboardConfig whiteboardConfig = new WhiteboardConfig(GroupType.SHARE_WB, "");
+        //        whiteboardConfig.bindGroupId="";
+        whiteboardConfig.maxNumber = 2; //一对一单聊
+        whiteboardConfig.isOpen = true;
+        whiteboardConfig.masters = master;
         CubeEngine.getInstance().getWhiteboardService().create(whiteboardConfig);
     }
 
