@@ -79,6 +79,9 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(path: ':CommonMvp')
+    implementation project(path: ':CommonSdk')
+    implementation project(path: ':CommonUtils')
     implementation developmentDependencies.support_appcompat_v7
     implementation developmentDependencies.support_v4
     implementation developmentDependencies.support_recyclerview_v7
@@ -118,8 +121,4 @@ dependencies {
     implementation 'com.shixincube:genie:2.0.21'        // 通信库
     implementation 'com.shixincube:rtc:2.1.4'           // WebRTC
     implementation 'com.shixincube:sip:1.1.13'          // sip信令
-
-    implementation project(path: ':CommonMvp')
-    implementation project(path: ':CommonSdk')
-    implementation project(path: ':CommonUtils')
 }
