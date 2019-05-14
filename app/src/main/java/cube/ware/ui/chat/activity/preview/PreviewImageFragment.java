@@ -3,6 +3,7 @@ package cube.ware.ui.chat.activity.preview;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,8 @@ import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.common.mvp.base.BaseLazyFragment;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
+
+import java.io.File;
 
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
@@ -108,7 +111,13 @@ public class PreviewImageFragment extends BaseLazyFragment {
                         if (null != cubeMessage && cubeMessage.getMessageType().equals(CubeMessageType.Image.getType())) {
                             LogUtil.i("预览图片url ------> " + cubeMessage.getFileUrl());
 //                            GlideUtil.loadImage(cubeMessage.getFileUrl(), getContext(), mPhotoView, false);
-                            Glide.with(getContext()).load(cubeMessage.getFileUrl()).into(new GlideDrawableImageViewTarget(mPhotoView){
+                            String imagePath;
+                            if(!TextUtils.isEmpty(cubeMessage.getFilePath()) && new File(cubeMessage.getFilePath()).exists()){ //加载本地文件
+                                imagePath=cubeMessage.getFilePath();
+                            }else {
+                                imagePath=cubeMessage.getFileUrl();
+                            }
+                            Glide.with(getContext()).load(imagePath).into(new GlideDrawableImageViewTarget(mPhotoView){
                                 @Override
                                 public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
                                     super.onResourceReady(resource, animation);
