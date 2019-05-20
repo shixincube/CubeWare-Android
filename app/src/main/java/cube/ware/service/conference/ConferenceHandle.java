@@ -20,6 +20,7 @@ import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.conference.ConferenceListener;
 import cube.service.conference.model.Conference;
+import cube.service.conference.model.ConferenceStream;
 import cube.service.group.GroupType;
 import cube.service.group.model.Member;
 import cube.service.sharedesktop.ShareDesktopExtListener;
@@ -317,6 +318,16 @@ public class ConferenceHandle implements ConferenceListener {
         for (int i = 0; i < mConferenceStateListeners.size(); i++) {
             mConferenceStateListeners.get(i).onConferenceQuited(conference, quitMember);
         }
+    }
+
+    @Override
+    public void onConferenceAddStream(ConferenceStream conferenceStream) {
+
+    }
+
+    @Override
+    public void onConferenceRemoveStream(ConferenceStream conferenceStream) {
+
     }
 
     /**

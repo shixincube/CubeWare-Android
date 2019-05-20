@@ -110,4 +110,8 @@ dependencies {
     implementation project(path: ':CommonMvp')
     implementation project(path: ':CommonSdk')
     implementation project(path: ':CommonUtils')
+    implementation project(path: ':CommonUtils')
+    implementation project(path: ':CommonUtils')
+    implementation project(path: ':CubeEngine')
+    implementation project(path: ':CubeRTC')
 }

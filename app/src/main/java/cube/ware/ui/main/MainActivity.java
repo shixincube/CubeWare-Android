@@ -25,6 +25,7 @@ import cube.service.common.model.DeviceInfo;
 import cube.service.user.model.User;
 import cube.ware.AppConstants;
 import cube.ware.R;
+import cube.ware.TestConferenceActivity;
 import cube.ware.data.room.AppDataBase;
 import cube.ware.eventbus.CubeEvent;
 import cube.ware.service.user.UserHandle;
@@ -104,8 +105,10 @@ public class MainActivity extends BaseActivity implements UserStateListener {
                         selectFragment(mConferenceFragment, MAIN_PAGE_CONFERENCE);
                         break;
                     case 2: // + 扩展
-                        AddDialogFragment addDialogFragment = AddDialogFragment.getInstance();
-                        addDialogFragment.show(getSupportFragmentManager(),"");
+//                        AddDialogFragment addDialogFragment = AddDialogFragment.getInstance();
+//                        addDialogFragment.show(getSupportFragmentManager(),"");
+                        Intent intent = new Intent(mContext, TestConferenceActivity.class);
+                        startActivity(intent);
                         break;
                     case 3: // 联系人
                         if (null == mContactMainFragment) {
