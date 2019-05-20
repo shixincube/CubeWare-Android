@@ -1,1 +1,2 @@
-include ':app', ':CommonMvp', ':CommonUtils', ':CommonSdk'
+include ':app',':CommonMvp', ':CommonUtils', ':CommonSdk'/*,':cube-call', ':cube-live',':cube-instruction' , ':cube-whiteboard', ':cube-sharedesktop', ':cube-media', ':cube-message', ':cube-file', ':cube-conference',':cube-core',':cube-api'*/
+//include ':CubeEngine',':CubeRTC'
