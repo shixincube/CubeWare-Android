@@ -107,18 +107,36 @@ dependencies {
     androidTestImplementation 'android.arch.persistence.room:testing:1.1.1'
     implementation 'com.contrarywind:Android-PickerView:4.1.6'
 
-    implementation 'com.shixincube:api:3.0.0'           // api调用
-    implementation 'com.shixincube:core:3.0.0'          // 基础服务
-    implementation 'com.shixincube:call:3.0.0'          // 通话服务
-    implementation 'com.shixincube:media:3.0.0'         // 媒体服务
-    implementation 'com.shixincube:conference:3.0.0'    // 会议服务
-    implementation 'com.shixincube:file:3.0.0'          // 文件服务
-    implementation 'com.shixincube:messages:3.0.0'      // 消息服务
-    implementation 'com.shixincube:whiteboard:3.0.0'    // 白板服务
-    implementation 'com.shixincube:sharedesktop:3.0.0'  // 分享桌面
-    implementation 'com.shixincube:instruction:3.0.0'   // 指令服务
-    implementation 'com.shixincube:live:3.0.0'          // 直播服务
-    implementation 'com.shixincube:genie:2.0.21'        // 通信库
-    implementation 'com.shixincube:rtc:2.1.4'           // WebRTC
-    implementation 'com.shixincube:sip:1.1.13'          // sip信令
+    implementation 'com.shixincube:api:3.0.0'          // api调用
+    implementation 'com.shixincube:core:3.0.0'         // 基础服务
+    implementation 'com.shixincube:call:3.0.0'         // 通话服务
+//    implementation 'com.shixincube:media:3.0.1'        // 媒体服务
+    implementation 'com.shixincube:conference:3.0.0'   // 会议服务
+    implementation 'com.shixincube:file:3.0.0'         // 文件服务
+    implementation 'com.shixincube:messages:3.0.0'     // 消息服务
+    implementation 'com.shixincube:whiteboard:3.0.0'   // 白板服务
+    implementation 'com.shixincube:sharedesktop:3.0.0' // 分享桌面
+    implementation 'com.shixincube:instruction:3.0.0'  // 指令服务
+    implementation 'com.shixincube:live:3.0.0'         // 直播服务
+    implementation 'com.shixincube:genie:2.0.21'       // 通信库
+    implementation 'com.shixincube:rtc:2.1.4'          // WebRTC
+    implementation 'com.shixincube:sip:1.1.13'
+    implementation files('lib/cube-media-v3.0.3.jar')
+
+
+    // sip信令
+//    implementation project(':cube-api')
+//    implementation project(':cube-call')
+//    implementation project(':cube-conference')
+//    implementation project(':cube-core')
+//    implementation project(':cube-file')
+//    implementation project(':cube-instruction')
+//    implementation project(':cube-live')
+//    implementation project(':cube-media')
+//    implementation project(':cube-message')
+//    implementation project(':cube-sharedesktop')
+//    implementation project(':cube-whiteboard')
+//        implementation project(':CubeEngine')
+//        implementation project(':CubeRTC')
+
 }
