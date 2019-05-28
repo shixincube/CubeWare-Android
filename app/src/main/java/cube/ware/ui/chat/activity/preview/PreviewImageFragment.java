@@ -126,7 +126,7 @@ public class PreviewImageFragment extends BaseLazyFragment {
                     @Override
                     public void call(CubeMessage cubeMessage) {
                         if (null != cubeMessage && cubeMessage.getMessageType().equals(CubeMessageType.Image.getType())) {
-                            LogUtil.i("预览图片url ------> " + cubeMessage.getFileUrl());
+                            LogUtil.i("预览图片url ------> " + cubeMessage.getFileUrl()+" "+cubeMessage.getMessageSN());
 //                            GlideUtil.loadImage(cubeMessage.getFileUrl(), getContext(), mPhotoView, false);
                             String imagePath;
                             if (!TextUtils.isEmpty(cubeMessage.getFilePath()) && new File(cubeMessage.getFilePath()).exists()) { //加载本地文件
@@ -173,9 +173,9 @@ public class PreviewImageFragment extends BaseLazyFragment {
                             .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                             .get();
                     String saveBitmapPath = BitmapUtils.saveBitmap(mBitmap, SpUtil.getImagePath(), cubeMessage.getFileName());
-                    AppDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessage);
                     if (saveBitmapPath != null) {
                         cubeMessage.setFilePath(saveBitmapPath);
+                        AppDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessage);
                         MessageManager.getInstance().updateMessageLite(cubeMessage);
                     }
 
