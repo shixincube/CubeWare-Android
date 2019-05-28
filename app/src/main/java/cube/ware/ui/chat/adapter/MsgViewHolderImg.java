@@ -6,6 +6,7 @@ import android.view.View;
 import com.common.utils.utils.glide.GlideUtil;
 import com.common.utils.utils.log.LogUtil;
 
+import java.io.File;
 import java.util.Map;
 
 import cube.ware.R;
@@ -32,14 +33,22 @@ public class MsgViewHolderImg extends MsgViewHolderPVBase {
 
     @Override
     protected void loadThumbnailImage(String path) {
-        LogUtil.d("加载缩略图url-----> " + mThumbUrl);
+        LogUtil.d("加载缩略图url-----> " + mThumbUrl+" "+mPath);
         if (!TextUtils.isEmpty(mFileUrl) && mFileUrl.contains(".gif")) {
-            GlideUtil.loadImage(mFileUrl,mContext,mChatContentIv, R.drawable.default_image,true);
+            if(!TextUtils.isEmpty(mPath) && new File(mPath).exists()){
+                GlideUtil.loadImage(mPath,mContext,mChatContentIv, R.drawable.default_image,true);
+            }else {
+                GlideUtil.loadImage(mFileUrl,mContext,mChatContentIv, R.drawable.default_image,true);
+            }
         } else {
             if (TextUtils.isEmpty(mThumbUrl)) {
                 mThumbUrl = mFileUrl + "?imageView2/0/w/200/h/100";//缩略图规则，w，h可以自定义
             }
-            GlideUtil.loadImage(mThumbUrl,mContext,mChatContentIv, R.drawable.default_image,false);
+            if(!TextUtils.isEmpty(mPath) && new File(mPath).exists()){
+                GlideUtil.loadImage(mPath,mContext,mChatContentIv, R.drawable.default_image,false);
+            }else {
+                GlideUtil.loadImage(mThumbUrl,mContext,mChatContentIv, R.drawable.default_image,false);
+            }
         }
     }
 
