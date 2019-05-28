@@ -11,6 +11,7 @@ import com.common.utils.manager.ActivityManager;
 import com.common.utils.utils.RingtoneUtil;
 import com.common.utils.utils.log.LogUtil;
 
+import cube.service.conference.model.ConferenceStream;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -317,6 +318,16 @@ public class ConferenceHandle implements ConferenceListener {
         for (int i = 0; i < mConferenceStateListeners.size(); i++) {
             mConferenceStateListeners.get(i).onConferenceQuited(conference, quitMember);
         }
+    }
+
+    @Override
+    public void onConferenceAddStream(ConferenceStream conferenceStream) {
+        
+    }
+
+    @Override
+    public void onConferenceRemoveStream(ConferenceStream conferenceStream) {
+
     }
 
     /**
