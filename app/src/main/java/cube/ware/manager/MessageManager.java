@@ -909,6 +909,15 @@ public class MessageManager {
         CubeEngine.getInstance().getMessageService().resumeMessage(messageSN);
     }
 
+    public void updateMessageLite(CubeMessage cubeMessage){
+        if (cubeMessage != null) {
+            if (!mContainer.isEmpty()) {
+                for (ChatContainer chatContainer : mContainer.values()) {
+                    chatContainer.mPanelProxy.onMessagePersisted(cubeMessage);
+                }
+            }
+        }
+    }
     /**
      * 重发消息
      *

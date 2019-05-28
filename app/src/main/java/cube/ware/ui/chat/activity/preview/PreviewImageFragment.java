@@ -1,8 +1,10 @@
 package cube.ware.ui.chat.activity.preview;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.transition.Transition;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,18 +15,33 @@ import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.request.target.ImageViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.common.mvp.base.BaseLazyFragment;
+import com.common.utils.utils.BitmapUtils;
+import com.common.utils.utils.FileUtil;
+import com.common.utils.utils.ThreadUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
 
+import cube.service.message.model.ImageMessage;
+import cube.service.message.model.MessageEntity;
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.repository.CubeMessageRepository;
+import cube.ware.data.room.AppDataBaseFactory;
 import cube.ware.data.room.model.CubeMessage;
+import cube.ware.manager.MessageManager;
+import cube.ware.ui.chat.ChatContainer;
+import cube.ware.ui.recent.manager.RecentSessionManager;
+import cube.ware.utils.SpUtil;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import uk.co.senab.photoview.PhotoView;
@@ -116,7 +133,9 @@ public class PreviewImageFragment extends BaseLazyFragment {
                                 imagePath=cubeMessage.getFilePath();
                             }else {
                                 imagePath=cubeMessage.getFileUrl();
+                                saveImage(cubeMessage,imagePath);
                             }
+
                             Glide.with(getContext()).load(imagePath).into(new GlideDrawableImageViewTarget(mPhotoView){
                                 @Override
                                 public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
@@ -141,5 +160,31 @@ public class PreviewImageFragment extends BaseLazyFragment {
                         ToastUtil.showToast(getContext(), 0, "图片加载失败");
                     }
                 });
+    }
+
+    private void saveImage(CubeMessage cubeMessage,String imagePath) {
+        ThreadUtil.request(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Bitmap mBitmap = Glide.with(getContext()).load(imagePath)
+                            .asBitmap()
+                            .centerCrop()
+                            .into(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL)
+                            .get();
+                    String saveBitmapPath = BitmapUtils.saveBitmap(mBitmap, SpUtil.getImagePath(), cubeMessage.getFileName());
+                    AppDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessage);
+                    if(saveBitmapPath!=null){
+                        cubeMessage.setFilePath(saveBitmapPath);
+                        MessageManager.getInstance().updateMessageLite(cubeMessage);
+                    }
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
