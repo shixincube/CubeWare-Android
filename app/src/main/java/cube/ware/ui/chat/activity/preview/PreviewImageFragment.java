@@ -56,10 +56,10 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class PreviewImageFragment extends BaseLazyFragment {
 
     private static final String TAG = PreviewImageFragment.class.getSimpleName();
-    private PhotoView   mPhotoView;
+    private PhotoView mPhotoView;
     private ProgressBar mProgressBar;
     private ImageButton imageView;
-    private long        mMessageSn;
+    private long mMessageSn;
 
     public static PreviewImageFragment newInstance(long messageSn) {
         PreviewImageFragment fragment = new PreviewImageFragment();
@@ -129,14 +129,14 @@ public class PreviewImageFragment extends BaseLazyFragment {
                             LogUtil.i("预览图片url ------> " + cubeMessage.getFileUrl());
 //                            GlideUtil.loadImage(cubeMessage.getFileUrl(), getContext(), mPhotoView, false);
                             String imagePath;
-                            if(!TextUtils.isEmpty(cubeMessage.getFilePath()) && new File(cubeMessage.getFilePath()).exists()){ //加载本地文件
-                                imagePath=cubeMessage.getFilePath();
-                            }else {
-                                imagePath=cubeMessage.getFileUrl();
-                                saveImage(cubeMessage,imagePath);
+                            if (!TextUtils.isEmpty(cubeMessage.getFilePath()) && new File(cubeMessage.getFilePath()).exists()) { //加载本地文件
+                                imagePath = cubeMessage.getFilePath();
+                            } else {
+                                imagePath = cubeMessage.getFileUrl();
+                                saveImage(cubeMessage, imagePath);
                             }
 
-                            Glide.with(getContext()).load(imagePath).into(new GlideDrawableImageViewTarget(mPhotoView){
+                            Glide.with(getContext()).load(imagePath).into(new GlideDrawableImageViewTarget(mPhotoView) {
                                 @Override
                                 public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
                                     super.onResourceReady(resource, animation);
@@ -162,7 +162,7 @@ public class PreviewImageFragment extends BaseLazyFragment {
                 });
     }
 
-    private void saveImage(CubeMessage cubeMessage,String imagePath) {
+    private void saveImage(CubeMessage cubeMessage, String imagePath) {
         ThreadUtil.request(new Runnable() {
             @Override
             public void run() {
@@ -170,11 +170,11 @@ public class PreviewImageFragment extends BaseLazyFragment {
                     Bitmap mBitmap = Glide.with(getContext()).load(imagePath)
                             .asBitmap()
                             .centerCrop()
-                            .into(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL)
+                            .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                             .get();
                     String saveBitmapPath = BitmapUtils.saveBitmap(mBitmap, SpUtil.getImagePath(), cubeMessage.getFileName());
                     AppDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessage);
-                    if(saveBitmapPath!=null){
+                    if (saveBitmapPath != null) {
                         cubeMessage.setFilePath(saveBitmapPath);
                         MessageManager.getInstance().updateMessageLite(cubeMessage);
                     }
