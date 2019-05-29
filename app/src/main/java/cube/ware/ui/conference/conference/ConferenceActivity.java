@@ -23,7 +23,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.common.mvp.base.BaseActivity;
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.RingtoneUtil;
-import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.glide.GlideUtil;
 import com.common.utils.utils.log.LogUtil;
@@ -41,7 +40,6 @@ import cube.service.conference.model.ControlAction;
 import cube.service.conference.model.MemberStatus;
 import cube.service.group.GroupType;
 import cube.service.group.model.Member;
-//import cube.service.media.CubeMediaQuality;
 import cube.service.media.MediaService;
 import cube.service.user.model.User;
 import cube.ware.AppConstants;
@@ -51,6 +49,8 @@ import cube.ware.service.conference.ConferenceHandle;
 import cube.ware.service.conference.ConferenceStateListener;
 import cube.ware.ui.whiteboard.adapter.RVJoinedMemAdapter;
 import cube.ware.utils.SpUtil;
+
+//import cube.service.media.CubeMediaQuality;
 
 @Route(path=AppConstants.Router.ConferenceActivity)
 public class ConferenceActivity extends BaseActivity<ConferencePresenter> implements ConferenceContract.View, ConferenceStateListener {
@@ -600,11 +600,11 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
                 mConference = conference;
                 //自己接受，加就加入
                 if (mPresenter.isSelf(joinedMember.cubeId)) {
-                    if (conference.type.equals(GroupType.VOICE_CALL)) {
-                        CubeEngine.getInstance().getConferenceService().addControlAudio(conference.conferenceId, joinedMember.cubeId);
-                    } else {
-                        CubeEngine.getInstance().getConferenceService().addControlVideo(conference.conferenceId, joinedMember.cubeId);
-                    }
+//                    if (conference.type.equals(GroupType.VOICE_CALL)) {
+//                        CubeEngine.getInstance().getConferenceService().addControlAudio(conference.conferenceId, joinedMember.cubeId);
+//                    } else {
+//                        CubeEngine.getInstance().getConferenceService().addControlVideo(conference.conferenceId, joinedMember.cubeId);
+//                    }
                     mProgressDialog.setMessage(getString(R.string.join_in_conference));
                 } else {
                     //有人加入，要刷新adapter

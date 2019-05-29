@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@drawable/shape_login_appid_bg"
-        android:hint="请输入群名称"
+        android:hint="输入会议id，为空则创建会议"
         android:textSize="14sp"
         android:textColor="@color/text_primary"
         android:textColorHint="@color/third_text"

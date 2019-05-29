@@ -1,7 +1,6 @@
 package cube.ware.service.remoteDesktop.ui;
 
 import android.app.ProgressDialog;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,10 +25,7 @@ import com.common.utils.utils.RingtoneUtil;
 import com.common.utils.utils.ScreenSwitchUtils;
 import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.ToastUtil;
-import com.common.utils.utils.UIHandler;
 import com.common.utils.utils.log.LogUtil;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,20 +33,14 @@ import java.util.List;
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.conference.model.Conference;
-import cube.service.group.GroupType;
 import cube.service.media.MediaService;
-import cube.service.sharedesktop.model.ShareDesktop;
 import cube.service.user.model.User;
-import cube.ware.App;
 import cube.ware.AppConstants;
 import cube.ware.CubeUI;
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.data.repository.CubeUserRepository;
 import cube.ware.data.room.model.CubeUser;
-import cube.ware.eventbus.CubeAvatarEvent;
-import cube.ware.eventbus.MessageEvent;
-import cube.ware.eventbus.UpdateRecentListAboutGroup;
 import cube.ware.service.call.adapter.P2PmemberAdapter;
 import cube.ware.service.conference.ConferenceHandle;
 import cube.ware.service.conference.ConferenceStateListener;
@@ -612,7 +602,7 @@ public class ShareScreenActivity extends BaseActivity implements ScreenSwitchUti
     public void onConferenceJoined(Conference conference, User joinedMember) {
         //加入共享屏幕成功，需要调用会控方法，成为会议角色
         if (joinedMember.cubeId.equals(SpUtil.getCubeId())) {
-            CubeEngine.getInstance().getConferenceService().addControlVideo(mConference.conferenceId, joinedMember.cubeId);
+//            CubeEngine.getInstance().getConferenceService().addControlVideo(mConference.conferenceId, joinedMember.cubeId);
         }
         mProgressDialog.setMessage(getString(R.string.join_in_conference_share));
 

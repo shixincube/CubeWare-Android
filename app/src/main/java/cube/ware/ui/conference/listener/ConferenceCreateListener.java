@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.common.sdk.RouterUtil;
-import com.common.utils.utils.log.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +73,7 @@ public class ConferenceCreateListener implements ConferenceStateListener {
     @Override
     public void onConferenceJoined(Conference conference, User joinedMember) {
         if(TextUtils.isEmpty(mGroupId) ||mUser.cubeId.equals(joinedMember.cubeId)){
-            CubeEngine.getInstance().getConferenceService().addControlAudio(conference.conferenceId,mUser.cubeId);
+//            CubeEngine.getInstance().getConferenceService().addControlAudio(conference.conferenceId,mUser.cubeId);
             mCreateCallback.onJoined(conference);
         }
     }

@@ -1,11 +1,11 @@
 package cube.ware.ui.main;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +20,7 @@ import com.common.utils.utils.ToastUtil;
 
 import cube.ware.AppConstants;
 import cube.ware.R;
+import cube.ware.TestConferenceActivity;
 
 /**
  * author: kun .
@@ -30,6 +31,7 @@ public class AddDialogFragment extends DialogFragment implements View.OnClickLis
     private ImageView mIvCancel;
     private LinearLayout mLlAudio;
     private LinearLayout mLlWhiteBoard;
+    private LinearLayout mLlSfu;
     private RelativeLayout mRlBgLayout;
 
 
@@ -53,6 +55,7 @@ public class AddDialogFragment extends DialogFragment implements View.OnClickLis
         mLlAudio = inflate.findViewById(R.id.ll_audio);
         mLlWhiteBoard = inflate.findViewById(R.id.ll_whiteboard);
         mRlBgLayout = inflate.findViewById(R.id.rl_bg_layout);
+        mLlSfu = inflate.findViewById(R.id.ll_sfu);
     }
 
     private void initListener() {
@@ -60,6 +63,7 @@ public class AddDialogFragment extends DialogFragment implements View.OnClickLis
         mLlAudio.setOnClickListener(this);
         mLlWhiteBoard.setOnClickListener(this);
         mRlBgLayout.setOnClickListener(this);
+        mLlSfu.setOnClickListener(this);
     }
 
     @Override
@@ -79,6 +83,10 @@ public class AddDialogFragment extends DialogFragment implements View.OnClickLis
                 bundleWB.putInt("select_type",10);//首次创建
                 RouterUtil.navigation(AppConstants.Router.SelectMemberActivity,bundleWB);
                 getDialog().dismiss();
+                break;
+            case R.id.ll_sfu:
+                startActivity(new Intent(getContext(),TestConferenceActivity.class));
+                dismiss();
                 break;
             case R.id.rl_bg_layout:
                 getDialog().dismiss();

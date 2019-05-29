@@ -1,48 +1,31 @@
 package cube.ware.ui.conference.create;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.bigkoo.pickerview.builder.TimePickerBuilder;
-import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
-import com.bigkoo.pickerview.listener.OnTimeSelectListener;
-import com.bigkoo.pickerview.view.TimePickerView;
 import com.common.mvp.base.BaseActivity;
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.ClickUtil;
-import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -50,7 +33,6 @@ import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.conference.model.Conference;
 import cube.service.conference.model.ConferenceConfig;
-import cube.service.group.GroupType;
 import cube.service.user.model.User;
 import cube.ware.AppConstants;
 import cube.ware.R;
@@ -59,7 +41,6 @@ import cube.ware.service.conference.ConferenceHandle;
 import cube.ware.service.conference.ConferenceStateListener;
 import cube.ware.ui.conference.adapter.RVCreateAdapter;
 import cube.ware.ui.conference.create.dialog.BottomDatePicker;
-import cube.ware.ui.conference.eventbus.CreateConferenceEvent;
 import cube.ware.ui.conference.eventbus.InviteConferenceEvent;
 import cube.ware.ui.conference.eventbus.SelectMemberEvent;
 import rx.functions.Action1;
@@ -369,7 +350,7 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
            mProgressDialog.setMessage("加入成功,进入会议中。。。");
             //必须调用会议控制
             mConference=conference;
-            CubeEngine.getInstance().getConferenceService().addControlAudio(conference.conferenceId,mUser.cubeId);
+//            CubeEngine.getInstance().getConferenceService().addControlAudio(conference.conferenceId,mUser.cubeId);
     }
 
     @Override
