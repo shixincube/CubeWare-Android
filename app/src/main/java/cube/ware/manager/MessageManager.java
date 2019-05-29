@@ -88,8 +88,8 @@ import top.zibin.luban.OnCompressListener;
 
 public class MessageManager {
 
-    public static final long                         SHOW_TIME_PERIOD = 5 * 60 * 1000;  //消息显示时间的最小间隔时间
-    private             Map<Fragment, ChatContainer> mContainer       = new HashMap<>();
+    public static final long SHOW_TIME_PERIOD = 5 * 60 * 1000;  //消息显示时间的最小间隔时间
+    private Map<Fragment, ChatContainer> mContainer = new HashMap<>();
 
     public static MessageManager getInstance() {
         return MessageManagerHolder.INSTANCE;
@@ -249,7 +249,8 @@ public class MessageManager {
             }
         });
 
-        observable = recalled ? recallCubeMessage : CubeMessageRepository.getInstance().queryMessageBySn(messageEntity.getSerialNumber());;
+        observable = recalled ? recallCubeMessage : CubeMessageRepository.getInstance().queryMessageBySn(messageEntity.getSerialNumber());
+        ;
         observable.flatMap(new Func1<CubeMessage, Observable<CubeMessage>>() {
             @Override
             public Observable<CubeMessage> call(final CubeMessage cubeMessage) {
@@ -258,7 +259,7 @@ public class MessageManager {
         }).flatMap(new Func1<CubeMessage, Observable<CubeMessage>>() {
             @Override
             public Observable<CubeMessage> call(final CubeMessage cubeMessage) {
-                return  CubeMessageRepository.getInstance().saveOrUpdate(cubeMessage);
+                return CubeMessageRepository.getInstance().saveOrUpdate(cubeMessage);
             }
         }).filter(new Func1<CubeMessage, Boolean>() {
             @Override
@@ -281,6 +282,7 @@ public class MessageManager {
 
     /**
      * 处理断网时撤回消息逻辑
+     *
      * @param messageEntities
      */
     public void reCallMessageList(List<MessageEntity> messageEntities) {
@@ -326,6 +328,7 @@ public class MessageManager {
 
     /**
      * 构建撤回消息显示的 CubeMessage
+     *
      * @param cubeMessage
      * @return
      */
@@ -365,8 +368,7 @@ public class MessageManager {
 //                            }
 //                        });
 //            }
-        }
-        else {
+        } else {
             cubeMessage.setMessageType(CubeMessageType.RECALLMESSAGETIPS.getType());
             cubeMessage.setRead(true);
             cubeMessage.setContent(CubeUI.getInstance().getContext().getString(R.string.notice_send_recall));
@@ -439,7 +441,7 @@ public class MessageManager {
 
         CubeMessageViewModel viewModel = new CubeMessageViewModel();
         viewModel.userNme = cubeMessage.getSenderName();
-        viewModel.userFace = AppConstants.AVATAR_URL+cubeMessage.getSenderId();
+        viewModel.userFace = AppConstants.AVATAR_URL + cubeMessage.getSenderId();
         viewModel.remark = cubeMessage.getSenderName();
         viewModel.mMessage = cubeMessage;
         return Observable.just(viewModel);
@@ -494,10 +496,10 @@ public class MessageManager {
      * @param isSecret
      * @return
      */
-    public TextMessage buildTextMessage(CubeSessionType sessionType, String senderId, String receiverId,String receiverName, String content, boolean isSecret) {
+    public TextMessage buildTextMessage(CubeSessionType sessionType, String senderId, String receiverId, String receiverName, String content, boolean isSecret) {
         TextMessage message = new TextMessage(content);
-        message.setSender(new Sender(senderId,SpUtil.getUserName()));
-        message.setReceiver(new Receiver(receiverId,receiverName));
+        message.setSender(new Sender(senderId, SpUtil.getUserName()));
+        message.setReceiver(new Receiver(receiverId, receiverName));
 //        message.setSender(senderId);
 //        message.setReceiver(receiverId);
         message.setDirection(MessageDirection.Sent);
@@ -695,7 +697,7 @@ public class MessageManager {
                     //发送消息回执
                     if (!message.isReceipt && message.isReceivedMessage()) {
                         //直接更新本地数据库消息回执状态，不等服务器的回执消息反馈
-                        ReceiptManager.getInstance().updateIsReceipted(chatId,message.getTimestamp(),false);
+                        ReceiptManager.getInstance().updateIsReceipted(chatId, message.getTimestamp(), false);
                         //发送回执消息
                         ReceiptMessage receiptMessage = new ReceiptMessage(message.isGroupMessage() ? message.getGroupId() : message.getSenderId(), SpUtil.getCubeId());
                         receiptMessage.setTraceless(true);
@@ -789,27 +791,27 @@ public class MessageManager {
                             public void onSuccess(File newfile) {
                                 // TODO 压缩成功后调用，返回压缩后的图片文件
                                 LogUtil.i("Luban ==>onSuccess file=" + newfile.getPath());
-                                MessageEntity innermessageEntity = MessageManager.getInstance().buildImageMessage(context, sessionType, new Sender(SpUtil.getCubeId(),SpUtil.getUserName()), receiver, newfile.getPath(), true, isAnonymous);
+                                MessageEntity innermessageEntity = MessageManager.getInstance().buildImageMessage(context, sessionType, new Sender(SpUtil.getCubeId(), SpUtil.getUserName()), receiver, newfile.getPath(), true, isAnonymous);
                                 sendMessage(context, innermessageEntity).subscribe();
                             }
 
                             @Override
                             public void onError(Throwable e) {
                                 // TODO 当压缩过程出现问题时调用
-                                MessageEntity innermessageEntity = MessageManager.getInstance().buildImageMessage(context, sessionType, new Sender(SpUtil.getCubeId(),SpUtil.getUserName()), receiver, filePath, true, isAnonymous);
+                                MessageEntity innermessageEntity = MessageManager.getInstance().buildImageMessage(context, sessionType, new Sender(SpUtil.getCubeId(), SpUtil.getUserName()), receiver, filePath, true, isAnonymous);
                                 sendMessage(context, innermessageEntity).subscribe();
                             }
                         }).launch();    //启动压缩
             } else {
-                messageEntity = MessageManager.getInstance().buildImageMessage(context, sessionType, new Sender(SpUtil.getCubeId(),SpUtil.getUserName()), receiver, filePath, true, isAnonymous);
+                messageEntity = MessageManager.getInstance().buildImageMessage(context, sessionType, new Sender(SpUtil.getCubeId(), SpUtil.getUserName()), receiver, filePath, true, isAnonymous);
                 sendMessage(context, messageEntity).subscribe();
             }
         } else if (fileType == 1) {
-            messageEntity = MessageManager.getInstance().buildVideoMessage(context, sessionType, new Sender(SpUtil.getCubeId(),SpUtil.getUserName()), receiver, filePath, isAnonymous);
+            messageEntity = MessageManager.getInstance().buildVideoMessage(context, sessionType, new Sender(SpUtil.getCubeId(), SpUtil.getUserName()), receiver, filePath, isAnonymous);
             ((VideoClipMessage) messageEntity).setDuration(FileUtil.getVideoDuration(filePath));
             sendMessage(context, messageEntity).subscribe();
         } else {
-            messageEntity = MessageManager.getInstance().buildFileMessage(sessionType, new Sender(SpUtil.getCubeId(),SpUtil.getUserName()), receiver, filePath);
+            messageEntity = MessageManager.getInstance().buildFileMessage(sessionType, new Sender(SpUtil.getCubeId(), SpUtil.getUserName()), receiver, filePath);
             sendMessage(context, messageEntity).subscribe();
         }
     }
@@ -907,6 +909,16 @@ public class MessageManager {
 
     public void resumeMessage(long messageSN) {
         CubeEngine.getInstance().getMessageService().resumeMessage(messageSN);
+    }
+
+    public void updateMessageLite(CubeMessage cubeMessage) {
+        if (cubeMessage != null) {
+            if (!mContainer.isEmpty()) {
+                for (ChatContainer chatContainer : mContainer.values()) {
+                    chatContainer.mPanelProxy.onMessagePersisted(cubeMessage);
+                }
+            }
+        }
     }
 
     /**
@@ -1305,50 +1317,39 @@ public class MessageManager {
             if (session.getCallDirection() == CallDirection.Outgoing && CallAction.CANCEL.equals(callAction)) {
                 content = context.getString(R.string.peer_has_refused);
                 isCall = true;
-            }
-            else if (session.getCallDirection() == CallDirection.Incoming && CallAction.CANCEL.equals(callAction)) {
+            } else if (session.getCallDirection() == CallDirection.Incoming && CallAction.CANCEL.equals(callAction)) {
                 content = context.getString(R.string.call_not_accept);
-            }
-            else if (session.getCallDirection() == CallDirection.Incoming && CallAction.ANSWER_BY_OTHER.equals(callAction)
+            } else if (session.getCallDirection() == CallDirection.Incoming && CallAction.ANSWER_BY_OTHER.equals(callAction)
                     || session.getCallDirection() == CallDirection.Outgoing && CallAction.ANSWER_BY_OTHER.equals(callAction)
                     ) {
                 content = context.getString(R.string.other_terminal_has_answered);
                 isCall = true;
-            }
-            else if (session.getCallDirection() == CallDirection.Outgoing && CallAction.CANCEL_ACK.equals(callAction)) {
+            } else if (session.getCallDirection() == CallDirection.Outgoing && CallAction.CANCEL_ACK.equals(callAction)) {
                 content = context.getString(R.string.cancelled);
-            }
-            else if (session.getCallDirection() == CallDirection.Outgoing && CallAction.CANCEL_BY_OTHER.equals(callAction)) {
+            } else if (session.getCallDirection() == CallDirection.Outgoing && CallAction.CANCEL_BY_OTHER.equals(callAction)) {
                 content = context.getString(R.string.call_voice_not_answer);
-            }
-            else if(session.getCallDirection() == CallDirection.Incoming && CallAction.CANCEL_BY_OTHER.equals(callAction)){
+            } else if (session.getCallDirection() == CallDirection.Incoming && CallAction.CANCEL_BY_OTHER.equals(callAction)) {
                 content = context.getString(R.string.other_terminal_has_cancle);
-            }
-            else if (session.getCallDirection() == CallDirection.Incoming && CallAction.CANCEL_ACK.equals(callAction)) {
+            } else if (session.getCallDirection() == CallDirection.Incoming && CallAction.CANCEL_ACK.equals(callAction)) {
                 content = context.getString(R.string.refused);
                 isCall = true;
-            }
-            else if (session.getCallDirection() == CallDirection.Outgoing && CallAction.BYE.equals(callAction) || session.getCallDirection() == CallDirection.Outgoing && CallAction.BYE_ACK.equals(callAction)) {
+            } else if (session.getCallDirection() == CallDirection.Outgoing && CallAction.BYE.equals(callAction) || session.getCallDirection() == CallDirection.Outgoing && CallAction.BYE_ACK.equals(callAction)) {
                 if (session.getStartTime() != 0l) {
                     content = context.getString(R.string.call_completed);
                     isCall = true;
 
 
-                }
-                else {
+                } else {
                     content = context.getString(R.string.call_user_busy);
                 }
-            }
-            else if (session.getCallDirection() == CallDirection.Incoming && CallAction.BYE.equals(callAction) || session.getCallDirection() == CallDirection.Incoming && CallAction.BYE_ACK.equals(callAction)) {
+            } else if (session.getCallDirection() == CallDirection.Incoming && CallAction.BYE.equals(callAction) || session.getCallDirection() == CallDirection.Incoming && CallAction.BYE_ACK.equals(callAction)) {
                 if (session.getStartTime() != 0l) {
                     content = context.getString(R.string.call_completed);
                     isCall = true;
-                }
-                else {
+                } else {
                     content = context.getString(R.string.call_user_busy);
                 }
-            }
-            else {
+            } else {
                 content = context.getString(R.string.call_completed);
             }
 
@@ -1357,12 +1358,11 @@ public class MessageManager {
                 return;
             }
             if (session.getCallDirection() == CallDirection.Outgoing) {
-                sender = new Sender(session.getCaller().cubeId,session.getCaller().displayName);
-                receiver = new Receiver(session.getCallee().cubeId,session.getCallee().displayName);
-            }
-            else {
-                sender = new Sender(session.getCallee().cubeId,session.getCallee().displayName);
-                receiver = new Receiver(session.getCaller().cubeId,session.getCaller().displayName);
+                sender = new Sender(session.getCaller().cubeId, session.getCaller().displayName);
+                receiver = new Receiver(session.getCallee().cubeId, session.getCallee().displayName);
+            } else {
+                sender = new Sender(session.getCallee().cubeId, session.getCallee().displayName);
+                receiver = new Receiver(session.getCaller().cubeId, session.getCaller().displayName);
             }
             LogUtil.d("===本条消息所封装的sender--->" + sender + "===receiver--->" + receiver);
 
@@ -1386,8 +1386,7 @@ public class MessageManager {
             CustomMessage message = MessageManager.getInstance().buildCustomMessage(CubeSessionType.P2P, sender, receiver, content);
             if (session.isVideoEnabled()) {
                 message.setHeader("operate", CubeCustomMessageType.VideoCall.type);
-            }
-            else {
+            } else {
                 message.setHeader("operate", CubeCustomMessageType.AudioCall.type);
             }
             message.setReceived(isCall);
@@ -1398,6 +1397,7 @@ public class MessageManager {
 
     /**
      * P2P处理音视频错误回调消息，如对方正在通话中
+     *
      * @param context
      * @param session
      * @param cubeError
@@ -1416,20 +1416,18 @@ public class MessageManager {
                 return;
             }
             if (session.getCallDirection() == CallDirection.Outgoing) {
-                sender = new Sender(session.getCaller().cubeId,session.getCaller().displayName);
-                receiver = new Receiver(session.getCallee().cubeId,session.getCallee().displayName);
-            }
-            else {
-                sender = new Sender(session.getCallee().cubeId,session.getCallee().displayName);
-                receiver = new Receiver(session.getCaller().cubeId,session.getCaller().displayName);
+                sender = new Sender(session.getCaller().cubeId, session.getCaller().displayName);
+                receiver = new Receiver(session.getCallee().cubeId, session.getCallee().displayName);
+            } else {
+                sender = new Sender(session.getCallee().cubeId, session.getCallee().displayName);
+                receiver = new Receiver(session.getCaller().cubeId, session.getCaller().displayName);
             }
 
             if (!TextUtils.isEmpty(content)) {
                 CustomMessage message = MessageManager.getInstance().buildCustomMessage(CubeSessionType.P2P, sender, receiver, content);
                 if (session.isVideoEnabled()) {
                     message.setHeader("operate", CubeCustomMessageType.VideoCall.type);
-                }
-                else {
+                } else {
                     message.setHeader("operate", CubeCustomMessageType.AudioCall.type);
                 }
                 message.setReceived(isCall);
@@ -1441,12 +1439,13 @@ public class MessageManager {
 
     /**
      * p2p白板发送创建消息，更新本地
+     *
      * @param from
      * @param to
      */
-    public void sendP2PWBCreateMessage(User from,User to){
-        Sender sender = new Sender(from.cubeId,from.displayName);//发起者
-        Receiver receiver = new Receiver(to.cubeId,to.displayName);//接受者
+    public void sendP2PWBCreateMessage(User from, User to) {
+        Sender sender = new Sender(from.cubeId, from.displayName);//发起者
+        Receiver receiver = new Receiver(to.cubeId, to.displayName);//接受者
         CustomMessage customMessage = MessageManager.getInstance().buildCustomMessage(CubeSessionType.P2P, sender, receiver, "");
         customMessage.setHeader("operate", CubeCustomMessageType.P2PWhiteBoardApply.type);
         customMessage.setHeader("userCube", from.cubeId);
@@ -1456,12 +1455,13 @@ public class MessageManager {
 
     /**
      * p2p白板发送创建消息，更新本地
+     *
      * @param from
      * @param to
      */
-    public void sendP2PWBDestoryMessage(User from,User to){
-        Sender sender = new Sender(from.cubeId,from.displayName);//发起者
-        Receiver receiver = new Receiver(to.cubeId,to.displayName);//接受者
+    public void sendP2PWBDestoryMessage(User from, User to) {
+        Sender sender = new Sender(from.cubeId, from.displayName);//发起者
+        Receiver receiver = new Receiver(to.cubeId, to.displayName);//接受者
         CustomMessage customMessage = MessageManager.getInstance().buildCustomMessage(CubeSessionType.P2P, sender, receiver, "");
         customMessage.setHeader("operate", CubeCustomMessageType.P2PWhiteBoardClose.type);
         MessageManager.getInstance().addMessageInLocal(customMessage).subscribe();

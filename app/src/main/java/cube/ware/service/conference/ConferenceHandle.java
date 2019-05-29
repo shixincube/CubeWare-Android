@@ -11,7 +11,6 @@ import com.common.utils.manager.ActivityManager;
 import com.common.utils.utils.RingtoneUtil;
 import com.common.utils.utils.log.LogUtil;
 
-import cube.service.conference.model.ConferenceStream;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.conference.ConferenceListener;
 import cube.service.conference.model.Conference;
+import cube.service.conference.model.ConferenceStream;
 import cube.service.group.GroupType;
 import cube.service.group.model.Member;
 import cube.service.sharedesktop.ShareDesktopExtListener;
@@ -322,7 +322,7 @@ public class ConferenceHandle implements ConferenceListener {
 
     @Override
     public void onConferenceAddStream(ConferenceStream conferenceStream) {
-        
+
     }
 
     @Override
