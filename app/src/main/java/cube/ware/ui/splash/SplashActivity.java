@@ -7,24 +7,17 @@ import android.widget.FrameLayout;
 import com.common.mvp.base.BaseActivity;
 import com.common.mvp.base.BasePresenter;
 import com.common.sdk.RouterUtil;
-import com.common.utils.utils.GsonUtil;
-import com.common.utils.utils.ToastUtil;
-import com.common.utils.utils.log.LogUtil;
-
-import java.util.List;
-
-import cube.service.common.model.CubeError;
-import cube.service.common.model.CubeSession;
-import cube.service.common.model.DeviceInfo;
-import cube.service.user.model.User;
 import cube.ware.AppConstants;
-import cube.ware.CubeUI;
 import cube.ware.R;
-import cube.ware.service.user.UserHandle;
-import cube.ware.service.user.UserStateListener;
 import cube.ware.utils.SpUtil;
 
-public class SplashActivity extends BaseActivity implements UserStateListener {
+/**
+ * 应用启动界面
+ *
+ * @author LiuFeng
+ * @data 2019/5/29 9:57
+ */
+public class SplashActivity extends BaseActivity {
 
     private FrameLayout mFrameLayout;
 
@@ -46,7 +39,7 @@ public class SplashActivity extends BaseActivity implements UserStateListener {
     @Override
     protected void initData() {
         AlphaAnimation alphaAnimation = new AlphaAnimation(0.6f, 1.0f);
-        alphaAnimation.setDuration(800);
+        alphaAnimation.setDuration(500);
         this.mFrameLayout.startAnimation(alphaAnimation);
         alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -56,13 +49,12 @@ public class SplashActivity extends BaseActivity implements UserStateListener {
             @Override
             public void onAnimationEnd(Animation animation) {
                 String cubeToken = SpUtil.getCubeToken();
-                String  cubeId= SpUtil.getCubeId();
-                if (TextUtils.isEmpty(cubeToken)||TextUtils.isEmpty(cubeId)) {
+                String cubeId = SpUtil.getCubeId();
+                if (TextUtils.isEmpty(cubeToken) || TextUtils.isEmpty(cubeId)) {
                     goToLogin();
                 }
                 else {
-                    UserHandle.getInstance().addUserStateListener(SplashActivity.this);
-                    CubeUI.getInstance().login(SpUtil.getCubeId(), SpUtil.getCubeToken(), SpUtil.getCubeId());
+                    goToMain();
                 }
             }
 
@@ -87,29 +79,5 @@ public class SplashActivity extends BaseActivity implements UserStateListener {
     public void goToMain() {
         RouterUtil.navigation(this, AppConstants.Router.MainActivity);
         finish();
-    }
-
-    @Override
-    public void onLogin(CubeSession session, User from) {
-        LogUtil.i(from.toString());
-        goToMain();
-    }
-
-    @Override
-    public void onLogout(CubeSession session, User from) {
-
-    }
-
-    @Override
-    public void onUserFailed(CubeError error, User from) {
-        //重新登录
-        SpUtil.clear();
-        LogUtil.i("login fail:" + error.toString());
-        ToastUtil.showToast(this, "login fail:" + error.toString());
-    }
-
-    @Override
-    public void onDeviceOnline(DeviceInfo loginDevice, List<DeviceInfo> onlineDevices, User from) {
-
     }
 }

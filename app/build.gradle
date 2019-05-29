@@ -120,7 +120,10 @@ dependencies {
     implementation 'com.shixincube:live:3.0.1'         // 直播服务
     implementation 'com.shixincube:genie:2.0.22'       // 通信库
     implementation 'com.shixincube:rtc:2.1.8'          // RTC
-    implementation 'com.shixincube:sip:1.1.13'
+    implementation 'com.shixincube:sip:1.1.13'         // SIP通信
 
 
+//    implementation project(':cube-api')
+//    implementation project(':CubeRTC')
+//    implementation project(':CubeSIP')
 }
