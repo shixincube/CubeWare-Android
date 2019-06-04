@@ -68,6 +68,8 @@ public class TestConferenceActivity extends AppCompatActivity implements Confere
         findViewById(R.id.update).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LogUtil.d("switchCamera:");
+                CubeEngine.getInstance().getMediaService().switchCamera();
             }
         });
 
