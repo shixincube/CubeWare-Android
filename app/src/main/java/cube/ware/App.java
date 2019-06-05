@@ -3,7 +3,6 @@ package cube.ware;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
-
 import com.common.mvp.base.BaseApplication;
 import com.common.mvp.crash.AppCrashHandler;
 import com.common.sdk.CommonSdk;
@@ -19,7 +18,6 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.umeng.commonsdk.UMConfigure;
-
 import cube.ware.utils.SpUtil;
 
 /**
@@ -50,7 +48,7 @@ public class App extends BaseApplication {
         if (AppManager.isDebug()) {
             UMConfigure.setLogEnabled(true);
         }
-        UMConfigure.init(this, BuildConfig.UMENG_APP_KEY, "shixin",UMConfigure.DEVICE_TYPE_PHONE, null);
+        UMConfigure.init(this, BuildConfig.UMENG_APP_KEY, "shixin", UMConfigure.DEVICE_TYPE_PHONE, null);
 
         // app崩溃处理
         AppCrashHandler.getInstance().init(this, SpUtil.getLogPath());
@@ -59,11 +57,10 @@ public class App extends BaseApplication {
         NetworkStateReceiver.getInstance().register(this);
 
         // 初始化CubeUI
-        CubeUI.getInstance().init(this, AppManager.getAppId(), AppManager.getAppKey(),  AppManager.getLicenceUrl(), SpUtil.getResourcePath());
+        CubeUI.getInstance().init(this, AppManager.getAppId(), AppManager.getAppKey(), AppManager.getLicenceUrl(), SpUtil.getResourcePath());
 
         // 启动cube引擎
         CubeUI.getInstance().startupCube(this);
-
     }
 
     @Override
@@ -92,17 +89,12 @@ public class App extends BaseApplication {
         return null;
     }
 
-    @Override
-    protected void onBackToFront(Activity activity) {
-//        CoreService.checkServiceIsHealthy(activity);
-    }
-
     static {
         //设置全局的Header构建器
         SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
             @Override
             public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
-//                layout.setPrimaryColorsId(R.color.colorPrimary, android.R.color.white);//全局设置主题颜色
+                //                layout.setPrimaryColorsId(R.color.colorPrimary, android.R.color.white);//全局设置主题颜色
                 return new ClassicsHeader(context);//.setTimeFormat(new DynamicTimeFormat("更新于 %s"));//指定为经典Header，默认是 贝塞尔雷达Header
             }
         });
@@ -115,5 +107,4 @@ public class App extends BaseApplication {
             }
         });
     }
-
 }

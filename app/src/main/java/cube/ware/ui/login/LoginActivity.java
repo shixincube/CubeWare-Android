@@ -65,7 +65,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public void onNormalClick(View v) {
         if (v.getId() == loginBtn.getId()) {
             if (!TextUtils.isEmpty(mEtAppId.getText().toString()) && !TextUtils.isEmpty(mEtAppKey.getText().toString())) {
-                showToast("登录中。。。");
+                showToast("登录中...");
                 mPresenter.login(mEtAppId.getText().toString().trim(),mEtAppKey.getText().toString().trim());
             }
             else {

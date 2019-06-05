@@ -2,11 +2,9 @@ package cube.ware.service.call;
 
 import android.content.Context;
 import android.os.Bundle;
-
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.common.utils.utils.RingtoneUtil;
 import com.common.utils.utils.log.LogUtil;
-
 import cube.service.CubeEngine;
 import cube.service.call.CallAction;
 import cube.service.call.CallDirection;
@@ -17,15 +15,14 @@ import cube.service.common.model.CubeErrorCode;
 import cube.service.user.UserState;
 import cube.service.user.model.User;
 import cube.ware.AppConstants;
+import cube.ware.CubeUI;
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.manager.MessageManager;
 import cube.ware.service.call.manager.OneOnOneCallManager;
 import cube.ware.service.listener.CallStateListener;
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * 引擎通话服务处理
@@ -37,11 +34,11 @@ public class CallHandle implements CallListener {
 
     private static CallHandle instance = new CallHandle();
 
-    private long   mCallTime           = -1;//通话时长
+    private long mCallTime = -1;//通话时长
 
-    private Context mContext ;
+    private Context mContext;
 
-    private List<CallStateListener>                mCallStateListenerList          = new ArrayList<>();
+    private List<CallStateListener> mCallStateListenerList = new ArrayList<>();
 
     private CallHandle() {}
 
@@ -52,8 +49,8 @@ public class CallHandle implements CallListener {
     /**
      * 启动监听
      */
-    public void start(Context context) {
-        mContext = context;
+    public void start() {
+        mContext = CubeUI.getInstance().getContext();
         CubeEngine.getInstance().getCallService().addCallListener(this);
     }
 
@@ -73,7 +70,7 @@ public class CallHandle implements CallListener {
     @Override
     public void onCall(CallSession session, User from) {
 
-        LogUtil.d("===收到了邀请通知"+from.cubeId);
+        LogUtil.d("===收到了邀请通知" + from.cubeId);
         LogUtil.i("CoreService ===> onCall callDirection=" + session + session.isVideoEnabled());
         if (OneOnOneCallManager.getInstance().isCalling() || CubeEngine.getInstance().getSession().userState != UserState.LoginSucceed) {
             return;
@@ -90,14 +87,14 @@ public class CallHandle implements CallListener {
                 callState = CallStatus.AUDIO_INCOMING;
             }
             // 播放来电铃声
-            RingtoneUtil.play(R.raw.ringing,mContext);
+            RingtoneUtil.play(R.raw.ringing, mContext);
 
             // 跳转到拨打电话页面
             Bundle bundle = new Bundle();
-            bundle.putString("call_id",callId);
+            bundle.putString("call_id", callId);
             bundle.putSerializable("call_state", callState);
-            bundle.putLong("call_time",0l);
-            ARouter.getInstance().build(AppConstants.Router.P2PCallActivity).withBundle("call_data",bundle).navigation();
+            bundle.putLong("call_time", 0l);
+            ARouter.getInstance().build(AppConstants.Router.P2PCallActivity).withBundle("call_data", bundle).navigation();
         }
         else if (session.callDirection == CallDirection.Outgoing) {
             // 播放呼叫铃声
@@ -136,7 +133,6 @@ public class CallHandle implements CallListener {
     @Override
     public void onCallRinging(CallSession session, User from) {
 
-
     }
 
     /**
@@ -170,8 +166,8 @@ public class CallHandle implements CallListener {
         // TODO: 2017/7/15
         OneOnOneCallManager.getInstance().restCalling();
 
-        LogUtil.i("CoreService ===> onCallEnded---session action =="+session.getAction());
-        LogUtil.i("CoreService ===> onCallEnded---session 描述 =="+session.getCallDirection());
+        LogUtil.i("CoreService ===> onCallEnded---session action ==" + session.getAction());
+        LogUtil.i("CoreService ===> onCallEnded---session 描述 ==" + session.getCallDirection());
         // 释放铃声
         RingtoneUtil.release();
         RingtoneUtil.play1(R.raw.hungup, mContext);
@@ -186,7 +182,6 @@ public class CallHandle implements CallListener {
         LogUtil.d("====走到了这里吗？====onCallEnded---");
         MessageManager.getInstance().onCallEnd(mContext, session, session.getAction());
         mCallTime = 0;
-
     }
 
     /**
@@ -233,13 +228,14 @@ public class CallHandle implements CallListener {
         }
         if (this.mCallStateListenerList != null && !this.mCallStateListenerList.isEmpty()) {
             for (CallStateListener listener : this.mCallStateListenerList) {
-                LogUtil.d("===监听器的大小==="+mCallStateListenerList.size());
+                LogUtil.d("===监听器的大小===" + mCallStateListenerList.size());
                 if (listener != null) {
-                    listener.onCallFailed(session,  CubeErrorCode.convert(error.code));
+                    listener.onCallFailed(session, CubeErrorCode.convert(error.code));
                 }
             }
         }
     }
+
     /**
      * 添加一个通话状态监听器
      *

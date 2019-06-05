@@ -2,25 +2,30 @@ package cube.ware;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-
-import com.common.utils.alive.DaemonEnv;
 import com.common.utils.utils.log.LogUtil;
 import com.umeng.analytics.MobclickAgent;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
-
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeConfig;
 import cube.service.common.model.CubeError;
 import cube.service.common.model.Version;
 import cube.service.message.model.MessageEntity;
 import cube.service.user.UserState;
-import cube.ware.service.core.CoreAliveService;
+import cube.ware.service.call.CallHandle;
+import cube.ware.service.conference.ConferenceHandle;
+import cube.ware.service.core.SettingHandle;
+import cube.ware.service.engine.CubeEngineHandle;
 import cube.ware.service.engine.CubeEngineWorkerListener;
+import cube.ware.service.file.FileHandle;
+import cube.ware.service.group.GroupHandle;
+import cube.ware.service.message.MessageHandle;
+import cube.ware.service.remoteDesktop.RemoteDesktopHandle;
+import cube.ware.service.user.UserHandle;
+import cube.ware.service.whiteboard.WhiteBoardHandle;
 import cube.ware.ui.chat.ChatEventListener;
 import cube.ware.ui.recent.listener.UnreadMessageCountListener;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * CubeWare全局管理类
@@ -35,8 +40,9 @@ public class CubeUI {
     private Context mContext;
 
     private final StringBuilder buffer = new StringBuilder();
+
     private List<CubeEngineWorkerListener> mCubeEngineWorkerListenerList = new ArrayList<>(); // CubeEngine工作状态监听
-    private List<ChatEventListener> sChatEventListeners = new ArrayList<>(); // 会话窗口消息列表一些点击事件的响应处理回调
+    private List<ChatEventListener>        sChatEventListeners           = new ArrayList<>(); // 会话窗口消息列表一些点击事件的响应处理回调
 
     private List<WeakReference<UnreadMessageCountListener>> mUnreadMessageCountListeners = new ArrayList<>();//未读消息总数监听器
 
@@ -106,20 +112,34 @@ public class CubeUI {
      *
      * @return
      */
-    public boolean startupCube(Context context) {
-        if (CubeEngine.getInstance().startup(context)) {
-            // 启动CubeService
-//            CoreService.start(context);
-
-            //启动尝试保活的service
+    public void startupCube(Context context) {
+        if (!isStarted() && CubeEngine.getInstance().startup(context)) {
+            /*//启动尝试保活的service
             DaemonEnv.initialize(
                     context,  //Application Context.
                     CoreAliveService.class, //Service 对应的 Class 对象.
                     3 * 1000);  //定时唤醒的时间间隔(ms), 默认 6 分钟.
-            CoreAliveService.start(context);
-            return true;
+            CoreAliveService.start(context);*/
+
+            // 注册启动监听
+            startListener();
         }
-        return false;
+    }
+
+    /**
+     * 启动引擎各服务的监听
+     */
+    private void startListener() {
+        CubeEngineHandle.getInstance().start();
+        UserHandle.getInstance().start();
+        MessageHandle.getInstance().start();
+        CallHandle.getInstance().start();
+        ConferenceHandle.getInstance().start();
+        FileHandle.getInstance().start();
+        GroupHandle.getInstance().start();
+        RemoteDesktopHandle.getInstance().start();
+        WhiteBoardHandle.getInstance().start();
+        SettingHandle.getInstance().start();
     }
 
     /**
@@ -250,6 +270,7 @@ public class CubeUI {
 
     /**
      * 移除CubeEngine监听器
+     *
      * @param cubeEngineWorkerListener
      */
     public void removeCubeEngineWorkerListener(CubeEngineWorkerListener cubeEngineWorkerListener) {

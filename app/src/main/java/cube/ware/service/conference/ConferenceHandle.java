@@ -78,8 +78,8 @@ public class ConferenceHandle implements ConferenceListener {
      * 启动监听
      * @param
      */
-    public void start(Context context) {
-        this.mContext=context;
+    public void start() {
+        mContext = CubeUI.getInstance().getContext();
         CubeEngine.getInstance().getConferenceService().addConferenceListener(this);
     }
 

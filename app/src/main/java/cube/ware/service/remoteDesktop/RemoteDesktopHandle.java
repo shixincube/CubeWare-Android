@@ -11,6 +11,7 @@ import com.common.utils.manager.ActivityManager;
 import com.common.utils.utils.RingtoneUtil;
 import com.common.utils.utils.log.LogUtil;
 
+import cube.ware.CubeUI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,8 +50,8 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
     /**
      * 启动监听
      */
-    public void start(Context context) {
-        mContext = context;
+    public void start() {
+        mContext = CubeUI.getInstance().getContext();
         CubeEngine.getInstance().getShareDesktopService().addShareDesktopListener(this);
     }
 

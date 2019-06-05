@@ -14,17 +14,6 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import com.common.utils.utils.log.LogUtil;
-import cube.service.CubeEngine;
-import cube.ware.CubeUI;
-import cube.ware.service.call.CallHandle;
-import cube.ware.service.conference.ConferenceHandle;
-import cube.ware.service.engine.CubeEngineHandle;
-import cube.ware.service.file.FileHandle;
-import cube.ware.service.group.GroupHandle;
-import cube.ware.service.message.MessageHandle;
-import cube.ware.service.remoteDesktop.RemoteDesktopHandle;
-import cube.ware.service.user.UserHandle;
-import cube.ware.service.whiteboard.WhiteBoardHandle;
 
 /**
  * cube核心service
@@ -136,33 +125,7 @@ public class CoreService extends Service {
             this.startForeground(FORE_SERVICE_ID, notification);
         }
 
-        initListener();
-
         return START_STICKY;
-    }
-
-    /**
-     * 初始化监听
-     */
-    private void initListener() {
-
-        if (!CubeEngine.getInstance().isStarted()) {
-            boolean startup = CubeEngine.getInstance().startup(getApplicationContext());
-            LogUtil.i("引擎是否启动成功： " + startup);
-            CubeUI.getInstance().reportError("no start engine!");
-        }
-
-        CubeEngineHandle.getInstance().start();
-        UserHandle.getInstance().start();
-        FileHandle.getInstance().start(this);
-        MessageHandle.getInstance().start();
-        CallHandle.getInstance().start(this);
-        ConferenceHandle.getInstance().start(this);
-        GroupHandle.getInstance().start();
-        RemoteDesktopHandle.getInstance().start(this);
-        WhiteBoardHandle.getInstance().start(this);
-        SettingHandle.getInstance().start();
-
     }
 
     @Override
@@ -174,17 +137,6 @@ public class CoreService extends Service {
     public void onDestroy() {
         LogUtil.i("CoreService ===》 destroyed");
         super.onDestroy();
-        CubeEngineHandle.getInstance().stop();
-        UserHandle.getInstance().stop();
-        FileHandle.getInstance().stop();
-//        MessageHandle.getInstance().stop();
-        CallHandle.getInstance().stop();
-        ConferenceHandle.getInstance().stop();
-        GroupHandle.getInstance().stop();
-        RemoteDesktopHandle.getInstance().stop();
-        WhiteBoardHandle.getInstance().stop();
-        SettingHandle.getInstance().stop();
-        CubeEngine.getInstance().shutdown();
     }
 
     /**
