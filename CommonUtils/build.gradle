@@ -27,4 +27,8 @@ dependencies {
   api developmentDependencies.support_appcompat_v7
   api developmentDependencies.gson
   api developmentDependencies.glide
+  api developmentDependencies.retrofit
+  api developmentDependencies.retrofit_gson
+  api developmentDependencies.retrofit_rxjava
+  api developmentDependencies.okhttp_logging
 }

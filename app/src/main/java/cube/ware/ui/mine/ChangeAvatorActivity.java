@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -47,6 +48,7 @@ public class ChangeAvatorActivity extends AppCompatActivity {
     private ImageView mIvAvator;
     private int REQUEST_CODE_FROM_GALLERY=1001;
     private ImageView mIvBack;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class ChangeAvatorActivity extends AppCompatActivity {
     private void initView() {
         mIvBack = findViewById(R.id.iv_back);
         mIvAvator = findViewById(R.id.iv_avator);
+        mProgressBar = findViewById(R.id.progressbar);
         GlideUtil.loadImage(AppConstants.AVATAR_URL+SpUtil.getCubeId(),ChangeAvatorActivity.this,mIvAvator, DiskCacheStrategy.NONE,true,R.drawable.default_head_user);
     }
 
@@ -108,6 +111,7 @@ public class ChangeAvatorActivity extends AppCompatActivity {
                 Uri dataUri = data.getData();
                 String dataPath = getDataColumn(this, dataUri, null, null);
                 String path = BitmapUtils.compressImage(dataPath);
+                mProgressBar.setVisibility(View.VISIBLE);
                 changeAvatar(path);
             }
         }
@@ -122,6 +126,7 @@ public class ChangeAvatorActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResultData<CubeAvator>> call, Response<ResultData<CubeAvator>> response) {
                 if(response.isSuccessful()){
+                    mProgressBar.setVisibility(View.GONE);
                     if(response.body().data!=null){
                         LogUtil.i("===更换头像uploadAvatar:"+response.body().data.getUrl());
                         User user = new User();
@@ -136,7 +141,9 @@ public class ChangeAvatorActivity extends AppCompatActivity {
                         ToastUtil.showToast(ChangeAvatorActivity.this,response.body().state.desc);
                     }
                 }else {
+                    mProgressBar.setVisibility(View.GONE);
                     try {
+                        ToastUtil.showToast(ChangeAvatorActivity.this,"修改头像失败");
                         LogUtil.i("uploadAvatar:"+response.errorBody().string());
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -146,6 +153,7 @@ public class ChangeAvatorActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResultData<CubeAvator>> call, Throwable t) {
+                mProgressBar.setVisibility(View.GONE);
                 LogUtil.i("uploadAvatar error:"+t.getMessage().toString());
             }
         });

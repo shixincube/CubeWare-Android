@@ -204,7 +204,7 @@
                 android:layout_weight="1"
                 android:clickable="true"
                 android:gravity="center"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:orientation="vertical"
                 android:paddingBottom="4dp"
                 android:paddingTop="4dp">

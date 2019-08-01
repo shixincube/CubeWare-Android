@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
 import android.media.ExifInterface;
+import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -130,6 +132,35 @@ public class BitmapUtils {
             inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
         }
         return inSampleSize;
+    }
+
+    public static String saveBitmap(Bitmap bitmap, String path,String name) {
+        String savePath;
+        File filePic;
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+            savePath = path;
+        } else {
+            Log.d("xxx", "saveBitmap: 1return");
+            return null;
+        }
+        try {
+            filePic = new File(savePath + "/"+name);
+            if (!filePic.exists()) {
+                filePic.getParentFile().mkdirs();
+                filePic.createNewFile();
+            }
+            FileOutputStream fos = new FileOutputStream(filePic);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("xxx", "saveBitmap: 2return");
+            return null;
+        }
+        Log.d("xxx", "saveBitmap: " + filePic.getAbsolutePath());
+        return filePic.getAbsolutePath();
     }
 
 

@@ -9,10 +9,10 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.common.utils.utils.FriendlyDateUtil;
 import com.common.utils.utils.ToastUtil;
 
+import cube.service.recent.RecentSession;
 import java.util.ArrayList;
 import java.util.List;
 
-import cube.data.model.db.RecentSession;
 import cube.service.CubeEngine;
 import cube.ware.R;
 import cube.ware.widget.PopupHorizontalMenu;

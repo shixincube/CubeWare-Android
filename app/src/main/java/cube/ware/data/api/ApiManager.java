@@ -2,9 +2,19 @@ package cube.ware.data.api;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+import com.common.utils.utils.log.LogUtil;
 import cube.ware.AppConstants;
 import cube.ware.AppManager;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -19,6 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @data 2019/1/22 14:30
  */
 public class ApiManager {
+    private static final String TAG = "ApiManager";
     private static ApiManager mInstance = new ApiManager();
 
     private Retrofit     mRetrofit;         // Retrofit实例
@@ -57,6 +68,7 @@ public class ApiManager {
         builder.readTimeout(READ_TIME_OUT, TimeUnit.SECONDS);   // 设置读取超时
         builder.writeTimeout(READ_TIME_OUT, TimeUnit.SECONDS);  // 设置写入超时
         builder.retryOnConnectionFailure(true); // 设置重连
+        this.setSSL(builder);
         this.mOkHttpClient = builder.build();
     }
 
@@ -114,5 +126,43 @@ public class ApiManager {
      */
     ApiService getApiService() {
         return this.mApiService;
+    }
+
+    /**
+     * 设置忽略ssl证书验证
+     *
+     * @param builder
+     */
+    private void setSSL(OkHttpClient.Builder builder) {
+        try {
+            X509TrustManager xtm = new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(X509Certificate[] chain, String authType) {
+                }
+
+                @Override
+                public void checkServerTrusted(X509Certificate[] chain, String authType) {
+                }
+
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+            };
+
+            SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, new TrustManager[] { xtm }, new SecureRandom());
+
+            HostnameVerifier doNotVerify = new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            };
+            builder.sslSocketFactory(sslContext.getSocketFactory(), xtm);
+            builder.hostnameVerifier(doNotVerify);
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            LogUtil.e(TAG, e);
+        }
     }
 }

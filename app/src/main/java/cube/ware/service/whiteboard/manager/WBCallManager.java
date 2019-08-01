@@ -11,7 +11,7 @@ public class WBCallManager {
 
     private volatile boolean    isInvited;
 
-    private boolean isCalling;
+    private boolean isCalling = false;
 
     public static WBCallManager getInstance() {
         if (null == mInstance) {

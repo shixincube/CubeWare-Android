@@ -13,7 +13,7 @@ import cube.ware.utils.SpUtil;
  */
 public class AppManager {
 
-    private static Boolean mIsDebug = true; // 是否是debug模式
+    private static Boolean mIsDebug = false; // 是否是debug模式
 
     static {
         LogUtil.setLoggable(true);          // 是否打印日志
@@ -62,6 +62,7 @@ public class AppManager {
         else {
             return AppConstants.Release.APP_ID;
         }
+//        return AppConstants.Release.APP_ID;
     }
 
     /**
@@ -76,6 +77,7 @@ public class AppManager {
         else {
             return AppConstants.Release.APP_KEY;
         }
+//        return AppConstants.Release.APP_KEY;
     }
 
     /**

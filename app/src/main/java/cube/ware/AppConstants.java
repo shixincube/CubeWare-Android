@@ -14,24 +14,20 @@ public interface AppConstants {
      * 正式服环境
      */
     public interface Release {
-        String APP_ID      = "5d5fe3a5637d4bfda644b0933336865c";            // 引擎id
-        String APP_KEY     = "0fac82c9b98f4973afc244800122b48e ";           // 引擎key
-        String BASE_URL    = "http://user.shixincube.com";                  // 服务器接口地址
-        String LICENSE_URL = "http://license.getcube.cn/auth/license/get";  // 服务license地址
+        String APP_ID      = "b6830d7360d54c72aaffbd3785a1a884";                     // 引擎id
+        String APP_KEY     = "ad9c414718814830863171b88f1798c0";                     // 引擎key
+        String BASE_URL    = "https://aws-user.shixincube.com";                      // 服务器接口地址
+        String LICENSE_URL = "https://aws-license.shixincube.com/auth/license/get";  // 服务license地址
     }
 
     /**
      * 测试服环境
      */
     public interface Debug {
-        //        String APP_ID      = "09eab471bc1d4a1b855f6b8f87b01caf800";         // 引擎id
-        //        String APP_KEY     = "cc9793d0dd534cfc8c8f74e2f2ab1baf800";         // 引擎key
-        //        String APP_KEY      = "5df6d5495fb74b35ad157c94977527ff005";         // web引擎id
-        //        String APP_ID       = "9c2ed36ae5d34131b3768ea432da6cea005";         // web引擎key
-        String APP_ID      = "6365f0cafd8a47b984bdc08a64327881";         // 引擎id
-        String APP_KEY     = "9074ad1395f24fbd83a92ddc80facb1f";         // 引擎key
-        String BASE_URL    = "https://dev.user.shixincube.cn";                    // 服务器接口地址
-        String LICENSE_URL = "https://dev.license.shixincube.cn/auth/license/get";   // 服务license地址
+        String APP_ID      = "a0369a87a945475fb5fdbe07bc760d45";                     // 引擎id
+        String APP_KEY     = "f3eafec4b4e844e4acfe5ca91d62c2ef";                     // 引擎key
+        String BASE_URL    = "https://test-user.shixincube.cn";                      // 服务器接口地址
+        String LICENSE_URL = "https://test-license.shixincube.cn/auth/license/get";  // 服务license地址
     }
 
     //超时时间常量
