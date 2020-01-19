@@ -14,7 +14,9 @@ import cube.service.message.model.ImageMessage;
 import cube.service.message.model.VideoClipMessage;
 import cube.ware.AppConstants;
 import cube.ware.R;
+import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.room.model.CubeMessage;
+import cube.ware.service.message.MessageHandle;
 import cube.ware.ui.chat.message.Listener.FileMessageUploadListener;
 import cube.ware.widget.CubeProgressBar;
 import cube.ware.widget.recyclerview.BaseRecyclerViewHolder;
@@ -42,7 +44,8 @@ public class FileMessageSendListener implements FileMessageUploadListener {
         this.mCubeMessage = cubeMessage;
         this.mViewHolder = holder;
         this.mInflate = inflate;
-        if (cubeMessage.getItemType() == AppConstants.MessageType.CHAT_VIDEO || cubeMessage.getItemType() == AppConstants.MessageType.CHAT_IMAGE) {
+        CubeMessageType messageType = cubeMessage.getMessageType();
+        if (messageType == CubeMessageType.Video || messageType == CubeMessageType.Image) {
             this.mPVProgressBar = (CubeProgressBar) this.mInflate.findViewById(R.id.chat_progress_bar);
             this.mProgressLayout = (LinearLayout) this.mInflate.findViewById(R.id.chat_progress_cover);
             this.mVideoPlay = (ImageView) this.mInflate.findViewById(R.id.chat_video_iv);
@@ -99,7 +102,7 @@ public class FileMessageSendListener implements FileMessageUploadListener {
         }
 
         // 移除监听器
-        this.mCubeMessage.removeFileMessageUploadListener(this.mCubeMessage.getMessageSN());
+        MessageHandle.getInstance().removeUploadListener(this.mCubeMessage.getMessageSN(), CubeMessage.class.getSimpleName());
     }
 
     @Override

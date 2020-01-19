@@ -3,8 +3,7 @@ package cube.ware.data.api;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import com.common.utils.utils.log.LogUtil;
-import cube.ware.AppConstants;
-import cube.ware.AppManager;
+import cube.ware.data.CubeDataHelper;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -28,10 +27,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiManager {
     private static final String TAG = "ApiManager";
 
+    private static ApiManager mInstance = new ApiManager();
+
     private static final int READ_TIME_OUT    = 15;      // 读取超时时间为15秒
     private static final int CONNECT_TIME_OUT = 15;      // 连接超时时间为15秒
 
-    private static ApiManager mInstance = new ApiManager();
     private Retrofit     mRetrofit;         // Retrofit实例
     private OkHttpClient mOkHttpClient; // OkHttpClient实例
     private ApiService   mApiService;       // api接口
@@ -58,7 +58,7 @@ public class ApiManager {
     private void initOkHttp() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         // 打印请求log日志
-        if (AppManager.isDebug()) {
+        if (CubeDataHelper.getInstance().isDebug()) {
             builder.addInterceptor(getLogInterceptor());
         }
         builder.connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS); // 设置连接超时
@@ -91,12 +91,7 @@ public class ApiManager {
     private void initRetrofit() {
         Retrofit.Builder builder = new Retrofit.Builder();
         // base地址
-        if (AppManager.isDebug()) {
-            builder.baseUrl(AppConstants.Debug.BASE_URL);
-        }
-        else {
-            builder.baseUrl(AppConstants.Release.BASE_URL);
-        }
+        builder.baseUrl(CubeDataHelper.getInstance().getUserCenterUrl());
         builder.client(this.mOkHttpClient);
         builder.addConverterFactory(GsonConverterFactory.create());
         builder.addCallAdapterFactory(RxJavaCallAdapterFactory.create());

@@ -3,6 +3,8 @@ package cube.ware;
 import android.content.Context;
 import com.common.utils.utils.AppUtil;
 import com.common.utils.utils.log.LogUtil;
+import cube.ware.data.CubeDataHelper;
+import cube.ware.data.DataConfig;
 import cube.ware.utils.SpUtil;
 
 /**
@@ -13,7 +15,11 @@ import cube.ware.utils.SpUtil;
  */
 public class AppManager {
 
-    private static Boolean mIsDebug = true; // 是否是debug模式
+    /** 是否是debug模式 **/
+    private static boolean mIsDebug;
+
+    /** 服务器环境配置 **/
+    private static ServerEnum serverConfig = ServerEnum.BETA;
 
     static {
         LogUtil.setLoggable(true);          // 是否打印日志
@@ -27,6 +33,7 @@ public class AppManager {
     public static void init(Context context) {
         initLogger(context);
         syncIsDebug(context);
+        initDatabase(context);
     }
 
     /**
@@ -35,7 +42,7 @@ public class AppManager {
      * @return
      */
     public static boolean isDebug() {
-        return mIsDebug != null && mIsDebug;
+        return mIsDebug;
     }
 
     /**
@@ -45,8 +52,18 @@ public class AppManager {
      * @param context
      */
     public static void syncIsDebug(Context context) {
-        if (mIsDebug == null) {
+        // 无默认配置时，则以Apk的debug模式为准
+        if (serverConfig == null) {
             mIsDebug = AppUtil.isApkInDebug(context);
+            return;
+        }
+
+        // 正式服为false，否则为true
+        if (serverConfig == ServerEnum.OFFICIAL) {
+            mIsDebug = false;
+        }
+        else {
+            mIsDebug = true;
         }
     }
 
@@ -56,13 +73,15 @@ public class AppManager {
      * @return
      */
     public static String getAppId() {
-        if (isDebug()) {
-            return AppConstants.Debug.APP_ID;
+        if (serverConfig == ServerEnum.OFFICIAL) {
+            return AppConstants.Official.APP_ID;
+        }
+        else if (serverConfig == ServerEnum.BETA) {
+            return AppConstants.Beta.APP_ID;
         }
         else {
-            return AppConstants.Release.APP_ID;
+            return AppConstants.Develop.APP_ID;
         }
-//        return AppConstants.Release.APP_ID;
     }
 
     /**
@@ -71,13 +90,32 @@ public class AppManager {
      * @return
      */
     public static String getAppKey() {
-        if (isDebug()) {
-            return AppConstants.Debug.APP_KEY;
+        if (serverConfig == ServerEnum.OFFICIAL) {
+            return AppConstants.Official.APP_KEY;
+        }
+        else if (serverConfig == ServerEnum.BETA) {
+            return AppConstants.Beta.APP_KEY;
         }
         else {
-            return AppConstants.Release.APP_KEY;
+            return AppConstants.Develop.APP_KEY;
         }
-//        return AppConstants.Release.APP_KEY;
+    }
+
+    /**
+     * 获取base地址
+     *
+     * @return
+     */
+    public static String getBaseUrl() {
+        if (serverConfig == ServerEnum.OFFICIAL) {
+            return AppConstants.Official.BASE_URL;
+        }
+        else if (serverConfig == ServerEnum.BETA) {
+            return AppConstants.Beta.BASE_URL;
+        }
+        else {
+            return AppConstants.Develop.BASE_URL;
+        }
     }
 
     /**
@@ -86,11 +124,14 @@ public class AppManager {
      * @return
      */
     public static String getLicenceUrl() {
-        if (isDebug()) {
-            return AppConstants.Debug.LICENSE_URL;
+        if (serverConfig == ServerEnum.OFFICIAL) {
+            return AppConstants.Official.LICENSE_URL;
+        }
+        else if (serverConfig == ServerEnum.BETA) {
+            return AppConstants.Beta.LICENSE_URL;
         }
         else {
-            return AppConstants.Release.LICENSE_URL;
+            return AppConstants.Develop.LICENSE_URL;
         }
     }
 
@@ -102,5 +143,18 @@ public class AppManager {
         LogUtil.addCommonLogHandle();                  // 普通日志
         LogUtil.addDiskLogHandle(context, logPath);    // 文件日志
         LogUtil.setLogTag("CubeWare");                 // TAG
+    }
+
+    /**
+     * 初始化数据库配置数据
+     *
+     * @param context
+     */
+    private static void initDatabase(Context context) {
+        CubeDataHelper.setContext(context);
+        DataConfig config = new DataConfig();
+        config.setDebug(isDebug());
+        config.setUserCenterUrl(getBaseUrl());
+        CubeDataHelper.getInstance().setDataConfig(config);
     }
 }

@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.common.mvp.rx.RxBus;
 import com.common.utils.utils.log.LogUtil;
 
+import cube.ware.data.CubeDataHelper;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,6 +113,7 @@ public class UserHandle implements UserListener {
         SpUtil.setCubeId(user.cubeId);
         SpUtil.setUserAvator(user.avatar);
         SpUtil.setUserName(user.displayName);
+        CubeDataHelper.getInstance().setCubeId(user.cubeId);
 
         CubeUser cubeUser = new CubeUser(user.cubeId, user.displayName, user.avatar);
         CubeUserRepository.getInstance().saveUser(cubeUser).subscribe(new Action1<CubeUser>() {

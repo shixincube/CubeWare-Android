@@ -14,7 +14,7 @@ import java.util.Map;
 
 import cube.ware.AppConstants;
 import cube.ware.R;
-import cube.ware.data.model.dataModel.CubeMessageViewModel;
+import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.ui.chat.panel.messagelist.MessageListPanel;
 import cube.ware.widget.CountdownChronometer;

@@ -45,9 +45,8 @@ public class CustomMessageManager {
     private static String buildText(CubeMessage cubeMessage, CustomMessage message, String type, boolean isSync) {
         String text = null;
         String groupCube = getGroupCube(message);
-        String token = message.getHeader("token");
         if (type.equals(CubeCustomMessageType.AddFriend.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildAddFriendNotification(message);
 //            if (CubeUI.getInstance().getFriendOperationListener() != null && !isSync) {
 //                String adverse = CubeSpUtil.getCubeUser().getCubeId().equals(message.getHeader("acceptUserCube")) ? message.getHeader("applyUserCube") : message.getHeader("acceptUserCube");//对方cube
@@ -59,37 +58,37 @@ public class CustomMessageManager {
             if (!cubeMessage.isReceivedMessage()) {//如果是自己发的文件下载成功消息可以不显示fldy
                 return null;
             }
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildDownloadCompletedNotification(message);
         }
         else if (type.equals(CubeCustomMessageType.ApplyFriend.getType()) && !isSync) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
 //            if (CubeUI.getInstance().getFriendOperationListener() != null) {
 //                CubeUI.getInstance().getFriendOperationListener().apply(message.getHeader("applyUserCube"));
 //            }
         }
         else if (type.equals(CubeCustomMessageType.RefuseFriend.getType()) && !isSync) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
 //            if (CubeUI.getInstance().getFriendOperationListener() != null) {
 //                CubeUI.getInstance().getFriendOperationListener().refuse();
 //            }
         }
         else if (type.equals(CubeCustomMessageType.AddGroupManager.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildAddGroupManagerNotification(message);
 //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
 //                CubeUI.getInstance().getGroupOperationListener().addGroupManager(groupCube, message.getHeader("managerCube"), token);
 //            }
         }
         else if (type.equals(CubeCustomMessageType.DelGroupManager.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildDelGroupManagerNotification(message);
 //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
 //                CubeUI.getInstance().getGroupOperationListener().delGroupManager(groupCube, message.getHeader("managerCube"), token);
 //            }
         }
         else if (type.equals(CubeCustomMessageType.DelFriend.getType()) && !isSync) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             String userCube = message.getHeader("fromUserCube");
             String friendUserCube = message.getHeader("friendUserCube");
             String adverse = SpUtil.getCubeId().equals(userCube) ? friendUserCube : userCube;//对方cube
@@ -104,7 +103,7 @@ public class CustomMessageManager {
             try {
                 String memberCubeJsonArray = message.getHeader("memberCubeArray");
                 JSONArray memberCubeArray = new JSONArray(memberCubeJsonArray);
-                cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+                cubeMessage.setMessageType(CubeMessageType.CustomTips);
                 text = buildAddGroupMemberNotification(message);
 //                if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
 //                    CubeUI.getInstance().getGroupOperationListener().addMember(groupCube, memberCubeArray, token);
@@ -115,7 +114,7 @@ public class CustomMessageManager {
         }
         else if (type.equals(CubeCustomMessageType.DelGroupMember.getType()) && !isSync) {
             try {
-                cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+                cubeMessage.setMessageType(CubeMessageType.CustomTips);
                 String memberCubeJsonArray = message.getHeader("memberCubeArray");
                 JSONArray memberCubeArray = new JSONArray(memberCubeJsonArray);
                 boolean isMyself = isMyself(memberCubeArray);
@@ -133,28 +132,28 @@ public class CustomMessageManager {
             //if (quitCube.equals(SpUtil.getCubeUser().getCubeId()) && isSync) {
             //    return "";
             //}
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildGroupMemberQuitNotification(message, groupCube);
 //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
 //                CubeUI.getInstance().getGroupOperationListener().memberQuit(groupCube, quitCube, token, quitCube.equals(CubeSpUtil.getCubeUser().getCubeId()));
 //            }
         }
         else if (type.equals(CubeCustomMessageType.DismissGroup.getType()) && !isSync) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
 //            MessageManager.getInstance().deleteMessagesBySessionId(groupCube, CubeSessionType.Group, false);
 //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
 //                CubeUI.getInstance().getGroupOperationListener().dismiss(groupCube, token);
 //            }
         }
         else if (type.equals(CubeCustomMessageType.UpdateGroupName.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildUpdateGroupNameNotification(message);
 //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
 //                CubeUI.getInstance().getGroupOperationListener().updateGroupName(groupCube, message.getHeader("groupName"), token);
 //            }
         }
         else if (type.equals(CubeCustomMessageType.UpdateGroupNotice.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildUpdateGroupNoticeNotification(message);
 //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
 //                CubeUI.getInstance().getGroupOperationListener().updateGroupNotice(groupCube, message.getHeader("noticeContent"), token);
@@ -166,104 +165,104 @@ public class CustomMessageManager {
 //            }
         }
         else if (type.equals(CubeCustomMessageType.TransferGroupMaster.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildTransferGroupMasterNotification(message);
 //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
 //                CubeUI.getInstance().getGroupOperationListener().transferGroupMaster(groupCube, message.getHeader("newMasterCube"), token);
 //            }
         }
         else if (type.equals(CubeCustomMessageType.NewGroup.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildNewGroupNotification(message);
 //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
 //                CubeUI.getInstance().getGroupOperationListener().newGroup(groupCube, token);
 //            }
         }
         else if (type.equals(CubeCustomMessageType.UpdateUserInfo.getType()) && !isSync) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
 //            if (CubeUI.getInstance().getFriendOperationListener() != null) {
 //                CubeUI.getInstance().getFriendOperationListener().update(message.getHeader("cube"));
 //            }
         }
         else if (type.equals(CubeCustomMessageType.UpdateGroupMemberRemark.getType()) && !isSync) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
 //            if (CubeUI.getInstance().getGroupOperationListener() != null) {
 //                CubeUI.getInstance().getGroupOperationListener().updateMemberRemark(groupCube, message.getHeader("memberCube"), message.getHeader("memberRemark"), token);
 //            }
         }
         else if (type.equals(CubeCustomMessageType.Logout.getType()) && !isSync) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
 //            if (CubeUI.getInstance().getLoginListener() != null) {
 //                String plat = message.getHeader("plat");
 //                CubeUI.getInstance().getLoginListener().loginOut(plat);
 //            }
         }
         else if (type.equals(CubeCustomMessageType.Login.getType()) && !isSync) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             String plat = message.getHeader("plat");
             String timestamp = message.getHeader("timestamp");
 //            if (CubeUI.getInstance().getLoginListener() != null) {
 //                CubeUI.getInstance().getLoginListener().loginIn(plat, Long.parseLong(timestamp), token);
 //            }
         }
-        else if (type.equals(CubeCustomMessageType.UpdateUserPwd.getType()) && !isSync) {
-            cubeMessage.setMessageType(CubeCustomMessageType.UpdateUserPwd.getType());
+        else if (type.equals(CubeMessageType.UpdateUserPwd.getType()) && !isSync) {
+            cubeMessage.setMessageType(CubeMessageType.UpdateUserPwd);
 //            if (CubeUI.getInstance().getLoginListener() != null) {
 //                CubeUI.getInstance().getLoginListener().updateUserPwd();
 //            }
         }
         else if (type.equals(CubeCustomMessageType.VideoCall.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomCallVideo.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomCallVideo);
             text = buildCall(message);
         }
         else if (type.equals(CubeCustomMessageType.AudioCall.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomCallAudio.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomCallAudio);
             text = buildCall(message);
         }
         else if (type.equals(CubeCustomMessageType.GroupShareQr.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomShare.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomShare);
             cubeMessage.setThumbUrl(message.getHeader("shareGroupQrSrc"));
             text = buildShare(message, true);
         }
         else if (type.equals(CubeCustomMessageType.UserShareQr.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomShare.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomShare);
             cubeMessage.setThumbUrl(message.getHeader("shareQrSrc"));
             text = buildShare(message, false);
         }
         else if (type.equals(CubeCustomMessageType.ApplyOrAgreeToGroup.getType()) && !isSync) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
 //            CubeUI.getInstance().getGroupOperationListener().applyOrAgreeToGroup(message.getHeader("groupCube"), message.getHeader("groupName"), message.getHeader("userCube"), message.getHeader("userDisplayName"));
         }
         else if (type.equals(CubeCustomMessageType.InviteToGroup.getType()) && !isSync) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
 //            CubeUI.getInstance().getGroupOperationListener().inviteToGroup(message.getHeader("groupCube"), message.getHeader("groupName"), message.getHeader("userCube"), message.getHeader("userDisplayName"));
         }
         else if (type.equals(CubeCustomMessageType.RefuseInviteToGroup.getType()) && !isSync) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
 //            CubeUI.getInstance().getGroupOperationListener().refuseInviteToGroup(message.getHeader("groupCube"), message.getHeader("groupName"), message.getHeader("userCube"), message.getHeader("userDisplayName"));
         }
         else if (type.equals(CubeCustomMessageType.CallAbnormal.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildCall(message);
         }
         else if (type.equals(CubeCustomMessageType.ApplyConference.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildApplyConference(message);
         }
         else if (type.equals(CubeCustomMessageType.CloseConference.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildCloseConference(message);
         }
         else if (type.equals(CubeCustomMessageType.SharerRD.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildApplyRD(message);
         }
         else if (type.equals(CubeCustomMessageType.RevokeRD.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildCloseRD(message);
         }
         else if (type.equals(CubeCustomMessageType.SecretTip.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = message.getBody();
         }
         else if (CubeCustomMessageType.WriteEvent.type.equals(type) && !isSync) {
@@ -274,28 +273,28 @@ public class CustomMessageManager {
 //            }
         }
         else if (type.equals(CubeCustomMessageType.ShakeEvent.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomShake.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomShake);
             text = buildShake(message);
         }
 
         //白板相关
         else if (type.equals(CubeCustomMessageType.WhiteBoardApply.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildApplyWhiteBoard(message);
         }
 
         else if (type.equals(CubeCustomMessageType.WhiteBoardClose.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildCloseWhiteBoard(message);
         }
         //P2P白板相关
         else if (type.equals(CubeCustomMessageType.P2PWhiteBoardApply.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildP2PApplyWhiteBoard(message);
         }
 
         else if (type.equals(CubeCustomMessageType.P2PWhiteBoardClose.getType())) {
-            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
+            cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildCloseWhiteBoard(message);
         }
 //        else if (type.equals(CubeCustomMessageType.CompletedTates.getType())) {

@@ -1,14 +1,12 @@
 package cube.ware.data.repository;
 
 import com.common.mvp.rx.OnSubscribeRoom;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import cube.ware.data.model.dataModel.CubeRecentViewModel;
 import cube.ware.data.room.AppDataBaseFactory;
 import cube.ware.data.room.model.CubeRecentSession;
 import cube.ware.data.room.model.CubeUser;
+import java.util.ArrayList;
+import java.util.List;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -52,7 +50,6 @@ public class CubeRecentSessionRepository {
                 return cubeRecentSession;
             }
         }).subscribeOn(Schedulers.io());
-
     }
 
     /**
@@ -70,15 +67,16 @@ public class CubeRecentSessionRepository {
                 return cubeRecentSessions;
             }
         }).subscribeOn(Schedulers.io());
-
     }
 
     /**
      * 根据sessionId删除会话
+     *
      * @param sessionId
+     *
      * @return
      */
-    public Observable<CubeRecentSession> removeRecentSession(String sessionId){
+    public Observable<CubeRecentSession> removeRecentSession(final String sessionId) {
         return Observable.create(new OnSubscribeRoom<CubeRecentSession>() {
             @Override
             protected CubeRecentSession get() {
@@ -91,9 +89,9 @@ public class CubeRecentSessionRepository {
         }).subscribeOn(Schedulers.io());
     }
 
-
     /**
      * 查询所有最近会话
+     *
      * @return
      */
     public Observable<List<CubeRecentSession>> queryAll() {
@@ -103,15 +101,16 @@ public class CubeRecentSessionRepository {
                 return AppDataBaseFactory.getCubeRecentSessionDao().queryAll();
             }
         }).subscribeOn(Schedulers.io());
-
     }
 
     /**
      * 通过会话id 查询CubeRecentSession
+     *
      * @param sessionId
+     *
      * @return
      */
-    public Observable<CubeRecentSession> queryBySessionId(String sessionId) {
+    public Observable<CubeRecentSession> queryBySessionId(final String sessionId) {
         return Observable.create(new OnSubscribeRoom<CubeRecentSession>() {
             @Override
             protected CubeRecentSession get() {
@@ -122,38 +121,43 @@ public class CubeRecentSessionRepository {
 
     /**
      * 查询所有未读消息数量
+     *
      * @return
      */
     public Observable<Integer> queryUnAllReadCount() {
 
         return queryAll().doOnNext(new Action1<List<CubeRecentSession>>() {
-                    @Override
-                    public void call(List<CubeRecentSession> cubeRecentSessions) {
-                        if(cubeRecentSessions == null)return;
-                    }
-                }).flatMap(new Func1<List<CubeRecentSession>, Observable<List<String>>>() {
-                    @Override
-                    public Observable<List<String>> call(List<CubeRecentSession> cubeRecentSessions) {
-                        List<String> cubeIds = new ArrayList<>();
-                        for (CubeRecentSession cubeRecentSession : cubeRecentSessions) {
-                            cubeIds.add(cubeRecentSession.getSessionId());
-                        }
-                        return Observable.just(cubeIds);
-                    }
-                }).flatMap(new Func1<List<String>, Observable<Integer>>() {
-                    @Override
-                    public Observable<Integer> call(List<String> strings) {
-                        return CubeMessageRepository.getInstance().queryAllUnRead(strings);
-                    }
-                });
+            @Override
+            public void call(List<CubeRecentSession> cubeRecentSessions) {
+                if (cubeRecentSessions == null) {
+                    return;
+                }
+            }
+        }).flatMap(new Func1<List<CubeRecentSession>, Observable<List<String>>>() {
+            @Override
+            public Observable<List<String>> call(List<CubeRecentSession> cubeRecentSessions) {
+                List<String> cubeIds = new ArrayList<>();
+                for (CubeRecentSession cubeRecentSession : cubeRecentSessions) {
+                    cubeIds.add(cubeRecentSession.getSessionId());
+                }
+                return Observable.just(cubeIds);
+            }
+        }).flatMap(new Func1<List<String>, Observable<Integer>>() {
+            @Override
+            public Observable<Integer> call(List<String> strings) {
+                return CubeMessageRepository.getInstance().queryAllUnRead(strings);
+            }
+        });
     }
 
     /**
      * 组装最近消息列表model
+     *
      * @param sessionId
+     *
      * @return
      */
-    public Observable<CubeRecentViewModel> queryUnReadCubeRecentSession(String sessionId) {
+    public Observable<CubeRecentViewModel> queryUnReadCubeRecentSession(final String sessionId) {
         Observable<CubeRecentSession> sessionObservable = queryBySessionId(sessionId);
         Observable<Integer> unReadObservable = CubeMessageRepository.getInstance().queryMessageUnRead(sessionId);
         Observable<CubeUser> cubeUserObservable = CubeUserRepository.getInstance().queryUser(sessionId).map(new Func1<CubeUser, CubeUser>() {
@@ -162,13 +166,12 @@ public class CubeRecentSessionRepository {
                 //对于没在本地user表中的数据处理 ps：暂时 目前最近会话列表CubeRecentSession缓存了sessionName不需要CubeUser的数据了
                 // CubeRecentViewModel这个包装类可以删掉 直接使用CubeRecentSession,或者需要自定义用户信息，可以组装CubeRecentViewModel这个包装类
                 if (cubeUser == null) {
-                    return new CubeUser(sessionId,"","");
+                    return new CubeUser(sessionId, "", "");
                 }
 
                 return cubeUser;
             }
         });
-
 
         return Observable.zip(sessionObservable, unReadObservable, cubeUserObservable, new Func3<CubeRecentSession, Integer, CubeUser, CubeRecentViewModel>() {
             @Override
@@ -185,10 +188,11 @@ public class CubeRecentSessionRepository {
 
     /**
      * 获取所有最近列表model
+     *
      * @return
      */
     public Observable<List<CubeRecentViewModel>> queryAllUnReadCubeRecentSession() {
-       return queryAll().doOnNext(new Action1<List<CubeRecentSession>>() {
+        return queryAll().doOnNext(new Action1<List<CubeRecentSession>>() {
             @Override
             public void call(List<CubeRecentSession> cubeRecentSessions) {
                 if (cubeRecentSessions == null) {

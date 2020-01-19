@@ -42,7 +42,7 @@ import cube.service.message.FileMessageStatus;
 import cube.service.message.model.ReceiptMessage;
 import cube.ware.AppConstants;
 import cube.ware.R;
-import cube.ware.data.model.dataModel.CubeMessageViewModel;
+import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
@@ -744,7 +744,7 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener{
                     @Override
                     public Observable<CubeMessageViewModel> call(final CubeMessage cubeMessage) {
                         //自定义消息特殊处理
-                        if (cubeMessage.getMessageType().equals(CubeMessageType.CustomTips.getType())) {
+                        if (cubeMessage.getMessageType() == CubeMessageType.CustomTips) {
                             return MessageManager.getInstance().buildCustom(cubeMessage);
                         }
                         else {
@@ -764,7 +764,7 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener{
     private void buildMessage(final CubeMessage cubeMessage, final int messageStatus) {
         LogUtil.d(TAG, "buildMessage message status=" + messageStatus);
         //自定义消息特殊处理
-        if (cubeMessage.getMessageType().equals(CubeMessageType.CustomTips.getType())) {
+        if (cubeMessage.getMessageType() == CubeMessageType.CustomTips) {
             CubeMessageViewModel viewModel = new CubeMessageViewModel();
             viewModel.mMessage = cubeMessage;
             onRefresh(viewModel, messageStatus);
@@ -857,7 +857,7 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener{
                 mChatMessageAdapter.addOrUpdateItem(viewModel);
                 break;
         }
-        if (viewModel.mMessage.getMessageType().equals(CubeMessageType.REPLYMESSAGE.getType())) {
+        if (viewModel.mMessage.getMessageType() == CubeMessageType.REPLYMESSAGE) {
             scrollToBottom();
         }
     }

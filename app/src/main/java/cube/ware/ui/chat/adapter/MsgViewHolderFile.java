@@ -7,12 +7,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import cube.ware.service.message.MessageHandle;
 import java.io.File;
 import java.util.Map;
 
 import cube.service.CubeEngine;
 import cube.ware.R;
-import cube.ware.data.model.dataModel.CubeMessageViewModel;
+import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeFileMessageStatus;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.manager.FileDownLoadManager;
@@ -90,7 +91,7 @@ public class MsgViewHolderFile extends BaseMsgViewHolder {
         }
         else {
             if (mData.mMessage.getFileMessageStatus() == CubeFileMessageStatus.Uploading.getStatus()) {
-                mData.mMessage.addFileMessageUploadListener(mData.mMessage.getMessageSN(), new FileMessageSendListener(mContext, mData.mMessage, mViewHolder, mInflate));
+                MessageHandle.getInstance().addUploadListener(mData.mMessage.getMessageSN(), CubeMessage.class.getSimpleName(), new FileMessageSendListener(mContext, mData.mMessage, mViewHolder, mInflate));
             }
             else {
                 StringBuilder sb = new StringBuilder();
@@ -110,7 +111,7 @@ public class MsgViewHolderFile extends BaseMsgViewHolder {
             this.mFileProgressBar.setVisibility(View.VISIBLE);
             int percent = (int) (Double.parseDouble(String.valueOf(mData.mMessage.getProcessedSize())) / Double.parseDouble(String.valueOf(mData.mMessage.getFileSize())) * 100);
             this.mFileProgressBar.setProgress(percent);
-            this.mData.mMessage.addFileMessageDownloadListener(mData.mMessage.getMessageSN(), new FileMessageReceiveListener(mContext, mData.mMessage, mViewHolder, mInflate));
+            MessageHandle.getInstance().addDownloadListener(mData.mMessage.getMessageSN(), CubeMessage.class.getSimpleName(), new FileMessageReceiveListener(mContext, mData.mMessage, mViewHolder, mInflate));
         }
         else {
             this.mFileProgressBar.setVisibility(View.GONE);
@@ -137,8 +138,8 @@ public class MsgViewHolderFile extends BaseMsgViewHolder {
     @Override
     public void onDestroy() {
         if (mData.mMessage != null) {
-            mData.mMessage.removeFileMessageUploadListener(mData.mMessage.getMessageSN());
-            mData.mMessage.removeFileMessageDownloadListener(mData.mMessage.getMessageSN());
+            MessageHandle.getInstance().removeUploadListener(mData.mMessage.getMessageSN(), CubeMessage.class.getSimpleName());
+            MessageHandle.getInstance().removeDownloadListener(mData.mMessage.getMessageSN(), CubeMessage.class.getSimpleName());
         }
     }
 
@@ -151,7 +152,7 @@ public class MsgViewHolderFile extends BaseMsgViewHolder {
         if (FileDownLoadManager.getInstance().isDownloading(mData.mMessage.getMessageSN()) || FileDownLoadManager.getInstance().isDownloadFailed(mData.mMessage.getMessageSN())) {
             return;
         }
-        mData.mMessage.addFileMessageDownloadListener(mData.mMessage.getMessageSN(), new FileMessageReceiveListener(mContext, mData.mMessage, mViewHolder, mInflate));
+        MessageHandle.getInstance().addDownloadListener(mData.mMessage.getMessageSN(), CubeMessage.class.getSimpleName(), new FileMessageReceiveListener(mContext, mData.mMessage, mViewHolder, mInflate));
         CubeEngine.getInstance().getMessageService().acceptMessage(mData.mMessage.getMessageSN(), null);
     }
 }

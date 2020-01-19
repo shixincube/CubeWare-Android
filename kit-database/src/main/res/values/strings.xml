@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">kit-database</string>
+    <string name="unknown_message_type">不支持的消息类型,请到其他终端查看</string>
+    <string name="image_message">[图片]</string>
+    <string name="video_message">[视频消息]</string>
+    <string name="voice_message">[语音消息]</string>
+    <string name="video_call_message">[视频通话]</string>
+    <string name="voice_call_message">[语音通话]</string>
+    <string name="file_message">[文件]</string>
+    <string name="whiteboard_message">[白板消息]</string>
+</resources>

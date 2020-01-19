@@ -127,9 +127,9 @@ public class MessagePopupManager {
     public static void showMessagePopup(final BaseMsgViewHolder base, View view, final OnPopMenuHandleListener listener) {
         List<String> popupMenuItemList = new ArrayList<>();
         PopupHorizontalMenu popupHorizontalMenu = new PopupHorizontalMenu();
-        String messageType = base.mData.mMessage.getMessageType();
+        CubeMessageType messageType = base.mData.mMessage.getMessageType();
         CubeMessageStatus status = CubeMessageStatus.parse(base.mData.mMessage.getMessageStatus());
-        if (messageType.equals(CubeMessageType.Text.getType())) {
+        if (messageType == CubeMessageType.Text) {
             popupMenuItemList.add(COPY);
             if (!base.mData.isReceivedMessage() && isRecall(base.mData.mMessage)) {
                 if (status != CubeMessageStatus.Sending) {
@@ -142,7 +142,7 @@ public class MessagePopupManager {
             }
             popupMenuItemList.add(DEL);           //需考虑到发送中不能撤回跟转发
         }
-        else if (messageType.equals(CubeMessageType.Voice.getType())) {
+        else if (messageType == CubeMessageType.Voice) {
             if (!base.mData.isReceivedMessage() && isRecall(base.mData.mMessage)) {
                 if (status != CubeMessageStatus.Sending) {
                     popupMenuItemList.add(RECALL);
@@ -150,16 +150,16 @@ public class MessagePopupManager {
             }
             popupMenuItemList.add(DEL);
         }
-        else if (messageType.equals(CubeMessageType.CustomCallVideo.getType())) {
+        else if (messageType == CubeMessageType.CustomCallVideo) {
             popupMenuItemList.add(DEL);
         }
-        else if (messageType.equals(CubeMessageType.CustomCallAudio.getType())) {
+        else if (messageType == CubeMessageType.CustomCallAudio) {
             popupMenuItemList.add(DEL);
         }
-        else if (messageType.equals(CubeMessageType.CustomShare.getType())) {
+        else if (messageType == CubeMessageType.CustomShare) {
             popupMenuItemList.add(DEL);
         }
-        else if (messageType.equals(CubeMessageType.CustomShake.getType())) {
+        else if (messageType == CubeMessageType.CustomShake) {
             popupMenuItemList.add(DEL);
         }
         else {
@@ -174,11 +174,11 @@ public class MessagePopupManager {
             }
             popupMenuItemList.add(DEL);
         }
-        if (messageType.equals(CubeMessageType.Image.getType())) {
+        if (messageType == CubeMessageType.Image) {
 //            popupMenuItemList.add(COLLECT);
         }
 
-        if (messageType.equals(CubeMessageType.CARD.getType())) {
+        if (messageType == CubeMessageType.CARD) {
             List<HeaderMap> customHeaders = base.mData.mMessage.getCustomHeaderMap();
             boolean isGroupTask = false;
             for (HeaderMap customHeader : customHeaders) {

@@ -11,11 +11,12 @@ import android.widget.TextView;
 
 import com.common.utils.utils.ScreenUtil;
 
+import cube.ware.service.message.MessageHandle;
 import java.util.Map;
 
 import cube.service.CubeEngine;
 import cube.ware.R;
-import cube.ware.data.model.dataModel.CubeMessageViewModel;
+import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.manager.MessagePopupManager;
@@ -80,7 +81,7 @@ public class MsgViewHolderAudio extends BaseMsgViewHolder {
 
     private void layoutByDirection() {
         if (isReceivedMessage()) {
-            mData.mMessage.addFileMessageDownloadListener(mData.mMessage.getMessageSN(), new FileMessageReceiveListener(mContext, mData.mMessage, mViewHolder, mInflate));
+            MessageHandle.getInstance().addDownloadListener(mData.mMessage.getMessageSN(), CubeMessage.class.getSimpleName(), new FileMessageReceiveListener(mContext, mData.mMessage, mViewHolder, mInflate));
 
             setAudioGravity(mAnimationView, Gravity.LEFT | Gravity.CENTER_VERTICAL);
             setAudioGravity(mDurationLabel, Gravity.RIGHT | Gravity.CENTER_VERTICAL);
@@ -97,7 +98,7 @@ public class MsgViewHolderAudio extends BaseMsgViewHolder {
         }
         else {
 //            FileSendManager.getInstance().resendFileMessageIfNeeded(mData.mMessage);
-            mData.mMessage.addFileMessageUploadListener(mData.mMessage.getMessageSN(), new FileMessageSendListener(mContext, mData.mMessage, mViewHolder, mInflate));
+            MessageHandle.getInstance().addUploadListener(mData.mMessage.getMessageSN(), CubeMessage.class.getSimpleName(), new FileMessageSendListener(mContext, mData.mMessage, mViewHolder, mInflate));
 
             setAudioGravity(mAnimationView, Gravity.RIGHT | Gravity.CENTER_VERTICAL);
             setAudioGravity(mDurationLabel, Gravity.LEFT | Gravity.CENTER_VERTICAL);
@@ -199,8 +200,8 @@ public class MsgViewHolderAudio extends BaseMsgViewHolder {
     @Override
     public void onDestroy() {
         if (mData.mMessage != null) {
-            mData.mMessage.removeFileMessageUploadListener(mData.mMessage.getMessageSN());
-            mData.mMessage.removeFileMessageDownloadListener(mData.mMessage.getMessageSN());
+            MessageHandle.getInstance().removeUploadListener(mData.mMessage.getMessageSN(), CubeMessage.class.getSimpleName());
+            MessageHandle.getInstance().removeDownloadListener(mData.mMessage.getMessageSN(), CubeMessage.class.getSimpleName());
         }
     }
 }

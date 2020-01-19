@@ -1,125 +1,140 @@
 apply plugin: 'com.android.application'
 
-
 def appDependencies = rootProject.ext.android
 def developmentDependencies = rootProject.ext.developmentDependencies
 def testDependencies = rootProject.ext.testDependencies
 
 android {
-    compileSdkVersion appDependencies.compileSdkVersion
-    buildToolsVersion appDependencies.buildToolsVersion
+  compileSdkVersion appDependencies.compileSdkVersion
+  buildToolsVersion appDependencies.buildToolsVersion
 
-    defaultConfig {
-        applicationId appDependencies.applicationId
-        minSdkVersion appDependencies.minSdkVersion
-        targetSdkVersion appDependencies.targetSdkVersion
-        versionCode appDependencies.versionCode
-        versionName appDependencies.versionName
-        flavorDimensions "versionCode"
+  defaultConfig {
+    applicationId appDependencies.applicationId
+    minSdkVersion appDependencies.minSdkVersion
+    targetSdkVersion appDependencies.targetSdkVersion
+    versionCode appDependencies.versionCode
+    versionName appDependencies.versionName
+    flavorDimensions "versionCode"
 
-        buildConfigField "String", "UMENG_APP_KEY", "\"5bcedbf0b465f543c9000078\""
+    buildConfigField "String", "UMENG_APP_KEY", "\"5bcedbf0b465f543c9000078\""
 
-        ndk {
-            abiFilters "armeabi-v7a"
-        }
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [moduleName: project.getName(),"room.schemaLocation": "$projectDir/schemas".toString()]
-            }
-        }
-        // Enabling multidex support.
-        multiDexEnabled true
+    ndk {
+      abiFilters "armeabi-v7a"
     }
 
-    lintOptions {
-        checkReleaseBuilds false
+    //指定room.schemaLocation生成的文件路径
+    javaCompileOptions {
+      annotationProcessorOptions {
+        arguments =
+            [moduleName: project.getName(), "room.schemaLocation": "$projectDir/schemas".toString()]
+      }
     }
 
-    // 签名
-    signingConfigs {
-        debug {}
-        release {
-            keyAlias 'cubeware'
-            keyPassword 'shixincube'
-            storePassword '123456'
-            storeFile file('../cube.jks')
-        }
-    }
+    // Enabling multidex support.
+    multiDexEnabled true
+  }
 
-    buildTypes {
-        debug{
-            signingConfig signingConfigs.debug
-        }
-        release {
-            // zipalign优化
-            zipAlignEnabled false
-            // 移除无用的资源文件
-            shrinkResources false
-            // release
-            signingConfig signingConfigs.release
-            shrinkResources false
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+  lintOptions {
+    checkReleaseBuilds false
+  }
 
-    // 打包名称
-    android.applicationVariants.all { variant ->
-        variant.outputs.all {
-            outputFileName = "CubeWare_v${defaultConfig.versionName}.apk"
-        }
+  // 签名
+  signingConfigs {
+    debug {}
+    release {
+      keyAlias 'cubeware'
+      keyPassword 'shixincube'
+      storePassword '123456'
+      storeFile file('../cube.jks')
     }
+  }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+  buildTypes {
+    debug {
+      signingConfig signingConfigs.debug
     }
+    release {
+      // zipalign优化
+      zipAlignEnabled false
+      // 移除无用的资源文件
+      shrinkResources false
+      // release
+      signingConfig signingConfigs.release
+      shrinkResources false
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  // 打包名称
+  android.applicationVariants.all { variant ->
+    variant.outputs.all {
+      outputFileName = "CubeWare_v${defaultConfig.versionName}.apk"
+    }
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation project(path: ':CommonMvp')
-    implementation project(path: ':CommonSdk')
-    implementation project(path: ':CommonUtils')
-    implementation developmentDependencies.support_appcompat_v7
-    implementation developmentDependencies.support_v4
-    implementation developmentDependencies.support_recyclerview_v7
-    implementation developmentDependencies.multidex
-    implementation developmentDependencies.constraint_layout
-    implementation developmentDependencies.support_design
-    implementation developmentDependencies.support_cardview_v7
-    implementation developmentDependencies.rxjava
-    implementation developmentDependencies.rxandroid
-    implementation developmentDependencies.rxpermissions
-    implementation developmentDependencies.eventbus
-    implementation developmentDependencies.umeng
-    implementation developmentDependencies.umeng_common
-    implementation developmentDependencies.recyclerview_helper
-    implementation developmentDependencies.smartrefresh
-    implementation developmentDependencies.arouter
-    annotationProcessor developmentDependencies.arouter_compiler
-    implementation developmentDependencies.arouter_annotation
-    implementation 'com.lzy.widget:imagepicker:0.6.1'
-    implementation 'top.zibin:Luban:1.1.8'
-    implementation 'android.arch.persistence.room:runtime:1.1.1'
-    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
-    androidTestImplementation 'android.arch.persistence.room:testing:1.1.1'
-    implementation 'com.contrarywind:Android-PickerView:4.1.6'
+  implementation fileTree(include: ['*.jar'], dir: 'libs')
+  implementation project(path: ':CommonMvp')
+  implementation project(path: ':CommonSdk')
+  implementation project(path: ':CommonUtils')
+  implementation project(path: ':kit-database')
+  implementation developmentDependencies.support_appcompat_v7
+  implementation developmentDependencies.support_v4
+  implementation developmentDependencies.support_recyclerview_v7
+  implementation developmentDependencies.multidex
+  implementation developmentDependencies.constraint_layout
+  implementation developmentDependencies.support_design
+  implementation developmentDependencies.support_cardview_v7
+  implementation developmentDependencies.rxjava
+  implementation developmentDependencies.rxandroid
+  implementation developmentDependencies.rxpermissions
+  implementation developmentDependencies.eventbus
+  implementation developmentDependencies.umeng
+  implementation developmentDependencies.umeng_common
+  implementation developmentDependencies.recyclerview_helper
+  implementation developmentDependencies.smartrefresh
+  implementation developmentDependencies.arouter
+  annotationProcessor developmentDependencies.arouter_compiler
+  implementation developmentDependencies.arouter_annotation
+  implementation 'com.lzy.widget:imagepicker:0.6.1'
+  implementation 'top.zibin:Luban:1.1.8'
+//  implementation 'android.arch.persistence.room:runtime:1.1.1'
+//  annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+//  androidTestImplementation 'android.arch.persistence.room:testing:1.1.1'
+  implementation 'com.contrarywind:Android-PickerView:4.1.6'
 
-    implementation 'com.shixincube:api:3.0.2'          // api调用
-    implementation 'com.shixincube:core:3.0.2'         // 基础服务
-    implementation 'com.shixincube:call:3.0.2'         // 通话服务
-    implementation 'com.shixincube:media:3.0.2'        // 媒体服务
-    implementation 'com.shixincube:conference:3.0.2'   // 会议服务
-    implementation 'com.shixincube:file:3.0.2'         // 文件服务
-    implementation 'com.shixincube:messages:3.0.2'     // 消息服务
-    implementation 'com.shixincube:whiteboard:3.0.2'   // 白板服务
-    implementation 'com.shixincube:sharedesktop:3.0.2' // 分享桌面
-    implementation 'com.shixincube:instruction:3.0.2'  // 指令服务
-    implementation 'com.shixincube:live:3.0.2'         // 直播服务
-    implementation 'com.shixincube:genie:2.0.22'       // 通信库
-    implementation 'com.shixincube:rtc:2.1.9'          // RTC
-    implementation 'com.shixincube:sip:1.1.13'         // SIP通信
+  //    implementation 'com.shixincube:api:3.0.2'          // api调用
+  //    implementation 'com.shixincube:core:3.0.2'         // 基础服务
+  //    implementation 'com.shixincube:call:3.0.2'         // 通话服务
+  //    implementation 'com.shixincube:media:3.0.2'        // 媒体服务
+  //    implementation 'com.shixincube:conference:3.0.2'   // 会议服务
+  //    implementation 'com.shixincube:file:3.0.2'         // 文件服务
+  //    implementation 'com.shixincube:messages:3.0.2'     // 消息服务
+  //    implementation 'com.shixincube:whiteboard:3.0.2'   // 白板服务
+  //    implementation 'com.shixincube:sharedesktop:3.0.2' // 分享桌面
+  //    implementation 'com.shixincube:instruction:3.0.2'  // 指令服务
+  //    implementation 'com.shixincube:live:3.0.2'         // 直播服务
+//  implementation 'com.shixincube:genie:2.0.22' // 通信库
+  implementation 'com.shixincube:rtc:2.1.9' // RTC
+  implementation 'com.shixincube:sip:1.1.13' // SIP通信
 
+
+  implementation project(':cube-api')
+  implementation project(':cube-call')
+  implementation project(':cube-conference')
+  implementation project(':cube-core')
+  implementation project(':cube-file')
+//  implementation project(':cube-instruction')
+//  implementation project(':cube-live')
+  implementation project(':cube-media')
+  implementation project(':cube-message')
+  implementation project(':cube-sharedesktop')
+  implementation project(':cube-whiteboard')
 }

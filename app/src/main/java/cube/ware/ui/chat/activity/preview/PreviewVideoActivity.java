@@ -118,7 +118,7 @@ public class PreviewVideoActivity extends BaseActivity {
                         @Override
                         public void call(CubeMessage cubeMessage) {
                             if (null != cubeMessage) {
-                                if (cubeMessage.getMessageType().equals(CubeMessageType.Image.getType())) {
+                                if (cubeMessage.getMessageType() == CubeMessageType.Image) {
                                     mImage.setVisibility(View.VISIBLE);
                                     mVideo.setVisibility(View.GONE);
                                     mVideoBackIv.setVisibility(View.GONE);

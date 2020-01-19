@@ -1,5 +1,6 @@
 package cube.ware.data.model.dataModel.enmu;
 
+import android.arch.persistence.room.TypeConverter;
 import java.io.Serializable;
 
 /**
@@ -25,6 +26,7 @@ public enum CubeMessageType implements Serializable {
     CARD("card"),                     //卡片消息
     RICHTEXT("richtext"),           //富文本消息
     Emoji("emoji"), // 贴图表情消息
+    UpdateUserPwd("update_user_pwd"), // 在其他端修改密码
     RECALLMESSAGETIPS("recall_message_tips"),//撤回的提示消息
     REPLYMESSAGE("reply_message"),//回复消息
     ServiceNumber("service_number"), // 服务号
@@ -43,7 +45,22 @@ public enum CubeMessageType implements Serializable {
         return this.type;
     }
 
-    public static boolean isFileMessage(String type) {
-        return type.equals(CubeMessageType.File.getType()) || type.equals(CubeMessageType.Image.getType()) || type.equals(CubeMessageType.Video.getType()) || type.equals(CubeMessageType.Voice.getType());
+    @TypeConverter
+    public static CubeMessageType parse(String type) {
+        for (CubeMessageType messageType : CubeMessageType.values()) {
+            if (messageType.type.equals(type)) {
+                return messageType;
+            }
+        }
+        return Unknown;
+    }
+
+    @TypeConverter
+    public static String getType(CubeMessageType messageType) {
+        return messageType.type;
+    }
+
+    public static boolean isFileMessage(CubeMessageType messageType) {
+        return messageType == File || messageType == Image || messageType == Video || messageType == Voice;
     }
 }

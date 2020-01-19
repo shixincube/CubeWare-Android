@@ -966,7 +966,7 @@ public class InputPanel implements View.OnClickListener {
             content = content.substring(0, 100);
         }
         //由于分享二维码消息使用了自定西消息去做 因此需要特殊处理
-        if (cubeMessage.getMessageType().equals(CubeMessageType.CustomShare.getType())) {
+        if (cubeMessage.getMessageType() == CubeMessageType.CustomShare) {
             content = "[二维码]";
         }
         else {

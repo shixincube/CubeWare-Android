@@ -13,7 +13,7 @@ public interface AppConstants {
     /**
      * 正式服环境
      */
-    public interface Release {
+    public interface Official {
         String APP_ID      = "b6830d7360d54c72aaffbd3785a1a884";                     // 引擎id
         String APP_KEY     = "ad9c414718814830863171b88f1798c0";                     // 引擎key
         String BASE_URL    = "https://aws-user.shixincube.com";                      // 服务器接口地址
@@ -23,13 +23,23 @@ public interface AppConstants {
     /**
      * 测试服环境
      */
-    public interface Debug {
+    public interface Beta {
 //        String APP_ID      = "a0369a87a945475fb5fdbe07bc760d45";                     // 引擎id
 //        String APP_KEY     = "f3eafec4b4e844e4acfe5ca91d62c2ef";                     // 引擎key
         String APP_ID      = "6365f0cafd8a47b984bdc08a64327881";         // 引擎id
         String APP_KEY     = "9074ad1395f24fbd83a92ddc80facb1f";         // 引擎key
         String BASE_URL    = "https://test-user.shixincube.cn";                      // 服务器接口地址
         String LICENSE_URL = "https://test-license.shixincube.cn/auth/license/get";  // 服务license地址
+    }
+
+    /**
+     * 开发服环境
+     */
+    public interface Develop {
+        String APP_ID               = "c9111d7ccaf14e6bb922c346b9e8fedd";                     // 引擎id
+        String APP_KEY              = "2c96265a9a934735a0b25faa9a410d99";                     // 引擎key
+        String BASE_URL             = "http://125.208.1.66:10021";                            // 基础接口地址
+        String LICENSE_URL          = "https://dev.license.shixincube.cn/auth/license/get";   // license地址
     }
 
     //超时时间常量

@@ -21,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cube.ware.R;
-import cube.ware.data.model.dataModel.CubeMessageViewModel;
+import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.manager.MessagePopupManager;
 import cube.ware.utils.ClipBoardUtil;

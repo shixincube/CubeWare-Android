@@ -1,6 +1,5 @@
 package cube.ware.ui.main;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,13 +13,10 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.ToastUtil;
-
 import cube.ware.AppConstants;
 import cube.ware.R;
-import cube.ware.TestConferenceActivity;
 
 /**
  * author: kun .
@@ -28,14 +24,13 @@ import cube.ware.TestConferenceActivity;
  */
 public class AddDialogFragment extends DialogFragment implements View.OnClickListener {
 
-    private ImageView mIvCancel;
-    private LinearLayout mLlAudio;
-    private LinearLayout mLlWhiteBoard;
-    private LinearLayout mLlSfu;
+    private ImageView      mIvCancel;
+    private LinearLayout   mLlAudio;
+    private LinearLayout   mLlWhiteBoard;
+    private LinearLayout   mLlSfu;
     private RelativeLayout mRlBgLayout;
 
-
-    public static AddDialogFragment getInstance(){
+    public static AddDialogFragment getInstance() {
         return new AddDialogFragment();
     }
 
@@ -68,24 +63,24 @@ public class AddDialogFragment extends DialogFragment implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.iv_cancel:
                 getDialog().dismiss();
                 break;
             case R.id.ll_audio:
-                Bundle bundle=new Bundle();
-                bundle.putInt("select_type",9);//首次创建
-                RouterUtil.navigation(AppConstants.Router.SelectMemberActivity,bundle);
+                Bundle bundle = new Bundle();
+                bundle.putInt("select_type", 9);//首次创建
+                RouterUtil.navigation(AppConstants.Router.SelectMemberActivity, bundle);
                 getDialog().dismiss();
                 break;
             case R.id.ll_whiteboard:
-                Bundle bundleWB=new Bundle();
-                bundleWB.putInt("select_type",10);//首次创建
-                RouterUtil.navigation(AppConstants.Router.SelectMemberActivity,bundleWB);
+                Bundle bundleWB = new Bundle();
+                bundleWB.putInt("select_type", 10);//首次创建
+                RouterUtil.navigation(AppConstants.Router.SelectMemberActivity, bundleWB);
                 getDialog().dismiss();
                 break;
             case R.id.ll_sfu:
-                startActivity(new Intent(getContext(),TestConferenceActivity.class));
+                //startActivity(new Intent(getContext(),TestConferenceActivity.class));
                 dismiss();
                 break;
             case R.id.rl_bg_layout:
@@ -102,14 +97,15 @@ public class AddDialogFragment extends DialogFragment implements View.OnClickLis
         if (window != null) {
             //得到LayoutParams
             WindowManager.LayoutParams params = window.getAttributes();
-            params.dimAmount =0f;
+            params.dimAmount = 0f;
             //修改gravity
             params.height = ViewGroup.LayoutParams.MATCH_PARENT;
             params.width = ViewGroup.LayoutParams.MATCH_PARENT;
             window.setAttributes(params);
         }
     }
-    private void showToast(String msg){
-        ToastUtil.showToast(getContext(),msg);
+
+    private void showToast(String msg) {
+        ToastUtil.showToast(getContext(), msg);
     }
 }

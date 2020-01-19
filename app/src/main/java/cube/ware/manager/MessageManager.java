@@ -55,7 +55,7 @@ import cube.service.user.model.User;
 import cube.ware.AppConstants;
 import cube.ware.CubeUI;
 import cube.ware.R;
-import cube.ware.data.model.dataModel.CubeMessageViewModel;
+import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeCustomMessageType;
 import cube.ware.data.model.dataModel.enmu.CubeFileMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
@@ -337,7 +337,7 @@ public class MessageManager {
             return Observable.empty();
         }
         if (cubeMessage.isReceivedMessage()) {
-            cubeMessage.setMessageType(CubeMessageType.RECALLMESSAGETIPS.getType());
+            cubeMessage.setMessageType(CubeMessageType.RECALLMESSAGETIPS);
             cubeMessage.setRead(true);
             cubeMessage.setContent(CubeUI.getInstance().getContext().getString(R.string.notice_received_recall, cubeMessage.getSenderName()));
             return Observable.just(cubeMessage);
@@ -369,7 +369,7 @@ public class MessageManager {
 //                        });
 //            }
         } else {
-            cubeMessage.setMessageType(CubeMessageType.RECALLMESSAGETIPS.getType());
+            cubeMessage.setMessageType(CubeMessageType.RECALLMESSAGETIPS);
             cubeMessage.setRead(true);
             cubeMessage.setContent(CubeUI.getInstance().getContext().getString(R.string.notice_send_recall));
             return Observable.just(cubeMessage);
@@ -709,7 +709,7 @@ public class MessageManager {
                     @Override
                     public Observable<CubeMessageViewModel> call(final CubeMessage cubeMessage) {
                         //自定义消息特殊处理
-                        if (cubeMessage.getMessageType().equals(CubeMessageType.CustomTips.getType())) {
+                        if (cubeMessage.getMessageType() == CubeMessageType.CustomTips) {
                             return buildCustom(cubeMessage);
                         }
 
@@ -982,7 +982,7 @@ public class MessageManager {
         try {
             CubeMessage cubeMessage = new CubeMessage();
             if (messageEntity instanceof UnKnownMessage) {
-                cubeMessage.setMessageType(CubeMessageType.Unknown.getType());
+                cubeMessage.setMessageType(CubeMessageType.Unknown);
                 cubeMessage.setContent(CubeUI.getInstance().getContext().getString(R.string.unknown_message_type));
             }
             if (messageEntity instanceof ReceiptMessage) {
@@ -993,16 +993,16 @@ public class MessageManager {
                 String textContent = textMessage.getContent();
                 cubeMessage.setContent(textContent);
                 if (StringUtil.isEmoji(textContent)) {
-                    cubeMessage.setMessageType(CubeMessageType.Emoji.getType());
+                    cubeMessage.setMessageType(CubeMessageType.Emoji);
                     cubeMessage.setContent("[图片]");
                     cubeMessage.setEmojiContent(textContent);
                 } else {
-                    cubeMessage.setMessageType(CubeMessageType.Text.getType());
+                    cubeMessage.setMessageType(CubeMessageType.Text);
                     cubeMessage.setContent(textContent);
                 }
             } else if (messageEntity instanceof CardMessage) {    //卡片消息
                 CardMessage cardMessage = (CardMessage) messageEntity;
-                cubeMessage.setMessageType(CubeMessageType.CARD.getType());
+                cubeMessage.setMessageType(CubeMessageType.CARD);
                 cubeMessage.setContent(cardMessage.getContent());
                 cubeMessage.setCardTitle(cardMessage.getTitle());
                 cubeMessage.setCardIcon(cardMessage.getIcon());
@@ -1020,7 +1020,7 @@ public class MessageManager {
                 cubeMessage.setFileSize(fileMessage.getFileSize());
                 cubeMessage.setLastModified(fileMessage.getFileLastModified());
                 cubeMessage.setFileMessageStatus(this.getFileMessageStatus(fileMessage).getStatus());
-                cubeMessage.setMessageType(CubeMessageType.File.getType());
+                cubeMessage.setMessageType(CubeMessageType.File);
                 cubeMessage.setContent(CubeUI.getInstance().getContext().getString(R.string.file_message));
 
                 if (fileMessage instanceof ImageMessage) {  // 图片
@@ -1032,12 +1032,12 @@ public class MessageManager {
                     cubeMessage.setThumbUrl(imageMessage.getThumbUrl());
                     cubeMessage.setImgWidth(imageMessage.getWidth());
                     cubeMessage.setImgHeight(imageMessage.getHeight());
-                    cubeMessage.setMessageType(CubeMessageType.Image.getType());
+                    cubeMessage.setMessageType(CubeMessageType.Image);
                     cubeMessage.setContent(CubeUI.getInstance().getContext().getString(R.string.image_message));
                 } else if (fileMessage instanceof VoiceClipMessage) { // 语音
                     VoiceClipMessage voiceClipMessage = (VoiceClipMessage) fileMessage;
                     cubeMessage.setDuration(voiceClipMessage.getDuration());
-                    cubeMessage.setMessageType(CubeMessageType.Voice.getType());
+                    cubeMessage.setMessageType(CubeMessageType.Voice);
                     cubeMessage.setContent(CubeUI.getInstance().getContext().getString(R.string.voice_message));
 //                    cubeMessage.setPlay(messageEntity.getDirection() == MessageDirection.Sent || messageEntity.isReceipted());
                 } else if (fileMessage instanceof VideoClipMessage) { // 视频
@@ -1050,7 +1050,7 @@ public class MessageManager {
                     cubeMessage.setDuration(videoClipMessage.getDuration());
                     cubeMessage.setImgWidth(videoClipMessage.getWidth());
                     cubeMessage.setImgHeight(videoClipMessage.getHeight());
-                    cubeMessage.setMessageType(CubeMessageType.Video.getType());
+                    cubeMessage.setMessageType(CubeMessageType.Video);
                     cubeMessage.setContent(CubeUI.getInstance().getContext().getString(R.string.video_message));
                 } else if (fileMessage instanceof WhiteboardMessage) {    // 白板
                     WhiteboardMessage whiteboardMessage = (WhiteboardMessage) fileMessage;
@@ -1059,7 +1059,7 @@ public class MessageManager {
                         cubeMessage.setThumbPath(thumbFile.getAbsolutePath());
                     }
                     cubeMessage.setThumbUrl(whiteboardMessage.getThumbUrl());
-                    cubeMessage.setMessageType(CubeMessageType.Whiteboard.getType());
+                    cubeMessage.setMessageType(CubeMessageType.Whiteboard);
                     cubeMessage.setContent(CubeUI.getInstance().getContext().getString(R.string.whiteboard_message));
 
                     if (whiteboardMessage instanceof WhiteboardClipMessage) {    // 白板剪辑
@@ -1086,7 +1086,7 @@ public class MessageManager {
                     return null;
                 }
             } else if (messageEntity instanceof RichContentMessage) {
-                cubeMessage.setMessageType(CubeMessageType.RICHTEXT.getType());
+                cubeMessage.setMessageType(CubeMessageType.RICHTEXT);
                 StringBuilder stringBuilder = new StringBuilder();
                 RichContentMessage richContentMessage = (RichContentMessage) messageEntity;
                 //获取富文本消息中的消息
@@ -1107,7 +1107,7 @@ public class MessageManager {
                 }
                 cubeMessage.setContent(stringBuilder.toString());  //给最近聊天列表显示的内容
             } else if (messageEntity instanceof ReplyMessage) {
-                cubeMessage.setMessageType(CubeMessageType.REPLYMESSAGE.getType());
+                cubeMessage.setMessageType(CubeMessageType.REPLYMESSAGE);
                 ReplyMessage messageEntity1 = (ReplyMessage) messageEntity;
                 cubeMessage.setReplyContentJson(messageEntity1.toString());
                 MessageEntity reply = messageEntity1.getReply();
@@ -1118,7 +1118,7 @@ public class MessageManager {
                     cubeMessage.setContent("回复消息");
                 }
             } else {
-                cubeMessage.setMessageType(CubeMessageType.Unknown.getType());
+                cubeMessage.setMessageType(CubeMessageType.Unknown);
                 cubeMessage.setContent(CubeUI.getInstance().getContext().getString(R.string.unknown_message_type));
             }
             cubeMessage.setMessageSN(messageEntity.getSerialNumber());
@@ -1129,9 +1129,9 @@ public class MessageManager {
             cubeMessage.setSendTimestamp(messageEntity.getSendTimestamp());
             cubeMessage.setReceiverId(messageEntity.getReceiver().getCubeId());
             cubeMessage.setReceiveTimestamp(messageEntity.getReceiveTimestamp());
-            cubeMessage.setGroupId(messageEntity.getGroupId() == null ? null : messageEntity.getGroupId());
+            cubeMessage.setGroupId(messageEntity.getGroupId());
             cubeMessage.setTimestamp(messageEntity.getTimestamp());
-            cubeMessage.setRead(messageEntity.getDirection() == MessageDirection.Sent || cubeMessage.getMessageType().equals(CubeMessageType.CustomTips.getType()) || messageEntity.isReceipted());
+            cubeMessage.setRead(messageEntity.getDirection() == MessageDirection.Sent || cubeMessage.getMessageType() == CubeMessageType.CustomTips || messageEntity.isReceipted());
             cubeMessage.setReceipt(messageEntity.isReceipted());
             cubeMessage.setAnonymous(messageEntity.isAnonymous());
             boolean alreadyReceiptedMessage = ReceiptManager.getInstance().isAlreadyReceiptedMessage(cubeMessage.getTimestamp());

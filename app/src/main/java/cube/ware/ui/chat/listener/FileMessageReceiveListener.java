@@ -8,23 +8,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.common.utils.utils.glide.GlideUtil;
 import com.common.utils.utils.log.LogUtil;
-
-import java.io.File;
-
 import cube.service.message.model.FileMessage;
 import cube.service.message.model.ImageMessage;
 import cube.service.message.model.VideoClipMessage;
 import cube.service.message.model.VoiceClipMessage;
-import cube.ware.AppConstants;
 import cube.ware.R;
+import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.room.model.CubeMessage;
+import cube.ware.service.message.MessageHandle;
 import cube.ware.ui.chat.message.Listener.FileMessageDownloadListener;
 import cube.ware.utils.ImageUtil;
 import cube.ware.widget.CubeProgressBar;
 import cube.ware.widget.recyclerview.BaseRecyclerViewHolder;
+import java.io.File;
 
 /**
  * 文件消息发送监听器
@@ -33,18 +31,18 @@ import cube.ware.widget.recyclerview.BaseRecyclerViewHolder;
  * @date 2016/6/13
  */
 public class FileMessageReceiveListener implements FileMessageDownloadListener {
-    private static final String TAG = FileMessageReceiveListener.class.getSimpleName();
-    private FrameLayout            mContainerView;
-    private Context                mContext;
-    private CubeMessage            mCubeMessage;
-    private BaseRecyclerViewHolder mViewHolder;
-    private View                   mInflate;
-    private TextView               mFileStatus;
-    private ProgressBar            mFileProgressBar;
-    private ProgressBar            mProgressBar;//消息接收进度条
-    private CubeProgressBar        mPVProgressBar;//图片/视频接收进度条
-    private LinearLayout           mProgressLayout;//图片传输进度布局
-    private ImageView              mVideoPlay;//视频播放按钮
+    private static final String                 TAG = FileMessageReceiveListener.class.getSimpleName();
+    private              FrameLayout            mContainerView;
+    private              Context                mContext;
+    private              CubeMessage            mCubeMessage;
+    private              BaseRecyclerViewHolder mViewHolder;
+    private              View                   mInflate;
+    private              TextView               mFileStatus;
+    private              ProgressBar            mFileProgressBar;
+    private              ProgressBar            mProgressBar;//消息接收进度条
+    private              CubeProgressBar        mPVProgressBar;//图片/视频接收进度条
+    private              LinearLayout           mProgressLayout;//图片传输进度布局
+    private              ImageView              mVideoPlay;//视频播放按钮
 
     private boolean isDownLoading;
 
@@ -69,17 +67,18 @@ public class FileMessageReceiveListener implements FileMessageDownloadListener {
         this.mViewHolder = holder;
         this.mInflate = inflate;
         mInflate.setTag(R.string.app_name, cubeMessage.getMessageSN() + "");
-        if (cubeMessage.getItemType() == AppConstants.MessageType.CHAT_VIDEO || cubeMessage.getItemType() == AppConstants.MessageType.CHAT_IMAGE) {
+        CubeMessageType messageType = cubeMessage.getMessageType();
+        if (messageType == CubeMessageType.Video || messageType == CubeMessageType.Image) {
             this.mPVProgressBar = (CubeProgressBar) this.mInflate.findViewById(R.id.chat_progress_bar);
             this.mProgressLayout = (LinearLayout) this.mInflate.findViewById(R.id.chat_progress_cover);
             this.mVideoPlay = (ImageView) this.mInflate.findViewById(R.id.chat_video_iv);
         }
-        else if (cubeMessage.getItemType() == AppConstants.MessageType.CHAT_FILE) {
+        else if (messageType == CubeMessageType.File) {
             this.mFileProgressBar = (ProgressBar) this.mInflate.findViewById(R.id.item_message_file_transfer_progress_bar);
             this.mFileStatus = (TextView) this.mInflate.findViewById(R.id.item_message_file_status_label);
             this.mContainerView = this.mViewHolder.getView(R.id.chat_item_content);
         }
-        else if (cubeMessage.getItemType() == AppConstants.MessageType.CHAT_AUDIO) {
+        else if (messageType == CubeMessageType.Voice) {
             this.mProgressBar = this.mViewHolder.getView(R.id.chat_item_progress);
             this.mContainerView = (FrameLayout) this.mInflate.findViewById(R.id.item_message_audio_container);
         }
@@ -105,7 +104,7 @@ public class FileMessageReceiveListener implements FileMessageDownloadListener {
             showProgressNum(processed, total);
         }
         else {
-//            this.mFileProgressBar.setVisibility(View.GONE);
+            //            this.mFileProgressBar.setVisibility(View.GONE);
             this.mFileProgressBar.setVisibility(View.VISIBLE);
             int percent = (int) (Double.parseDouble(String.valueOf(processed)) / Double.parseDouble(String.valueOf(total)) * 100);
             this.mFileProgressBar.setProgress(percent);
@@ -140,7 +139,7 @@ public class FileMessageReceiveListener implements FileMessageDownloadListener {
             if (null != thumbFile && thumbFile.exists()) {
                 contentImageView.setImageURI(Uri.fromFile(thumbFile));
                 // TODO: 2018/1/24 使用Glide加载出现了加载出空白的bug 没有找到原因 因此替换为 setImageURI原生方式
-               // ImageUtil.displayImage(mContext, R.drawable.default_image, contentImageView, imageSize.width, imageSize.height, thumbPath);
+                // ImageUtil.displayImage(mContext, R.drawable.default_image, contentImageView, imageSize.width, imageSize.height, thumbPath);
             }
             else if (null != imageFile && imageFile.exists()) {
                 contentImageView.setImageURI(Uri.fromFile(imageFile));
@@ -183,6 +182,6 @@ public class FileMessageReceiveListener implements FileMessageDownloadListener {
 
         // 移除监听器
         LogUtil.i("移除监听器" + this.mCubeMessage.toString());
-        this.mCubeMessage.removeFileMessageDownloadListener(this.mCubeMessage.getMessageSN());
+        MessageHandle.getInstance().removeDownloadListener(this.mCubeMessage.getMessageSN(), CubeMessage.class.getSimpleName());
     }
 }

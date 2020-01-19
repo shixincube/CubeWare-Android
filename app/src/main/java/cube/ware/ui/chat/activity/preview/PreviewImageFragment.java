@@ -125,7 +125,7 @@ public class PreviewImageFragment extends BaseLazyFragment {
                 .subscribe(new Action1<CubeMessage>() {
                     @Override
                     public void call(CubeMessage cubeMessage) {
-                        if (null != cubeMessage && cubeMessage.getMessageType().equals(CubeMessageType.Image.getType())) {
+                        if (null != cubeMessage && cubeMessage.getMessageType() == CubeMessageType.Image) {
                             LogUtil.i("预览图片url ------> " + cubeMessage.getFileUrl()+" "+cubeMessage.getMessageSN());
 //                            GlideUtil.loadImage(cubeMessage.getFileUrl(), getContext(), mPhotoView, false);
                             String imagePath;

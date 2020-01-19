@@ -16,6 +16,7 @@ import com.common.sdk.RouterUtil;
 import com.common.utils.manager.ActivityManager;
 import com.common.utils.utils.log.LogUtil;
 
+import cube.ware.data.CubeDataHelper;
 import java.util.List;
 
 import cube.service.CubeEngine;
@@ -191,6 +192,7 @@ public class MainActivity extends BaseActivity implements UserStateListener {
         SpUtil.setCubeId(from.cubeId);
         SpUtil.setUserName(from.displayName);
         SpUtil.setUserAvator(from.avatar);
+        CubeDataHelper.getInstance().setCubeId(from.cubeId);
     }
 
     @Override

@@ -6,7 +6,7 @@ import android.view.View;
 import java.util.Map;
 
 import cube.ware.R;
-import cube.ware.data.model.dataModel.CubeMessageViewModel;
+import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeCustomMessageType;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.room.model.CubeMessage;
@@ -35,7 +35,7 @@ public class MsgViewHolderCall extends MsgViewHolderText {
         Drawable drawable;
         mContentTv.setCompoundDrawablePadding(20);
         if (isReceivedMessage()) {
-            if (mData.mMessage.getMessageType().equals(CubeMessageType.CustomCallVideo.getType())) {
+            if (mData.mMessage.getMessageType() == CubeMessageType.CustomCallVideo) {
                 drawable = mContext.getResources().getDrawable(R.drawable.ic_video_left_end);
             }
             else {
@@ -45,7 +45,7 @@ public class MsgViewHolderCall extends MsgViewHolderText {
             mContentTv.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         }
         else {
-            if (mData.mMessage.getMessageType().equals(CubeMessageType.CustomCallVideo.getType())) {
+            if (mData.mMessage.getMessageType() == CubeMessageType.CustomCallVideo) {
                 drawable = mContext.getResources().getDrawable(R.drawable.ic_video_right_end);
             }
             else {

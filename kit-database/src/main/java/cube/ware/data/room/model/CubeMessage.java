@@ -2,30 +2,22 @@ package cube.ware.data.room.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.text.TextUtils;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import cube.ware.AppConstants;
+import cube.ware.data.CubeDataHelper;
 import cube.ware.data.model.HeaderMap;
 import cube.ware.data.model.dataModel.enmu.CubeFileMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
 import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
-import cube.ware.service.message.MessageHandle;
-import cube.ware.ui.chat.message.Listener.FileMessageDownloadListener;
-import cube.ware.ui.chat.message.Listener.FileMessageUploadListener;
-import cube.ware.utils.SpUtil;
-import cube.ware.widget.recyclerview.entity.MultiItemEntity;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by dth
@@ -33,7 +25,8 @@ import cube.ware.widget.recyclerview.entity.MultiItemEntity;
  * Date: 2018/8/30.
  */
 @Entity
-public class CubeMessage implements Serializable, MultiItemEntity {
+@TypeConverters(CubeMessageType.class)
+public class CubeMessage implements Serializable {
     /**
      * 消息唯一序列号
      */
@@ -43,7 +36,7 @@ public class CubeMessage implements Serializable, MultiItemEntity {
     /**
      * 消息类型{@link CubeMessageType}
      */
-    private String messageType;
+    private CubeMessageType messageType;
 
     /**
      * 消息状态{@link CubeMessageStatus}
@@ -242,11 +235,11 @@ public class CubeMessage implements Serializable, MultiItemEntity {
         this.messageSN = messageSN;
     }
 
-    public String getMessageType() {
+    public CubeMessageType getMessageType() {
         return messageType;
     }
 
-    public void setMessageType(String messageType) {
+    public void setMessageType(CubeMessageType messageType) {
         this.messageType = messageType;
     }
 
@@ -567,76 +560,6 @@ public class CubeMessage implements Serializable, MultiItemEntity {
     }
 
     @Override
-    public int getItemType() {
-        if (this.messageType.equals(CubeMessageType.Text.getType())) {
-            return AppConstants.MessageType.CHAT_TXT;
-        }
-        else if (this.messageType.equals(CubeMessageType.File.getType())) {
-            return AppConstants.MessageType.CHAT_FILE;
-        }
-        else if (this.messageType.equals(CubeMessageType.Image.getType())) {
-            return AppConstants.MessageType.CHAT_IMAGE;
-        }
-        else if (this.messageType.equals(CubeMessageType.Voice.getType())) {
-            return AppConstants.MessageType.CHAT_AUDIO;
-        }
-        else if (this.messageType.equals(CubeMessageType.Video.getType())) {
-            return AppConstants.MessageType.CHAT_VIDEO;
-        }
-        else if (this.messageType.equals(CubeMessageType.Whiteboard.getType())) {
-            return AppConstants.MessageType.CHAT_WHITEBOARD;
-        }
-        else if (this.messageType.equals(CubeMessageType.CustomTips.getType())) {
-            return AppConstants.MessageType.CUSTOM_TIPS;
-        }
-        else if (this.messageType.equals(CubeMessageType.CustomCallVideo.getType())) {
-            return AppConstants.MessageType.CUSTOM_CALL_VIDEO;
-        }
-        else if (this.messageType.equals(CubeMessageType.CustomCallAudio.getType())) {
-            return AppConstants.MessageType.CUSTOM_CALL_AUDIO;
-        }
-        else if (this.messageType.equals(CubeMessageType.CustomShare.getType())) {
-            return AppConstants.MessageType.CUSTOM_SHARE;
-        }
-        else if (this.messageType.equals(CubeMessageType.CustomShake.getType())) {  //屏幕抖动
-            return AppConstants.MessageType.CUSTOM_SHAKE;
-        }
-        else if (this.messageType.equals(CubeMessageType.CARD.getType())) {
-            return AppConstants.MessageType.CHAT_CARD;
-        }
-        else if (this.messageType.equals(CubeMessageType.RICHTEXT.getType())) {
-            return AppConstants.MessageType.CHAT_RICH_TEXT;
-        }
-        else if (this.messageType.equals(CubeMessageType.GroupShareCard.getType())) {
-            return AppConstants.MessageType.GroupShareCard;
-        }
-        else if (this.messageType.equals(CubeMessageType.UserShareCard.getType())) {
-            return AppConstants.MessageType.UserShareCard;
-        }
-        else if (this.messageType.equals(CubeMessageType.GroupTaskNew.getType())) {
-            return AppConstants.MessageType.GroupTaskNew;
-        }
-        else if (this.messageType.equals(CubeMessageType.GroupTaskComplete.getType())) {
-            return AppConstants.MessageType.GroupTaskComplete;
-        }
-        else if (this.messageType.equals(CubeMessageType.Emoji.getType())) {
-            return AppConstants.MessageType.CHAT_EMOJI;
-        }
-        else if (this.messageType.equals(CubeMessageType.RECALLMESSAGETIPS.getType())) {
-            return AppConstants.MessageType.RECALL_MESSAGE_TIPS;
-        }
-        else if (messageType.equals(CubeMessageType.REPLYMESSAGE.getType())) {
-            return AppConstants.MessageType.REPLY_MESSAGE;
-        }
-        else if (messageType.equals(CubeMessageType.ServiceNumber.getType())) {
-            return AppConstants.MessageType.SERVICE_NUMBER;
-        }
-        else {
-            return AppConstants.MessageType.UNKNOWN;
-        }
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (null == o) {
             return false;
@@ -683,7 +606,7 @@ public class CubeMessage implements Serializable, MultiItemEntity {
             return this.groupId;
         }
         else {
-            boolean isMyself = SpUtil.getCubeId().equals(this.senderId); // 发送者是否是自己
+            boolean isMyself = CubeDataHelper.getInstance().getCubeId().equals(this.senderId); // 发送者是否是自己
             return isMyself ? this.receiverId : this.senderId;
         }
     }
@@ -694,45 +617,6 @@ public class CubeMessage implements Serializable, MultiItemEntity {
 
     public void setOperate(String operate) {
         this.operate = operate;
-    }
-
-    /**
-     * 添加文件上传监听器
-     *
-     * @param sn
-     * @param listener
-     */
-    public void addFileMessageUploadListener(long sn, FileMessageUploadListener listener) {
-            MessageHandle.getInstance().addUploadListener(sn, CubeMessage.class.getSimpleName(), listener);
-    }
-
-    /**
-     * 移除文件上传监听器
-     *
-     * @param sn
-     */
-    public void removeFileMessageUploadListener(long sn) {
-            MessageHandle.getInstance().removeUploadListener(sn, CubeMessage.class.getSimpleName());
-    }
-
-    /**
-     * 添加文件下载监听器
-     *
-     * @param sn
-     * @param listener
-     */
-    // TODO: 2017/9/15 需要处理缩略图与原文件不能同时监听
-    public void addFileMessageDownloadListener(long sn, FileMessageDownloadListener listener) {
-            MessageHandle.getInstance().addDownloadListener(sn, CubeMessage.class.getSimpleName(), listener);
-    }
-
-    /**
-     * 移除文件下载监听器
-     *
-     * @param sn
-     */
-    public void removeFileMessageDownloadListener(long sn) {
-            MessageHandle.getInstance().removeDownloadListener(sn, CubeMessage.class.getSimpleName());
     }
 
     public String getReplyContentJson() {

@@ -8,7 +8,7 @@ import com.common.utils.utils.ScreenUtil;
 import java.util.Map;
 
 import cube.ware.R;
-import cube.ware.data.model.dataModel.CubeMessageViewModel;
+import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.widget.recyclerview.BaseRecyclerViewHolder;
 

@@ -42,7 +42,6 @@ public enum CubeCustomMessageType {
     RevokeRD("revokeRD"),  // 关闭远程桌面
     SecretTip("secret_tip"),  // 密聊提示
     ShakeEvent("shake"),//抖动事件
-    UpdateUserPwd("update_user_pwd"), // 在其他端修改密码
     DownLoad_Complete("download"), //接收方文件下载完成
     GroupFileAdd("group_file_add"), // 新增群文件
     GroupFileDelete("group_file_delete"), // 删除群文件

@@ -14,6 +14,7 @@ import com.common.utils.utils.GsonUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
 
+import cube.ware.data.CubeDataHelper;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,6 +130,7 @@ public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implem
         SpUtil.setCubeId(from.cubeId);
         SpUtil.setUserName(from.displayName);
         SpUtil.setUserAvator(from.avatar);
+        CubeDataHelper.getInstance().setCubeId(from.cubeId);
         LogUtil.i(from.toString());
         CubeUserRepository.getInstance().saveUser(mUsers)
                 .observeOn(AndroidSchedulers.mainThread())

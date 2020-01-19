@@ -1,4 +1,4 @@
-package cube.ware.data.model.dataModel;
+package cube.ware.data.model;
 
 import android.text.TextUtils;
 
@@ -24,68 +24,68 @@ public class CubeMessageViewModel implements Serializable, MultiItemEntity {
 
     @Override
     public int getItemType() {
-        String messageType = mMessage.getMessageType();
-        if (messageType.equals(CubeMessageType.Text.getType())) {
+        CubeMessageType messageType = mMessage.getMessageType();
+        if (messageType == CubeMessageType.Text) {
             return AppConstants.MessageType.CHAT_TXT;
         }
-        else if (messageType.equals(CubeMessageType.Emoji.getType())) {
+        else if (messageType == CubeMessageType.Emoji) {
             return AppConstants.MessageType.CHAT_EMOJI;
         }
-        else if (messageType.equals(CubeMessageType.File.getType())) {
+        else if (messageType == CubeMessageType.File) {
             return AppConstants.MessageType.CHAT_FILE;
         }
-        else if (messageType.equals(CubeMessageType.Image.getType())) {
+        else if (messageType == CubeMessageType.Image) {
             return AppConstants.MessageType.CHAT_IMAGE;
         }
-        else if (messageType.equals(CubeMessageType.Voice.getType())) {
+        else if (messageType == CubeMessageType.Voice) {
             return AppConstants.MessageType.CHAT_AUDIO;
         }
-        else if (messageType.equals(CubeMessageType.Video.getType())) {
+        else if (messageType == CubeMessageType.Video) {
             return AppConstants.MessageType.CHAT_VIDEO;
         }
-        else if (messageType.equals(CubeMessageType.Whiteboard.getType())) {
+        else if (messageType == CubeMessageType.Whiteboard) {
             return AppConstants.MessageType.CHAT_WHITEBOARD;
         }
-        else if (messageType.equals(CubeMessageType.CustomTips.getType())) {
+        else if (messageType == CubeMessageType.CustomTips) {
             return AppConstants.MessageType.CUSTOM_TIPS;
         }
-        else if (messageType.equals(CubeMessageType.CustomCallVideo.getType())) {
+        else if (messageType == CubeMessageType.CustomCallVideo) {
             return AppConstants.MessageType.CUSTOM_CALL_VIDEO;
         }
-        else if (messageType.equals(CubeMessageType.CustomCallAudio.getType())) {
+        else if (messageType == CubeMessageType.CustomCallAudio) {
             return AppConstants.MessageType.CUSTOM_CALL_AUDIO;
         }
-        else if (messageType.equals(CubeMessageType.CustomShare.getType())) {
+        else if (messageType == CubeMessageType.CustomShare) {
             return AppConstants.MessageType.CUSTOM_SHARE;
         }
-        else if (messageType.equals(CubeMessageType.CustomShake.getType())) {
+        else if (messageType == CubeMessageType.CustomShake) {
             return AppConstants.MessageType.CUSTOM_SHAKE;
         }
-        else if (messageType.equals(CubeMessageType.CARD.getType())) {
+        else if (messageType == CubeMessageType.CARD) {
             return AppConstants.MessageType.CHAT_CARD;
         }
-        else if (messageType.equals(CubeMessageType.RICHTEXT.getType())) {
+        else if (messageType == CubeMessageType.RICHTEXT) {
             return AppConstants.MessageType.CHAT_RICH_TEXT;
         }
-        else if(messageType.equals(CubeMessageType.ServiceNumber.getType())){
+        else if(messageType == CubeMessageType.ServiceNumber){
             return AppConstants.MessageType.SERVICE_NUMBER;
         }
-        else if (messageType.equals(CubeMessageType.GroupShareCard.getType())) {
+        else if (messageType == CubeMessageType.GroupShareCard) {
             return AppConstants.MessageType.GroupShareCard;
         }
-        else if (messageType.equals(CubeMessageType.UserShareCard.getType())) {
+        else if (messageType == CubeMessageType.UserShareCard) {
             return AppConstants.MessageType.UserShareCard;
         }
-        else if (messageType.equals(CubeMessageType.GroupTaskNew.getType())) {
+        else if (messageType == CubeMessageType.GroupTaskNew) {
             return AppConstants.MessageType.GroupTaskNew;
         }
-        else if (messageType.equals(CubeMessageType.GroupTaskComplete.getType())) {
+        else if (messageType == CubeMessageType.GroupTaskComplete) {
             return AppConstants.MessageType.GroupTaskComplete;
         }
-        else if (messageType.equals(CubeMessageType.RECALLMESSAGETIPS.getType())) {
+        else if (messageType == CubeMessageType.RECALLMESSAGETIPS) {
             return AppConstants.MessageType.RECALL_MESSAGE_TIPS;
         }
-        else if (messageType.equals(CubeMessageType.REPLYMESSAGE.getType())) {
+        else if (messageType == CubeMessageType.REPLYMESSAGE) {
             return AppConstants.MessageType.REPLY_MESSAGE;
         }
         else {

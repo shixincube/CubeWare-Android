@@ -6,10 +6,11 @@ import android.view.View;
 import com.common.utils.utils.glide.GlideUtil;
 import com.common.utils.utils.log.LogUtil;
 
+import cube.ware.service.message.MessageHandle;
 import java.util.Map;
 
 import cube.ware.R;
-import cube.ware.data.model.dataModel.CubeMessageViewModel;
+import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;
@@ -54,7 +55,7 @@ public class MsgViewHolderVideo extends MsgViewHolderPVBase {
         }
         if (!TextUtils.isEmpty(mThumbUrl) && mDownLoadVideoListener == null) {
             mDownLoadVideoListener = new FileMessageReceiveListener(mContext, mData.mMessage, mViewHolder, mInflate);
-            mData.mMessage.addFileMessageDownloadListener(mData.mMessage.getMessageSN(), mDownLoadVideoListener);
+            MessageHandle.getInstance().addDownloadListener(mData.mMessage.getMessageSN(), CubeMessage.class.getSimpleName(), mDownLoadVideoListener);
         }
     }
 

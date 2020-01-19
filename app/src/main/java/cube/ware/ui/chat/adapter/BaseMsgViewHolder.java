@@ -26,7 +26,7 @@ import java.util.Random;
 import cube.ware.AppConstants;
 import cube.ware.CubeUI;
 import cube.ware.R;
-import cube.ware.data.model.dataModel.CubeMessageViewModel;
+import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.room.model.CubeMessage;
@@ -306,7 +306,7 @@ public abstract class BaseMsgViewHolder implements MessagePopupManager.OnPopMenu
      */
     private void setMoreLayout() {
         this.mCubeMessageSn = String.valueOf(mData.mMessage.getMessageSN());
-        if (!(mData.getItemType() == AppConstants.MessageType.CUSTOM_TIPS)) {
+        if (!(mData.mMessage.getMessageType() == CubeMessageType.CustomTips)) {
             this.mChatMoreLl.setVisibility(mAdapter.isShowMore ? View.VISIBLE : View.GONE);
             this.mChatMoreCb.setVisibility(mAdapter.isShowMore ? View.VISIBLE : View.GONE);
         }
@@ -459,10 +459,10 @@ public abstract class BaseMsgViewHolder implements MessagePopupManager.OnPopMenu
             //this.mUserHeadReceive.setOnLongClickListener(longClickListener);
         }
 
-        if (mData.mMessage.getMessageType().equals(CubeMessageType.Text.getType())) {
+        if (mData.mMessage.getMessageType() == CubeMessageType.Text) {
             return;
         }
-        else if (mData.mMessage.getMessageType().equals(CubeMessageType.Voice.getType())) {
+        else if (mData.mMessage.getMessageType() == CubeMessageType.Voice) {
             return;
         }
         else if (mData.mMessage.isAnonymous()) {
