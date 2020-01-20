@@ -119,10 +119,6 @@
             android:name=".ui.setting.SettingActivity"
             android:screenOrientation="portrait"
             />
-        <activity
-            android:name=".service.call.ui.P2PCallActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".ui.mine.ModifyNameActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".service.remoteDesktop.ui.ShareScreenActivity"
@@ -141,10 +137,6 @@
         <activity android:name=".ui.conference.conference.ConferenceActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
-
-
-        <activity android:name=".TestConferenceActivity"
-                  android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

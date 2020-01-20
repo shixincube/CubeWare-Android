@@ -6,7 +6,7 @@ import android.arch.persistence.room.TypeConverters;
 import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import cube.ware.data.CubeDataHelper;
+import cube.ware.core.CubeCore;
 import cube.ware.data.model.HeaderMap;
 import cube.ware.data.model.dataModel.enmu.CubeFileMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
@@ -606,7 +606,7 @@ public class CubeMessage implements Serializable {
             return this.groupId;
         }
         else {
-            boolean isMyself = CubeDataHelper.getInstance().getCubeId().equals(this.senderId); // 发送者是否是自己
+            boolean isMyself = CubeCore.getInstance().getCubeId().equals(this.senderId); // 发送者是否是自己
             return isMyself ? this.receiverId : this.senderId;
         }
     }

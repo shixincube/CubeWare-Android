@@ -1,13 +1,7 @@
 package cube.ware.service.remoteDesktop;
 
-import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.common.utils.manager.ActivityManager;
 import com.common.utils.utils.RingtoneUtil;
 import com.common.utils.utils.log.LogUtil;
 
@@ -16,18 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cube.service.CubeEngine;
-import cube.service.call.CallState;
 import cube.service.common.model.CubeError;
-import cube.service.group.model.Member;
 import cube.service.sharedesktop.ShareDesktopExtListener;
 import cube.service.sharedesktop.ShareDesktopListener;
 import cube.service.sharedesktop.model.ShareDesktop;
 import cube.service.user.model.User;
-import cube.ware.AppConstants;
 import cube.ware.R;
-import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.service.remoteDesktop.manager.ShareDesketopManager;
-import cube.ware.service.remoteDesktop.ui.ShareScreenActivity;
 
 /**
  * 引擎远程桌面服务处理

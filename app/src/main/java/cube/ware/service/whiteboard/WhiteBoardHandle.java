@@ -10,6 +10,7 @@ import com.common.utils.utils.GsonUtil;
 import com.common.utils.utils.RingtoneUtil;
 import com.common.utils.utils.log.LogUtil;
 
+import cube.ware.core.CubeCore;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ import cube.ware.CubeUI;
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.manager.MessageManager;
-import cube.ware.service.call.manager.OneOnOneCallManager;
 import cube.ware.service.conference.manager.ConferenceCallManager;
 import cube.ware.service.whiteboard.manager.WBCallManager;
 import cube.ware.ui.conference.eventbus.UpdateWhiteBoardTipView;
@@ -154,7 +154,7 @@ public class WhiteBoardHandle implements WhiteboardListener {
             }
         }
         if(!from.cubeId.equals(SpUtil.getCubeId())){
-            if(!WBCallManager.getInstance().isCalling() && !OneOnOneCallManager.getInstance().isCalling() && !ConferenceCallManager.getInstance().isCalling()){ //没有正在白板
+            if(!WBCallManager.getInstance().isCalling() && !CubeCore.getInstance().isCalling() && !ConferenceCallManager.getInstance().isCalling()){ //没有正在白板
                 WBCallManager.getInstance().setCalling(true);
                 Bundle bundle=new Bundle();
                 bundle.putInt(AppConstants.Value.CALLSTATA_WHITE_BOARD,AppConstants.Value.CALLSTATE_INVITE);

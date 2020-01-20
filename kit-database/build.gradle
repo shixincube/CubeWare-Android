@@ -23,9 +23,11 @@ android {
 }
 
 dependencies {
+  implementation project(':kit-core')
   implementation project(':CommonMvp')
   implementation project(':CommonSdk')
   implementation project(':CommonUtils')
+  implementation project(':cube-api')
   implementation project(':cube-core')
   implementation project(':cube-message')
   implementation developmentDependencies.support_recyclerview_v7

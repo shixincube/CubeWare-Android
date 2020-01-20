@@ -3,8 +3,8 @@ package cube.ware;
 import android.content.Context;
 import com.common.utils.utils.AppUtil;
 import com.common.utils.utils.log.LogUtil;
-import cube.ware.data.CubeDataHelper;
-import cube.ware.data.DataConfig;
+import cube.ware.core.CubeCore;
+import cube.ware.core.KitCoreConfig;
 import cube.ware.utils.SpUtil;
 
 /**
@@ -151,10 +151,11 @@ public class AppManager {
      * @param context
      */
     private static void initDatabase(Context context) {
-        CubeDataHelper.setContext(context);
-        DataConfig config = new DataConfig();
+        CubeCore.setContext(context);
+        KitCoreConfig config = new KitCoreConfig();
         config.setDebug(isDebug());
         config.setUserCenterUrl(getBaseUrl());
-        CubeDataHelper.getInstance().setDataConfig(config);
+        config.setAvatarUrl(AppConstants.AVATAR_URL);
+        CubeCore.getInstance().setDataConfig(config);
     }
 }

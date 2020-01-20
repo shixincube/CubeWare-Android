@@ -3,7 +3,7 @@ package cube.ware.data.api;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import com.common.utils.utils.log.LogUtil;
-import cube.ware.data.CubeDataHelper;
+import cube.ware.core.CubeCore;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -58,7 +58,7 @@ public class ApiManager {
     private void initOkHttp() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         // 打印请求log日志
-        if (CubeDataHelper.getInstance().isDebug()) {
+        if (CubeCore.getInstance().isDebug()) {
             builder.addInterceptor(getLogInterceptor());
         }
         builder.connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS); // 设置连接超时
@@ -91,7 +91,7 @@ public class ApiManager {
     private void initRetrofit() {
         Retrofit.Builder builder = new Retrofit.Builder();
         // base地址
-        builder.baseUrl(CubeDataHelper.getInstance().getUserCenterUrl());
+        builder.baseUrl(CubeCore.getInstance().getUserCenterUrl());
         builder.client(this.mOkHttpClient);
         builder.addConverterFactory(GsonConverterFactory.create());
         builder.addCallAdapterFactory(RxJavaCallAdapterFactory.create());

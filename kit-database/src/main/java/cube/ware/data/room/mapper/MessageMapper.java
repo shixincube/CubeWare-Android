@@ -2,7 +2,6 @@ package cube.ware.data.room.mapper;
 
 import android.content.Context;
 import android.text.TextUtils;
-import com.common.mvp.rx.RxBus;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.message.FileMessageStatus;
 import cube.service.message.MessageDirection;
@@ -19,10 +18,9 @@ import cube.service.message.model.TextMessage;
 import cube.service.message.model.UnKnownMessage;
 import cube.service.message.model.VideoClipMessage;
 import cube.service.message.model.VoiceClipMessage;
-import cube.service.message.model.WhiteboardClipMessage;
 import cube.service.message.model.WhiteboardMessage;
 import cube.ware.R;
-import cube.ware.data.CubeDataHelper;
+import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeFileMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
 import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
@@ -85,7 +83,7 @@ public class MessageMapper {
             CubeMessage cubeMessage = new CubeMessage();
             if (messageEntity instanceof UnKnownMessage) {
                 cubeMessage.setMessageType(CubeMessageType.Unknown);
-                cubeMessage.setContent(CubeDataHelper.getContext().getString(R.string.unknown_message_type));
+                cubeMessage.setContent(CubeCore.getContext().getString(R.string.unknown_message_type));
             }
             if (messageEntity instanceof ReceiptMessage) {
                 LogUtil.i("引擎回执消息转化处理====>");
@@ -123,7 +121,7 @@ public class MessageMapper {
                 cubeMessage.setLastModified(fileMessage.getFileLastModified());
                 cubeMessage.setFileMessageStatus(getFileMessageStatus(fileMessage).getStatus());
                 cubeMessage.setMessageType(CubeMessageType.File);
-                cubeMessage.setContent(CubeDataHelper.getContext().getString(R.string.file_message));
+                cubeMessage.setContent(CubeCore.getContext().getString(R.string.file_message));
 
                 if (fileMessage instanceof ImageMessage) {  // 图片
                     ImageMessage imageMessage = (ImageMessage) fileMessage;
@@ -135,12 +133,12 @@ public class MessageMapper {
                     cubeMessage.setImgWidth(imageMessage.getWidth());
                     cubeMessage.setImgHeight(imageMessage.getHeight());
                     cubeMessage.setMessageType(CubeMessageType.Image);
-                    cubeMessage.setContent(CubeDataHelper.getContext().getString(R.string.image_message));
+                    cubeMessage.setContent(CubeCore.getContext().getString(R.string.image_message));
                 } else if (fileMessage instanceof VoiceClipMessage) { // 语音
                     VoiceClipMessage voiceClipMessage = (VoiceClipMessage) fileMessage;
                     cubeMessage.setDuration(voiceClipMessage.getDuration());
                     cubeMessage.setMessageType(CubeMessageType.Voice);
-                    cubeMessage.setContent(CubeDataHelper.getContext().getString(R.string.voice_message));
+                    cubeMessage.setContent(CubeCore.getContext().getString(R.string.voice_message));
                     //                    cubeMessage.setPlay(messageEntity.getDirection() == MessageDirection.Sent || messageEntity.isReceipted());
                 } else if (fileMessage instanceof VideoClipMessage) { // 视频
                     VideoClipMessage videoClipMessage = (VideoClipMessage) fileMessage;
@@ -153,7 +151,7 @@ public class MessageMapper {
                     cubeMessage.setImgWidth(videoClipMessage.getWidth());
                     cubeMessage.setImgHeight(videoClipMessage.getHeight());
                     cubeMessage.setMessageType(CubeMessageType.Video);
-                    cubeMessage.setContent(CubeDataHelper.getContext().getString(R.string.video_message));
+                    cubeMessage.setContent(CubeCore.getContext().getString(R.string.video_message));
                 } else if (fileMessage instanceof WhiteboardMessage) {    // 白板
                     WhiteboardMessage whiteboardMessage = (WhiteboardMessage) fileMessage;
                     File thumbFile = whiteboardMessage.getThumbFile();
@@ -162,7 +160,7 @@ public class MessageMapper {
                     }
                     cubeMessage.setThumbUrl(whiteboardMessage.getThumbUrl());
                     cubeMessage.setMessageType(CubeMessageType.Whiteboard);
-                    cubeMessage.setContent(CubeDataHelper.getContext().getString(R.string.whiteboard_message));
+                    cubeMessage.setContent(CubeCore.getContext().getString(R.string.whiteboard_message));
                 }
             } else if (messageEntity instanceof CustomMessage) {      // 自定义消息
                 //如果是验证消息 通知刷新最近列表
@@ -217,7 +215,7 @@ public class MessageMapper {
                 }
             } else {
                 cubeMessage.setMessageType(CubeMessageType.Unknown);
-                cubeMessage.setContent(CubeDataHelper.getContext().getString(R.string.unknown_message_type));
+                cubeMessage.setContent(CubeCore.getContext().getString(R.string.unknown_message_type));
             }
             cubeMessage.setMessageSN(messageEntity.getSerialNumber());
             cubeMessage.setMessageDirection(getMessageDirection(messageEntity).getDirection());
@@ -328,7 +326,7 @@ public class MessageMapper {
      * @return
      */
     public static String getMessageContent(MessageEntity messageEntity) {
-        Context context = CubeDataHelper.getContext();
+        Context context = CubeCore.getContext();
         if (messageEntity == null || messageEntity instanceof UnKnownMessage) {
             return context.getString(R.string.unknown_message_type);
         } else if (messageEntity instanceof TextMessage) {

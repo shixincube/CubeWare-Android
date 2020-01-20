@@ -3,7 +3,7 @@ package cube.ware.data.repository;
 import com.common.mvp.rx.OnSubscribeRoom;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.message.model.MessageEntity;
-import cube.ware.data.CubeDataHelper;
+import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.room.AppDataBaseFactory;
 import cube.ware.data.room.mapper.MessageMapper;
@@ -207,7 +207,7 @@ public class CubeMessageRepository {
         return Observable.create(new OnSubscribeRoom<Integer>() {
             @Override
             protected Integer get() {
-                return AppDataBaseFactory.getCubeMessageDao().queryUnReadMessagesCount(chatId, CubeDataHelper.getInstance().getCubeId(), false);
+                return AppDataBaseFactory.getCubeMessageDao().queryUnReadMessagesCount(chatId, CubeCore.getInstance().getCubeId(), false);
             }
         }).subscribeOn(Schedulers.io());
     }
@@ -223,7 +223,7 @@ public class CubeMessageRepository {
         return Observable.create(new OnSubscribeRoom<Integer>() {
             @Override
             protected Integer get() {
-                return AppDataBaseFactory.getCubeMessageDao().queryAllUnReadMessagesCount(chatIds, CubeDataHelper.getInstance().getCubeId(), false);
+                return AppDataBaseFactory.getCubeMessageDao().queryAllUnReadMessagesCount(chatIds, CubeCore.getInstance().getCubeId(), false);
             }
         }).subscribeOn(Schedulers.io());
     }

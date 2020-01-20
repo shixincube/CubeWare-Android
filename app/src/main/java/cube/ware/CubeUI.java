@@ -10,7 +10,6 @@ import cube.service.common.model.CubeError;
 import cube.service.common.model.Version;
 import cube.service.message.model.MessageEntity;
 import cube.service.user.UserState;
-import cube.ware.service.call.CallHandle;
 import cube.ware.service.conference.ConferenceHandle;
 import cube.ware.service.core.SettingHandle;
 import cube.ware.service.engine.CubeEngineHandle;
@@ -133,7 +132,7 @@ public class CubeUI {
         CubeEngineHandle.getInstance().start();
         UserHandle.getInstance().start();
         MessageHandle.getInstance().start();
-        CallHandle.getInstance().start();
+        //CallHandle.getInstance().start();
         ConferenceHandle.getInstance().start();
         FileHandle.getInstance().start();
         GroupHandle.getInstance().start();
@@ -220,24 +219,6 @@ public class CubeUI {
      * 上传错误到友盟
      *
      * @param desc
-     */
-    public void reportError(String desc) {
-        reportError(desc, null);
-    }
-
-    /**
-     * 上传错误到友盟
-     *
-     * @param cubeError
-     */
-    public void reportError(CubeError cubeError) {
-        reportError("", cubeError);
-    }
-
-    /**
-     * 上传错误到友盟
-     *
-     * @param desc
      * @param cubeError
      */
     public void reportError(String desc, CubeError cubeError) {
@@ -312,42 +293,5 @@ public class CubeUI {
         if (chatEventListener != null && sChatEventListeners.contains(chatEventListener)) {
             sChatEventListeners.remove(chatEventListener);
         }
-    }
-
-    /**
-     * 设置未读消息总数监听器
-     *
-     * @param listener
-     */
-    public void addUnreadMessageCountListener(UnreadMessageCountListener listener) {
-        for (WeakReference<UnreadMessageCountListener> unreadMessageCountListener : mUnreadMessageCountListeners) {
-            if (unreadMessageCountListener != null && unreadMessageCountListener.get() == listener) {
-                return;
-            }
-        }
-        this.mUnreadMessageCountListeners.add(new WeakReference<UnreadMessageCountListener>(listener));
-    }
-
-    /**
-     * 设置未读消息总数监听器
-     *
-     * @param listener
-     */
-    public void removeUnreadMessageCountListener(UnreadMessageCountListener listener) {
-        for (WeakReference<UnreadMessageCountListener> unreadMessageCountListener : mUnreadMessageCountListeners) {
-            if (unreadMessageCountListener != null && unreadMessageCountListener.get() == listener) {
-                this.mUnreadMessageCountListeners.remove(unreadMessageCountListener);
-                return;
-            }
-        }
-    }
-
-    /**
-     * 获取未读消息总数监听器
-     *
-     * @return
-     */
-    public List<WeakReference<UnreadMessageCountListener>> getUnreadMessageCountListener() {
-        return this.mUnreadMessageCountListeners;
     }
 }

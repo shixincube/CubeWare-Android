@@ -7,15 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.ToastUtil;
-import com.common.utils.utils.log.LogUtil;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.group.GroupType;
@@ -23,47 +17,50 @@ import cube.service.whiteboard.model.Whiteboard;
 import cube.service.whiteboard.model.WhiteboardConfig;
 import cube.ware.AppConstants;
 import cube.ware.R;
-import cube.ware.data.model.dataModel.enmu.CallStatus;
+import cube.ware.core.CubeCore;
+import cube.ware.core.data.model.CallStatus;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
-import cube.ware.service.call.manager.OneOnOneCallManager;
+import cube.ware.core.CubeConstants;
 import cube.ware.service.conference.manager.ConferenceCallManager;
 import cube.ware.service.whiteboard.WhiteBoardHandle;
 import cube.ware.service.whiteboard.manager.WBCallManager;
 import cube.ware.ui.chat.BaseChatActivity;
 import cube.ware.ui.chat.ChatContainer;
-import cube.ware.ui.conference.listener.ConferenceCreateListener;
 import cube.ware.ui.whiteboard.listener.CreateCallback;
 import cube.ware.ui.whiteboard.listener.WBListener;
 import cube.ware.utils.SpUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * @author  zzy
+ * @author zzy
  * @date 2018/9/10
  * 聊天页面+展开Fragment
  */
 @SuppressLint("ValidFragment")
 public class ChatMoreFunctionFragment extends Fragment implements View.OnClickListener, CreateCallback {
 
-    private View mRootView;
-    private View video_call_layout;//语音通话
-    private View audio_call_layout;//视频通话
-    private View white_board_layout;//白板演示
-    private View share_screen_layout;//共享屏幕
+    private View            mRootView;
+    private View            video_call_layout;//语音通话
+    private View            audio_call_layout;//视频通话
+    private View            white_board_layout;//白板演示
+    private View            share_screen_layout;//共享屏幕
     private CubeSessionType mChatType;
 
     private BaseChatActivity  mChatActivity;
-    private ChatContainer  mContainer;
-    private WBListener mWBListener;
-    private ArrayList<String> mList=new ArrayList<>();
+    private ChatContainer     mContainer;
+    private WBListener        mWBListener;
+    private ArrayList<String> mList = new ArrayList<>();
 
     public ChatMoreFunctionFragment() {
     }
 
-    public ChatMoreFunctionFragment (BaseChatActivity activity, CubeSessionType mChatType, ChatContainer container){
+    public ChatMoreFunctionFragment(BaseChatActivity activity, CubeSessionType mChatType, ChatContainer container) {
         this.mChatActivity = activity;
-        this.mChatType=mChatType;
+        this.mChatType = mChatType;
         this.mContainer = container;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +70,7 @@ public class ChatMoreFunctionFragment extends Fragment implements View.OnClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mList.add(mContainer.mChatId);
         mRootView = inflater.inflate(R.layout.fragment_chat_more_function, container, false);
-        mWBListener = new WBListener(mChatActivity, mChatType, mList,"p2p");//单人白板可以不传groupId，占位而已
+        mWBListener = new WBListener(mChatActivity, mChatType, mList, "p2p");//单人白板可以不传groupId，占位而已
         mWBListener.setCreateCallback(this);
         return mRootView;
     }
@@ -100,84 +97,94 @@ public class ChatMoreFunctionFragment extends Fragment implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.video_call_layout:
-                if(mChatType.equals(CubeSessionType.P2P)){ //单聊
-                    if (OneOnOneCallManager.getInstance().isCalling()){
-                        ToastUtil.showToast(mChatActivity,R.string.calling_please_try_again_later);
-                    }else{
+                if (mChatType.equals(CubeSessionType.P2P)) { //单聊
+                    if (CubeCore.getInstance().isCalling()) {
+                        ToastUtil.showToast(mChatActivity, R.string.calling_please_try_again_later);
+                    }
+                    else {
                         Bundle bundle = new Bundle();
-                        bundle.putString("call_id",mContainer.mChatId);
+                        bundle.putString("call_id", mContainer.mChatId);
                         bundle.putSerializable("call_state", CallStatus.VIDEO_OUTGOING);
-                        bundle.putLong("call_time",0l);
-                        ARouter.getInstance().build(AppConstants.Router.P2PCallActivity).withBundle("call_data",bundle).navigation();
-                    }}else { //群聊
-                    if (ConferenceCallManager.getInstance().isCalling()){
-                        ToastUtil.showToast(mChatActivity,R.string.calling_please_try_again_later);
-                    }else{
-                        Bundle bundle=new Bundle();
-                        bundle.putInt("select_type",8);//视频会议首次创建
-                        bundle.putString("group_id",mContainer.mChatId); //mChatId 就是 groupId
-                        RouterUtil.navigation(AppConstants.Router.SelectMemberActivity,bundle);
+                        bundle.putLong("call_time", 0l);
+                        ARouter.getInstance().build(CubeConstants.Router.P2PCallActivity).withBundle("call_data", bundle).navigation();
+                    }
+                }
+                else { //群聊
+                    if (ConferenceCallManager.getInstance().isCalling()) {
+                        ToastUtil.showToast(mChatActivity, R.string.calling_please_try_again_later);
+                    }
+                    else {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("select_type", 8);//视频会议首次创建
+                        bundle.putString("group_id", mContainer.mChatId); //mChatId 就是 groupId
+                        RouterUtil.navigation(AppConstants.Router.SelectMemberActivity, bundle);
                     }
                 }
                 break;
             case R.id.audio_call_layout:
-                if(mChatType.equals(CubeSessionType.P2P)){//单聊
-                    if (OneOnOneCallManager.getInstance().isCalling()){
-                        ToastUtil.showToast(mChatActivity,R.string.calling_please_try_again_later);
-                    }else{
-                        Bundle bundle = new Bundle();
-                        bundle.putString("call_id",mContainer.mChatId);
-                        bundle.putSerializable("call_state", CallStatus.AUDIO_OUTGOING);
-                        bundle.putLong("call_time",0l);
-                        ARouter.getInstance().build(AppConstants.Router.P2PCallActivity).withBundle("call_data",bundle).navigation();
+                if (mChatType.equals(CubeSessionType.P2P)) {//单聊
+                    if (CubeCore.getInstance().isCalling()) {
+                        ToastUtil.showToast(mChatActivity, R.string.calling_please_try_again_later);
                     }
-                }else {//群聊
-                    if (ConferenceCallManager.getInstance().isCalling()){
-                        ToastUtil.showToast(mChatActivity,R.string.calling_please_try_again_later);
-                    }else{
-                        Bundle bundle=new Bundle();
-                        bundle.putInt("select_type",2);//视频音频会议首次创建
-                        bundle.putString("group_id",mContainer.mChatId); //mChatId 就是 groupId
-                        RouterUtil.navigation(AppConstants.Router.SelectMemberActivity,bundle);
+                    else {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("call_id", mContainer.mChatId);
+                        bundle.putSerializable("call_state", CallStatus.AUDIO_OUTGOING);
+                        bundle.putLong("call_time", 0l);
+                        ARouter.getInstance().build(CubeConstants.Router.P2PCallActivity).withBundle("call_data", bundle).navigation();
+                    }
+                }
+                else {//群聊
+                    if (ConferenceCallManager.getInstance().isCalling()) {
+                        ToastUtil.showToast(mChatActivity, R.string.calling_please_try_again_later);
+                    }
+                    else {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("select_type", 2);//视频音频会议首次创建
+                        bundle.putString("group_id", mContainer.mChatId); //mChatId 就是 groupId
+                        RouterUtil.navigation(AppConstants.Router.SelectMemberActivity, bundle);
                     }
                 }
                 break;
             case R.id.white_board_layout: //白板
-                if(mChatType.equals(CubeSessionType.P2P)){//单聊
-                    if (WBCallManager.getInstance().isCalling()){
-                        ToastUtil.showToast(mChatActivity,R.string.calling_please_try_again_later);
-                    }else{
+                if (mChatType.equals(CubeSessionType.P2P)) {//单聊
+                    if (WBCallManager.getInstance().isCalling()) {
+                        ToastUtil.showToast(mChatActivity, R.string.calling_please_try_again_later);
+                    }
+                    else {
                         //监听
                         WhiteBoardHandle.getInstance().addWhiteBoardStateListeners(mWBListener);
                         createWhiteBoard();
                     }
-                }else {//群聊
-                    Bundle bundle=new Bundle();
-                    bundle.putInt("select_type",3);//白板首次创建
-                    bundle.putString("group_id",mContainer.mChatId); //mChatId 就是 groupId
-                    RouterUtil.navigation(AppConstants.Router.SelectMemberActivity,bundle);
+                }
+                else {//群聊
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("select_type", 3);//白板首次创建
+                    bundle.putString("group_id", mContainer.mChatId); //mChatId 就是 groupId
+                    RouterUtil.navigation(AppConstants.Router.SelectMemberActivity, bundle);
                 }
                 break;
             case R.id.share_screen_layout:
                 break;
-                default:
-                    break;
+            default:
+                break;
         }
     }
 
     //开启白板
     private void createWhiteBoard() {
-        List<String> master=new ArrayList<>();
+        List<String> master = new ArrayList<>();
         master.add(SpUtil.getCubeId());
-        WhiteboardConfig whiteboardConfig=new WhiteboardConfig(GroupType.SHARE_WB,"p2p");
-        whiteboardConfig.bindGroupId="p2p";
-        whiteboardConfig.maxNumber=9;
-        whiteboardConfig.isOpen=true;
-        whiteboardConfig.masters=master;
+        WhiteboardConfig whiteboardConfig = new WhiteboardConfig(GroupType.SHARE_WB, "p2p");
+        whiteboardConfig.bindGroupId = "p2p";
+        whiteboardConfig.maxNumber = 9;
+        whiteboardConfig.isOpen = true;
+        whiteboardConfig.masters = master;
         CubeEngine.getInstance().getWhiteboardService().create(whiteboardConfig);
     }
+
     //白板创建回调
     @Override
     public void onWBFinish(Whiteboard whiteboard) {

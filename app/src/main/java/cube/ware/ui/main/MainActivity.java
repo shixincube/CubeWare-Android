@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.common.mvp.base.BaseActivity;
 import com.common.mvp.base.BasePresenter;
@@ -15,10 +14,6 @@ import com.common.mvp.rx.RxManager;
 import com.common.sdk.RouterUtil;
 import com.common.utils.manager.ActivityManager;
 import com.common.utils.utils.log.LogUtil;
-
-import cube.ware.data.CubeDataHelper;
-import java.util.List;
-
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.common.model.CubeSession;
@@ -26,6 +21,7 @@ import cube.service.common.model.DeviceInfo;
 import cube.service.user.model.User;
 import cube.ware.AppConstants;
 import cube.ware.R;
+import cube.ware.core.CubeCore;
 import cube.ware.data.room.AppDataBase;
 import cube.ware.eventbus.CubeEvent;
 import cube.ware.service.user.UserHandle;
@@ -37,28 +33,29 @@ import cube.ware.ui.recent.RecentFragment;
 import cube.ware.ui.recent.RecentSessionFragment;
 import cube.ware.utils.SpUtil;
 import cube.ware.widget.tabbar.NavigateTabBar;
+import java.util.List;
 import rx.functions.Action1;
 
 @Route(path = AppConstants.Router.MainActivity)
 public class MainActivity extends BaseActivity implements UserStateListener {
 
-    private static final String MAIN_PAGE_MESSAGE = "消息";
+    private static final String MAIN_PAGE_MESSAGE    = "消息";
     private static final String MAIN_PAGE_CONFERENCE = "会议";
-    private static final String MAIN_PAGE_CONTACTS = "联系人";
-    private static final String MAIN_PAGE_MINE = "我的";
+    private static final String MAIN_PAGE_CONTACTS   = "联系人";
+    private static final String MAIN_PAGE_MINE       = "我的";
 
-    private RecentFragment     mRecentFragment;//基于本地数据的最近会话列表
-    private RecentSessionFragment     mRecentSessionFragment;//基于引擎数据的最近会话列表
-    private ConferenceFragment mConferenceFragment;
-    private ContactFragment    mContactMainFragment;
-    private MineFragment       mPersonalFragment;
+    private RecentFragment        mRecentFragment;//基于本地数据的最近会话列表
+    private RecentSessionFragment mRecentSessionFragment;//基于引擎数据的最近会话列表
+    private ConferenceFragment    mConferenceFragment;
+    private ContactFragment       mContactMainFragment;
+    private MineFragment          mPersonalFragment;
 
-    private NavigateTabBar         mNavigateTabBar;    //底部NavigateTabBar
-    private FragmentManager        mFragmentManager;   // Fragment 管理器
-    private Fragment               mCurrentFragment;   // 当前展示的Fragment
-    private long lastClickTimeStamp = 0;
-    public boolean isForceSync = true;//是否强制同步
-    private String aliDeviceToken;
+    private NavigateTabBar  mNavigateTabBar;    //底部NavigateTabBar
+    private FragmentManager mFragmentManager;   // Fragment 管理器
+    private Fragment        mCurrentFragment;   // 当前展示的Fragment
+    private long            lastClickTimeStamp = 0;
+    public  boolean         isForceSync        = true;//是否强制同步
+    private String          aliDeviceToken;
     RxManager mRxManager = new RxManager();
 
     @Override
@@ -76,7 +73,7 @@ public class MainActivity extends BaseActivity implements UserStateListener {
         super.initView();
         UserHandle.getInstance().addUserStateListener(this);
         this.mFragmentManager = getSupportFragmentManager();
-        this.mNavigateTabBar =  findViewById(R.id.navigate_tabbar);
+        this.mNavigateTabBar = findViewById(R.id.navigate_tabbar);
     }
 
     @Override
@@ -93,10 +90,10 @@ public class MainActivity extends BaseActivity implements UserStateListener {
                             mRecentFragment = new RecentFragment();
                         }
                         selectFragment(mRecentFragment, MAIN_PAGE_MESSAGE);
-//                        if (null == mRecentSessionFragment) {
-//                            mRecentSessionFragment = new RecentSessionFragment();
-//                        }
-//                        selectFragment(mRecentSessionFragment, MAIN_PAGE_MESSAGE);
+                        //                        if (null == mRecentSessionFragment) {
+                        //                            mRecentSessionFragment = new RecentSessionFragment();
+                        //                        }
+                        //                        selectFragment(mRecentSessionFragment, MAIN_PAGE_MESSAGE);
                         break;
                     case 1: // 发现
                         if (null == mConferenceFragment) {
@@ -106,7 +103,7 @@ public class MainActivity extends BaseActivity implements UserStateListener {
                         break;
                     case 2: // + 扩展
                         AddDialogFragment addDialogFragment = AddDialogFragment.getInstance();
-                        addDialogFragment.show(getSupportFragmentManager(),"");
+                        addDialogFragment.show(getSupportFragmentManager(), "");
                         break;
                     case 3: // 联系人
                         if (null == mContactMainFragment) {
@@ -146,9 +143,9 @@ public class MainActivity extends BaseActivity implements UserStateListener {
         // 打开默认Fragment
         mRecentFragment = new RecentFragment();
         selectFragment(mRecentFragment, MAIN_PAGE_MESSAGE);
-//        mRecentSessionFragment = new RecentSessionFragment();
-//        selectFragment(mRecentSessionFragment, MAIN_PAGE_MESSAGE);
-//        IntentWrapper.whiteListMatters(this, "");
+        //        mRecentSessionFragment = new RecentSessionFragment();
+        //        selectFragment(mRecentSessionFragment, MAIN_PAGE_MESSAGE);
+        //        IntentWrapper.whiteListMatters(this, "");
     }
 
     /**
@@ -192,7 +189,7 @@ public class MainActivity extends BaseActivity implements UserStateListener {
         SpUtil.setCubeId(from.cubeId);
         SpUtil.setUserName(from.displayName);
         SpUtil.setUserAvator(from.avatar);
-        CubeDataHelper.getInstance().setCubeId(from.cubeId);
+        CubeCore.getInstance().setCubeId(from.cubeId);
     }
 
     @Override
@@ -220,7 +217,7 @@ public class MainActivity extends BaseActivity implements UserStateListener {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 CubeEngine.getInstance().getUserService().logout();
-//                RouterUtil.navigation(MainActivity.this, AppConstants.Router.LoginActivity);
+                //                RouterUtil.navigation(MainActivity.this, AppConstants.Router.LoginActivity);
             }
         }).show();
     }

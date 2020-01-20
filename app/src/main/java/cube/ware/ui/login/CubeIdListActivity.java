@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.common.mvp.base.BaseActivity;
 import com.common.sdk.RouterUtil;
@@ -13,11 +12,6 @@ import com.common.utils.utils.ClickUtil;
 import com.common.utils.utils.GsonUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
-
-import cube.ware.data.CubeDataHelper;
-import java.util.ArrayList;
-import java.util.List;
-
 import cube.service.common.model.CubeError;
 import cube.service.common.model.CubeSession;
 import cube.service.common.model.DeviceInfo;
@@ -25,12 +19,15 @@ import cube.service.user.model.User;
 import cube.ware.AppConstants;
 import cube.ware.CubeUI;
 import cube.ware.R;
+import cube.ware.core.CubeCore;
 import cube.ware.data.repository.CubeUserRepository;
 import cube.ware.data.room.model.CubeUser;
 import cube.ware.service.user.UserHandle;
 import cube.ware.service.user.UserStateListener;
 import cube.ware.ui.login.adapter.LVCubeIdListAdapter;
 import cube.ware.utils.SpUtil;
+import java.util.ArrayList;
+import java.util.List;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
@@ -43,7 +40,7 @@ public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implem
     private ImageView           mIvBack;
     private String              cubeId;
     private String              disPlayName;
-    private ProgressDialog mProgressDialog;
+    private ProgressDialog      mProgressDialog;
 
     @Override
     protected int getContentViewId() {
@@ -130,17 +127,15 @@ public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implem
         SpUtil.setCubeId(from.cubeId);
         SpUtil.setUserName(from.displayName);
         SpUtil.setUserAvator(from.avatar);
-        CubeDataHelper.getInstance().setCubeId(from.cubeId);
+        CubeCore.getInstance().setCubeId(from.cubeId);
         LogUtil.i(from.toString());
-        CubeUserRepository.getInstance().saveUser(mUsers)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<CubeUser>>() {
-                    @Override
-                    public void call(List<CubeUser> cubeUsers) {
-                        goToMain();
-                    }
-                });
-        if(mProgressDialog!=null){
+        CubeUserRepository.getInstance().saveUser(mUsers).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<CubeUser>>() {
+            @Override
+            public void call(List<CubeUser> cubeUsers) {
+                goToMain();
+            }
+        });
+        if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
     }
@@ -163,7 +158,7 @@ public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implem
     public void onUserFailed(CubeError error, User from) {
         LogUtil.e("登录失败：" + error);
         ToastUtil.showToast(this, "登录失败：" + error);
-        if(mProgressDialog!=null){
+        if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
     }

@@ -8,7 +8,7 @@ import android.arch.persistence.room.migration.Migration;
 import android.text.TextUtils;
 import android.util.Log;
 import com.common.utils.utils.log.LogUtil;
-import cube.ware.data.CubeDataHelper;
+import cube.ware.core.CubeCore;
 import cube.ware.data.room.dao.CubeConferenceDao;
 import cube.ware.data.room.dao.CubeMessageDao;
 import cube.ware.data.room.dao.CubeRecentSessionDao;
@@ -46,14 +46,14 @@ public abstract class AppDataBase extends RoomDatabase {
     }
 
     private static void initInstance() {
-        String cubeId = CubeDataHelper.getInstance().getCubeId();
+        String cubeId = CubeCore.getInstance().getCubeId();
         if (TextUtils.isEmpty(cubeId)) {
             throw new RuntimeException("数据库初始化失败，请先进行用户信息初始化！");
         }
 
         LogUtil.i("数据库name -----> :  " + getDbName(cubeId));
 
-        INSTANCE = Room.databaseBuilder(CubeDataHelper.getContext(), AppDataBase.class, getDbName(cubeId))
+        INSTANCE = Room.databaseBuilder(CubeCore.getContext(), AppDataBase.class, getDbName(cubeId))
                        //                            .addMigrations(MIGRATION_1_2)//添加数据库迁移
                        .fallbackToDestructiveMigration()//如果更新版本，没有加入迁移，则会删除所有数据
                        .build();

@@ -38,10 +38,9 @@ import cube.service.user.model.User;
 import cube.ware.AppConstants;
 import cube.ware.CubeUI;
 import cube.ware.R;
-import cube.ware.data.model.dataModel.enmu.CallStatus;
+import cube.ware.core.data.model.CallStatus;
 import cube.ware.data.repository.CubeUserRepository;
 import cube.ware.data.room.model.CubeUser;
-import cube.ware.service.call.adapter.P2PmemberAdapter;
 import cube.ware.service.conference.ConferenceHandle;
 import cube.ware.service.conference.ConferenceStateListener;
 import cube.ware.utils.SpUtil;
@@ -87,9 +86,9 @@ public class ShareScreenActivity extends BaseActivity implements ScreenSwitchUti
     private String inviteID;                           //邀请者ID
     private ScreenSwitchUtils mScreenSwitchUtils;       //屏幕工具管理器 ，主要是横竖屏切换
 
-    private P2PmemberAdapter mAdapter;                  //邀请界面参与人员适配器
-    private P2PmemberAdapter joinedAdapter;             //已加入成员适配器
-    private P2PmemberAdapter tojoinAdapter;             //待加入成员列表
+    private MemberAdapter mAdapter;                  //邀请界面参与人员适配器
+    private MemberAdapter joinedAdapter;             //已加入成员适配器
+    private MemberAdapter tojoinAdapter;             //待加入成员列表
     private ImageView add_member;                       //添加成员
 
     private Conference mConference;                     //当前的共享屏幕流程
@@ -277,7 +276,7 @@ public class ShareScreenActivity extends BaseActivity implements ScreenSwitchUti
                     //暂时是id
                     inviteMembers.add(AppConstants.AVATAR_URL+shareDesktop.invites.get(i).cubeId);
                 }
-                mAdapter = new P2PmemberAdapter(inviteMembers,this);
+                mAdapter = new MemberAdapter(inviteMembers,this);
                 members_recycleview.setLayoutManager(new GridLayoutManager(this, 4));
                 members_recycleview.setAdapter(mAdapter);
             } else {
@@ -317,7 +316,7 @@ public class ShareScreenActivity extends BaseActivity implements ScreenSwitchUti
             for (int i = 0; i <conference.getMembers().size(); i++) {
                 membersList.add(AppConstants.AVATAR_URL+conference.getMembers().get(i).cubeId);
             }
-            P2PmemberAdapter adapter = new P2PmemberAdapter(membersList,this);
+            MemberAdapter adapter = new MemberAdapter(membersList,this);
             RecyclerView.LayoutManager manager = new GridLayoutManager(this,4);
             group_member_face.setLayoutManager(manager);
             group_member_face.setAdapter(adapter);
@@ -415,8 +414,8 @@ public class ShareScreenActivity extends BaseActivity implements ScreenSwitchUti
                 continue;
             }
         }
-        joinedAdapter = new P2PmemberAdapter(membersJoined,this);
-        tojoinAdapter = new P2PmemberAdapter(memberToJoin,this);
+        joinedAdapter = new MemberAdapter(membersJoined,this);
+        tojoinAdapter = new MemberAdapter(memberToJoin,this);
 
     }
 

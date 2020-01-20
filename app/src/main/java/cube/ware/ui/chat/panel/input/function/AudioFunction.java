@@ -14,9 +14,9 @@ import cube.service.whiteboard.model.WhiteBoardInfo;
 import cube.ware.AppConstants;
 import cube.ware.CubeUI;
 import cube.ware.R;
-import cube.ware.data.model.dataModel.enmu.CallStatus;
+import cube.ware.core.data.model.CallStatus;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
-import cube.ware.service.call.manager.OneOnOneCallManager;
+import cube.ware.core.CubeConstants;
 import cube.ware.ui.chat.ChatContainer;
 import cube.ware.utils.SpUtil;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class AudioFunction extends BaseFunction {
     @Override
     public void onClick() {
         if (mCubeSessionType.equals(CubeSessionType.P2P)) {//单聊
-            if (OneOnOneCallManager.getInstance().isCalling()) {
+            if (CubeUI.getInstance().isCalling()) {
                 ToastUtil.showToast(getActivity(), R.string.calling_please_try_again_later);
             }
             else {
@@ -54,7 +54,7 @@ public class AudioFunction extends BaseFunction {
                 bundle.putString("call_id", mChatContainer.mChatId);
                 bundle.putSerializable("call_state", CallStatus.AUDIO_OUTGOING);
                 bundle.putLong("call_time", 0l);
-                ARouter.getInstance().build(AppConstants.Router.P2PCallActivity).withBundle("call_data", bundle).navigation();
+                ARouter.getInstance().build(CubeConstants.Router.P2PCallActivity).withBundle("call_data", bundle).navigation();
             }
         }
         else {//群聊

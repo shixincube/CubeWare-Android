@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">kit-call</string>
+
+    <!-- 音视频通话 -->
+    <string name="refuse">拒绝</string>
+    <string name="answer">接听</string>
+    <string name="hang_up">挂断</string>
+    <string name="speaker">免提</string>
+    <string name="mute">麦克风</string>
+    <string name="join">立即加入</string>
+    <string name="need_join_member">参与人员</string>
+    <string name="audio_calling_title">语音通话</string>
+    <string name="video_calling_title">视频通话</string>
+    <string name="conference_calling">多人语音</string>
+    <string name="wb_calling_title">白板演示</string>
+    <string name="wb_calling">白板演示</string>
+    <string name="sharescreen_calling">共享屏幕</string>
+    <string name="conference_video_Calling">多人语音</string>
+
+    <string name="someone_wanted_to_talk_to_you_voice_calls">邀请您参与多人语音</string>
+    <string name="someone_wanted_to_talk_to_you_video_calls">邀请您参与视频通话</string>
+    <string name="someone_wanted_to_talk_to_you_voice_call">邀请您加入语音通话</string>
+
+    <string name="waiting_for_the_other_answer">正在等待对方接受邀请…</string>
+    <string name="audio_calling">正在进行语音通话...</string>
+    <string name="calling_please_try_again_later">正在通话中，请稍后再试</string>
+    <string name="switch_to_voice">关闭摄像头</string>
+    <string name="switch_to_video">开启摄像头</string>
+    <string name="switch_camera">切换摄像头</string>
+    <string name="network_not_available_please_try_again_later">网络不可用，请稍后再试</string>
+    <string name="call_failure_please_try_again_later">呼叫失败，请稍后再试</string>
+
+    <string name="connection_failure_please_try_again_later">连接失败，请稍后再试</string>
+    <string name="connection_failure">网络异常，通话中断</string>
+    <string name="call_user_busy">对方正在忙</string>
+    <string name="call_voice_not_answer">对方无应答</string>
+    <string name="peer_offline_please_try_again_later">对方无应答</string>
+    <string name="peer_has_refused">对方已拒绝</string>
+    <string name="peer_has_cancelled">对方已取消</string>
+    <string name="refused">已拒绝</string>
+    <string name="cancelled">已取消</string>
+    <string name="call_not_accept">通话未接听</string>
+    <string name="call_completed">通话已结束</string>
+    <string name="other_terminal_has_answered">其它终端已接听</string>
+    <string name="other_terminal_has_cancle">其它终端已拒绝</string>
+</resources>
