@@ -1,0 +1,54 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <!-- 语音呼叫显示UI-->
+    <ViewStub
+        android:id="@+id/call_audio_outgoing_vs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/call_audio_outgoing_view"
+        />
+
+    <!-- 语音来电显示UI,一对一， 群组屏幕分享收到邀请UI-->
+    <ViewStub
+        android:id="@+id/call_audio_incoming_vs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/call_audio_incoming_view"
+        />
+
+    <!-- 语音通话UI-->
+    <ViewStub
+        android:id="@+id/call_audio_vs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/call_audio_view"
+        />
+    <!-- 视频通话UI-->
+    <ViewStub
+        android:id="@+id/call_video_vs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/call_video_view"
+        />
+
+    <!-- 一对一、群组 屏幕分享接通UI-->
+    <ViewStub
+        android:id="@+id/share_screen_connect_vs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/share_screen_connect_view"
+        />
+
+    <!-- 群组屏幕分享，会议，白板，加入显示UI-->
+    <ViewStub
+        android:id="@+id/group_join_vs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/share_screen_join_view"
+        />
+
+</FrameLayout>

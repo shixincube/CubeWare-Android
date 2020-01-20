@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.whiteboard.WhiteBoardActivity">
+    tools:context=".service.whiteboard.ui.WhiteBoardActivity">
     <!--发起的view-->
     <ViewStub
         android:id="@+id/p2p_white_call_layout"

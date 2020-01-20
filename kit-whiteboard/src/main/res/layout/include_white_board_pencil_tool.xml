@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/paint_weight_thin"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_weight="1"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp"
+                android:src="@drawable/wb_paint_thin"/>
+
+            <ImageView
+                android:id="@+id/paint_weight_middle"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp"
+                android:src="@drawable/wb_paint_weight_middle"/>
+
+            <ImageView
+                android:id="@+id/paint_weight_large"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_weight="1"
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
+                android:src="@drawable/wb_paint_weight_large"/>
+
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:id="@+id/wb_getcolor_base_1"
+                android:layout_width="32dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:src="@drawable/wb_getcolor_base_1"/>
+
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:id="@+id/wb_getcolor_base_2"
+                android:layout_width="32dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:src="@drawable/wb_getcolor_base_2"/>
+
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:id="@+id/wb_getcolor_base_7"
+                android:layout_width="32dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:src="@drawable/wb_getcolor_base_6"/>
+
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:id="@+id/wb_getcolor_base_6"
+                android:layout_width="32dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:src="@drawable/wb_getcolor_base_7"/>
+        </LinearLayout>
+
+</LinearLayout>

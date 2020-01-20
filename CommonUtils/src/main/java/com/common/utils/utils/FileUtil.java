@@ -2,7 +2,11 @@ package com.common.utils.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -423,6 +427,33 @@ public final class FileUtil {
             e.printStackTrace();
             return false;
         }
+    }
+
+    /**
+     * 将Uri转换为File
+     *
+     * @param context
+     * @param uri
+     *
+     * @return
+     */
+    public static File uriToFile(@NonNull Context context,@NonNull Uri uri) {
+        File file;
+        String[] project = { MediaStore.Images.Media.DATA };
+        Cursor actualImageCursor = context.getContentResolver().query(uri, project, null, null, null);
+        if (actualImageCursor != null) {
+            int actual_image_column_index = actualImageCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            actualImageCursor.moveToFirst();
+            String img_path = actualImageCursor.getString(actual_image_column_index);
+            file = new File(img_path);
+        }
+        else {
+            file = new File(uri.getPath());
+        }
+        if (actualImageCursor != null) {
+            actualImageCursor.close();
+        }
+        return file;
     }
 
     /**

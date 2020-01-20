@@ -87,6 +87,7 @@ dependencies {
   implementation project(path: ':kit-core')
 //  implementation project(path: ':kit-database')
 //  implementation project(path: ':kit-call')
+  implementation project(path: ':kit-whiteboard')
   implementation developmentDependencies.support_appcompat_v7
   implementation developmentDependencies.support_v4
   implementation developmentDependencies.support_recyclerview_v7

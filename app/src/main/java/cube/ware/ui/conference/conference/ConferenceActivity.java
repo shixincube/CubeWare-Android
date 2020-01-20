@@ -47,7 +47,7 @@ import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.service.conference.ConferenceHandle;
 import cube.ware.service.conference.ConferenceStateListener;
-import cube.ware.ui.whiteboard.adapter.RVJoinedMemAdapter;
+import cube.ware.service.whiteboard.ui.adapter.RVJoinedMemAdapter;
 import cube.ware.utils.SpUtil;
 
 //import cube.service.media.CubeMediaQuality;

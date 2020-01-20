@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">kit-whiteboard</string>
+
+    <string name="whiteboard">白板演示</string>
+    <string name="whiteboard_message">[白板消息]</string>
+    <string name="someone_wanted_to_talk_to_you_wb_calls">邀请您参与白板演示</string>
+    <string name="wb_calling_title">白板演示</string>
+    <string name="wb_calling">白板演示</string>
+    <string name="start_whiteboard">%1$s 人正在白板演示</string>
+    <string name="start_share_screen">%1$s正在屏幕分享</string>
+    <string name="connect_white_borad">白板演示</string>
+    <string name="call_member">通话成员</string>
+    <string name="join">立即加入</string>
+
+    <!--权限申请-->
+    <string name="request_storage_permission">请打开SD卡读取权限！</string>
+    <string name="request_camera_permission">请打开照相机权限！</string>
+    <string name="request_record_permission">请打开录音权限！</string>
+    <string name="request_contact_permission">请打开读取通讯录权限！</string>
+    <string name="request_sms_permission">请打开读取短信权限！</string>
+    <string name="request_basic_permission">请申请APP相关应用权限！</string>
+</resources>

@@ -126,7 +126,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.contact.addfriend.AddFriendActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.whiteboard.WhiteBoardActivity"
+        <activity android:name=".service.whiteboard.ui.WhiteBoardActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.conference.create.CreateConferenceActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|navigation"

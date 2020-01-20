@@ -40,11 +40,11 @@ import cube.ware.ui.conference.eventbus.SelectMemberEvent;
 import cube.ware.ui.conference.listener.ConferenceCreateListener;
 import cube.ware.ui.conference.listener.CreateCallback;
 import cube.ware.ui.contact.adapter.SelectContactsAdapter;
-import cube.ware.ui.whiteboard.listener.WBListener;
+import cube.ware.service.whiteboard.ui.listener.WBListener;
 import cube.ware.utils.SpUtil;
 
 @Route(path= AppConstants.Router.SelectMemberActivity)
-public class SelectMemberActivity extends BaseActivity<SelectPresenter> implements SelectContract.View, SwipeRefreshLayout.OnRefreshListener, SelectContactsAdapter.OnItemSelectedListener, CreateCallback, cube.ware.ui.whiteboard.listener.CreateCallback, RVSelectAdapter.OnItemSelectedShowToast {
+public class SelectMemberActivity extends BaseActivity<SelectPresenter> implements SelectContract.View, SwipeRefreshLayout.OnRefreshListener, SelectContactsAdapter.OnItemSelectedListener, CreateCallback, cube.ware.service.whiteboard.ui.listener.CreateCallback, RVSelectAdapter.OnItemSelectedShowToast {
     private   TextView       mBack;
     private   TextView       mTitle;
     private   TextView       mComplete;

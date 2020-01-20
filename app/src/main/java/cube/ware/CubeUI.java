@@ -11,7 +11,6 @@ import cube.service.common.model.Version;
 import cube.service.message.model.MessageEntity;
 import cube.service.user.UserState;
 import cube.ware.service.conference.ConferenceHandle;
-import cube.ware.service.core.SettingHandle;
 import cube.ware.service.file.FileHandle;
 import cube.ware.service.group.GroupHandle;
 import cube.ware.service.message.MessageHandle;
@@ -131,7 +130,7 @@ public class CubeUI {
         GroupHandle.getInstance().start();
         RemoteDesktopHandle.getInstance().start();
         WhiteBoardHandle.getInstance().start();
-        SettingHandle.getInstance().start();
+        //SettingHandle.getInstance().start();
     }
 
     /**

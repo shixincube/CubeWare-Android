@@ -24,8 +24,8 @@ public interface AppConstants {
      * 测试服环境
      */
     public interface Beta {
-//        String APP_ID      = "a0369a87a945475fb5fdbe07bc760d45";                     // 引擎id
-//        String APP_KEY     = "f3eafec4b4e844e4acfe5ca91d62c2ef";                     // 引擎key
+        //        String APP_ID      = "a0369a87a945475fb5fdbe07bc760d45";                     // 引擎id
+        //        String APP_KEY     = "f3eafec4b4e844e4acfe5ca91d62c2ef";                     // 引擎key
         String APP_ID      = "6365f0cafd8a47b984bdc08a64327881";         // 引擎id
         String APP_KEY     = "9074ad1395f24fbd83a92ddc80facb1f";         // 引擎key
         String BASE_URL    = "https://test-user.shixincube.cn";                      // 服务器接口地址
@@ -36,10 +36,10 @@ public interface AppConstants {
      * 开发服环境
      */
     public interface Develop {
-        String APP_ID               = "c9111d7ccaf14e6bb922c346b9e8fedd";                     // 引擎id
-        String APP_KEY              = "2c96265a9a934735a0b25faa9a410d99";                     // 引擎key
-        String BASE_URL             = "http://125.208.1.66:10021";                            // 基础接口地址
-        String LICENSE_URL          = "https://dev.license.shixincube.cn/auth/license/get";   // license地址
+        String APP_ID      = "c9111d7ccaf14e6bb922c346b9e8fedd";                     // 引擎id
+        String APP_KEY     = "2c96265a9a934735a0b25faa9a410d99";                     // 引擎key
+        String BASE_URL    = "http://125.208.1.66:10021";                            // 基础接口地址
+        String LICENSE_URL = "https://dev.license.shixincube.cn/auth/license/get";   // license地址
     }
 
     //超时时间常量
@@ -60,18 +60,18 @@ public interface AppConstants {
     int NAVIGATION_TYPE_VOICE  = 1013;
 
     // 参数
-    public static final String EXTRA_CHAT_ID            = "chat_id";
-    public static final String EXTRA_CHAT_NAME          = "chat_name";
-    public static final String EXTRA_CHAT_TYPE          = "chat_type";
-    public static final String EXTRA_CHAT_CUSTOMIZATION = "chat_customization";
-    public static final String EXTRA_CHAT_MESSAGE       = "chat_message";
-    public static final String EXTRA_CHAT_RX_MANAGER    = "extra_chat_rx_manager";
-    public static final long   EXTRA_CHAT_MANAGER_SN    = -1;
+    String EXTRA_CHAT_ID            = "chat_id";
+    String EXTRA_CHAT_NAME          = "chat_name";
+    String EXTRA_CHAT_TYPE          = "chat_type";
+    String EXTRA_CHAT_CUSTOMIZATION = "chat_customization";
+    String EXTRA_CHAT_MESSAGE       = "chat_message";
+    String EXTRA_CHAT_RX_MANAGER    = "extra_chat_rx_manager";
+    long   EXTRA_CHAT_MANAGER_SN    = -1;
 
     //请求结果码
-    public static final int REQUEST_CODE_CAMERA_IMAGE = 1; // 拍照图片
-    public static final int REQUEST_CODE_LOCAL_IMAGE  = 2;  // 本地图片
-    public static final int REQUEST_CODE_LOCAL_FILE   = 3;  // 本地文件
+    int REQUEST_CODE_CAMERA_IMAGE = 1; // 拍照图片
+    int REQUEST_CODE_LOCAL_IMAGE  = 2;  // 本地图片
+    int REQUEST_CODE_LOCAL_FILE   = 3;  // 本地文件
 
     // 草稿消息
     String MESSAGE_DRAFT = "message_draft_";
@@ -82,12 +82,6 @@ public interface AppConstants {
      * SharedPreferences常量
      */
     public interface Sp {
-        String RESOURCE_PATH       = "resource_path";
-        String RESOURCE_LOG_PATH   = "resource_log_path";
-        String RESOURCE_IMAGE_PATH = "resource_image_path";
-        String RESOURCE_FILE_PATH  = "resource_file_path";
-        String RESOURCE_THUMB_PATH = "resource_thumb_path";
-
         String PATH_APP   = "CubeWare";                // 根目录
         String PATH_LOG   = "log";                     // 日志目录
         String PATH_IMAGE = "image";                   // 图片目录
@@ -104,13 +98,6 @@ public interface AppConstants {
         String SP_CUBE_AT            = "sp_cube_at" + SP_CUBE;
         String SP_CUBE_AT_ALL        = "sp_cube_at_all" + SP_CUBE;    // @全体成员的数量
         String SP_CUBE_RECEIVE_ATALL = "sp_cube_receive_at_all" + SP_CUBE;//接收到的@All
-    }
-
-    /**
-     * 事件通知
-     */
-    public interface Event {
-
     }
 
     /**

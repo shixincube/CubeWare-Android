@@ -31,6 +31,7 @@ dependencies {
   implementation developmentDependencies.rxpermissions
   implementation developmentDependencies.umeng
   implementation developmentDependencies.umeng_common
+  implementation developmentDependencies.eventbus
 
   implementation project(path: ':CommonUtils')
   implementation project(path: ':CommonSdk')

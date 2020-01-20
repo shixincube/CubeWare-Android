@@ -10,8 +10,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
-import com.common.mvp.rx.RxManager;
+import com.common.mvp.eventbus.Event;
+import com.common.mvp.eventbus.EventBusUtil;
 import com.common.utils.manager.ActivityManager;
 import com.common.utils.receiver.NetworkStateReceiver;
 import com.common.utils.utils.ClickUtil;
@@ -21,6 +21,8 @@ import com.common.utils.utils.log.LogUtil;
 import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * 基础的activity
@@ -33,9 +35,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     protected P       mPresenter;
     protected Bundle  mSavedInstanceState;
     private   Handler mHandler;
-    private boolean mDestroyed = false;
+    private   boolean mDestroyed = false;
     protected Context mContext;
-    protected RxManager mRxManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +44,10 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         ActivityManager.getInstance().addActivity(this);
         setContentView(this.getContentViewId());
         this.mContext = this;
+        if (isRegisterEventBus()) {
+            EventBusUtil.register(this);
+        }
         this.mPresenter = this.createPresenter();
-        mRxManager = new RxManager();
         this.initToolBar();
         this.initView();
         this.initListener();
@@ -339,12 +342,52 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         ClickUtil.clear();
         NetworkStateReceiver.getInstance().removeNetworkStateChangedListener(this);
         this.mDestroyed = true;
+        if (isRegisterEventBus()) {
+            EventBusUtil.unregister(this);
+        }
         if (this.mPresenter != null) {
             this.mPresenter.onDestroy();
         }
-        if (mRxManager != null) {
-            mRxManager.clear();
-            mRxManager = null;
+    }
+
+    /**
+     * 是否注册事件分发
+     *
+     * @return true绑定EventBus事件分发，false不绑定
+     */
+    protected boolean isRegisterEventBus() {
+        return false;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBusCome(Event event) {
+        if (event != null) {
+            onReceiveEvent(event);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onStickyEventBusCome(Event event) {
+        if (event != null) {
+            onReceiveStickyEvent(event);
+        }
+    }
+
+    /**
+     * 接收到分发到事件
+     *
+     * @param event 事件
+     */
+    public <T> void onReceiveEvent(Event<T> event) {
+
+    }
+
+    /**
+     * 接受到分发的粘性事件
+     *
+     * @param event 粘性事件
+     */
+    public <T> void onReceiveStickyEvent(Event<T> event) {
+
     }
 }

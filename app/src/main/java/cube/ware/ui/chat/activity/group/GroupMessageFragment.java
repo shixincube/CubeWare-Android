@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.common.mvp.eventbus.Event;
+import com.common.mvp.eventbus.EventBusUtil;
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
@@ -17,6 +19,7 @@ import cube.service.whiteboard.model.WhiteBoardInfo;
 import cube.service.whiteboard.model.Whiteboard;
 import cube.ware.AppConstants;
 import cube.ware.R;
+import cube.ware.core.CubeConstants;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.ui.chat.message.MessageFragment;
@@ -43,7 +46,7 @@ public class GroupMessageFragment extends MessageFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        EventBus.getDefault().register(this);
+        EventBusUtil.register(this);
         mTipView = (TextView) this.mRootView.findViewById(R.id.group_call_tip);
         getArgument();
         List<String> groupIds = new ArrayList<>();
@@ -93,13 +96,19 @@ public class GroupMessageFragment extends MessageFragment {
     /**
      * 更新TipView的回调，白板相关
      *
-     * @param updateTipViewEvent
+     * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateWhiteBoard(UpdateWhiteBoardTipView updateTipViewEvent) {
-        List<String> groupIds = updateTipViewEvent.mGroupIds;
-        LogUtil.d("===回调到这里了吗===" + groupIds.get(0));
-        queryWhiteBoardByGroupId(groupIds);
+    public void onReceiveEvent(Event event) {
+        switch (event.eventName) {
+            case CubeConstants.Event.UpdateWhiteBoardTipView:
+                List<String> groupIds = (List<String>) event.data;
+                queryWhiteBoardByGroupId(groupIds);
+                break;
+
+            default:
+                break;
+        }
     }
 
     private void queryConferenceByFroupId(List<String> groupIds) {
@@ -246,7 +255,7 @@ public class GroupMessageFragment extends MessageFragment {
                             bundle.putSerializable(AppConstants.Value.CALLSTATA_WHITE_BOARD, AppConstants.Value.CALLSTATE_JOIN);
                             bundle.putSerializable(AppConstants.Value.WHITEBOARD, whiteboards.get(0));//
                             bundle.putSerializable(AppConstants.Value.CHAT_TYPE, CubeSessionType.Group);//
-                            RouterUtil.navigation(getActivity(), bundle, AppConstants.Router.WhiteBoardActivity);
+                            RouterUtil.navigation(getActivity(), bundle, CubeConstants.Router.WhiteBoardActivity);
                         }
                     });
                 }
@@ -260,6 +269,6 @@ public class GroupMessageFragment extends MessageFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EventBus.getDefault().unregister(this);
+        EventBusUtil.unregister(this);
     }
 }

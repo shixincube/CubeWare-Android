@@ -14,5 +14,18 @@ public interface CubeConstants {
     interface Router {
         //一对一语音通话
         String P2PCallActivity = "/app/P2PCallActivity";
+
+        //白板
+        String WhiteBoardActivity = "/app/WhiteBoardActivity";
+
+        //选择人员
+        String SelectMemberActivity = "/app/SelectMemberActivity";
+    }
+
+    /**
+     * 事件通知Key
+     */
+    interface Event {
+        String UpdateWhiteBoardTipView = "UpdateWhiteBoardTipView";
     }
 }

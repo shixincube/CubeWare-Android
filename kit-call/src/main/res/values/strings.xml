@@ -22,7 +22,7 @@
     <string name="someone_wanted_to_talk_to_you_voice_call">邀请您加入语音通话</string>
 
     <string name="waiting_for_the_other_answer">正在等待对方接受邀请…</string>
-    <string name="audio_calling">正在进行语音通话...</string>
+    <string name="audio_calling">正在进行语音通话…</string>
     <string name="calling_please_try_again_later">正在通话中，请稍后再试</string>
     <string name="switch_to_voice">关闭摄像头</string>
     <string name="switch_to_video">开启摄像头</string>
