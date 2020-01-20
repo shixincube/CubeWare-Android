@@ -22,7 +22,7 @@ import cube.ware.AppConstants;
 import cube.ware.CubeUI;
 import cube.ware.R;
 import cube.ware.core.CubeCore;
-import cube.ware.core.data.model.CallStatus;
+import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.service.conference.manager.ConferenceCallManager;
 import cube.ware.service.remoteDesktop.manager.ShareDesketopManager;
 import cube.ware.service.remoteDesktop.ui.ShareScreenActivity;

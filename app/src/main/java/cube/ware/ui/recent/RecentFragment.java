@@ -14,7 +14,6 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.common.mvp.base.BaseFragment;
@@ -25,12 +24,8 @@ import com.common.utils.utils.DateUtil;
 import com.common.utils.utils.NetworkUtil;
 import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.log.LogUtil;
-
-import org.greenrobot.eventbus.Subscribe;
-
-import java.util.List;
-
 import cube.service.CubeEngine;
+import cube.service.common.CubeEngineListener;
 import cube.service.common.CubeState;
 import cube.service.common.model.CubeError;
 import cube.ware.AppConstants;
@@ -41,13 +36,14 @@ import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeRecentSession;
 import cube.ware.eventbus.CubeEvent;
 import cube.ware.eventbus.UpdateRecentListAboutGroup;
-import cube.ware.service.engine.CubeEngineWorkerListener;
 import cube.ware.ui.chat.activity.group.GroupChatCustomization;
 import cube.ware.ui.chat.activity.p2p.P2PChatCustomization;
 import cube.ware.ui.recent.adapter.RecentAdapter;
 import cube.ware.widget.DividerItemDecoration;
 import cube.ware.widget.emptyview.EmptyView;
 import cube.ware.widget.emptyview.EmptyViewUtil;
+import java.util.List;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by dth
@@ -55,7 +51,7 @@ import cube.ware.widget.emptyview.EmptyViewUtil;
  * Date: 2018/8/27.
  */
 
-public class RecentFragment extends BaseFragment<RecentPresenter> implements RecentContract.View, NetworkStateReceiver.NetworkStateChangedListener, CubeEngineWorkerListener {
+public class RecentFragment extends BaseFragment<RecentPresenter> implements RecentContract.View, NetworkStateReceiver.NetworkStateChangedListener, CubeEngineListener {
 
     private RecyclerView   mMessageRecyclerView;
     private ImageView      mToolbarSearch;
@@ -77,8 +73,6 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
     private PopupWindow    popupWindow;
 
     private RelativeLayout tool_bar_layout;
-
-
 
     @Override
     protected int getContentViewId() {
@@ -103,7 +97,7 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
         mMessageRecyclerView.addItemDecoration(itemDecoration);
         tool_bar_layout = ((RelativeLayout) mRootView.findViewById(R.id.tool_bar_layout));
 
-//        mHeaderView = View.inflate(getContext(),R.layout.header_recent_session_recyclerview, null);
+        //        mHeaderView = View.inflate(getContext(),R.layout.header_recent_session_recyclerview, null);
         mHeaderView = getLayoutInflater().inflate(R.layout.header_recent_session_recyclerview, (ViewGroup) mMessageRecyclerView.getParent(), false);
         mRecentMessageTv = (TextView) mHeaderView.findViewById(R.id.recent_message_tv);
         mRecentMessageErrorTv = (TextView) mHeaderView.findViewById(R.id.recent_message_error_tv);
@@ -115,7 +109,6 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
         mOtherPlatLoginTipTv = (TextView) mHeaderView.findViewById(R.id.other_plat_login_tip_tv);
         mOtherPlatLoginTipLl = (LinearLayout) mHeaderView.findViewById(R.id.other_plat_login_tip_ll);
 
-
         mRecentMessageTv.setVisibility(View.GONE);
         mRecentMessageErrorTv.setVisibility(View.GONE);
         mRecentMessagePb.setVisibility(View.GONE);
@@ -126,7 +119,6 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
         mRecentAdapter.addHeaderView(mHeaderView);//添加头视图
         mMessageRecyclerView.setAdapter(mRecentAdapter);
         closeRecyclerViewAnimator(mMessageRecyclerView);
-
 
         if (NetworkUtil.isNetworkConnected(getContext()) && NetworkUtil.isNetAvailable(getContext())) {
             //if (!CubeSpUtil.isFirstSync(CubeSpUtil.getCubeUser().getCubeId())) {
@@ -140,13 +132,12 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
             mEmptyView = EmptyViewUtil.EmptyViewBuilder.getInstance(getActivity()).setItemCountToShowEmptyView(1).setEmptyText(R.string.no_data_no_net_tip).setShowText(true).setIconSrc(R.drawable.ic_nodata_no_net).setShowIcon(true).bindView(this.mMessageRecyclerView);
             mNoNetworkTipLl.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override
     protected void initListener() {
         NetworkStateReceiver.getInstance().addNetworkStateChangedListener(this);
-        CubeUI.getInstance().addCubeEngineWorkerListener(this);
+        CubeEngine.getInstance().addCubeEngineListener(this);
         this.mNoNetworkTipLl.setOnClickListener(this);
         this.mOtherPlatLoginTipLl.setOnClickListener(this);
 
@@ -174,22 +165,13 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
                 CubeRecentSession cubeRecentSession = cubeRecentViewModel.cubeRecentSession;
 
                 if (cubeRecentSession.getSessionType() == CubeSessionType.Group.getType()) {
-                    ARouter.getInstance().build(AppConstants.Router.GroupChatActivity)
-                            .withString(AppConstants.EXTRA_CHAT_ID, cubeRecentSession.getSessionId())
-                            .withString(AppConstants.EXTRA_CHAT_NAME, TextUtils.isEmpty(cubeRecentSession.getSessionName()) ? cubeRecentSession.getSessionId() : cubeRecentSession.getSessionName())
-                            .withSerializable(AppConstants.EXTRA_CHAT_CUSTOMIZATION, new GroupChatCustomization())
-                            .navigation();
-                } else {
-                    ARouter.getInstance().build(AppConstants.Router.P2PChatActivity)
-                            .withString(AppConstants.EXTRA_CHAT_ID,cubeRecentSession.getSessionId())
-                            .withString(AppConstants.EXTRA_CHAT_NAME,TextUtils.isEmpty(cubeRecentSession.getSessionName()) ? cubeRecentSession.getSessionId() : cubeRecentSession.getSessionName())
-                            .withSerializable(AppConstants.EXTRA_CHAT_CUSTOMIZATION,new P2PChatCustomization())
-                            .navigation();
+                    ARouter.getInstance().build(AppConstants.Router.GroupChatActivity).withString(AppConstants.EXTRA_CHAT_ID, cubeRecentSession.getSessionId()).withString(AppConstants.EXTRA_CHAT_NAME, TextUtils.isEmpty(cubeRecentSession.getSessionName()) ? cubeRecentSession.getSessionId() : cubeRecentSession.getSessionName()).withSerializable(AppConstants.EXTRA_CHAT_CUSTOMIZATION, new GroupChatCustomization()).navigation();
                 }
-
+                else {
+                    ARouter.getInstance().build(AppConstants.Router.P2PChatActivity).withString(AppConstants.EXTRA_CHAT_ID, cubeRecentSession.getSessionId()).withString(AppConstants.EXTRA_CHAT_NAME, TextUtils.isEmpty(cubeRecentSession.getSessionName()) ? cubeRecentSession.getSessionId() : cubeRecentSession.getSessionName()).withSerializable(AppConstants.EXTRA_CHAT_CUSTOMIZATION, new P2PChatCustomization()).navigation();
+                }
             }
         });
-
     }
 
     @Override
@@ -201,6 +183,7 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
                 break;
         }
     }
+
     /**
      * 弹出popWindow
      */
@@ -246,15 +229,15 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
         mPresenter.subscribeChange();
         mPresenter.getRecentSessionList();
 
-//        CubeRecentSessionRepository.getInstance().queryAllUnReadCubeRecentSession()
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Action1<List<CubeRecentViewModel>>() {
-//                    @Override
-//                    public void call(List<CubeRecentViewModel> cubeRecentViewModels) {
-//
-//                        mRecentAdapter.setNewData(cubeRecentViewModels);
-//                    }
-//                });
+        //        CubeRecentSessionRepository.getInstance().queryAllUnReadCubeRecentSession()
+        //                .observeOn(AndroidSchedulers.mainThread())
+        //                .subscribe(new Action1<List<CubeRecentViewModel>>() {
+        //                    @Override
+        //                    public void call(List<CubeRecentViewModel> cubeRecentViewModels) {
+        //
+        //                        mRecentAdapter.setNewData(cubeRecentViewModels);
+        //                    }
+        //                });
 
     }
 
@@ -264,7 +247,6 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
         recyclerView.getItemAnimator().setMoveDuration(0);
         recyclerView.getItemAnimator().setRemoveDuration(0);
     }
-
 
     private int getScollYDistance(RecyclerView recyclerView) {
         LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -301,15 +283,16 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
 
     /**
      * 当列表中的群组有会议产生时，更新群组头，作为提示
+     *
      * @param updateRecentListAboutGroup
      */
-  @Subscribe
-  private void updateGroupIcon(UpdateRecentListAboutGroup updateRecentListAboutGroup){
-        if (updateRecentListAboutGroup !=null){
-
+    @Subscribe
+    private void updateGroupIcon(UpdateRecentListAboutGroup updateRecentListAboutGroup) {
+        if (updateRecentListAboutGroup != null) {
 
         }
-  }
+    }
+
     @Override
     public void onNetworkStateChanged(boolean isNetAvailable) {
         if (isNetAvailable) {
@@ -319,7 +302,7 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
             }
             mNoNetworkTipLl.setVisibility(View.GONE);
             RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_SYSTEM_MESSAGE, true);
-//            queryOtherPlayLoginTip();
+            //            queryOtherPlayLoginTip();
         }
         else {
             if (mEmptyView != null) {
@@ -382,7 +365,7 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
 
     @Override
     public void onFailed(CubeError cubeError) {
-        LogUtil.i("CubeEngine_onFailed ->  " +cubeError.toString());
+        LogUtil.i("CubeEngine_onFailed ->  " + cubeError.toString());
         if (mRecentMessagePb != null) {
             mRecentMessagePb.setVisibility(View.GONE);
             if (null != mRecentStatusTv) {
@@ -395,7 +378,9 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
 
     @Override
     public void onRefreshList(List<CubeRecentViewModel> cubeRecentViewModels) {
-        if(cubeRecentViewModels == null)return;
+        if (cubeRecentViewModels == null) {
+            return;
+        }
         mRecentAdapter.replaceData(cubeRecentViewModels);
     }
 
@@ -406,18 +391,19 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
         LogUtil.i("onRefresh -------------" + position);
         if (position != -1) {
             //如果是回执消息引起的刷新
-            if(cubeRecentViewModel.cubeRecentSession.getTimestamp() == data.get(position).cubeRecentSession.getTimestamp()){
-                mRecentAdapter.setData(position,cubeRecentViewModel);
-            }else {
-//                mRecentAdapter.remove(position);
-//                mRecentAdapter.addData(0,cubeRecentViewModel);
+            if (cubeRecentViewModel.cubeRecentSession.getTimestamp() == data.get(position).cubeRecentSession.getTimestamp()) {
+                mRecentAdapter.setData(position, cubeRecentViewModel);
+            }
+            else {
+                //                mRecentAdapter.remove(position);
+                //                mRecentAdapter.addData(0,cubeRecentViewModel);
                 data.remove(position);
-                data.add(0,cubeRecentViewModel);
+                data.add(0, cubeRecentViewModel);
                 mRecentAdapter.notifyDataSetChanged();
             }
-
-        } else {
-            mRecentAdapter.addData(0,cubeRecentViewModel);
+        }
+        else {
+            mRecentAdapter.addData(0, cubeRecentViewModel);
         }
     }
 
@@ -426,13 +412,10 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
         int position = mRecentAdapter.findPosition(sessionId);
         LogUtil.i("onRemoveSession -------------" + position);
         mRecentAdapter.remove(position);
-
     }
 
     @Override
     public void onRefreshListAvatar() {
         mRecentAdapter.notifyDataSetChanged();
     }
-
-
 }

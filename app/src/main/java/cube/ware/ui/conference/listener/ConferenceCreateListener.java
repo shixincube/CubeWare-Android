@@ -14,7 +14,7 @@ import cube.service.common.model.CubeError;
 import cube.service.conference.model.Conference;
 import cube.service.user.model.User;
 import cube.ware.AppConstants;
-import cube.ware.core.data.model.CallStatus;
+import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.service.conference.ConferenceStateListener;
 
 /**

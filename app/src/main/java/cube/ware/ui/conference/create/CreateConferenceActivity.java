@@ -36,7 +36,7 @@ import cube.service.conference.model.ConferenceConfig;
 import cube.service.user.model.User;
 import cube.ware.AppConstants;
 import cube.ware.R;
-import cube.ware.core.data.model.CallStatus;
+import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.service.conference.ConferenceHandle;
 import cube.ware.service.conference.ConferenceStateListener;
 import cube.ware.ui.conference.adapter.RVCreateAdapter;

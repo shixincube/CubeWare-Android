@@ -1,4 +1,4 @@
-package cube.ware.core.data.model;
+package cube.ware.data.model.dataModel.enmu;
 
 import java.io.Serializable;
 

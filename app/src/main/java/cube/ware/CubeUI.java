@@ -12,8 +12,6 @@ import cube.service.message.model.MessageEntity;
 import cube.service.user.UserState;
 import cube.ware.service.conference.ConferenceHandle;
 import cube.ware.service.core.SettingHandle;
-import cube.ware.service.engine.CubeEngineHandle;
-import cube.ware.service.engine.CubeEngineWorkerListener;
 import cube.ware.service.file.FileHandle;
 import cube.ware.service.group.GroupHandle;
 import cube.ware.service.message.MessageHandle;
@@ -21,8 +19,6 @@ import cube.ware.service.remoteDesktop.RemoteDesktopHandle;
 import cube.ware.service.user.UserHandle;
 import cube.ware.service.whiteboard.WhiteBoardHandle;
 import cube.ware.ui.chat.ChatEventListener;
-import cube.ware.ui.recent.listener.UnreadMessageCountListener;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,10 +36,7 @@ public class CubeUI {
 
     private final StringBuilder buffer = new StringBuilder();
 
-    private List<CubeEngineWorkerListener> mCubeEngineWorkerListenerList = new ArrayList<>(); // CubeEngine工作状态监听
-    private List<ChatEventListener>        sChatEventListeners           = new ArrayList<>(); // 会话窗口消息列表一些点击事件的响应处理回调
-
-    private List<WeakReference<UnreadMessageCountListener>> mUnreadMessageCountListeners = new ArrayList<>();//未读消息总数监听器
+    private List<ChatEventListener> sChatEventListeners = new ArrayList<>(); // 会话窗口消息列表一些点击事件的响应处理回调
 
     /**
      * 私有化构造方法
@@ -129,7 +122,7 @@ public class CubeUI {
      * 启动引擎各服务的监听
      */
     private void startListener() {
-        CubeEngineHandle.getInstance().start();
+        //CubeEngineHandle.getInstance().start();
         UserHandle.getInstance().start();
         MessageHandle.getInstance().start();
         //CallHandle.getInstance().start();
@@ -236,32 +229,6 @@ public class CubeUI {
         MobclickAgent.reportError(CubeUI.getInstance().getContext(), buffer.toString());
 
         buffer.delete(0, buffer.length());
-    }
-
-    /**
-     * 添加CubeEngine监听器
-     *
-     * @param cubeEngineWorkerListener
-     */
-    public void addCubeEngineWorkerListener(CubeEngineWorkerListener cubeEngineWorkerListener) {
-        if (cubeEngineWorkerListener != null) {
-            mCubeEngineWorkerListenerList.add(cubeEngineWorkerListener);
-        }
-    }
-
-    /**
-     * 移除CubeEngine监听器
-     *
-     * @param cubeEngineWorkerListener
-     */
-    public void removeCubeEngineWorkerListener(CubeEngineWorkerListener cubeEngineWorkerListener) {
-        if (cubeEngineWorkerListener != null && mCubeEngineWorkerListenerList.contains(cubeEngineWorkerListener)) {
-            mCubeEngineWorkerListenerList.remove(cubeEngineWorkerListener);
-        }
-    }
-
-    public List<CubeEngineWorkerListener> getCubeEngineWorkerListener() {
-        return mCubeEngineWorkerListenerList;
     }
 
     /**

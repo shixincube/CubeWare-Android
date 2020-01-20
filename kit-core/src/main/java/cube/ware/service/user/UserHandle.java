@@ -17,8 +17,6 @@ import cube.service.user.UserListener;
 import cube.service.user.model.User;
 import cube.ware.data.repository.CubeUserRepository;
 import cube.ware.data.room.model.CubeUser;
-import cube.ware.eventbus.CubeEvent;
-import cube.ware.utils.SpUtil;
 import rx.functions.Action1;
 
 /**
@@ -110,16 +108,16 @@ public class UserHandle implements UserListener {
     public void onUserUpdated(User user) {
         //更新SPUtil中保存的用户信息
         LogUtil.d("===更新用户信息==: " + user);
-        SpUtil.setCubeId(user.cubeId);
-        SpUtil.setUserAvator(user.avatar);
-        SpUtil.setUserName(user.displayName);
+        //SpUtil.setCubeId(user.cubeId);
+        //SpUtil.setUserAvator(user.avatar);
+        //SpUtil.setUserName(user.displayName);
         CubeCore.getInstance().setCubeId(user.cubeId);
 
         CubeUser cubeUser = new CubeUser(user.cubeId, user.displayName, user.avatar);
         CubeUserRepository.getInstance().saveUser(cubeUser).subscribe(new Action1<CubeUser>() {
             @Override
             public void call(CubeUser cubeUser) {
-                RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_CUBE_USER,cubeUser);
+                //RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_CUBE_USER,cubeUser);
             }
         });
     }

@@ -14,7 +14,7 @@ import cube.service.whiteboard.model.WhiteBoardInfo;
 import cube.ware.AppConstants;
 import cube.ware.CubeUI;
 import cube.ware.R;
-import cube.ware.core.data.model.CallStatus;
+import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.core.CubeConstants;
 import cube.ware.ui.chat.ChatContainer;

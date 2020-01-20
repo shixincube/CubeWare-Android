@@ -31,7 +31,7 @@ import cube.service.common.model.CubeErrorCode;
 import cube.service.media.MediaService;
 import cube.service.user.model.User;
 import cube.ware.core.CubeCore;
-import cube.ware.core.data.model.CallStatus;
+import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.data.repository.CubeUserRepository;
 import cube.ware.data.room.model.CubeUser;
 import cube.ware.core.CubeConstants;

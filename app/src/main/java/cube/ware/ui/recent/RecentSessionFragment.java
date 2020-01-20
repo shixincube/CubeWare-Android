@@ -27,6 +27,7 @@ import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
 import cube.service.common.CubeCallback;
+import cube.service.common.CubeEngineListener;
 import cube.service.common.CubeState;
 import cube.service.common.model.CubeError;
 import cube.service.recent.RecentSession;
@@ -37,7 +38,6 @@ import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.eventbus.CubeEvent;
 import cube.ware.eventbus.UpdateRecentListAboutGroup;
-import cube.ware.service.engine.CubeEngineWorkerListener;
 import cube.ware.ui.chat.activity.group.GroupChatCustomization;
 import cube.ware.ui.chat.activity.p2p.P2PChatCustomization;
 import cube.ware.ui.recent.adapter.RecentSessionAdapter;
@@ -53,7 +53,7 @@ import org.greenrobot.eventbus.Subscribe;
  * Date: 2018/9/28.
  */
 
-public class RecentSessionFragment extends BaseFragment implements NetworkStateReceiver.NetworkStateChangedListener, CubeEngineWorkerListener, RecentSessionListener {
+public class RecentSessionFragment extends BaseFragment implements NetworkStateReceiver.NetworkStateChangedListener, CubeEngineListener, RecentSessionListener {
 
     private RecyclerView         mMessageRecyclerView;
     private ImageView            mToolbarSearch;
@@ -136,7 +136,7 @@ public class RecentSessionFragment extends BaseFragment implements NetworkStateR
     @Override
     protected void initListener() {
         NetworkStateReceiver.getInstance().addNetworkStateChangedListener(this);
-        CubeUI.getInstance().addCubeEngineWorkerListener(this);
+        CubeEngine.getInstance().addCubeEngineListener(this);
         CubeEngine.getInstance().getRecentSessionService().addRecentSessionListener(this);
         this.mNoNetworkTipLl.setOnClickListener(this);
         this.mOtherPlatLoginTipLl.setOnClickListener(this);
