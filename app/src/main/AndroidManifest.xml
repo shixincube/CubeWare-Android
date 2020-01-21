@@ -86,7 +86,7 @@
             android:name=".ui.contact.select.SelectContactActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.group.details.GroupDetailsActivity"
+            android:name=".ui.group.groupDetails.GroupDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.contact.friend.details.FriendDetailsActivity"

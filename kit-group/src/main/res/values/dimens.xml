@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- 可触摸组件的高度 -->
+    <dimen name="view_height_1">1dp</dimen>
+    <dimen name="view_height_4">4dp</dimen>
+    <dimen name="view_height_6">6dp</dimen>
+    <dimen name="view_height_8">8dp</dimen>
+    <dimen name="view_height_10">10dp</dimen>
+    <dimen name="view_height_12">12dp</dimen>
+    <dimen name="view_height_16">16dp</dimen>
+    <dimen name="view_height_18">18dp</dimen>
+    <dimen name="view_height_22">22dp</dimen>
+    <dimen name="view_height_28">28dp</dimen>
+    <dimen name="view_height_30">30dp</dimen>
+    <dimen name="view_height_32">32dp</dimen>
+    <dimen name="view_height_34">34dp</dimen>
+    <dimen name="view_height_36">36dp</dimen>
+    <dimen name="view_height_38">38dp</dimen>
+    <dimen name="view_height_40">40dp</dimen>
+    <dimen name="view_height_44">44dp</dimen>
+    <dimen name="view_height_45">45dp</dimen>
+    <dimen name="view_height_48">48dp</dimen>
+    <dimen name="view_height_50">50dp</dimen>
+    <dimen name="view_height_52">52dp</dimen>
+    <dimen name="view_height_54">54dp</dimen>
+    <dimen name="view_height_56">56dp</dimen>
+    <dimen name="view_height_58">58dp</dimen>
+    <dimen name="view_height_60">60dp</dimen>
+    <dimen name="view_height_64">64dp</dimen>
+    <dimen name="view_height_66">66dp</dimen>
+    <dimen name="view_height_72">72dp</dimen>
+    <dimen name="view_height_76">76dp</dimen>
+    <dimen name="view_height_80">80dp</dimen>
+    <dimen name="view_height_82">82dp</dimen>
+    <dimen name="view_height_86">86dp</dimen>
+    <dimen name="view_height_90">90dp</dimen>
+    <dimen name="view_height_96">96dp</dimen>
+    <dimen name="view_height_110">110dp</dimen>
+    <dimen name="view_height_116">116dp</dimen>
+    <dimen name="view_height_120">120dp</dimen>
+    <dimen name="view_height_126">126dp</dimen>
+    <dimen name="view_height_160">160dp</dimen>
+    <dimen name="view_height_168">168dp</dimen>
+    <dimen name="view_height_170">170dp</dimen>
+    <dimen name="view_height_180">180dp</dimen>
+    <dimen name="view_height_220">220dp</dimen>
+    <dimen name="view_height_245">245dp</dimen>
+    <dimen name="view_height_256">256dp</dimen>
+
+    <!-- 组件之间的间距 -->
+    <dimen name="view_space_2">2dp</dimen>
+    <dimen name="view_space_4">4dp</dimen>
+    <dimen name="view_space_6">6dp</dimen>
+    <dimen name="view_space_8">8dp</dimen>
+    <dimen name="view_space_9">9dp</dimen>
+    <dimen name="view_space_10">10dp</dimen>
+    <dimen name="view_space_11">11dp</dimen>
+    <dimen name="view_space_12">12dp</dimen>
+    <dimen name="view_space_14">14dp</dimen>
+    <dimen name="view_space_16">16dp</dimen>
+    <dimen name="view_space_18">18dp</dimen>
+    <dimen name="view_space_20">20dp</dimen>
+    <dimen name="view_space_22">22dp</dimen>
+    <dimen name="view_space_24">24dp</dimen>
+    <dimen name="view_space_26">26dp</dimen>
+    <dimen name="view_space_32">32dp</dimen>
+    <dimen name="view_space_30">30dp</dimen>
+    <dimen name="view_space_34">34dp</dimen>
+    <dimen name="view_space_36">36dp</dimen>
+    <dimen name="view_space_38">38dp</dimen>
+    <dimen name="view_space_40">40dp</dimen>
+    <dimen name="view_space_44">44dp</dimen>
+    <dimen name="view_space_46">46dp</dimen>
+    <dimen name="view_space_48">48dp</dimen>
+    <dimen name="view_space_50">50dp</dimen>
+    <dimen name="view_space_52">52dp</dimen>
+    <dimen name="view_space_56">56dp</dimen>
+    <dimen name="view_space_60">60dp</dimen>
+    <dimen name="view_space_64">64dp</dimen>
+    <dimen name="view_space_70">70dp</dimen>
+    <dimen name="view_space_72">72dp</dimen>
+    <dimen name="view_space_76">76dp</dimen>
+    <dimen name="view_space_84">84dp</dimen>
+    <dimen name="view_space_86">86dp</dimen>
+    <dimen name="view_space_89">89dp</dimen>
+    <dimen name="view_space_100">100dp</dimen>
+    <dimen name="view_space_120">120dp</dimen>
+    <dimen name="view_space_110">110dp</dimen>
+    <dimen name="view_space_126">126dp</dimen>
+    <dimen name="view_space_130">130dp</dimen>
+    <dimen name="view_height_134">134dp</dimen>
+    <dimen name="view_space_136">136dp</dimen>
+    <dimen name="view_space_150">150dp</dimen>
+    <dimen name="view_space_160">160dp</dimen>
+    <dimen name="view_space_165">165dp</dimen>
+    <dimen name="view_space_170">170dp</dimen>
+    <dimen name="view_space_200">200dp</dimen>
+    <dimen name="view_space_234">234dp</dimen>
+    <dimen name="view_space_240">240dp</dimen>
+    <dimen name="view_space_248">248dp</dimen>
+    <dimen name="view_space_250">250dp</dimen>
+    <dimen name="view_space_256">256dp</dimen>
+    <dimen name="view_space_288">288dp</dimen>
+    <dimen name="view_space_340">340dp</dimen>
+    <dimen name="view_space_400">400dp</dimen>
+    <dimen name="function_viewpager_height">210dp</dimen>
+    <dimen name="tips_max_height">300dp</dimen>
+    <dimen name="dialog_height">164dp</dimen>
+
+    <!-- 文字大小 -->
+    <dimen name="text_size_10">10sp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_22">22sp</dimen>
+    <dimen name="text_size_24">24sp</dimen>
+    <dimen name="text_size_28">28sp</dimen>
+    <dimen name="text_size_30">30sp</dimen>
+    <dimen name="text_size_36">36sp</dimen>
+    <dimen name="text_size_50">50sp</dimen>
+
+    <!-- 分割线大小 -->
+    <dimen name="divider_size_1">1dp</dimen>
+    <dimen name="divider_size_2">2dp</dimen>
+    <dimen name="divider_size_4">4dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- 聊天头像的大小 -->
+    <dimen name="chat_head_size">40dp</dimen>
+    <!--卡片消息Big Icon-->
+    <dimen name="chat_card_msg_icon_big">60dp</dimen>
+    <!--卡片消息 content宽度-->
+    <dimen name="chat_card_msg_cardcontent_width">200dp</dimen>
+    <!-- 聊天内容的最大宽度 -->
+    <dimen name="chat_content_size">240dp</dimen>
+    <!-- 聊天消息的进度条大小 -->
+    <dimen name="chat_item_progress_size">16dp</dimen>
+
+    <!-- 文件管理条目图标的大小 -->
+    <dimen name="file_ic_size">40dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <!-- 日程日历数字的大小 -->
+    <integer name="calendar_text_size">14</integer>
+    <dimen name="card_width">340dp</dimen>
+    <dimen name="chat_panel_title_bar_height">54dp</dimen>
+
+    <!--新标注textsize-->
+    <dimen name="F1">32sp</dimen>
+    <dimen name="F2">18sp</dimen>
+    <dimen name="F3">16sp</dimen>
+    <dimen name="F4">14sp</dimen>
+    <dimen name="F5">12sp</dimen>
+    <dimen name="F6">10sp</dimen>
+    <dimen name="F7">8sp</dimen>
+</resources>

@@ -18,6 +18,9 @@ public interface CubeConstants {
         //白板
         String WhiteBoardActivity = "/whiteboard/WhiteBoardActivity";
 
+        //选择联系人
+        String SelectContactActivity = "/app/SelectContactActivity";
+
         //选择人员
         String SelectMemberActivity = "/app/SelectMemberActivity";
 
@@ -29,6 +32,15 @@ public interface CubeConstants {
 
         //会议创建
         String CreateConferenceActivity = "/conference/CreateConferenceActivity";
+
+        //群组详情
+        String GroupDetailsActivity = "/app/GroupDetailsActivity";
+
+        //group聊天
+        String GroupChatActivity = "/app/GroupChatActivity";
+
+        //修改昵称
+        String ModifyNameActivity = "/app/ModifyNameActivity";
     }
 
     /**

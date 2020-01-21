@@ -31,7 +31,7 @@ import cube.ware.R;
 import cube.ware.data.room.model.CubeUser;
 import cube.ware.service.group.GroupHandle;
 import cube.ware.ui.contact.adapter.SelectContactsAdapter;
-import cube.ware.ui.group.adapter.GroupListenerAdapter;
+import cube.ware.service.group.GroupListenerAdapter;
 import cube.ware.utils.SpUtil;
 import cube.ware.widget.indexbar.CubeIndexBar;
 import cube.ware.widget.indexbar.SuspensionDecoration;
@@ -56,9 +56,11 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
     private String                     mName;
     private SelectContactsAdapter mAdapter;
     private LinkedHashMap<String, CubeUser> mSelectedList = new LinkedHashMap<>();
+
     public static final String NOT_CHECKED_LIST = "not_checked_list";
     public static final String TYPE = "type";
     public static final String GROUP_ID = "group_id";
+
     @Autowired(name = NOT_CHECKED_LIST)
     public ArrayList<String> mNotCheckedList;
 

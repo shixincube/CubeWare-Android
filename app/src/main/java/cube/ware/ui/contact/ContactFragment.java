@@ -25,7 +25,7 @@ import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.ui.contact.adapter.ContactPagerAdapter;
 import cube.ware.ui.contact.friend.FriendListFragment;
-import cube.ware.ui.contact.group.GroupListFragment;
+import cube.ware.service.group.groupList.GroupListFragment;
 import cube.ware.utils.TabLayoutUtil;
 import cube.ware.widget.CustomViewPager;
 
