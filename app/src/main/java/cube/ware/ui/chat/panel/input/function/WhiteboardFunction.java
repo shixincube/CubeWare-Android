@@ -16,6 +16,7 @@ import cube.service.whiteboard.model.WhiteboardConfig;
 import cube.ware.AppConstants;
 import cube.ware.CubeUI;
 import cube.ware.R;
+import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.service.whiteboard.WhiteBoardHandle;
 import cube.ware.service.whiteboard.manager.WBCallManager;
@@ -43,7 +44,7 @@ public class WhiteboardFunction extends BaseFunction implements CreateCallback {
             return;
         }
         if (getChatType().equals(CubeSessionType.P2P)) {//单聊
-            if (WBCallManager.getInstance().isCalling()) {
+            if (CubeCore.getInstance().isCalling()) {
                 ToastUtil.showToast(getActivity(), R.string.calling_please_try_again_later);
             }
             else {
@@ -87,20 +88,6 @@ public class WhiteboardFunction extends BaseFunction implements CreateCallback {
                 isHasWhiteBoard();
             }
         });
-
-        //        CubeEngine.getInstance().getConferenceService().queryConferenceDetails(getChatId(), new CubeCallback<Conference>() {
-        //            @Override
-        //            public void onSucceed(Conference conference) {
-        //                if(conference!=null){
-        //                    ToastUtil.showToast(getActivity(),"当前存在会议");
-        //                }
-        //            }
-        //
-        //            @Override
-        //            public void onFailed(CubeError error) {
-        //                isHasWhiteBoard();
-        //            }
-        //        });
     }
 
     private void isHasWhiteBoard() {

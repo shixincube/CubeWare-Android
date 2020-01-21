@@ -150,7 +150,7 @@ public class ChatMoreFunctionFragment extends Fragment implements View.OnClickLi
                 break;
             case R.id.white_board_layout: //白板
                 if (mChatType.equals(CubeSessionType.P2P)) {//单聊
-                    if (WBCallManager.getInstance().isCalling()) {
+                    if (CubeCore.getInstance().isCalling()) {
                         ToastUtil.showToast(mChatActivity, R.string.calling_please_try_again_later);
                     }
                     else {

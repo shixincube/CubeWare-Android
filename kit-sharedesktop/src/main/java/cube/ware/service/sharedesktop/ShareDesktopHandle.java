@@ -1,22 +1,17 @@
-package cube.ware.service.remoteDesktop;
+package cube.ware.service.sharedesktop;
 
 import android.content.Context;
-
 import com.common.utils.utils.RingtoneUtil;
 import com.common.utils.utils.log.LogUtil;
-
-import cube.ware.CubeUI;
-import java.util.ArrayList;
-import java.util.List;
-
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.sharedesktop.ShareDesktopExtListener;
 import cube.service.sharedesktop.ShareDesktopListener;
 import cube.service.sharedesktop.model.ShareDesktop;
 import cube.service.user.model.User;
-import cube.ware.R;
-import cube.ware.service.remoteDesktop.manager.ShareDesketopManager;
+import cube.ware.core.CubeCore;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 引擎远程桌面服务处理
@@ -24,15 +19,15 @@ import cube.ware.service.remoteDesktop.manager.ShareDesketopManager;
  * @author LiuFeng
  * @date 2018-8-09
  */
-public class RemoteDesktopHandle implements ShareDesktopExtListener {
+public class ShareDesktopHandle implements ShareDesktopExtListener {
 
-    private static RemoteDesktopHandle instance = new RemoteDesktopHandle();
-    private List<ShareDesktopExtListener> mShareDesktopExtListeners          = new ArrayList<>();
-    private Context mContext ;
+    private static ShareDesktopHandle            instance                  = new ShareDesktopHandle();
+    private        List<ShareDesktopExtListener> mShareDesktopExtListeners = new ArrayList<>();
+    private        Context                       mContext;
 
-    private RemoteDesktopHandle() {}
+    private ShareDesktopHandle() {}
 
-    public static RemoteDesktopHandle getInstance() {
+    public static ShareDesktopHandle getInstance() {
         return instance;
     }
 
@@ -40,7 +35,7 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
      * 启动监听
      */
     public void start() {
-        mContext = CubeUI.getInstance().getContext();
+        mContext = CubeCore.getContext();
         CubeEngine.getInstance().getShareDesktopService().addShareDesktopListener(this);
     }
 
@@ -53,15 +48,17 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
 
     /**
      * 添加一个共享屏幕监听
+     *
      * @param listener
      */
-    public void addShareDesktipListener (ShareDesktopExtListener listener){
+    public void addShareDesktipListener(ShareDesktopExtListener listener) {
         mShareDesktopExtListeners.add(listener);
-
     }
-    public void removeShareDesktipListener(ShareDesktopExtListener listener){
+
+    public void removeShareDesktipListener(ShareDesktopExtListener listener) {
         mShareDesktopExtListeners.remove(listener);
     }
+
     /**
      * 当桌面创建时回调
      *
@@ -70,7 +67,7 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
      */
     @Override
     public void onShareDesktopCreated(ShareDesktop sd, User fromUser) {
-        LogUtil.i("共享屏幕创建回调，当绑定群组===> onShareDesktopCreated"+sd.bindGroupId);
+        LogUtil.i("共享屏幕创建回调，当绑定群组===> onShareDesktopCreated" + sd.bindGroupId);
         // 播放来电铃声
         RingtoneUtil.play(R.raw.ringing, mContext);
         if (this.mShareDesktopExtListeners != null && !this.mShareDesktopExtListeners.isEmpty()) {
@@ -80,7 +77,6 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
                 }
             }
         }
-
     }
 
     /**
@@ -92,7 +88,6 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
      */
     @Override
     public void onShareDesktopDestroyed(ShareDesktop sd, User fromUser) {
-        ShareDesketopManager.getInstance().removeShareDesktop(sd);
         if (this.mShareDesktopExtListeners != null && !this.mShareDesktopExtListeners.isEmpty()) {
             for (ShareDesktopListener listener : this.mShareDesktopExtListeners) {
                 if (listener != null) {
@@ -100,7 +95,6 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
                 }
             }
         }
-
     }
 
     /**
@@ -160,7 +154,7 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
      */
     @Override
     public void onShareDesktopConnectShared(ShareDesktop sd, String srcCubeID, String targetCubeID) {
-        LogUtil.d( "====onShareDesktopConnectShared: ---- 桌面分享连接成功"+sd.desktopId);
+        LogUtil.d("====onShareDesktopConnectShared: ---- 桌面分享连接成功" + sd.desktopId);
         //桌面共享连接成功
         if (this.mShareDesktopExtListeners != null && !this.mShareDesktopExtListeners.isEmpty()) {
             for (ShareDesktopListener listener : this.mShareDesktopExtListeners) {
@@ -169,7 +163,6 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
                 }
             }
         }
-
     }
 
     /**
@@ -187,7 +180,6 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
                 }
             }
         }
-
     }
 
     /**
@@ -198,32 +190,32 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
      */
     public void onShareDesktopInvited(ShareDesktop sd, User fromUser) {
 
-//        LogUtil.d("====收到邀请 --- " + sd.desktopId);
-//        //需要验证此处通知的对象是所有群成员还是别邀请的群成员
-//        ShareDesketopManager.getInstance().saveShareDesktop(sd);
-//        Activity activity = ActivityManager.getInstance().findActivity(ShareScreenActivity.class);
-//        LogUtil.d("===onShareDesktopInvited: --- activity --- " + activity);
-//        for (Member invite : sd.invites) {
-//            if (TextUtils.equals(invite.cubeId, CubeEngine.getInstance().getSession().user.cubeId) && activity == null) {
-//                //收到远程桌面邀请回调 并且自己在被邀请者集合里面 并且桌面activity没被启动过
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("shaerdesketop",sd);
-//                bundle.putString("inviteId",fromUser.cubeId);
-//                bundle.putSerializable("statues", CallStatus.REMOTE_DESKTOP_INCOMING);
-//                ARouter.getInstance().build(AppConstants.Router.P2PCallActivity).withBundle("desketop_data",bundle).navigation();
-//                // 播放来电铃声
-//                RingtoneUtil.play(R.raw.ringing, mContext);
-//                break;
-//            }
-//        }
-//
-//        if (this.mShareDesktopExtListeners != null && !this.mShareDesktopExtListeners.isEmpty()) {
-//            for (ShareDesktopListener listener : this.mShareDesktopExtListeners) {
-//                if (listener != null) {
-//                    listener.onShareDesktopInvited(sd, fromUser);
-//                }
-//            }
-//        }
+        //        LogUtil.d("====收到邀请 --- " + sd.desktopId);
+        //        //需要验证此处通知的对象是所有群成员还是别邀请的群成员
+        //        ShareDesketopManager.getInstance().saveShareDesktop(sd);
+        //        Activity activity = ActivityManager.getInstance().findActivity(ShareScreenActivity.class);
+        //        LogUtil.d("===onShareDesktopInvited: --- activity --- " + activity);
+        //        for (Member invite : sd.invites) {
+        //            if (TextUtils.equals(invite.cubeId, CubeEngine.getInstance().getSession().user.cubeId) && activity == null) {
+        //                //收到远程桌面邀请回调 并且自己在被邀请者集合里面 并且桌面activity没被启动过
+        //                Bundle bundle = new Bundle();
+        //                bundle.putSerializable("shaerdesketop",sd);
+        //                bundle.putString("inviteId",fromUser.cubeId);
+        //                bundle.putSerializable("statues", CallStatus.REMOTE_DESKTOP_INCOMING);
+        //                ARouter.getInstance().build(AppConstants.Router.P2PCallActivity).withBundle("desketop_data",bundle).navigation();
+        //                // 播放来电铃声
+        //                RingtoneUtil.play(R.raw.ringing, mContext);
+        //                break;
+        //            }
+        //        }
+        //
+        //        if (this.mShareDesktopExtListeners != null && !this.mShareDesktopExtListeners.isEmpty()) {
+        //            for (ShareDesktopListener listener : this.mShareDesktopExtListeners) {
+        //                if (listener != null) {
+        //                    listener.onShareDesktopInvited(sd, fromUser);
+        //                }
+        //            }
+        //        }
 
     }
 
@@ -235,7 +227,7 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
      * @param joinedMembers 加入者user实体
      */
     public void onShareDesktopInviteJoined(ShareDesktop sd, User fromUser, User joinedMembers) {
-        LogUtil.d( "onShareDesktopInviteJoined:=== 同意邀请回调 --- ");
+        LogUtil.d("onShareDesktopInviteJoined:=== 同意邀请回调 --- ");
         //同意邀请 桌面共享
         if (this.mShareDesktopExtListeners != null && !this.mShareDesktopExtListeners.isEmpty()) {
             for (ShareDesktopListener listener : this.mShareDesktopExtListeners) {
@@ -244,7 +236,6 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
                 }
             }
         }
-
     }
 
     /**
@@ -280,7 +271,6 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
                 }
             }
         }
-
     }
 
     /**
@@ -350,6 +340,7 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
 
     /**
      * 其他终端退出同步
+     *
      * @param shareDesktop
      * @param fromUser
      */
@@ -358,15 +349,15 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
         if (this.mShareDesktopExtListeners != null && !this.mShareDesktopExtListeners.isEmpty()) {
             for (ShareDesktopExtListener listener : this.mShareDesktopExtListeners) {
                 if (listener != null) {
-                    listener.onShareDesktopQuitedOther(shareDesktop,fromUser);
+                    listener.onShareDesktopQuitedOther(shareDesktop, fromUser);
                 }
             }
         }
-
     }
 
     /**
      * 其他 终端收到邀请同步
+     *
      * @param shareDesktop
      * @param fromUser
      */
@@ -375,15 +366,15 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
         if (this.mShareDesktopExtListeners != null && !this.mShareDesktopExtListeners.isEmpty()) {
             for (ShareDesktopExtListener listener : this.mShareDesktopExtListeners) {
                 if (listener != null) {
-                    listener.onShareDesktopInvitedOther(shareDesktop,fromUser);
+                    listener.onShareDesktopInvitedOther(shareDesktop, fromUser);
                 }
             }
         }
-
     }
 
     /**
      * 其他终端同意加入同步
+     *
      * @param shareDesktop
      * @param fromUser
      * @param joinedMembers
@@ -393,7 +384,7 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
         if (this.mShareDesktopExtListeners != null && !this.mShareDesktopExtListeners.isEmpty()) {
             for (ShareDesktopExtListener listener : this.mShareDesktopExtListeners) {
                 if (listener != null) {
-                    listener.onShareDesktopInviteJoinedOther(shareDesktop,fromUser,joinedMembers);
+                    listener.onShareDesktopInviteJoinedOther(shareDesktop, fromUser, joinedMembers);
                 }
             }
         }
@@ -401,6 +392,7 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
 
     /**
      * 其他终端拒绝邀请同步
+     *
      * @param shareDesktop
      * @param fromUser
      * @param rejectMember
@@ -410,10 +402,9 @@ public class RemoteDesktopHandle implements ShareDesktopExtListener {
         if (this.mShareDesktopExtListeners != null && !this.mShareDesktopExtListeners.isEmpty()) {
             for (ShareDesktopExtListener listener : this.mShareDesktopExtListeners) {
                 if (listener != null) {
-                    listener.onShareDesktopRejectInvitedOther(shareDesktop,fromUser,rejectMember);
+                    listener.onShareDesktopRejectInvitedOther(shareDesktop, fromUser, rejectMember);
                 }
             }
         }
-
     }
 }

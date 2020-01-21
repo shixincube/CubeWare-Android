@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.common.utils.utils.glide.GlideUtil;
 import cube.ware.core.CubeCore;
-import cube.ware.service.R;
+import cube.ware.service.whiteboard.R;
 import java.util.List;
 
 /**

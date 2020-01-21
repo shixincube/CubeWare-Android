@@ -17,7 +17,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.common.mvp.base.BaseActivity;
@@ -26,16 +25,13 @@ import com.common.utils.utils.RingtoneUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.glide.GlideUtil;
 import com.common.utils.utils.log.LogUtil;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.common.model.CubeErrorCode;
+import cube.service.conference.ConferenceListener;
 import cube.service.conference.model.Conference;
 import cube.service.conference.model.ConferenceControl;
+import cube.service.conference.model.ConferenceStream;
 import cube.service.conference.model.ControlAction;
 import cube.service.conference.model.MemberStatus;
 import cube.service.group.GroupType;
@@ -46,63 +42,65 @@ import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.service.conference.ConferenceHandle;
-import cube.ware.service.conference.ConferenceStateListener;
 import cube.ware.service.whiteboard.ui.adapter.RVJoinedMemAdapter;
 import cube.ware.utils.SpUtil;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 //import cube.service.media.CubeMediaQuality;
 
-@Route(path=AppConstants.Router.ConferenceActivity)
-public class ConferenceActivity extends BaseActivity<ConferencePresenter> implements ConferenceContract.View, ConferenceStateListener {
+@Route(path = AppConstants.Router.ConferenceActivity)
+public class ConferenceActivity extends BaseActivity<ConferencePresenter> implements ConferenceContract.View, ConferenceListener {
 
-    private ViewStub mVSConferenceReceiveLayout;  // 受邀
-    private ViewStub mVSConferenceLayout;  //  视频演示
-    private ViewStub mVSApplyJoinConferenceLayout;  // 申请加入
-    private ViewStub mVSAudioConferenceLayout;  // 音频演示
-    private CallStatus callState;
-    private ImageView mIvPeerHeader;
-    private TextView mTvPeerName;
-    private Button mBtCancel;
-    private TextView mTvTitle;
+    private ViewStub     mVSConferenceReceiveLayout;  // 受邀
+    private ViewStub     mVSConferenceLayout;  //  视频演示
+    private ViewStub     mVSApplyJoinConferenceLayout;  // 申请加入
+    private ViewStub     mVSAudioConferenceLayout;  // 音频演示
+    private CallStatus   callState;
+    private ImageView    mIvPeerHeader;
+    private TextView     mTvPeerName;
+    private Button       mBtCancel;
+    private TextView     mTvTitle;
     private LinearLayout mLlVideoView;
-    private Button mBtHangUp;
+    private Button       mBtHangUp;
     private RecyclerView mRvJoined;
     private RecyclerView mRvWaiteJoined;
-    private Button mBtAnswer;
-    private Button mBtRefuse;
+    private Button       mBtAnswer;
+    private Button       mBtRefuse;
     private LinearLayout mPeerVideoLayout;    // 对方的视频布局
     private LinearLayout mMyVideoLayout;    // 自己的视频布局
     private View         mMyVideoView;    // 自己的视频view
     private View         mPeerVideoView;    // 对方的视频view
 
-    private Conference mConference;
+    private Conference        mConference;
     private ArrayList<String> mInviteList;
-    private String mInviteId;
-    private String TAG="ConferenceActivity";
-    private String mGroupId;
+    private String            mInviteId;
+    private String            TAG = "ConferenceActivity";
+    private String            mGroupId;
 
     private LinearLayoutManager mLayoutManagerJoined;
     private LinearLayoutManager mLayoutManagerWaite;
-    private List<String> joinedList =new ArrayList<>();
-    private List<String> waiteJoinedList=new ArrayList<>();
-    private RVJoinedMemAdapter mRvWaiteJoinedMemAdapter;
-    private RVJoinedMemAdapter mRvJoinedMemAdapter;
-    private User mUserSelf;
-    private Button mSwitchCameraBtn;
-    private Button mCallSwitchMuteBtn;
-    private Button mCallSswitchSpeakerBtn;
-    private Button mCallSwitchAudioBtn;
-    private Chronometer mCallTimeTip;
-    private ImageButton mBtAddMem;
-    private RecyclerView mRvNeedInvite;
-    private TextView mTvCallType;
-    private RVJoinedMemAdapter mRvNeedInviteAdapter;
-    private Button mBtJoin;
-    private TextView mTvJoinTitle;
-    private ProgressDialog mProgressDialog;
-    private LinearLayout mLlHeaderLayout;
-    private LinearLayout mLlControlLayout;
-    private ImageView imag_back;
+    private List<String>        joinedList      = new ArrayList<>();
+    private List<String>        waiteJoinedList = new ArrayList<>();
+    private RVJoinedMemAdapter  mRvWaiteJoinedMemAdapter;
+    private RVJoinedMemAdapter  mRvJoinedMemAdapter;
+    private User                mUserSelf;
+    private Button              mSwitchCameraBtn;
+    private Button              mCallSwitchMuteBtn;
+    private Button              mCallSswitchSpeakerBtn;
+    private Button              mCallSwitchAudioBtn;
+    private Chronometer         mCallTimeTip;
+    private ImageButton         mBtAddMem;
+    private RecyclerView        mRvNeedInvite;
+    private TextView            mTvCallType;
+    private RVJoinedMemAdapter  mRvNeedInviteAdapter;
+    private Button              mBtJoin;
+    private TextView            mTvJoinTitle;
+    private ProgressDialog      mProgressDialog;
+    private LinearLayout        mLlHeaderLayout;
+    private LinearLayout        mLlControlLayout;
+    private ImageView           imag_back;
 
     @Override
     protected int getContentViewId() {
@@ -111,14 +109,13 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     @Override
     protected ConferencePresenter createPresenter() {
-        return new ConferencePresenter(this,this);
+        return new ConferencePresenter(this, this);
     }
-
 
     @Override
     protected void initView() {
         ConferenceHandle.getInstance().addConferenceStateListener(this);
-        mUserSelf=CubeEngine.getInstance().getSession().getUser();
+        mUserSelf = CubeEngine.getInstance().getSession().getUser();
         getArgment();
         switchViewStub();
         mProgressDialog = new ProgressDialog(this);
@@ -129,12 +126,12 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
     private void getArgment() {
         Bundle bundle = getIntent().getBundleExtra(AppConstants.Value.BUNDLE);
         callState = (CallStatus) bundle.getSerializable(AppConstants.Value.CONFERENCE_CALLSTATA);
-        mConference=(Conference) bundle.getSerializable(AppConstants.Value.CONFERENCE_CONFERENCE);
-        mInviteList=bundle.getStringArrayList(AppConstants.Value.CONFERENCE_INVITE_LIST); //发起者才会有邀请集合
-        mInviteId=bundle.getString(AppConstants.Value.CONFERENCE_INVITE_Id);
-        mGroupId=bundle.getString(AppConstants.Value.CONFERENCE_GROUP_ID,"");
-        if(callState.equals(CallStatus.GROUP_VIDEO_CALLING)){
-            if(mConference!=null&&(mConference.type == GroupType.VIDEO_CALL||mConference.type == GroupType.VIDEO_CONFERENCE)){
+        mConference = (Conference) bundle.getSerializable(AppConstants.Value.CONFERENCE_CONFERENCE);
+        mInviteList = bundle.getStringArrayList(AppConstants.Value.CONFERENCE_INVITE_LIST); //发起者才会有邀请集合
+        mInviteId = bundle.getString(AppConstants.Value.CONFERENCE_INVITE_Id);
+        mGroupId = bundle.getString(AppConstants.Value.CONFERENCE_GROUP_ID, "");
+        if (callState.equals(CallStatus.GROUP_VIDEO_CALLING)) {
+            if (mConference != null && (mConference.type == GroupType.VIDEO_CALL || mConference.type == GroupType.VIDEO_CONFERENCE)) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             }
         }
@@ -160,11 +157,10 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
         }
     }
 
-
     //接受邀请界面
     private void showConferenceReceiveLayout() {
-        if(mVSConferenceReceiveLayout==null){
-            this.mVSConferenceReceiveLayout=findViewById(R.id.call_audio_incoming_vs);
+        if (mVSConferenceReceiveLayout == null) {
+            this.mVSConferenceReceiveLayout = findViewById(R.id.call_audio_incoming_vs);
             View inflateView = this.mVSConferenceReceiveLayout.inflate();
             mIvPeerHeader = inflateView.findViewById(R.id.peer_head_iv);
             mTvPeerName = inflateView.findViewById(R.id.peer_name_tv);
@@ -175,20 +171,21 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
             inflateView.findViewById(R.id.members_layout).setVisibility(View.VISIBLE);
         }
 
-        GridLayoutManager gridLayoutManager=new GridLayoutManager(this,3);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         mRvNeedInvite.setLayoutManager(gridLayoutManager);
-        if(mConference!=null&&mConference.invites!=null){
+        if (mConference != null && mConference.invites != null) {
             //设置数据
             initInviteRV(mConference.invites);
         }
 
         //加载加入邀请的头像
-        GlideUtil.loadCircleImage(AppConstants.AVATAR_URL+mConference.founder, this,mIvPeerHeader,DiskCacheStrategy.NONE,false,R.drawable.default_head_user);
+        GlideUtil.loadCircleImage(AppConstants.AVATAR_URL + mConference.founder, this, mIvPeerHeader, DiskCacheStrategy.NONE, false, R.drawable.default_head_user);
         //获取邀请者数据
         mPresenter.getUserData(mConference.founder);
-        if(mConference.type.equals(GroupType.VOICE_CONFERENCE)||mConference.type.equals(GroupType.VOICE_CALL)){
+        if (mConference.type.equals(GroupType.VOICE_CONFERENCE) || mConference.type.equals(GroupType.VOICE_CALL)) {
             mTvCallType.setText(this.getResources().getString(R.string.someone_wanted_to_talk_to_you_voice_calls));
-        }else {
+        }
+        else {
             mTvCallType.setText(this.getResources().getString(R.string.someone_wanted_to_talk_to_you_video_calls));
         }
         this.initListener();
@@ -196,7 +193,7 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     private void initInviteRV(List<Member> invites) {
         //直接刷新头像列表
-        if(invites!=null){
+        if (invites != null) {
             mRvNeedInviteAdapter = new RVJoinedMemAdapter(ConferenceActivity.this, MemberToCubeIds(invites));
             mRvNeedInvite.setAdapter(mRvNeedInviteAdapter);
         }
@@ -204,20 +201,21 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     /**
      * 查询数据库返回的数据
+     *
      * @param user
      */
     @Override
     public void getUserData(User user) {
         //只是查询名字显示
-        if(mTvPeerName!=null) {
+        if (mTvPeerName != null) {
             mTvPeerName.setText(user.displayName);
         }
     }
 
     //音频会议中演示
     private void showConferenceAudioLayout() {
-        if(mVSAudioConferenceLayout==null){
-            this.mVSAudioConferenceLayout=findViewById(R.id.call_audio_vs);
+        if (mVSAudioConferenceLayout == null) {
+            this.mVSAudioConferenceLayout = findViewById(R.id.call_audio_vs);
             View inflateView = this.mVSAudioConferenceLayout.inflate();
             mTvTitle = inflateView.findViewById(R.id.tv_title);
             mBtHangUp = inflateView.findViewById(R.id.call_hang_up_btn);
@@ -241,8 +239,8 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     //视频会议中的界面
     private void showConferenceLayout() {
-        if(mVSConferenceLayout==null){
-            this.mVSConferenceLayout=findViewById(R.id.call_video_vs);
+        if (mVSConferenceLayout == null) {
+            this.mVSConferenceLayout = findViewById(R.id.call_video_vs);
             View inflateView = this.mVSConferenceLayout.inflate();
             mTvTitle = inflateView.findViewById(R.id.tv_title);
             mBtHangUp = inflateView.findViewById(R.id.call_hang_up_btn);
@@ -273,14 +271,13 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
             this.mMyVideoLayout.setVisibility(View.GONE);
         }
         if (this.mPeerVideoLayout.getChildAt(0) == null && this.mPeerVideoView != null) {
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
-                    , ViewGroup.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.gravity = Gravity.CENTER;
-            this.mPeerVideoLayout.addView(this.mPeerVideoView, 0,layoutParams);
+            this.mPeerVideoLayout.addView(this.mPeerVideoView, 0, layoutParams);
         }
         //计时器
-//        this.mCallTimeTip.setBase(SystemClock.elapsedRealtime());
-//        mCallTimeTip.start();
+        //        this.mCallTimeTip.setBase(SystemClock.elapsedRealtime());
+        //        mCallTimeTip.start();
         initRecyclerView();
         initAction();
         this.initListener();
@@ -288,10 +285,10 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     //recyclerview
     private void initRecyclerView() {
-        mLayoutManagerJoined = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
-        mLayoutManagerWaite = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
-        mRvJoinedMemAdapter = new RVJoinedMemAdapter(this,joinedList);
-        mRvWaiteJoinedMemAdapter = new RVJoinedMemAdapter(this,waiteJoinedList);
+        mLayoutManagerJoined = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mLayoutManagerWaite = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mRvJoinedMemAdapter = new RVJoinedMemAdapter(this, joinedList);
+        mRvWaiteJoinedMemAdapter = new RVJoinedMemAdapter(this, waiteJoinedList);
         mRvJoined.setLayoutManager(mLayoutManagerJoined);
         mRvWaiteJoined.setLayoutManager(mLayoutManagerWaite);
         mRvJoined.setAdapter(mRvJoinedMemAdapter);
@@ -299,13 +296,14 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
     }
 
     private void initAction() {
-        if(mInviteList!=null&&mInviteList.size()>0){
+        if (mInviteList != null && mInviteList.size() > 0) {
             //不绑定群组，且是视频会议，不需要邀请，在创建的时候由后台根据时间自动邀请
-            if(TextUtils.isEmpty(mGroupId)&&mConference.type.equals(GroupType.VIDEO_CONFERENCE)){
+            if (TextUtils.isEmpty(mGroupId) && mConference.type.equals(GroupType.VIDEO_CONFERENCE)) {
                 return;
-            }else {
+            }
+            else {
                 LogUtil.i("ConferenceInvited", mInviteList.toString());
-                CubeEngine.getInstance().getConferenceService().inviteMembers(mConference.conferenceId,mInviteList);
+                CubeEngine.getInstance().getConferenceService().inviteMembers(mConference.conferenceId, mInviteList);
             }
         }
         //加入自己，数据库查询
@@ -314,9 +312,9 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
         List<Member> invites = mConference.invites;
         List<Member> members = mConference.getMembers();
         //加入者
-        if(members!=null){
-            LogUtil.i(TAG,"members:"+members.toString());
-            if(members!=null){
+        if (members != null) {
+            LogUtil.i(TAG, "members:" + members.toString());
+            if (members != null) {
                 //更新adapter
                 mRvJoinedMemAdapter.addListDate(MemberToCubeIds(members));
             }
@@ -337,7 +335,6 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
             mTvCallType = inflateView.findViewById(R.id.call_hint_tv);
             mRvNeedInvite = inflateView.findViewById(R.id.group_member_face);
             imag_back = inflateView.findViewById(R.id.imag_back);
-
         }
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
@@ -347,10 +344,11 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
             initInviteRV(mConference.members);
         }
         //显示文字
-        if(mConference.type.equals(GroupType.VOICE_CALL)||mConference.type.equals(GroupType.VOICE_CONFERENCE)){
-            mTvJoinTitle.setText(getString(R.string.start_join_screen,mConference.members.size()+""));
-        }else {
-            mTvJoinTitle.setText(getString(R.string.start_join_video,mConference.members.size()+""));
+        if (mConference.type.equals(GroupType.VOICE_CALL) || mConference.type.equals(GroupType.VOICE_CONFERENCE)) {
+            mTvJoinTitle.setText(getString(R.string.start_join_screen, mConference.members.size() + ""));
+        }
+        else {
+            mTvJoinTitle.setText(getString(R.string.start_join_video, mConference.members.size() + ""));
         }
         mPresenter.getUserData(mConference.founder);
         this.initListener();
@@ -358,26 +356,25 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     //隐藏界面
     private void hideConferenceReceiveLayoutViewStub() {
-        if(mVSConferenceReceiveLayout!=null){
+        if (mVSConferenceReceiveLayout != null) {
             mVSConferenceReceiveLayout.setVisibility(View.GONE);
         }
     }
 
-
     private void hideConferenceLayoutViewStub() {
-        if(mVSConferenceLayout!=null){
+        if (mVSConferenceLayout != null) {
             mVSConferenceLayout.setVisibility(View.GONE);
         }
     }
 
     private void hideConferenceAudioLayoutViewStub() {
-        if(mVSAudioConferenceLayout!=null){
+        if (mVSAudioConferenceLayout != null) {
             mVSAudioConferenceLayout.setVisibility(View.GONE);
         }
     }
 
     private void hideApplyJoinConferenceLayoutViewStub() {
-        if(mVSApplyJoinConferenceLayout!=null){
+        if (mVSApplyJoinConferenceLayout != null) {
             mVSApplyJoinConferenceLayout.setVisibility(View.GONE);
         }
     }
@@ -385,12 +382,12 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
     @Override
     protected void initListener() {
         //邀请
-        if(callState.equals(CallStatus.GROUP_CALL_INCOMING)){
+        if (callState.equals(CallStatus.GROUP_CALL_INCOMING)) {
             mBtAnswer.setOnClickListener(this);
             mBtRefuse.setOnClickListener(this);
         }
         //视频会议中
-        if(callState.equals(CallStatus.GROUP_VIDEO_CALLING)){
+        if (callState.equals(CallStatus.GROUP_VIDEO_CALLING)) {
             mBtHangUp.setOnClickListener(this);
             mBtAddMem.setOnClickListener(this);
             mCallSswitchSpeakerBtn.setOnClickListener(this);
@@ -401,38 +398,37 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
         }
 
         //音频会议中
-        if(callState.equals(CallStatus.GROUP_AUDIO_CALLING)){
+        if (callState.equals(CallStatus.GROUP_AUDIO_CALLING)) {
             mBtHangUp.setOnClickListener(this);
             mBtAddMem.setOnClickListener(this);
             mCallSswitchSpeakerBtn.setOnClickListener(this);
             mCallSwitchMuteBtn.setOnClickListener(this);
-
         }
         //主动加入
-        if(callState.equals(CallStatus.GROUP_CALL_JOIN)){
+        if (callState.equals(CallStatus.GROUP_CALL_JOIN)) {
             mBtJoin.setOnClickListener(this);
         }
-        if (null != imag_back){
+        if (null != imag_back) {
             imag_back.setOnClickListener(this);
         }
 
         //测试媒体通话质量
-//        CubeEngine.getInstance().getMediaService().getMediaQuality(new CubeCallback<CubeMediaQuality>() {
-//            @Override
-//            public void onSucceed(CubeMediaQuality cubeMediaQuality) {
-//                LogUtil.w("cubeMediaQuality: " +cubeMediaQuality);
-//            }
-//
-//            @Override
-//            public void onFailed(CubeError error) {
-//
-//            }
-//        });
+        //        CubeEngine.getInstance().getMediaService().getMediaQuality(new CubeCallback<CubeMediaQuality>() {
+        //            @Override
+        //            public void onSucceed(CubeMediaQuality cubeMediaQuality) {
+        //                LogUtil.w("cubeMediaQuality: " +cubeMediaQuality);
+        //            }
+        //
+        //            @Override
+        //            public void onFailed(CubeError error) {
+        //
+        //            }
+        //        });
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.imag_back:
                 this.finish();
                 break;
@@ -442,8 +438,8 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
                 mProgressDialog.show();
                 break;
             case R.id.call_answer_btn://接收
-                CubeEngine.getInstance().getConferenceService().acceptInvite(mConference.conferenceId,mInviteId);
-                if(mProgressDialog!=null&&!mProgressDialog.isShowing()){
+                CubeEngine.getInstance().getConferenceService().acceptInvite(mConference.conferenceId, mInviteId);
+                if (mProgressDialog != null && !mProgressDialog.isShowing()) {
                     //不加这句，鲁比亚要崩
                     mProgressDialog.dismiss();
                     mProgressDialog.setMessage(getString(R.string.joining));
@@ -454,7 +450,7 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
                 jumpAddMember();
                 break;
             case R.id.call_refuse_btn://拒绝
-                CubeEngine.getInstance().getConferenceService().rejectInvite(mConference.conferenceId,mInviteId);
+                CubeEngine.getInstance().getConferenceService().rejectInvite(mConference.conferenceId, mInviteId);
                 finish();
                 break;
             case R.id.call_hang_up_btn://退出
@@ -464,14 +460,15 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
             case R.id.call_switch_audio_btn: //切换音频视频
                 MediaService ms = CubeEngine.getInstance().getMediaService();
                 ms.setVideoEnabled(!ms.isVideoEnabled());
-                if(mCallSwitchAudioBtn.isSelected()){
+                if (mCallSwitchAudioBtn.isSelected()) {
                     //关闭
                     mCallSwitchAudioBtn.setSelected(false);
                     this.mCallSwitchAudioBtn.setText(getString(R.string.switch_to_voice));
-                }else {  //开启
+                }
+                else {  //开启
                     mCallSwitchAudioBtn.setSelected(true);
                     this.mCallSwitchAudioBtn.setText(getString(R.string.switch_to_video));
-                    }
+                }
                 break;
             case R.id.call_switch_camera_btn: //切换摄像头
                 MediaService msCamera = CubeEngine.getInstance().getMediaService();
@@ -486,7 +483,8 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
                     // 免提（不是听筒）
                     mSpeaker.setSpeakerEnabled(false);
                     this.mCallSswitchSpeakerBtn.setSelected(false);
-                } else {
+                }
+                else {
                     mSpeaker.setSpeakerEnabled(true);
                     this.mCallSswitchSpeakerBtn.setSelected(true);
                 }
@@ -503,10 +501,11 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
                 }
                 break;
             case R.id.peer_video_layout: //视频会议点击隐藏界面
-                if(mLlHeaderLayout.getVisibility()==View.GONE){
+                if (mLlHeaderLayout.getVisibility() == View.GONE) {
                     mLlHeaderLayout.setVisibility(View.VISIBLE);
                     mLlControlLayout.setVisibility(View.VISIBLE);
-                }else {
+                }
+                else {
                     mLlHeaderLayout.setVisibility(View.GONE);
                     mLlControlLayout.setVisibility(View.GONE);
                 }
@@ -516,28 +515,29 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     //跳转到邀请页面
     private void jumpAddMember() {
-        Bundle bundle=new Bundle();
-        if(TextUtils.isEmpty(mGroupId)){
-            bundle.putInt("select_type",4);//音频,视频
-        }else {
-            bundle.putInt("select_type",5);//音频,视频
+        Bundle bundle = new Bundle();
+        if (TextUtils.isEmpty(mGroupId)) {
+            bundle.putInt("select_type", 4);//音频,视频
         }
-        bundle.putString("group_id",mGroupId);
-        bundle.putString("conference_id",mConference.conferenceId);//首次创建
+        else {
+            bundle.putInt("select_type", 5);//音频,视频
+        }
+        bundle.putString("group_id", mGroupId);
+        bundle.putString("conference_id", mConference.conferenceId);//首次创建
         HashMap<String, MemberStatus> status = mConference.status;
-        ArrayList<String> list=new ArrayList<>();
+        ArrayList<String> list = new ArrayList<>();
         list.addAll(MemberToCubeIds(mConference.invites));
         //不能二次邀请的人员
-        bundle.putStringArrayList("not_check_list",list);
-        LogUtil.i(TAG,"status:"+list.toString());
-        RouterUtil.navigation(AppConstants.Router.SelectMemberActivity,bundle);
+        bundle.putStringArrayList("not_check_list", list);
+        LogUtil.i(TAG, "status:" + list.toString());
+        RouterUtil.navigation(AppConstants.Router.SelectMemberActivity, bundle);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         RingtoneUtil.release();
-        if(mConference != null && callState.equals(CallStatus.GROUP_CALL_JOIN)){
+        if (mConference != null && callState.equals(CallStatus.GROUP_CALL_JOIN)) {
             //没有进入，直接关闭
             CubeEngine.getInstance().getConferenceService().quit(mConference.conferenceId);
         }
@@ -552,13 +552,13 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     @Override
     public void onConferenceInvited(Conference conference, User from, List<User> invites) {
-        LogUtil.i(TAG,"onConferenceInvited "+from.toString()+invites.toString());
-        if(mGroupId.equals("")||mPresenter.isCurrentGroup(mGroupId,conference.bindGroupId)){
-            mConference=conference;
+        LogUtil.i(TAG, "onConferenceInvited " + from.toString() + invites.toString());
+        if (mGroupId.equals("") || mPresenter.isCurrentGroup(mGroupId, conference.bindGroupId)) {
+            mConference = conference;
             //已加入
             List<Member> members = conference.getMembers();
-            if(members!=null){
-                    mRvJoinedMemAdapter.addListDate(MemberToCubeIds(members));
+            if (members != null) {
+                mRvJoinedMemAdapter.addListDate(MemberToCubeIds(members));
             }
             //待加入
             List<Member> invitesMem = conference.invites;
@@ -572,21 +572,22 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
     @Override
     public void onConferenceRejectInvited(Conference conference, User from, User rejectMember) {
         //mGroupId为空 没有群概念
-        if(TextUtils.isEmpty(mGroupId) || mPresenter.isCurrentGroup(mGroupId,conference.bindGroupId)){
+        if (TextUtils.isEmpty(mGroupId) || mPresenter.isCurrentGroup(mGroupId, conference.bindGroupId)) {
             //拒绝邀请
-            updateJoinedAdapter(rejectMember.cubeId,false);
+            updateJoinedAdapter(rejectMember.cubeId, false);
         }
     }
 
     @Override
     public void onConferenceAcceptInvited(Conference conference, User from, User acceptMember) {
-        LogUtil.i(TAG,"onConferenceAcceptInvited "+acceptMember.toString());
+        LogUtil.i(TAG, "onConferenceAcceptInvited " + acceptMember.toString());
         //mGroupId为空 没有群概念
-        if(TextUtils.isEmpty(mGroupId) || mPresenter.isCurrentGroup(mGroupId,conference.bindGroupId)){
+        if (TextUtils.isEmpty(mGroupId) || mPresenter.isCurrentGroup(mGroupId, conference.bindGroupId)) {
             //自己接受，加就加入
-            if(mPresenter.isSelf(acceptMember.cubeId)){
+            if (mPresenter.isSelf(acceptMember.cubeId)) {
                 CubeEngine.getInstance().getConferenceService().join(conference.conferenceId);
-            }else {
+            }
+            else {
 
             }
         }
@@ -594,19 +595,20 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     @Override
     public void onConferenceJoined(Conference conference, User joinedMember) {
-        LogUtil.i(TAG,"onConferenceJoined "+joinedMember.toString());
-        if(mGroupId.equals("")||mPresenter.isCurrentGroup(mGroupId,conference.bindGroupId)){
-            if(mConference.conferenceId.equals(conference.conferenceId)) {
+        LogUtil.i(TAG, "onConferenceJoined " + joinedMember.toString());
+        if (mGroupId.equals("") || mPresenter.isCurrentGroup(mGroupId, conference.bindGroupId)) {
+            if (mConference.conferenceId.equals(conference.conferenceId)) {
                 mConference = conference;
                 //自己接受，加就加入
                 if (mPresenter.isSelf(joinedMember.cubeId)) {
-//                    if (conference.type.equals(GroupType.VOICE_CALL)) {
-//                        CubeEngine.getInstance().getConferenceService().addControlAudio(conference.conferenceId, joinedMember.cubeId);
-//                    } else {
-//                        CubeEngine.getInstance().getConferenceService().addControlVideo(conference.conferenceId, joinedMember.cubeId);
-//                    }
+                    //                    if (conference.type.equals(GroupType.VOICE_CALL)) {
+                    //                        CubeEngine.getInstance().getConferenceService().addControlAudio(conference.conferenceId, joinedMember.cubeId);
+                    //                    } else {
+                    //                        CubeEngine.getInstance().getConferenceService().addControlVideo(conference.conferenceId, joinedMember.cubeId);
+                    //                    }
                     mProgressDialog.setMessage(getString(R.string.join_in_conference));
-                } else {
+                }
+                else {
                     //有人加入，要刷新adapter
                     updateJoinedAdapter(joinedMember.cubeId, true);
                 }
@@ -616,9 +618,9 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     @Override
     public void onConferenceQuited(Conference conference, User quitMember) {
-        LogUtil.i("quit："+mGroupId+"-"+conference.bindGroupId);
-        if(mGroupId.equals("")||mPresenter.isCurrentGroup(mGroupId,conference.bindGroupId)){
-            if(mConference.conferenceId.equals(conference.conferenceId)) {
+        LogUtil.i("quit：" + mGroupId + "-" + conference.bindGroupId);
+        if (mGroupId.equals("") || mPresenter.isCurrentGroup(mGroupId, conference.bindGroupId)) {
+            if (mConference.conferenceId.equals(conference.conferenceId)) {
                 mConference = conference;
                 //不是自己
                 if (!mPresenter.isSelf(quitMember.cubeId)) {
@@ -629,26 +631,36 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
     }
 
     @Override
+    public void onConferenceAddStream(ConferenceStream conferenceStream) {
+
+    }
+
+    @Override
+    public void onConferenceRemoveStream(ConferenceStream conferenceStream) {
+
+    }
+
+    @Override
     public void onConferenceDestroyed(Conference conference, User from) {
-        if(mGroupId.equals("")||mPresenter.isCurrentGroup(mGroupId,conference.bindGroupId)){
-            if(mConference.conferenceId.equals(conference.conferenceId)){
+        if (mGroupId.equals("") || mPresenter.isCurrentGroup(mGroupId, conference.bindGroupId)) {
+            if (mConference.conferenceId.equals(conference.conferenceId)) {
                 finish();
             }
         }
-        LogUtil.i(TAG,"onConferenceDestroyed "+from.toString());
+        LogUtil.i(TAG, "onConferenceDestroyed " + from.toString());
     }
 
     @Override
     public void onVideoEnabled(Conference conference, boolean videoEnabled) {
-        LogUtil.i(TAG,"onVideoEnabled");
-        if((videoEnabled && mGroupId.equals(""))||(videoEnabled && mPresenter.isCurrentGroup(mGroupId,conference.bindGroupId))){
+        LogUtil.i(TAG, "onVideoEnabled");
+        if ((videoEnabled && mGroupId.equals("")) || (videoEnabled && mPresenter.isCurrentGroup(mGroupId, conference.bindGroupId))) {
             //切换视频界面
-            callState=CallStatus.GROUP_VIDEO_CALLING;
+            callState = CallStatus.GROUP_VIDEO_CALLING;
             switchViewStub();
-            if(mProgressDialog.isShowing()){
+            if (mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
             }
-            if(mConference!=null&&mConference.type== GroupType.VIDEO_CALL||mConference.type== GroupType.VIDEO_CONFERENCE){
+            if (mConference != null && mConference.type == GroupType.VIDEO_CALL || mConference.type == GroupType.VIDEO_CONFERENCE) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             }
         }
@@ -656,12 +668,12 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     @Override
     public void onAudioEnabled(Conference conference, boolean videoEnabled) {
-        LogUtil.i(TAG,"onAudioEnabled");
-        if((videoEnabled && mGroupId.equals(""))||(videoEnabled && mPresenter.isCurrentGroup(mGroupId,conference.bindGroupId))){
+        LogUtil.i(TAG, "onAudioEnabled");
+        if ((videoEnabled && mGroupId.equals("")) || (videoEnabled && mPresenter.isCurrentGroup(mGroupId, conference.bindGroupId))) {
             //切换音频界面
-            callState=CallStatus.GROUP_AUDIO_CALLING;
+            callState = CallStatus.GROUP_AUDIO_CALLING;
             switchViewStub();
-            if(mProgressDialog.isShowing()){
+            if (mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
             }
         }
@@ -669,25 +681,25 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     @Override
     public void onConferenceUpdated(Conference conference) {
-        if(mGroupId.equals("")||mPresenter.isCurrentGroup(mGroupId,conference.bindGroupId)){
-            mConference=conference;
+        if (mGroupId.equals("") || mPresenter.isCurrentGroup(mGroupId, conference.bindGroupId)) {
+            mConference = conference;
             List<ConferenceControl> actions = conference.actions;
             for (int i = 0; i < actions.size(); i++) {
                 ConferenceControl conferenceControl = actions.get(i);
-                if(conferenceControl.action!=null&&conferenceControl.action.getAction().equals(ControlAction.KICK.getAction())){
-                    updateJoinedAdapter(conferenceControl.controlled.cubeId,false);
+                if (conferenceControl.action != null && conferenceControl.action.getAction().equals(ControlAction.KICK.getAction())) {
+                    updateJoinedAdapter(conferenceControl.controlled.cubeId, false);
                     //未接，自己被踢，结束页面
-                    if(conferenceControl.controlled.cubeId.equals(SpUtil.getCubeId())){
+                    if (conferenceControl.controlled.cubeId.equals(SpUtil.getCubeId())) {
                         finish();
                     }
                 }
-                if(conferenceControl.action!=null&&conferenceControl.action.getAction().equals(ControlAction.VMUTE.getAction())){
+                if (conferenceControl.action != null && conferenceControl.action.getAction().equals(ControlAction.VMUTE.getAction())) {
 
                 }
-                if(conferenceControl.action!=null&&conferenceControl.action.getAction().equals(ControlAction.SPEAKER.getAction())){
+                if (conferenceControl.action != null && conferenceControl.action.getAction().equals(ControlAction.SPEAKER.getAction())) {
 
                 }
-                if(conferenceControl.action!=null&&conferenceControl.action.getAction().equals(ControlAction.HEAR.getAction())){
+                if (conferenceControl.action != null && conferenceControl.action.getAction().equals(ControlAction.HEAR.getAction())) {
 
                 }
             }
@@ -696,23 +708,23 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     @Override
     public void onConferenceFailed(Conference conference, CubeError cubeError) {
-        LogUtil.i(TAG,"onConferenceFailed "+cubeError.toString());
+        LogUtil.i(TAG, "onConferenceFailed " + cubeError.toString());
         if (cubeError.code == CubeErrorCode.ApplyConferenceFailed.code) {
             showMessage(CubeErrorCode.ApplyConferenceFailed.message);
         }
-        if(mProgressDialog!=null && mProgressDialog.isShowing()){
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
-        if (conference==null) {
-//            showMessage("登录sip失败");
-            if(cubeError.code==CubeErrorCode.JoinConferenceEarly.code){
+        if (conference == null) {
+            //            showMessage("登录sip失败");
+            if (cubeError.code == CubeErrorCode.JoinConferenceEarly.code) {
                 showMessage(CubeErrorCode.JoinConferenceEarly.message);
             }
-            LogUtil.i(TAG,"onConferenceFailed: "+"登录sip失败");
+            LogUtil.i(TAG, "onConferenceFailed: " + "登录sip失败");
             finish();
             return;
         }
-        if (conference.conferenceId.equals(mGroupId)||TextUtils.isEmpty(mGroupId)) {
+        if (conference.conferenceId.equals(mGroupId) || TextUtils.isEmpty(mGroupId)) {
             if (cubeError.code == CubeErrorCode.ConferenceRejectByOther.code) {
                 showMessage(CubeErrorCode.ConferenceRejectByOther.message);
             }
@@ -729,7 +741,7 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
                 }
                 return;
             }
-           if (cubeError.code == CubeErrorCode.AlreadyInCalling.code) {
+            if (cubeError.code == CubeErrorCode.AlreadyInCalling.code) {
                 showMessage(CubeErrorCode.AlreadyInCalling.message);
                 finish();
             }
@@ -747,7 +759,7 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     @Override
     public void onBackPressed() {
-        if(mConference!=null){
+        if (mConference != null) {
             CubeEngine.getInstance().getConferenceService().quit(mConference.conferenceId);
         }
         super.onBackPressed();
@@ -755,23 +767,24 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     @Override
     public void showMessage(String message) {
-        ToastUtil.showToast(this,message);
+        ToastUtil.showToast(this, message);
     }
 
     //刷新两个adapter
-    private void updateJoinedAdapter(String cubeId,boolean isJoin) {
-        if(isJoin){ //加入
-            if(mRvJoinedMemAdapter!=null){
+    private void updateJoinedAdapter(String cubeId, boolean isJoin) {
+        if (isJoin) { //加入
+            if (mRvJoinedMemAdapter != null) {
                 mRvJoinedMemAdapter.addDate(cubeId);
             }
-            if(mRvWaiteJoinedMemAdapter!=null){
+            if (mRvWaiteJoinedMemAdapter != null) {
                 mRvWaiteJoinedMemAdapter.removeDate(cubeId);
             }
-        }else { //退出
-            if(mRvJoinedMemAdapter!=null){
+        }
+        else { //退出
+            if (mRvJoinedMemAdapter != null) {
                 mRvJoinedMemAdapter.removeDate(cubeId);
             }
-            if(mRvWaiteJoinedMemAdapter!=null){
+            if (mRvWaiteJoinedMemAdapter != null) {
                 mRvWaiteJoinedMemAdapter.removeDate(cubeId);
             }
         }
@@ -779,12 +792,14 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     /**
      * 数据转换
+     *
      * @param members
+     *
      * @return
      */
-    private List<String> MemberToCubeIds(List<Member> members){
-        List<String> cubeIds=new ArrayList<>();
-        if(members!=null){
+    private List<String> MemberToCubeIds(List<Member> members) {
+        List<String> cubeIds = new ArrayList<>();
+        if (members != null) {
             for (int i = 0; i < members.size(); i++) {
                 cubeIds.add(members.get(i).cubeId);
             }

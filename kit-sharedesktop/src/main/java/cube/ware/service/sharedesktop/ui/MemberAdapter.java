@@ -1,4 +1,4 @@
-package cube.ware.service.remoteDesktop.ui;
+package cube.ware.service.sharedesktop.ui;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.common.utils.utils.glide.GlideUtil;
-import cube.ware.R;
+import cube.ware.service.sharedesktop.R;
 import java.util.ArrayList;
 import java.util.List;
 

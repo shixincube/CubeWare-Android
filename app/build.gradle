@@ -88,6 +88,8 @@ dependencies {
 //  implementation project(path: ':kit-database')
 //  implementation project(path: ':kit-call')
   implementation project(path: ':kit-whiteboard')
+  implementation project(path: ':kit-conference')
+//  implementation project(path: ':kit-sharedesktop')
   implementation developmentDependencies.support_appcompat_v7
   implementation developmentDependencies.support_v4
   implementation developmentDependencies.support_recyclerview_v7

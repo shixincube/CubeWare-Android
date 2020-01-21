@@ -15,7 +15,6 @@ import cube.service.user.UserState;
 import cube.service.user.model.User;
 import cube.ware.core.CubeCore;
 import cube.ware.core.CubeConstants;
-import cube.ware.service.R;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.service.listener.CallStateListener;
 import java.util.ArrayList;

@@ -14,35 +14,33 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.common.mvp.base.BaseActivity;
+import com.common.mvp.eventbus.EventBusUtil;
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.ClickUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
+import cube.service.conference.ConferenceListener;
 import cube.service.conference.model.Conference;
 import cube.service.conference.model.ConferenceConfig;
+import cube.service.conference.model.ConferenceStream;
 import cube.service.user.model.User;
 import cube.ware.AppConstants;
 import cube.ware.R;
+import cube.ware.core.CubeConstants;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.service.conference.ConferenceHandle;
-import cube.ware.service.conference.ConferenceStateListener;
 import cube.ware.ui.conference.adapter.RVCreateAdapter;
 import cube.ware.ui.conference.create.dialog.BottomDatePicker;
-import cube.ware.ui.conference.eventbus.InviteConferenceEvent;
 import cube.ware.ui.conference.eventbus.SelectMemberEvent;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import rx.functions.Action1;
 
 /**
@@ -50,30 +48,30 @@ import rx.functions.Action1;
  * Des:
  * Date: 2018/8/27.
  */
-@Route(path= AppConstants.Router.CreateConferenceActivity)
-public class CreateConferenceActivity extends BaseActivity<CreatePresenter> implements CreateContract.View, TextWatcher, ConferenceStateListener {
+@Route(path = AppConstants.Router.CreateConferenceActivity)
+public class CreateConferenceActivity extends BaseActivity<CreatePresenter> implements CreateContract.View, TextWatcher, ConferenceListener {
 
-    private RecyclerView mRvMenber;
-    private TextView mTvComplete;
-    private TextView mTvBack;
-    private RVCreateAdapter mRvCreateAdapter;
-    private Button mBtCreate;
-    private List<User> users=new ArrayList<>();
-    private EditText mEtTitle;
-    private User mUser=new User();
-    private String TAG="CreateConferenceActivity";
-    private Conference mConference;
-    private ArrayList<String> mInviteList=new ArrayList<>();
-    private int type;
-    private ProgressDialog mProgressDialog;
-    private Conference conference;
-    private LinearLayout mRlStartTime;
-    private LinearLayout mRlConferenceDurtion;
-    private TextView mTvStartTime;
-    private TextView mTvConferenceDurtion;
-    private int mIndexTime;
-    private long mTimeStamps;
-    private TextView mTvTitle;
+    private RecyclerView      mRvMenber;
+    private TextView          mTvComplete;
+    private TextView          mTvBack;
+    private RVCreateAdapter   mRvCreateAdapter;
+    private Button            mBtCreate;
+    private List<User>        users       = new ArrayList<>();
+    private EditText          mEtTitle;
+    private User              mUser       = new User();
+    private String            TAG         = "CreateConferenceActivity";
+    private Conference        mConference;
+    private ArrayList<String> mInviteList = new ArrayList<>();
+    private int               type;
+    private ProgressDialog    mProgressDialog;
+    private Conference        conference;
+    private LinearLayout      mRlStartTime;
+    private LinearLayout      mRlConferenceDurtion;
+    private TextView          mTvStartTime;
+    private TextView          mTvConferenceDurtion;
+    private int               mIndexTime;
+    private long              mTimeStamps;
+    private TextView          mTvTitle;
 
     @Override
     protected int getContentViewId() {
@@ -82,55 +80,56 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
 
     @Override
     protected CreatePresenter createPresenter() {
-        return new CreatePresenter(this,this);
+        return new CreatePresenter(this, this);
     }
 
     @Override
     protected void initView() {
         Bundle bundleExtra = getIntent().getBundleExtra(AppConstants.Value.BUNDLE);
-        type=  bundleExtra.getInt("type");
-        conference= (Conference) bundleExtra.getSerializable("conference");
+        type = bundleExtra.getInt("type");
+        conference = (Conference) bundleExtra.getSerializable("conference");
         EventBus.getDefault().register(this);
         mRvMenber = findViewById(R.id.rv_member);
         mTvBack = findViewById(R.id.title_back);
         mTvComplete = findViewById(R.id.title_complete);
         mEtTitle = findViewById(R.id.et_conference_title);
-        mBtCreate=findViewById(R.id.bt_create);
+        mBtCreate = findViewById(R.id.bt_create);
         mTvTitle = findViewById(R.id.toolbar_title);
         mRlStartTime = findViewById(R.id.rl_start_time);
         mRlConferenceDurtion = findViewById(R.id.rl_conference_time);
         mTvStartTime = findViewById(R.id.tv_start_time);
         mTvConferenceDurtion = findViewById(R.id.tv_conference_time);
 
-        GridLayoutManager gridLayoutManager=new GridLayoutManager(this,6);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 6);
         mRvMenber.setLayoutManager(gridLayoutManager);
-        mRvCreateAdapter = new RVCreateAdapter(this,users);
+        mRvCreateAdapter = new RVCreateAdapter(this, users);
         mRvMenber.setAdapter(mRvCreateAdapter);
         //添加监听
         ConferenceHandle.getInstance().addConferenceStateListener(this);
-        mUser=CubeEngine.getInstance().getSession().getUser();
-        if(type==1){ //邀请
+        mUser = CubeEngine.getInstance().getSession().getUser();
+        if (type == 1) { //邀请
             mBtCreate.setVisibility(View.GONE);
-            mTimeStamps=System.currentTimeMillis();
+            mTimeStamps = System.currentTimeMillis();
             //添加默认时间
-            mTvStartTime.setText(mPresenter.dataToString(new Date(mTimeStamps),this));
-        }else {//创建
+            mTvStartTime.setText(mPresenter.dataToString(new Date(mTimeStamps), this));
+        }
+        else {//创建
             mTvComplete.setVisibility(View.GONE);
             mTvTitle.setText(R.string.conference_details);
             mEtTitle.setText(conference.displayName);
             mEtTitle.setEnabled(false);
             setInviteData();
-            Date date=new Date(conference.startTime);
+            Date date = new Date(conference.startTime);
             String startTime = mPresenter.dataToString(date, this);
             mTvStartTime.setText(startTime);
-            mTvConferenceDurtion.setText(conference.duration/1000/60+"分钟");
+            mTvConferenceDurtion.setText(conference.duration / 1000 / 60 + "分钟");
             mTvStartTime.setTextColor(getResources().getColor(R.color.C1));
             mTvConferenceDurtion.setTextColor(getResources().getColor(R.color.C1));
         }
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage("创建中。。。");
         //去除所有空格
-//        mEtTitle.setFilters(new InputFilter[]{getFilter()});
+        //        mEtTitle.setFilters(new InputFilter[]{getFilter()});
     }
 
     private void setInviteData() {
@@ -138,7 +137,7 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
             @Override
             public void call(List<User> userList) {
                 //updata adapter
-                getInviteDate(userList,null);
+                getInviteDate(userList, null);
             }
         });
     }
@@ -152,57 +151,58 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
         //创建
         mBtCreate.setOnClickListener(this);
         mEtTitle.addTextChangedListener(this);
-        if(type==1){
+        if (type == 1) {
             mRlStartTime.setOnClickListener(this);
             mRlConferenceDurtion.setOnClickListener(this);
         }
     }
 
     @Override
-    public void onClick(View view){
-        switch (view.getId()){
+    public void onClick(View view) {
+        switch (view.getId()) {
             //创建
             case R.id.bt_create:
                 //别人创建的，可以拿到会议，直接加入的会议
-                Bundle bundle=new Bundle();
-                if(conference.conferenceId.equals(conference.bindGroupId)){
+                Bundle bundle = new Bundle();
+                if (conference.conferenceId.equals(conference.bindGroupId)) {
                     //不依赖群
-                    bundle.putString(AppConstants.Value.CONFERENCE_GROUP_ID,"");
-                }else {
-                    bundle.putString(AppConstants.Value.CONFERENCE_GROUP_ID,conference.bindGroupId);
+                    bundle.putString(AppConstants.Value.CONFERENCE_GROUP_ID, "");
+                }
+                else {
+                    bundle.putString(AppConstants.Value.CONFERENCE_GROUP_ID, conference.bindGroupId);
                 }
                 bundle.putString(AppConstants.Value.CONFERENCE_INVITE_Id, conference.founder); //发起者
                 bundle.putSerializable(AppConstants.Value.CONFERENCE_CALLSTATA, CallStatus.GROUP_CALL_JOIN);
-                bundle.putSerializable(AppConstants.Value.CONFERENCE_CONFERENCE,conference);
-                RouterUtil.navigation(this,bundle,AppConstants.Router.ConferenceActivity);
+                bundle.putSerializable(AppConstants.Value.CONFERENCE_CONFERENCE, conference);
+                RouterUtil.navigation(this, bundle, AppConstants.Router.ConferenceActivity);
                 finish();
                 break;
-                //back
+            //back
             case R.id.title_back:
                 closeSoftKey();
-                if(mConference!=null){
+                if (mConference != null) {
                     CubeEngine.getInstance().getConferenceService().destroy(mConference.conferenceId);
                 }
                 finish();
                 break;
-                //完成
+            //完成
             case R.id.title_complete:
-                if(ClickUtil.isFastClick()){
+                if (ClickUtil.isFastClick()) {
                     closeSoftKey();
-                    if(TextUtils.isEmpty(mEtTitle.getText().toString().trim())){
+                    if (TextUtils.isEmpty(mEtTitle.getText().toString().trim())) {
                         showMessage(getString(R.string.please_add_conference_theme));
                         return;
                     }
-                    if (users.size()<=2){
+                    if (users.size() <= 2) {
                         showMessage(getString(R.string.please_invite_conference_member));
                         return;
                     }
-                    if (mTimeStamps==0){
+                    if (mTimeStamps == 0) {
                         showMessage("请选择会议时间");
                         return;
                     }
                     //(mIndexTime+1)*15 每次增加15分钟
-                    ConferenceConfig conferenceConfig = mPresenter.initConferenceConfig(mEtTitle.getText().toString(),"",mTimeStamps,(mIndexTime+1)*15*60*1000,true, mInviteList);
+                    ConferenceConfig conferenceConfig = mPresenter.initConferenceConfig(mEtTitle.getText().toString(), "", mTimeStamps, (mIndexTime + 1) * 15 * 60 * 1000, true, mInviteList);
                     CubeEngine.getInstance().getConferenceService().create(conferenceConfig);
                     mProgressDialog.show();
                 }
@@ -211,21 +211,21 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
                 mPresenter.initTimePicker(this);
                 break;
             case R.id.rl_conference_time:
-                BottomDatePicker bottomDatePicker=BottomDatePicker.getInstance();
-                bottomDatePicker.show(getSupportFragmentManager(),"");
+                BottomDatePicker bottomDatePicker = BottomDatePicker.getInstance();
+                bottomDatePicker.show(getSupportFragmentManager(), "");
                 break;
         }
     }
 
     @Override
-    public void onTimeSelect(Date date,String startTime,long timeStamps){
+    public void onTimeSelect(Date date, String startTime, long timeStamps) {
         mTimeStamps = timeStamps;
         mTvStartTime.setText(startTime);
         mTvStartTime.setTextColor(getResources().getColor(R.color.C1));
     }
 
     @Override
-    public void onDurationSelect(String startTime,int index){
+    public void onDurationSelect(String startTime, int index) {
         mTvConferenceDurtion.setText(startTime);
         mTvConferenceDurtion.setTextColor(getResources().getColor(R.color.C1));
         mIndexTime = index;
@@ -233,7 +233,7 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
 
     @Override
     protected void initData() {
-        if(type==1){
+        if (type == 1) {
             addSelf();
             addDefault();
             mRvCreateAdapter.setData(users);
@@ -242,22 +242,23 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
 
     /**
      * 由SelectMemberActivity传过来的数据
+     *
      * @param selectMemberEvent
      */
     @Subscribe
-    public void getCubeUserList(SelectMemberEvent selectMemberEvent){
+    public void getCubeUserList(SelectMemberEvent selectMemberEvent) {
         users.clear();
         mPresenter.changeDate(selectMemberEvent.getCubeUserList());
     }
 
     @Override
     public void getInviteDate(List<User> userList, ArrayList<String> invitelist) {
-        this.mInviteList=invitelist;
-        if(type==1){
+        this.mInviteList = invitelist;
+        if (type == 1) {
             addSelf();
         }
         users.addAll(userList);
-        if(type==1){
+        if (type == 1) {
             addDefault();
         }
         mRvCreateAdapter.setData(users);
@@ -266,9 +267,10 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
 
     @Override
     public void updateCompleteBtn() {
-        if(!TextUtils.isEmpty(mEtTitle.getText().toString().trim())&&users.size()>2){
+        if (!TextUtils.isEmpty(mEtTitle.getText().toString().trim()) && users.size() > 2) {
             mTvComplete.setTextColor(this.getResources().getColor(R.color.cube_primary));
-        }else {
+        }
+        else {
             mTvComplete.setTextColor(this.getResources().getColor(R.color.C4));
         }
     }
@@ -278,11 +280,11 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
         users.add(user);
     }
 
-    private void addDefault(){
-        User user=new User();
-        user.cubeId="default";
-        user.displayName="default";
-        user.avatar="default";
+    private void addDefault() {
+        User user = new User();
+        user.cubeId = "default";
+        user.displayName = "default";
+        user.avatar = "default";
         users.add(user);
     }
 
@@ -295,7 +297,7 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
 
     @Override
     public void showMessage(String message) {
-        ToastUtil.showToast(this,message);
+        ToastUtil.showToast(this, message);
     }
 
     //edittext的监听
@@ -318,8 +320,8 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
     //会议创建的监听
     @Override
     public void onConferenceCreated(Conference conference, User from) {
-        EventBus.getDefault().post(new InviteConferenceEvent(conference));
-        if(mProgressDialog!=null){
+        EventBusUtil.post(CubeConstants.Event.InviteConferenceEvent, conference);
+        if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
         finish();
@@ -347,23 +349,23 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
 
     @Override
     public void onConferenceJoined(Conference conference, User joinedMember) {
-           mProgressDialog.setMessage("加入成功,进入会议中。。。");
-            //必须调用会议控制
-            mConference=conference;
-//            CubeEngine.getInstance().getConferenceService().addControlAudio(conference.conferenceId,mUser.cubeId);
+        mProgressDialog.setMessage("加入成功,进入会议中。。。");
+        //必须调用会议控制
+        mConference = conference;
+        //            CubeEngine.getInstance().getConferenceService().addControlAudio(conference.conferenceId,mUser.cubeId);
     }
 
     @Override
     public void onVideoEnabled(Conference conference, boolean videoEnabled) {
-            mConference=conference;
-            mProgressDialog.dismiss();
-            //跳转到会议界面 c4410400
-            Bundle bundle=new Bundle();
-            bundle.putSerializable(AppConstants.Value.CONFERENCE_CALLSTATA, CallStatus.GROUP_VIDEO_CALLING);//创建者
-            bundle.putStringArrayList(AppConstants.Value.CONFERENCE_INVITE_LIST,mInviteList);//传递对象集合
-            bundle.putSerializable(AppConstants.Value.CONFERENCE_CONFERENCE,mConference);
-            RouterUtil.navigation(this,bundle,AppConstants.Router.ConferenceActivity);
-            finish();
+        mConference = conference;
+        mProgressDialog.dismiss();
+        //跳转到会议界面 c4410400
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(AppConstants.Value.CONFERENCE_CALLSTATA, CallStatus.GROUP_VIDEO_CALLING);//创建者
+        bundle.putStringArrayList(AppConstants.Value.CONFERENCE_INVITE_LIST, mInviteList);//传递对象集合
+        bundle.putSerializable(AppConstants.Value.CONFERENCE_CONFERENCE, mConference);
+        RouterUtil.navigation(this, bundle, AppConstants.Router.ConferenceActivity);
+        finish();
     }
 
     @Override
@@ -381,15 +383,22 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
     }
 
     @Override
+    public void onConferenceAddStream(ConferenceStream conferenceStream) {
+
+    }
+
+    @Override
+    public void onConferenceRemoveStream(ConferenceStream conferenceStream) {
+
+    }
+
+    @Override
     public void onConferenceFailed(Conference conference, CubeError error) {
-//        showMessage(error.toString());
-        LogUtil.i(TAG,error.toString());
+        //        showMessage(error.toString());
+        LogUtil.i(TAG, error.toString());
     }
 
-    public void closeSoftKey(){
-        ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE))
-                .hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+    public void closeSoftKey() {
+        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
-
 }

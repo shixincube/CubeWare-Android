@@ -23,12 +23,9 @@ import cube.ware.core.CubeConstants;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.ui.chat.message.MessageFragment;
-import cube.ware.ui.conference.eventbus.UpdateTipViewEvent;
-import cube.ware.ui.conference.eventbus.UpdateWhiteBoardTipView;
 import cube.ware.utils.SpUtil;
 import java.util.ArrayList;
 import java.util.List;
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -82,28 +79,15 @@ public class GroupMessageFragment extends MessageFragment {
         queryConferenceByFroupId(groupIds);
     }
 
-    /**
-     * 更新TipView的回调，退出会议，需要发生这个eventbus
-     *
-     * @param updateTipViewEvent
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateTipView(UpdateTipViewEvent updateTipViewEvent) {
-        List<String> groupIds = updateTipViewEvent.mGroupIds;
-        queryConferenceByFroupId(groupIds);
-    }
-
-    /**
-     * 更新TipView的回调，白板相关
-     *
-     * @param event
-     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onReceiveEvent(Event event) {
         switch (event.eventName) {
             case CubeConstants.Event.UpdateWhiteBoardTipView:
-                List<String> groupIds = (List<String>) event.data;
-                queryWhiteBoardByGroupId(groupIds);
+                queryWhiteBoardByGroupId((List<String>) event.data);
+                break;
+
+            case CubeConstants.Event.UpdateConferenceTipView:
+                queryConferenceByFroupId((List<String>) event.data);
                 break;
 
             default:

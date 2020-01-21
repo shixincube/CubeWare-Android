@@ -11,12 +11,9 @@ import cube.service.common.model.Version;
 import cube.service.message.model.MessageEntity;
 import cube.service.user.UserState;
 import cube.ware.service.conference.ConferenceHandle;
-import cube.ware.service.file.FileHandle;
 import cube.ware.service.group.GroupHandle;
 import cube.ware.service.message.MessageHandle;
-import cube.ware.service.remoteDesktop.RemoteDesktopHandle;
 import cube.ware.service.user.UserHandle;
-import cube.ware.service.whiteboard.WhiteBoardHandle;
 import cube.ware.ui.chat.ChatEventListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,10 +123,10 @@ public class CubeUI {
         MessageHandle.getInstance().start();
         //CallHandle.getInstance().start();
         ConferenceHandle.getInstance().start();
-        FileHandle.getInstance().start();
+        //FileHandle.getInstance().start();
         GroupHandle.getInstance().start();
-        RemoteDesktopHandle.getInstance().start();
-        WhiteBoardHandle.getInstance().start();
+        //ShareDesktopHandle.getInstance().start();
+        //WhiteBoardHandle.getInstance().start();
         //SettingHandle.getInstance().start();
     }
 

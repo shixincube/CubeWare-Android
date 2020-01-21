@@ -6,6 +6,8 @@ import android.text.TextUtils;
 
 import com.common.sdk.RouterUtil;
 
+import cube.service.conference.ConferenceListener;
+import cube.service.conference.model.ConferenceStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,14 +17,13 @@ import cube.service.conference.model.Conference;
 import cube.service.user.model.User;
 import cube.ware.AppConstants;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
-import cube.ware.service.conference.ConferenceStateListener;
 
 /**
  * author: kun .
  * des:会议创建的监听
  * date:   On 2018/9/10
  */
-public class ConferenceCreateListener implements ConferenceStateListener {
+public class ConferenceCreateListener implements ConferenceListener {
 
     private String mGroupId;
     private User mUser;
@@ -111,6 +112,16 @@ public class ConferenceCreateListener implements ConferenceStateListener {
 
     @Override
     public void onConferenceQuited(Conference conference, User quitMember) {
+
+    }
+
+    @Override
+    public void onConferenceAddStream(ConferenceStream conferenceStream) {
+
+    }
+
+    @Override
+    public void onConferenceRemoveStream(ConferenceStream conferenceStream) {
 
     }
 

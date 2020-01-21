@@ -10,30 +10,27 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-
 import com.common.mvp.base.BaseFragment;
+import com.common.mvp.eventbus.Event;
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.conference.model.Conference;
 import cube.service.group.GroupType;
 import cube.ware.AppConstants;
 import cube.ware.R;
+import cube.ware.core.CubeConstants;
 import cube.ware.ui.conference.adapter.RVConferenceListAdapter;
 import cube.ware.ui.conference.eventbus.CreateConferenceEvent;
 import cube.ware.ui.conference.eventbus.CreateData;
-import cube.ware.ui.conference.eventbus.InviteConferenceEvent;
 import cube.ware.utils.SpUtil;
+import java.util.ArrayList;
+import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by dth
@@ -43,16 +40,16 @@ import cube.ware.utils.SpUtil;
 
 public class ConferenceFragment extends BaseFragment<ConferenceContract.Presenter> implements ConferenceContract.View, AppBarLayout.OnOffsetChangedListener, SwipeRefreshLayout.OnRefreshListener, RVConferenceListAdapter.OnItemClickListener {
 
-    private TextView mTvTitle;
-    private RecyclerView mRvConference;
-    private FloatingActionButton mFbtAdd;
-    private AppBarLayout mAppBarLayout;
-    private SwipeRefreshLayout mSrlRefresh;
+    private TextView                mTvTitle;
+    private RecyclerView            mRvConference;
+    private FloatingActionButton    mFbtAdd;
+    private AppBarLayout            mAppBarLayout;
+    private SwipeRefreshLayout      mSrlRefresh;
     private RVConferenceListAdapter mRVConferenceListAdapter;
-    private LinearLayoutManager mLinearLayoutManager;
-    private List<CreateData> mCreateData=new ArrayList<>();
-    private List<GroupType> mGroupTypes=new ArrayList<>();
-    private TextView mTvCreateConference;
+    private LinearLayoutManager     mLinearLayoutManager;
+    private List<CreateData>        mCreateData = new ArrayList<>();
+    private List<GroupType>         mGroupTypes = new ArrayList<>();
+    private TextView                mTvCreateConference;
 
     @Override
     protected int getContentViewId() {
@@ -61,7 +58,7 @@ public class ConferenceFragment extends BaseFragment<ConferenceContract.Presente
 
     @Override
     protected ConferenceContract.Presenter createPresenter() {
-        return new ConferencePresenter(getActivity(),this);
+        return new ConferencePresenter(getActivity(), this);
     }
 
     @Override
@@ -80,12 +77,12 @@ public class ConferenceFragment extends BaseFragment<ConferenceContract.Presente
         mTvTitle.setText(getContext().getResources().getString(R.string.conference));
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mRvConference.setLayoutManager(mLinearLayoutManager);
-        mRVConferenceListAdapter=new RVConferenceListAdapter(getContext(),mCreateData);
+        mRVConferenceListAdapter = new RVConferenceListAdapter(getContext(), mCreateData);
         mRvConference.setAdapter(mRVConferenceListAdapter);
         mRVConferenceListAdapter.setOnItemClickListener(this);
         mGroupTypes.add(GroupType.VIDEO_CONFERENCE);
         //查询会议
-        mPresenter.getConferenceList(SpUtil.getCubeId(),mGroupTypes);
+        mPresenter.getConferenceList(SpUtil.getCubeId(), mGroupTypes);
     }
 
     @Override
@@ -108,11 +105,11 @@ public class ConferenceFragment extends BaseFragment<ConferenceContract.Presente
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tv_create_conference:
-                Bundle bundle=new Bundle();
-                bundle.putInt("type",1);// 1 邀请，其他为创建
-                RouterUtil.navigation(getContext(),bundle, AppConstants.Router.CreateConferenceActivity);
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", 1);// 1 邀请，其他为创建
+                RouterUtil.navigation(getContext(), bundle, AppConstants.Router.CreateConferenceActivity);
                 break;
         }
     }
@@ -122,7 +119,7 @@ public class ConferenceFragment extends BaseFragment<ConferenceContract.Presente
         mCreateData.clear();
         mRVConferenceListAdapter.setData(mCreateData);
         //刷新 查询会议
-        mPresenter.getConferenceList(CubeEngine.getInstance().getSession().user.cubeId,mGroupTypes);
+        mPresenter.getConferenceList(CubeEngine.getInstance().getSession().user.cubeId, mGroupTypes);
     }
 
     @Override
@@ -136,34 +133,39 @@ public class ConferenceFragment extends BaseFragment<ConferenceContract.Presente
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getConferenceData(InviteConferenceEvent inviteConferenceEvent){
-        if(inviteConferenceEvent!=null){
-            //再查一次就可以了
-            mCreateData.clear();
-            mRVConferenceListAdapter.setData(mCreateData);
-            mPresenter.getConferenceList(CubeEngine.getInstance().getSession().user.cubeId,mGroupTypes);
+    public void onReceiveEvent(Event event) {
+        switch (event.eventName) {
+            case CubeConstants.Event.InviteConferenceEvent:
+                //再查一次就可以了
+                mCreateData.clear();
+                mRVConferenceListAdapter.setData(mCreateData);
+                mPresenter.getConferenceList(CubeEngine.getInstance().getSession().user.cubeId, mGroupTypes);
+                break;
+
+            default:
+                break;
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getConferenceCreateData(CreateConferenceEvent createConferenceEvent){
-        if(createConferenceEvent!=null){
-            mPresenter.getConferenceList(CubeEngine.getInstance().getSession().user.cubeId,mGroupTypes);
+    public void getConferenceCreateData(CreateConferenceEvent createConferenceEvent) {
+        if (createConferenceEvent != null) {
+            mPresenter.getConferenceList(CubeEngine.getInstance().getSession().user.cubeId, mGroupTypes);
         }
     }
 
     @Override
     public void onClickListener(CreateData createData) {
         //查询出来的
-        Bundle bundle=new Bundle();
-        bundle.putInt("type",0);// 1 邀请，其他为创建
-        bundle.putSerializable("conference",createData.getConference());
-        RouterUtil.navigation(getContext(),bundle, AppConstants.Router.CreateConferenceActivity);
+        Bundle bundle = new Bundle();
+        bundle.putInt("type", 0);// 1 邀请，其他为创建
+        bundle.putSerializable("conference", createData.getConference());
+        RouterUtil.navigation(getContext(), bundle, AppConstants.Router.CreateConferenceActivity);
     }
 
     @Override
     public void onLongClickListener(CreateData createData, int position) {
-        showDialog(createData.getConference(),position);
+        showDialog(createData.getConference(), position);
     }
 
     private void showDialog(Conference conference, int position) {
@@ -172,28 +174,28 @@ public class ConferenceFragment extends BaseFragment<ConferenceContract.Presente
         builder.setTitle("删除会议").setMessage("是否删除会议").setPositiveButton("删除", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(conference.founder.equals(SpUtil.getCubeId())){
+                if (conference.founder.equals(SpUtil.getCubeId())) {
                     CubeEngine.getInstance().getConferenceService().destroy(conference.conferenceId);
                     mCreateData.remove(position);
                     mRVConferenceListAdapter.setData(mCreateData);
-                }else {
+                }
+                else {
                     showMessage("对不起，您没有删除权限");
                 }
             }
-        }).setNegativeButton("取消", null)
-                .show();
+        }).setNegativeButton("取消", null).show();
     }
 
     @Override
     public void showMessage(String message) {
-        ToastUtil.showToast(getContext(),message);
+        ToastUtil.showToast(getContext(), message);
     }
 
     @Override
     public void getConference(List<Conference> conferenceList) {
-        if(conferenceList!=null&&conferenceList.size()>0){
+        if (conferenceList != null && conferenceList.size() > 0) {
             for (int i = 0; i < conferenceList.size(); i++) {
-                CreateData createData=new CreateData();
+                CreateData createData = new CreateData();
                 createData.setConference(conferenceList.get(i));
                 mCreateData.add(createData);
             }

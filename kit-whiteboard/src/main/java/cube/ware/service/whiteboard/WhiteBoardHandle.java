@@ -17,7 +17,6 @@ import cube.service.whiteboard.model.WhiteboardSlide;
 import cube.ware.core.CubeConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
-import cube.ware.service.R;
 import cube.ware.service.whiteboard.manager.WBCallManager;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,12 +1,11 @@
 package cube.ware.service.conference;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.common.mvp.eventbus.EventBusUtil;
 import com.common.sdk.RouterUtil;
-import com.common.utils.manager.ActivityManager;
 import com.common.utils.utils.RingtoneUtil;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
@@ -16,23 +15,13 @@ import cube.service.conference.model.Conference;
 import cube.service.conference.model.ConferenceStream;
 import cube.service.group.GroupType;
 import cube.service.group.model.Member;
-import cube.service.sharedesktop.ShareDesktopExtListener;
 import cube.service.user.model.User;
-import cube.ware.AppConstants;
-import cube.ware.CubeUI;
-import cube.ware.R;
+import cube.ware.core.CubeConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.service.conference.manager.ConferenceCallManager;
-import cube.ware.service.remoteDesktop.manager.ShareDesketopManager;
-import cube.ware.service.remoteDesktop.ui.ShareScreenActivity;
-import cube.ware.service.whiteboard.manager.WBCallManager;
-import cube.ware.ui.conference.eventbus.InviteConferenceEvent;
-import cube.ware.ui.conference.eventbus.UpdateTipViewEvent;
-import cube.ware.utils.SpUtil;
 import java.util.ArrayList;
 import java.util.List;
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * 引擎会议服务处理
@@ -42,11 +31,15 @@ import org.greenrobot.eventbus.EventBus;
  */
 public class ConferenceHandle implements ConferenceListener {
 
-    private static ConferenceHandle              instance                  = new ConferenceHandle();
-    private        List<ShareDesktopExtListener> mShareDesktopExtListeners = new ArrayList<>();
+    private static ConferenceHandle instance = new ConferenceHandle();
 
-    private User    joineduser;//暂存成功加入的user
     private Context mContext;
+
+    String CONFERENCE_CALLSTATA   = "call_state";
+    String CONFERENCE_CONFERENCE  = "conference";
+    String CONFERENCE_INVITE_LIST = "invite_list";
+    String CONFERENCE_INVITE_Id   = "invite_id";
+    String CONFERENCE_GROUP_ID    = "group_id";
 
     private ConferenceHandle() {
     }
@@ -55,18 +48,17 @@ public class ConferenceHandle implements ConferenceListener {
         return instance;
     }
 
-    public List<ConferenceStateListener> mConferenceStateListeners = new ArrayList<>();
+    private List<ConferenceListener> mConferenceStateListeners = new ArrayList<>();
 
-    public void addConferenceStateListener(ConferenceStateListener conferenceStateListener) {
-
-        if (conferenceStateListener != null && !mConferenceStateListeners.contains(conferenceStateListener)) {
-            mConferenceStateListeners.add(conferenceStateListener);
+    public void addConferenceStateListener(ConferenceListener listener) {
+        if (listener != null && !mConferenceStateListeners.contains(listener)) {
+            mConferenceStateListeners.add(listener);
         }
     }
 
-    public void removeConferenceStateListener(ConferenceStateListener conferenceStateListener) {
-        if (conferenceStateListener != null && mConferenceStateListeners.contains(conferenceStateListener)) {
-            mConferenceStateListeners.remove(conferenceStateListener);
+    public void removeConferenceStateListener(ConferenceListener listener) {
+        if (listener != null) {
+            mConferenceStateListeners.remove(listener);
         }
     }
 
@@ -76,7 +68,7 @@ public class ConferenceHandle implements ConferenceListener {
      * @param
      */
     public void start() {
-        mContext = CubeUI.getInstance().getContext();
+        mContext = CubeCore.getContext();
         CubeEngine.getInstance().getConferenceService().addConferenceListener(this);
     }
 
@@ -100,7 +92,7 @@ public class ConferenceHandle implements ConferenceListener {
         if (!conference.bindGroupId.equals(conference.conferenceId)) { //不相等表示依赖群
             mGroupIds.add(conference.bindGroupId);
             //有人退出，需要更新聊天界面的tipview数值显示
-            EventBus.getDefault().post(new UpdateTipViewEvent(mGroupIds));
+            EventBusUtil.post(CubeConstants.Event.UpdateConferenceTipView, mGroupIds);
         }
         for (int i = 0; i < mConferenceStateListeners.size(); i++) {
             mConferenceStateListeners.get(i).onConferenceCreated(conference, from);
@@ -123,7 +115,7 @@ public class ConferenceHandle implements ConferenceListener {
         if (!conference.bindGroupId.equals(conference.conferenceId)) { //不相等表示依赖群
             mGroupIds.add(conference.bindGroupId);
             //有人退出，需要更新聊天界面的tipview数值显示
-            EventBus.getDefault().post(new UpdateTipViewEvent(mGroupIds));
+            EventBusUtil.post(CubeConstants.Event.UpdateConferenceTipView, mGroupIds);
         }
         for (int i = 0; i < mConferenceStateListeners.size(); i++) {
             mConferenceStateListeners.get(i).onConferenceDestroyed(conference, from);
@@ -141,23 +133,21 @@ public class ConferenceHandle implements ConferenceListener {
     public void onConferenceInvited(Conference conference, User from, List<User> invites) {
         LogUtil.i("ConferenceInvited", from.toString() + invites.toString());
         //是自己收到了邀请
-        if (!from.cubeId.equals(SpUtil.getCubeId()) || from.cubeId.equals("10000")) { //from.cubeId.equals("10000")表示自己创建的会议，收到服务器发起的邀请
+        if (!from.cubeId.equals(CubeCore.getInstance().getCubeId()) || from.cubeId.equals("10000")) { //from.cubeId.equals("10000")表示自己创建的会议，收到服务器发起的邀请
             //不在会议中,不在单聊中
-            if (!WBCallManager.getInstance().isCalling() && !CubeCore.getInstance().isCalling() && !ConferenceCallManager.getInstance().isCalling()) { //没有正在会议
+            if (!CubeCore.getInstance().isCalling()) { //没有正在会议
                 if (conference.type.equals(GroupType.SHARE_SCREEN)) {
                     //表示为共享屏幕邀请
                     LogUtil.d("====收到邀请 --- " + conference.conferenceId);
-                    ShareDesketopManager.getInstance().saveShareDesktop(conference);
-                    Activity activity = ActivityManager.getInstance().findActivity(ShareScreenActivity.class);
                     for (Member invite : conference.invites) {
-                        if (TextUtils.equals(invite.cubeId, CubeEngine.getInstance().getSession().user.cubeId) && activity == null) {
+                        if (TextUtils.equals(invite.cubeId, CubeEngine.getInstance().getSession().user.cubeId)) {
                             //收到远程桌面邀请回调 并且自己在被邀请者集合里面 并且桌面activity没被启动过
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("shaerdesketop", conference);
                             bundle.putString("inviteId", from.cubeId);
                             bundle.putSerializable("statues", CallStatus.REMOTE_DESKTOP_INCOMING);
-                            ARouter.getInstance().build(AppConstants.Router.ShareScreenActivity).withBundle("desketop_data", bundle).navigation();
-                            RingtoneUtil.play(R.raw.ringing, CubeUI.getInstance().getContext());
+                            ARouter.getInstance().build(CubeConstants.Router.ShareScreenActivity).withBundle("desketop_data", bundle).navigation();
+                            RingtoneUtil.play(R.raw.ringing, CubeCore.getContext());
                             break;
                         }
                     }
@@ -166,15 +156,15 @@ public class ConferenceHandle implements ConferenceListener {
                     ConferenceCallManager.getInstance().setCalling(true);
                     Bundle bundle = new Bundle();
                     if (conference.bindGroupId.equals(conference.conferenceId)) { //这俩参数相同，表示不依赖群组
-                        bundle.putString(AppConstants.Value.CONFERENCE_GROUP_ID, "");
+                        bundle.putString(CONFERENCE_GROUP_ID, "");
                     }
                     else {
-                        bundle.putString(AppConstants.Value.CONFERENCE_GROUP_ID, conference.bindGroupId);
+                        bundle.putString(CONFERENCE_GROUP_ID, conference.bindGroupId);
                     }
-                    bundle.putString(AppConstants.Value.CONFERENCE_INVITE_Id, from.cubeId);
-                    bundle.putSerializable(AppConstants.Value.CONFERENCE_CONFERENCE, conference);
-                    bundle.putSerializable(AppConstants.Value.CONFERENCE_CALLSTATA, CallStatus.GROUP_CALL_INCOMING); //邀请
-                    RouterUtil.navigation(AppConstants.Router.ConferenceActivity, bundle);
+                    bundle.putString(CONFERENCE_INVITE_Id, from.cubeId);
+                    bundle.putSerializable(CONFERENCE_CONFERENCE, conference);
+                    bundle.putSerializable(CONFERENCE_CALLSTATA, CallStatus.GROUP_CALL_INCOMING); //邀请
+                    RouterUtil.navigation(CubeConstants.Router.ConferenceActivity, bundle);
                     RingtoneUtil.play(R.raw.ringing, mContext);
                     for (int i = 0; i < mConferenceStateListeners.size(); i++) {
                         mConferenceStateListeners.get(i).onConferenceInvited(conference, from, invites);
@@ -189,7 +179,7 @@ public class ConferenceHandle implements ConferenceListener {
         }
         else if (!conference.type.equals(GroupType.SHARE_SCREEN)) {
             //发送EventBus到会议列表
-            EventBus.getDefault().post(new InviteConferenceEvent(conference));
+            EventBusUtil.post(CubeConstants.Event.InviteConferenceEvent, conference);
             for (int i = 0; i < mConferenceStateListeners.size(); i++) {
                 mConferenceStateListeners.get(i).onConferenceInvited(conference, from, invites);
             }
@@ -207,7 +197,7 @@ public class ConferenceHandle implements ConferenceListener {
     public void onConferenceRejectInvited(Conference conference, User from, User rejectMember) {
         RingtoneUtil.release();
         //发送EventBus到会议列表
-        EventBus.getDefault().post(new InviteConferenceEvent(conference));
+        EventBusUtil.post(CubeConstants.Event.InviteConferenceEvent, conference);
         if (rejectMember.cubeId.equals(CubeEngine.getInstance().getSession().getUser().cubeId)) {
             ConferenceCallManager.getInstance().setCalling(false);
         }
@@ -241,7 +231,7 @@ public class ConferenceHandle implements ConferenceListener {
     @Override
     public void onConferenceJoined(Conference conference, User joinedMember) {
         //发送EventBus到会议列表
-        EventBus.getDefault().post(new InviteConferenceEvent(conference));
+        EventBusUtil.post(CubeConstants.Event.InviteConferenceEvent, conference);
         LogUtil.d("===加入会议成功准备去调用会控方法==" + conference.bindGroupId);
         if (joinedMember.cubeId.equals(CubeEngine.getInstance().getSession().getUser().cubeId)) {
             ConferenceCallManager.getInstance().setCalling(true);
@@ -250,7 +240,7 @@ public class ConferenceHandle implements ConferenceListener {
         if (!conference.bindGroupId.equals(conference.conferenceId)) { //不相等表示依赖群
             mGroupIds.add(conference.bindGroupId);
             //有人退出，需要更新聊天界面的tipview数值显示
-            EventBus.getDefault().post(new UpdateTipViewEvent(mGroupIds));
+            EventBusUtil.post(CubeConstants.Event.UpdateConferenceTipView, mGroupIds);
         }
         for (int i = 0; i < mConferenceStateListeners.size(); i++) {
             mConferenceStateListeners.get(i).onConferenceJoined(conference, joinedMember);
@@ -305,12 +295,12 @@ public class ConferenceHandle implements ConferenceListener {
     public void onConferenceQuited(Conference conference, User quitMember) {
         RingtoneUtil.release();
         //发送EventBus到会议列表
-        EventBus.getDefault().post(new InviteConferenceEvent(conference));
+        EventBusUtil.post(CubeConstants.Event.InviteConferenceEvent, conference);
         List<String> mGroupIds = new ArrayList<>();
         if (!conference.bindGroupId.equals(conference.conferenceId)) { //不相等表示依赖群
             mGroupIds.add(conference.bindGroupId);
             //有人退出，需要更新聊天界面的tipview数值显示
-            EventBus.getDefault().post(new UpdateTipViewEvent(mGroupIds));
+            EventBusUtil.post(CubeConstants.Event.UpdateConferenceTipView, mGroupIds);
         }
         if (quitMember.cubeId.equals(CubeEngine.getInstance().getSession().getUser().cubeId)) {
             ConferenceCallManager.getInstance().setCalling(false);

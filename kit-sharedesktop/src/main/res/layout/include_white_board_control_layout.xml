@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/wb_tab_container_ll"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:clickable="false"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <LinearLayout
+            android:id="@+id/wb_tab_pencil_ll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:background="@drawable/wb_tab_select_bg"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/view_height_30"
+                android:layout_height="@dimen/view_height_30"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center"
+                android:src="@drawable/wb_tab_pencil_selector" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="铅笔"
+                android:background="@drawable/wb_tab_select_bg"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/wb_manipulate_ll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:background="@drawable/wb_tab_select_bg"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/view_height_30"
+                android:layout_height="@dimen/view_height_30"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/wb_tab_manipulate_selector" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="操作"
+                android:textSize="@dimen/text_size_12" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/wb_tab_upload_ll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:background="@drawable/wb_tab_select_bg"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/view_height_30"
+                android:layout_height="@dimen/view_height_30"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/wb_tab_upload_selector" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="共享"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/wb_tab_online_ll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:background="@drawable/wb_tab_select_bg"
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:id="@+id/wb_tab_online"
+                android:layout_width="@dimen/view_height_30"
+                android:layout_height="@dimen/view_height_30"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/wb_tab_online_selector" />
+
+            <TextView
+                android:id="@+id/wb_tab_online_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="在线"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
+
+        <!--<LinearLayout
+            android:id="@+id/wb_tab_more_ll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/wb_tab_more_selector" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="更多"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>-->
+    </LinearLayout>
+
+
+<!--    <LinearLayout
+        android:id="@+id/page_operate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="56dp"
+        android:clickable="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/page_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true" />
+
+        <TextView
+            android:id="@+id/current_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/total_pages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="8"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/page_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/whiteboard_file_page_down_selector"
+            android:clickable="true" />
+    </LinearLayout> -->
+</RelativeLayout>
