@@ -45,7 +45,7 @@ import cube.ware.service.whiteboard.R;
 import cube.ware.service.whiteboard.WhiteBoardHandle;
 import cube.ware.service.whiteboard.WhiteBoardStateListener;
 import cube.ware.service.whiteboard.manager.WBCallManager;
-import cube.ware.service.whiteboard.ui.adapter.RVJoinedMemAdapter;
+import cube.ware.service.whiteboard.ui.adapter.JoinedMemberAdapter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,26 +84,26 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     private String              groupId;
     private String              TAG = "WhiteBoardActivity";
 
-    private List<String>       joinedList      = new ArrayList<>();
-    private List<String>       waiteJoinedList = new ArrayList<>();
-    private RVJoinedMemAdapter mRvWaiteJoinedMemAdapter;
-    private RVJoinedMemAdapter mRvJoinedMemAdapter;
-    private TextView           mTvCallType;
-    private CubeSessionType    mChatType;
-    private User               mUser;
-    private RecyclerView       mRvNeedInvite;
-    private RVJoinedMemAdapter mRvNeedInviteAdapter;
-    private Button             mBtJoin;
-    private TextView           mTvJoinTitle;
-    private ImageView          mIvPeerHeader;
-    private boolean            hasJoined;
-    private ProgressDialog     mProgressDialog;
-    private ImageView          imag_back;
-    private LinearLayout       mLlFileLayout;
-    private ImageView          mIvPageUp;
-    private ImageView          mIvPageDown;
-    private TextView           mTvCurrentPage;
-    private TextView           mTvTotalPage;
+    private List<String>        joinedList      = new ArrayList<>();
+    private List<String>        waiteJoinedList = new ArrayList<>();
+    private JoinedMemberAdapter mRvWaiteJoinedMemAdapter;
+    private JoinedMemberAdapter mRvJoinedMemAdapter;
+    private TextView            mTvCallType;
+    private CubeSessionType     mChatType;
+    private User                mUser;
+    private RecyclerView        mRvNeedInvite;
+    private JoinedMemberAdapter mRvNeedInviteAdapter;
+    private Button              mBtJoin;
+    private TextView            mTvJoinTitle;
+    private ImageView           mIvPeerHeader;
+    private boolean             hasJoined;
+    private ProgressDialog      mProgressDialog;
+    private ImageView           imag_back;
+    private LinearLayout        mLlFileLayout;
+    private ImageView           mIvPageUp;
+    private ImageView           mIvPageDown;
+    private TextView            mTvCurrentPage;
+    private TextView            mTvTotalPage;
 
     int    REQUEST_CODE_LOCAL_IMAGE = 2;  // 本地图片
     int    REQUEST_CODE_LOCAL_FILE  = 3;  // 本地文件
@@ -341,7 +341,7 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     private void initInviteRV(List<Member> cubeIdList) {
         if (cubeIdList != null) {
             //直接刷新头像列表
-            mRvNeedInviteAdapter = new RVJoinedMemAdapter(WhiteBoardActivity.this, MemberToCubeIds(cubeIdList));
+            mRvNeedInviteAdapter = new JoinedMemberAdapter(WhiteBoardActivity.this, MemberToCubeIds(cubeIdList));
             mRvNeedInvite.setAdapter(mRvNeedInviteAdapter);
         }
     }
@@ -350,8 +350,8 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     private void initRecyclerView() {
         mLayoutManagerJoined = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mLayoutManagerWaite = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mRvJoinedMemAdapter = new RVJoinedMemAdapter(this, joinedList);
-        mRvWaiteJoinedMemAdapter = new RVJoinedMemAdapter(this, waiteJoinedList);
+        mRvJoinedMemAdapter = new JoinedMemberAdapter(this, joinedList);
+        mRvWaiteJoinedMemAdapter = new JoinedMemberAdapter(this, waiteJoinedList);
         mRvJoined.setLayoutManager(mLayoutManagerJoined);
         mRvWaiteJoined.setLayoutManager(mLayoutManagerWaite);
         mRvJoined.setAdapter(mRvJoinedMemAdapter);

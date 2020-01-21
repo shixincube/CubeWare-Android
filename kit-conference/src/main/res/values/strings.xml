@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">kit-conference</string>
+
+    <string name="someone_wanted_to_talk_to_you_voice_calls">邀请您参与多人语音</string>
+    <string name="someone_wanted_to_talk_to_you_video_calls">邀请您参与视频通话</string>
+    <string name="start_join_screen">%1$s 人正在会议</string>
+    <string name="start_join_video">%1$s 人正在视频</string>
+    <string name="switch_to_voice">关闭摄像头</string>
+    <string name="switch_to_video">开启摄像头</string>
+    <string name="switch_camera">切换摄像头</string>
+    <string name="contact">联系人</string>
+    <string name="conference_calling">多人语音</string>
+    <string name="conference_video_Calling">多人语音</string>
+    <string name="conference">会议</string>
+    <string name="create_conference">创建会议</string>
+    <string name="join_member">参会人员</string>
+    <string name="please_add_conference_theme">请输入会议主题</string>
+    <string name="please_invite_conference_member">请邀请会议成员</string>
+    <string name="start_time">开始时间</string>
+    <string name="conference_time">会议时间</string>
+    <string name="fifth_minute">15分钟</string>
+    <string name="conference_details">会议详情</string>
+    <string name="create_conferences">+创建会议</string>
+    <string name="send_message">发消息</string>
+    <string name="join_conference">进入会议</string>
+    <string name="joining">加入中。。。</string>
+    <string name="join_in_conference">加入成功，进入会议中。。。</string>
+    <string name="join_in_conference_share">加入成功，进入屏幕分享中。。。</string>
 </resources>

@@ -1,2 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cube.ware.service.sharedesktop" />
+    package="cube.ware.service.sharedesktop">
+
+    <application>
+        <activity
+            android:name=".ui.ShareScreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+    </application>
+
+</manifest>

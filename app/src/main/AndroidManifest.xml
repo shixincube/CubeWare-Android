@@ -121,22 +121,12 @@
             />
         <activity android:name=".ui.mine.ModifyNameActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".service.sharedesktop.ui.ShareScreenActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
         <activity android:name=".ui.contact.addfriend.AddFriendActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".service.whiteboard.ui.WhiteBoardActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.conference.create.CreateConferenceActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|navigation"
-            android:windowSoftInputMode="stateVisible|adjustPan|stateHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.conference.select.SelectMemberActivity"
+        <activity android:name=".ui.selectMember.SelectMemberActivity"
                   android:screenOrientation="portrait"/>
-        <activity android:name=".ui.conference.conference.ConferenceActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

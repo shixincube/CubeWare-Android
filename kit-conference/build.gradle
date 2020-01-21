@@ -40,7 +40,9 @@ dependencies {
   implementation developmentDependencies.support_appcompat_v7
   implementation developmentDependencies.support_v4
   implementation developmentDependencies.support_recyclerview_v7
+  implementation developmentDependencies.support_design
   implementation developmentDependencies.arouter
   annotationProcessor developmentDependencies.arouter_compiler
   implementation developmentDependencies.arouter_annotation
+  implementation 'com.contrarywind:Android-PickerView:4.1.6'
 }

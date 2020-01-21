@@ -1,2 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cube.ware.service.conference" />
+    package="cube.ware.service.conference">
+
+    <application>
+        <activity
+            android:name=".conference.ConferenceActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".create.CreateConferenceActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|navigation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustPan|stateHidden" />
+    </application>
+
+</manifest>

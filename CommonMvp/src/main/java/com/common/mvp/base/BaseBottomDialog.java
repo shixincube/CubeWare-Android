@@ -31,7 +31,9 @@ public abstract class BaseBottomDialog extends DialogFragment {
     }
 
     protected abstract void initView(View inflate, Bundle savedInstanceState);
+
     protected abstract void initData();
+
     protected abstract void initListener();
 
     public abstract int setLayout();
@@ -44,7 +46,7 @@ public abstract class BaseBottomDialog extends DialogFragment {
         if (window != null) {
             //得到LayoutParams
             WindowManager.LayoutParams params = window.getAttributes();
-            params.dimAmount =0f;
+            params.dimAmount = 0f;
             //修改gravity
             params.gravity = Gravity.BOTTOM;
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;

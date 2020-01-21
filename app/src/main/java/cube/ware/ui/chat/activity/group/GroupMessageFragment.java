@@ -205,7 +205,7 @@ public class GroupMessageFragment extends MessageFragment {
                         bundle.putString(AppConstants.Value.CONFERENCE_INVITE_Id, conference.get(0).founder); //发起者
                         bundle.putSerializable(AppConstants.Value.CONFERENCE_CALLSTATA, CallStatus.GROUP_CALL_JOIN);
                         bundle.putSerializable(AppConstants.Value.CONFERENCE_CONFERENCE, conference.get(0));
-                        RouterUtil.navigation(getActivity(), bundle, AppConstants.Router.ConferenceActivity);
+                        RouterUtil.navigation(getActivity(), bundle, CubeConstants.Router.ConferenceActivity);
                     }
                 }
             });

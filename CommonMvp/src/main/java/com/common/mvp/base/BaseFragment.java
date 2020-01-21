@@ -10,7 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import com.common.mvp.eventbus.Event;
+import com.common.mvp.eventbus.EventBusUtil;
 import com.common.utils.utils.log.LogUtil;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Fragment基类
@@ -58,6 +62,9 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     public void onCreate(@Nullable Bundle savedInstanceState) {
         LogUtil.i("onCreate");
         super.onCreate(savedInstanceState);
+        if (isRegisterEventBus()) {
+            EventBusUtil.register(this);
+        }
     }
 
     @Nullable
@@ -111,6 +118,9 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         LogUtil.i("onDestroy");
         super.onDestroy();
         destroyed = true;
+        if (isRegisterEventBus()) {
+            EventBusUtil.unregister(this);
+        }
         if (this.mPresenter != null) {
             this.mPresenter.onDestroy();
         }
@@ -225,5 +235,46 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     @Override
     public void onError(int code, String message) {
         LogUtil.e("code:" + code + " message:" + message);
+    }
+
+    /**
+     * 是否注册事件分发
+     *
+     * @return true绑定EventBus事件分发，false不绑定
+     */
+    protected boolean isRegisterEventBus() {
+        return false;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public <T> void onEventBusCome(Event<T> event) {
+        if (event != null) {
+            onReceiveEvent(event);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public <T> void onStickyEventBusCome(Event<T> event) {
+        if (event != null) {
+            onReceiveStickyEvent(event);
+        }
+    }
+
+    /**
+     * 接收到分发到事件
+     *
+     * @param event 事件
+     */
+    public <T> void onReceiveEvent(Event<T> event) {
+
+    }
+
+    /**
+     * 接受到分发的粘性事件
+     *
+     * @param event 粘性事件
+     */
+    public <T> void onReceiveStickyEvent(Event<T> event) {
+
     }
 }

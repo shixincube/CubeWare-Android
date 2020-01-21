@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:background="@color/C14"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height_50">
+        <TextView
+            android:id="@+id/btn_cancel"
+            android:text="@string/cancel"
+            android:gravity="center"
+            android:textColor="@color/C3"
+            android:textSize="17sp"
+            android:layout_marginBottom="1dp"
+            android:layout_width="@dimen/view_height_50"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/btn_complete"
+            android:text="@string/sure"
+            android:gravity="center"
+            android:textSize="17sp"
+            android:textColor="@color/cube_primary"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="1dp"
+            android:layout_width="@dimen/view_height_50"
+            android:layout_height="match_parent" />
+        <View
+            android:layout_alignParentBottom="true"
+            android:background="@color/primary_divider_setting"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+    </RelativeLayout>
+
+    <com.contrarywind.view.WheelView
+        android:id="@+id/wheelview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

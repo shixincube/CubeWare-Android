@@ -25,7 +25,10 @@ public interface CubeConstants {
         String ShareScreenActivity = "/sharedesktop/ShareScreenActivity";
 
         //会议页面
-        String ConferenceActivity = "/app/ConferenceActivity";
+        String ConferenceActivity = "/conference/ConferenceActivity";
+
+        //会议创建
+        String CreateConferenceActivity = "/conference/CreateConferenceActivity";
     }
 
     /**
@@ -37,5 +40,9 @@ public interface CubeConstants {
         String UpdateConferenceTipView = "UpdateConferenceTipView";
 
         String InviteConferenceEvent = "InviteConferenceEvent";
+
+        String CreateConferenceEvent = "CreateConferenceEvent";
+
+        String SelectMemberEvent = "SelectMemberEvent";
     }
 }

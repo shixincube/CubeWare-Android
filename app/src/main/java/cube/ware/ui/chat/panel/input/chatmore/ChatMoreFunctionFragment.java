@@ -17,17 +17,15 @@ import cube.service.whiteboard.model.Whiteboard;
 import cube.service.whiteboard.model.WhiteboardConfig;
 import cube.ware.AppConstants;
 import cube.ware.R;
+import cube.ware.core.CubeConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
-import cube.ware.core.CubeConstants;
-import cube.ware.service.conference.manager.ConferenceCallManager;
 import cube.ware.service.whiteboard.WhiteBoardHandle;
-import cube.ware.service.whiteboard.manager.WBCallManager;
-import cube.ware.ui.chat.BaseChatActivity;
-import cube.ware.ui.chat.ChatContainer;
 import cube.ware.service.whiteboard.ui.listener.CreateCallback;
 import cube.ware.service.whiteboard.ui.listener.WBListener;
+import cube.ware.ui.chat.BaseChatActivity;
+import cube.ware.ui.chat.ChatContainer;
 import cube.ware.utils.SpUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +110,7 @@ public class ChatMoreFunctionFragment extends Fragment implements View.OnClickLi
                     }
                 }
                 else { //群聊
-                    if (ConferenceCallManager.getInstance().isCalling()) {
+                    if (CubeCore.getInstance().isCalling()) {
                         ToastUtil.showToast(mChatActivity, R.string.calling_please_try_again_later);
                     }
                     else {
@@ -137,7 +135,7 @@ public class ChatMoreFunctionFragment extends Fragment implements View.OnClickLi
                     }
                 }
                 else {//群聊
-                    if (ConferenceCallManager.getInstance().isCalling()) {
+                    if (CubeCore.getInstance().isCalling()) {
                         ToastUtil.showToast(mChatActivity, R.string.calling_please_try_again_later);
                     }
                     else {

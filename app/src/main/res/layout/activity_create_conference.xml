@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.conference.create.CreateConferenceActivity">
+    tools:context=".service.conference.create.CreateConferenceActivity">
     <RelativeLayout
         android:id="@+id/toolbar_rl"
         android:layout_width="match_parent"

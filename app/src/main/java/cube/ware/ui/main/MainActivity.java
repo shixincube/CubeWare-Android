@@ -26,7 +26,7 @@ import cube.ware.data.room.AppDataBase;
 import cube.ware.eventbus.CubeEvent;
 import cube.ware.service.user.UserHandle;
 import cube.ware.service.user.UserStateListener;
-import cube.ware.ui.conference.ConferenceFragment;
+import cube.ware.service.conference.conferenceList.ConferenceListFragment;
 import cube.ware.ui.contact.ContactFragment;
 import cube.ware.ui.mine.MineFragment;
 import cube.ware.ui.recent.RecentFragment;
@@ -44,11 +44,11 @@ public class MainActivity extends BaseActivity implements UserStateListener {
     private static final String MAIN_PAGE_CONTACTS   = "联系人";
     private static final String MAIN_PAGE_MINE       = "我的";
 
-    private RecentFragment        mRecentFragment;//基于本地数据的最近会话列表
-    private RecentSessionFragment mRecentSessionFragment;//基于引擎数据的最近会话列表
-    private ConferenceFragment    mConferenceFragment;
-    private ContactFragment       mContactMainFragment;
-    private MineFragment          mPersonalFragment;
+    private RecentFragment         mRecentFragment;//基于本地数据的最近会话列表
+    private RecentSessionFragment  mRecentSessionFragment;//基于引擎数据的最近会话列表
+    private ConferenceListFragment mConferenceFragment;
+    private ContactFragment        mContactMainFragment;
+    private MineFragment           mPersonalFragment;
 
     private NavigateTabBar  mNavigateTabBar;    //底部NavigateTabBar
     private FragmentManager mFragmentManager;   // Fragment 管理器
@@ -97,7 +97,7 @@ public class MainActivity extends BaseActivity implements UserStateListener {
                         break;
                     case 1: // 发现
                         if (null == mConferenceFragment) {
-                            mConferenceFragment = new ConferenceFragment();
+                            mConferenceFragment = new ConferenceListFragment();
                         }
                         selectFragment(mConferenceFragment, MAIN_PAGE_CONFERENCE);
                         break;
