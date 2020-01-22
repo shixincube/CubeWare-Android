@@ -31,9 +31,9 @@ public class AppManager {
      * @param context
      */
     public static void init(Context context) {
+        initDatabase(context);
         initLogger(context);
         syncIsDebug(context);
-        initDatabase(context);
     }
 
     /**

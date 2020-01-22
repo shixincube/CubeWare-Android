@@ -86,33 +86,33 @@
             android:name=".ui.contact.select.SelectContactActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.group.groupDetails.GroupDetailsActivity"
+            android:name=".service.group.groupDetails.GroupDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.contact.friend.details.FriendDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.chat.activity.p2p.P2PChatActivity"
+            android:name=".service.message.chat.activity.p2p.P2PChatActivity"
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".ui.chat.activity.group.GroupChatActivity"
+            android:name=".service.message.chat.activity.group.GroupChatActivity"
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".ui.chat.activity.preview.PreviewImageActivity"
+            android:name=".service.message.chat.activity.preview.PreviewImageActivity"
             android:screenOrientation="portrait"
             />
         <activity
-            android:name=".ui.chat.activity.preview.PreviewVideoActivity"
+            android:name=".service.message.chat.activity.preview.PreviewVideoActivity"
             android:screenOrientation="portrait"
             />
         <activity
-            android:name=".ui.chat.activity.file.FileActivity"
+            android:name=".service.message.chat.activity.file.FileActivity"
             android:screenOrientation="portrait"
             />
         <activity

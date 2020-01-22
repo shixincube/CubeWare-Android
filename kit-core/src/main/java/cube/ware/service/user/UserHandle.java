@@ -2,7 +2,6 @@ package cube.ware.service.user;
 
 import android.text.TextUtils;
 
-import com.common.mvp.rx.RxBus;
 import com.common.utils.utils.log.LogUtil;
 
 import cube.ware.core.CubeCore;

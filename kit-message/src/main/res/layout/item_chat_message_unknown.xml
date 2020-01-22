@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    >
+    <cube.ware.widget.CubeEmoticonTextView
+        android:id="@+id/chat_message_item_text_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|left"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="3dp"
+        android:maxWidth="220dp"
+        android:textColor="@color/cube_primary_text"
+        android:textSize="@dimen/text_size_16"
+        />
+</RelativeLayout>

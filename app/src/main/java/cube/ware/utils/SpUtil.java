@@ -3,16 +3,13 @@ package cube.ware.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-
 import com.common.utils.utils.FileUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
+import cube.ware.core.CubeCore;
+import cube.ware.service.message.MessageConstants;
 import java.io.File;
 import java.util.Map;
-
-import cube.ware.App;
-import cube.ware.AppConstants;
 
 /**
  * SharedPreferences工具类
@@ -25,8 +22,8 @@ public class SpUtil {
     private static SharedPreferences sp;
 
     static {
-        if (App.getContext() != null) {
-            sp = App.getContext().getSharedPreferences("cube_ware", Context.MODE_PRIVATE);
+        if (CubeCore.getContext() != null) {
+            sp = CubeCore.getContext().getSharedPreferences("cube_ware", Context.MODE_PRIVATE);
         }
         else {
             throw new NullPointerException("Context is null, Initialize Context before using the SpUtil");
@@ -39,25 +36,25 @@ public class SpUtil {
      * @return
      */
     public static String getResourcePath() {
-        String path = FileUtil.getFilePath(App.getContext(), AppConstants.Sp.PATH_APP);
+        String path = FileUtil.getFilePath(CubeCore.getContext(), MessageConstants.Sp.PATH_APP);
         initFileDir(path);
         return path;
     }
 
     public static String getFilePath() {
-        return getResourcePath() + File.separator + AppConstants.Sp.PATH_FILE;
+        return getResourcePath() + File.separator + MessageConstants.Sp.PATH_FILE;
     }
 
     public static String getImagePath() {
-        return getResourcePath() + File.separator + AppConstants.Sp.PATH_IMAGE;
+        return getResourcePath() + File.separator + MessageConstants.Sp.PATH_IMAGE;
     }
 
     public static String getThumbPath() {
-        return getResourcePath() + File.separator + AppConstants.Sp.PATH_THUMB;
+        return getResourcePath() + File.separator + MessageConstants.Sp.PATH_THUMB;
     }
 
     public static String getLogPath() {
-        return getResourcePath() + File.separator + AppConstants.Sp.PATH_LOG;
+        return getResourcePath() + File.separator + MessageConstants.Sp.PATH_LOG;
     }
 
     /**
@@ -71,22 +68,22 @@ public class SpUtil {
             appFile.mkdirs();
         }
 
-        File log = new File(appFile, AppConstants.Sp.PATH_LOG);
+        File log = new File(appFile, MessageConstants.Sp.PATH_LOG);
         if (!log.exists()) {
             log.mkdirs();
         }
 
-        File image = new File(appFile, AppConstants.Sp.PATH_IMAGE);
+        File image = new File(appFile, MessageConstants.Sp.PATH_IMAGE);
         if (!image.exists()) {
             image.mkdirs();
         }
 
-        File file = new File(appFile, AppConstants.Sp.PATH_FILE);
+        File file = new File(appFile, MessageConstants.Sp.PATH_FILE);
         if (!file.exists()) {
             file.mkdirs();
         }
 
-        File thumb = new File(appFile, AppConstants.Sp.PATH_THUMB);
+        File thumb = new File(appFile, MessageConstants.Sp.PATH_THUMB);
         if (!thumb.exists()) {
             thumb.mkdirs();
         }
@@ -98,11 +95,11 @@ public class SpUtil {
      * @param cubeToken
      */
     public static void setCubeToken(String cubeToken) {
-        setString(AppConstants.Sp.CUBE_TOKEN, cubeToken);
+        setString(MessageConstants.Sp.CUBE_TOKEN, cubeToken);
     }
 
     public static String getCubeToken() {
-        return getString(AppConstants.Sp.CUBE_TOKEN, "");
+        return getString(MessageConstants.Sp.CUBE_TOKEN, "");
     }
 
     /**
@@ -111,11 +108,11 @@ public class SpUtil {
      * @param cubeId
      */
     public static void setCubeId(String cubeId) {
-        setString(AppConstants.Sp.USER_CUBEID, cubeId);
+        setString(MessageConstants.Sp.USER_CUBEID, cubeId);
     }
 
     public static String getCubeId() {
-        return getString(AppConstants.Sp.USER_CUBEID, "");
+        return getString(MessageConstants.Sp.USER_CUBEID, "");
     }
 
     /**
@@ -124,11 +121,11 @@ public class SpUtil {
      * @param name
      */
     public static void setUserName(String name) {
-        setString(AppConstants.Sp.CUBE_NAME, name);
+        setString(MessageConstants.Sp.CUBE_NAME, name);
     }
 
     public static String getUserName() {
-        return getString(AppConstants.Sp.CUBE_NAME, "");
+        return getString(MessageConstants.Sp.CUBE_NAME, "");
     }
 
     /**
@@ -137,11 +134,11 @@ public class SpUtil {
      * @param avator
      */
     public static void setUserAvator(String avator) {
-        setString(AppConstants.Sp.USER_AVATOR, avator);
+        setString(MessageConstants.Sp.USER_AVATOR, avator);
     }
 
     public static String getUserAvator() {
-        return getString(AppConstants.Sp.USER_AVATOR, "");
+        return getString(MessageConstants.Sp.USER_AVATOR, "");
     }
 
     /**
@@ -150,22 +147,22 @@ public class SpUtil {
      * @param userJson
      */
     public static void setUserJson(String userJson) {
-        setString(AppConstants.Sp.USER_JSON, userJson);
+        setString(MessageConstants.Sp.USER_JSON, userJson);
     }
 
     public static String getUserJson() {
-        return getString(AppConstants.Sp.USER_JSON, "");
+        return getString(MessageConstants.Sp.USER_JSON, "");
     }
 
-
-    /** 设置@全体成员
+    /**
+     * 设置@全体成员
      *
      * @param groupCube 群组cube号
      * @param value     @全体成员的值map（key:2017-9-8 value:1）
      */
     public static void setAtAll(String groupCube, Map<String, Integer> value) {
         String json = new Gson().toJson(value, new TypeToken<Map<String, Integer>>() {}.getType());
-        SpUtil.setString(AppConstants.Sp.SP_CUBE_AT_ALL + groupCube, json);
+        SpUtil.setString(MessageConstants.Sp.SP_CUBE_AT_ALL + groupCube, json);
     }
 
     /**
@@ -197,13 +194,12 @@ public class SpUtil {
     }
 
     public static void setDraftMessage(String chatId, String content) {
-        setString(AppConstants.MESSAGE_DRAFT + chatId, content);
+        setString(MessageConstants.Sp.MESSAGE_DRAFT + chatId, content);
     }
 
     public static String getDraftMessage(String chatId) {
-        return getString(AppConstants.MESSAGE_DRAFT + chatId, "");
+        return getString(MessageConstants.Sp.MESSAGE_DRAFT + chatId, "");
     }
-
 
     /**
      * 获取@全体成员
@@ -213,7 +209,7 @@ public class SpUtil {
      * @return
      */
     public static Map<String, Integer> getAtAll(String groupCube) {
-        String json = SpUtil.getString(AppConstants.Sp.SP_CUBE_AT_ALL + groupCube, "");
+        String json = SpUtil.getString(MessageConstants.Sp.SP_CUBE_AT_ALL + groupCube, "");
         return new Gson().fromJson(json, new TypeToken<Map<String, Integer>>() {}.getType());
     }
 

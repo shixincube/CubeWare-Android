@@ -1,18 +1,10 @@
 package cube.ware.service.message;
 
 import android.text.TextUtils;
-
 import com.common.mvp.rx.RxSchedulers;
 import com.common.utils.utils.EmptyUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.common.model.CubeErrorCode;
@@ -24,15 +16,19 @@ import cube.service.message.model.CustomMessage;
 import cube.service.message.model.FileMessage;
 import cube.service.message.model.MessageEntity;
 import cube.service.message.model.ReceiptMessage;
-import cube.ware.CubeUI;
+import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;
-import cube.ware.manager.MessageManager;
-import cube.ware.manager.ReceiptManager;
-import cube.ware.ui.chat.message.Listener.FileMessageDownloadListener;
-import cube.ware.ui.chat.message.Listener.FileMessageUploadListener;
-import cube.ware.ui.chat.message.MessageHandler;
-import cube.ware.utils.SpUtil;
+import cube.ware.service.message.chat.message.Listener.FileMessageDownloadListener;
+import cube.ware.service.message.chat.message.Listener.FileMessageUploadListener;
+import cube.ware.service.message.chat.message.MessageHandler;
+import cube.ware.service.message.manager.MessageManager;
+import cube.ware.service.message.manager.ReceiptManager;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import rx.schedulers.Schedulers;
 
 /**
@@ -44,11 +40,11 @@ import rx.schedulers.Schedulers;
 public class MessageHandle implements MessageListener {
 
     private static MessageHandle instance = new MessageHandle();
-    private Map<Long, Map<String, FileMessageUploadListener>>   uploadListenerMap   = new HashMap<>();   // 文件上传监听
-    private Map<Long, Map<String, FileMessageDownloadListener>> downloadListenerMap = new HashMap<>();   // 文件下载监听
 
-    private MessageHandle() {
-    }
+    private Map<Long, Map<String, FileMessageUploadListener>>   uploadListenerMap   = new ConcurrentHashMap<>();   // 文件上传监听
+    private Map<Long, Map<String, FileMessageDownloadListener>> downloadListenerMap = new ConcurrentHashMap<>();   // 文件下载监听
+
+    private MessageHandle() {}
 
     public static MessageHandle getInstance() {
         return instance;
@@ -85,7 +81,7 @@ public class MessageHandle implements MessageListener {
     @Override
     public void onMessageSent(MessageEntity message) {
         LogUtil.i("发送的消息: " + message.toString());
-        if (message instanceof ReceiptMessage){
+        if (message instanceof ReceiptMessage) {
             ReceiptManager.getInstance().onReceiptedAll(message, message.getFromDevice());
             return;
         }
@@ -170,9 +166,9 @@ public class MessageHandle implements MessageListener {
     public void onMessageDownloadCompleted(MessageEntity message) {
         LogUtil.i("文件下载完成的消息:" + message.toString());
 
-        if (message.getType().equals(MessageType.File) && !message.isGroupMessage() && !message.getSender().getCubeId().equals(SpUtil.getCubeId())) {
+        if (message.getType().equals(MessageType.File) && !message.isGroupMessage() && !message.getSender().getCubeId().equals(CubeCore.getInstance().getCubeId())) {
             FileMessage fileMessage = (FileMessage) message;
-            CustomMessage customMessage = MessageManager.getInstance().buildCustomMessage(CubeSessionType.P2P,SpUtil.getCubeId(), message.getSender().getCubeId(), "");
+            CustomMessage customMessage = MessageManager.getInstance().buildCustomMessage(CubeSessionType.P2P, CubeCore.getInstance().getCubeId(), message.getSender().getCubeId(), "");
             customMessage.setHeader("operate", "download");
             customMessage.setHeader("type", "notify");
             customMessage.setHeader("sn", String.valueOf(message.getSerialNumber()));
@@ -205,7 +201,7 @@ public class MessageHandle implements MessageListener {
     @Override
     public void onMessageRecalled(MessageEntity message) {
         LogUtil.i("撤回的消息:" + message.toString());
-        MessageManager.getInstance().reCallMessage(CubeUI.getInstance().getContext(), message);
+        MessageManager.getInstance().reCallMessage(CubeCore.getContext(), message);
         //取消消息的后续处理，如：下载等
         CubeEngine.getInstance().getMessageService().pauseMessage(message.getSerialNumber());
     }
@@ -218,7 +214,7 @@ public class MessageHandle implements MessageListener {
     @Override
     public void onMessageReceived(MessageEntity message) {
         LogUtil.i("接收的消息: " + message.toString());
-        if (message instanceof ReceiptMessage){
+        if (message instanceof ReceiptMessage) {
             //收到的回执消息，表示会话对端已回执（已读），无需求暂时不处理。
             ReceiptManager.getInstance().onReceiptedAll(message, message.getFromDevice());
             return;
@@ -272,7 +268,7 @@ public class MessageHandle implements MessageListener {
     @Override
     public void onMessagesSyncing(HashMap<String, List<MessageEntity>> map) {
         LogUtil.i("消息同步中--> 消息数量为：" + (map != null ? map.values().size() : 0));
-        MessageManager.getInstance().onSyncingMessage(CubeUI.getInstance().getContext(), map);
+        MessageManager.getInstance().onSyncingMessage(CubeCore.getContext(), map);
     }
 
     /**
@@ -293,11 +289,11 @@ public class MessageHandle implements MessageListener {
     public void onMessageFailed(MessageEntity message, CubeError cubeError) {
         LogUtil.i("消息错误：" + cubeError.desc + "code: " + cubeError.code);
         if (CubeErrorCode.NoReceiver == CubeErrorCode.convert(cubeError.code)) {
-            ToastUtil.showToast(CubeUI.getInstance().getContext(), "消息发送失败 没有接收者！");
+            ToastUtil.showToast(CubeCore.getContext(), "消息发送失败 没有接收者！");
             return;
         }
         if (CubeErrorCode.NoPullMessage == CubeErrorCode.convert(cubeError.code)) {
-            ToastUtil.showToast(CubeUI.getInstance().getContext(), "没有更多消息啦~");
+            ToastUtil.showToast(CubeCore.getContext(), "没有更多消息啦~");
             return;
         }
         if (null != message) {
@@ -316,8 +312,6 @@ public class MessageHandle implements MessageListener {
             }
             MessageManager.getInstance().updateMessageInLocal(message).subscribe();
         }
-
-        CubeUI.getInstance().reportError(message, cubeError);
     }
 
     /**

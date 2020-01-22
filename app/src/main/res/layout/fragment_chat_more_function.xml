@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="cube.ware.ui.chat.panel.input.chatmore.ChatMoreFunctionFragment">
+    tools:context=".service.message.chat.panel.input.chatmore.ChatMoreFunctionFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

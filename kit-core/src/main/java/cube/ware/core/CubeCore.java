@@ -18,6 +18,7 @@ public class CubeCore {
     private static Context       context;
     private        KitCoreConfig config;
     private        String        cubeId;
+    private        String        userName;
 
     private CubeCore() {}
 
@@ -39,6 +40,14 @@ public class CubeCore {
 
     public void setCubeId(String cubeId) {
         this.cubeId = cubeId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public void setDataConfig(@NonNull KitCoreConfig config) {

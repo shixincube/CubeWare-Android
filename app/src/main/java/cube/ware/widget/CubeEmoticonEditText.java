@@ -6,9 +6,9 @@ import android.text.Editable;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 
-import cube.ware.ui.chat.activity.group.AtHelper;
-import cube.ware.ui.chat.panel.input.InputPanel;
-import cube.ware.ui.chat.panel.input.emoticon.EmoticonUtil;
+import cube.ware.service.message.chat.activity.group.AtHelper;
+import cube.ware.service.message.chat.panel.input.InputPanel;
+import cube.ware.service.message.chat.panel.input.emoticon.EmoticonUtil;
 
 
 /**

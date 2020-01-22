@@ -91,6 +91,7 @@ dependencies {
   implementation project(path: ':kit-conference')
 //  implementation project(path: ':kit-sharedesktop')
   implementation project(path: ':kit-group')
+//  implementation project(path: ':kit-message')
   implementation developmentDependencies.support_appcompat_v7
   implementation developmentDependencies.support_v4
   implementation developmentDependencies.support_recyclerview_v7

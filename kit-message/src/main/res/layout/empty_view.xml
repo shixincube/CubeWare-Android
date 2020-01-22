@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutEmpty"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:weightSum="1"
+    >
+
+    <ImageView
+        android:id="@+id/empty_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.09"
+        android:contentDescription="@null"
+        android:src="@drawable/vector_no_data"
+        />
+
+    <TextView
+        android:id="@+id/empty_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/view_space_16"
+        android:text="No Data"
+        android:textColor="@color/grey_500"
+        />
+
+    <TextView
+        android:id="@+id/empty_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/view_space_16"
+        android:background="#f5f4f0"
+        android:clickable="true"
+        android:gravity="center"
+        android:minWidth="100dp"
+        android:text="Your custom button"
+        android:textSize="16sp"
+        android:visibility="visible"
+        style="?android:attr/borderlessButtonStyle"
+        />
+
+</LinearLayout>

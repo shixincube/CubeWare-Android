@@ -10,7 +10,6 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 
 import cube.ware.data.room.model.CubeConference;
-import cube.ware.data.room.model.CubeUser;
 
 /**
  * Created by dth

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chat_root"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/transparent"
+    >
+    <ImageView
+        android:id="@+id/chat_content_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:minHeight="@dimen/view_space_84"
+        android:minWidth="@dimen/view_space_72"
+        android:scaleType="centerCrop"
+        android:background="@color/transparent"
+        />
+    <TextView
+        android:id="@+id/chat_secret_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/view_space_16"
+        android:text="@string/secret_text_message"
+        android:textColor="@color/grey_500"
+        android:textSize="@dimen/text_size_16"
+        android:visibility="gone"
+        />
+    <ImageView
+        android:id="@+id/chat_video_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:focusable="false"
+        android:gravity="center"
+        android:scaleType="center"
+        android:src="@drawable/ic_video_play_bg"
+        android:visibility="gone"
+        />
+    <include layout="@layout/item_message_progress_bar"/>
+
+</FrameLayout>

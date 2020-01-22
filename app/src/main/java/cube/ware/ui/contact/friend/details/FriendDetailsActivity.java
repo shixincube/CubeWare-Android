@@ -18,7 +18,7 @@ import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.data.room.model.CubeUser;
 import cube.ware.eventbus.CubeEvent;
-import cube.ware.ui.chat.activity.p2p.P2PChatCustomization;
+import cube.ware.service.message.chat.activity.p2p.P2PChatCustomization;
 import cube.ware.widget.bottomPopupDialog.BottomPopupDialog;
 import java.util.ArrayList;
 import java.util.List;

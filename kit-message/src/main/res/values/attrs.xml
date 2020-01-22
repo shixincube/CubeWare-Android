@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="NavigateTabBar">
+        <attr format="color|reference" name="navigateTabTextColor"/>
+        <attr format="color|reference" name="navigateTabSelectedTextColor"/>
+        <attr format="integer|reference" name="containerId"/>
+        <attr format="dimension|reference" name="navigateTabTextSize"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="CubeIndexBar">
+        <attr format="dimension" name="indexBarTextSize"/>
+        <attr format="color" name="indexBarPressBackground"/>
+    </declare-styleable>
+
+    <!-- 自定义appBar -->
+    <declare-styleable name="CubeToolbar">
+        <attr format="boolean" name="titleVisible"/>
+        <attr format="dimension" name="titleTextSize"/>
+
+        <attr format="boolean" name="subtitleVisible"/>
+        <attr format="dimension" name="subtitleTextSize"/>
+
+        <attr name="title_gravity">
+            <flag name="top" value="0x30"/>
+            <flag name="bottom" value="0x50"/>
+            <flag name="left" value="0x03"/>
+            <flag name="right" value="0x05"/>
+            <flag name="center_vertical" value="0x10"/>
+            <flag name="fill_vertical" value="0x70"/>
+            <flag name="center_horizontal" value="0x01"/>
+            <flag name="fill_horizontal" value="0x07"/>
+            <flag name="center" value="0x11"/>
+            <flag name="fill" value="0x77"/>
+            <flag name="clip_vertical" value="0x80"/>
+            <flag name="clip_horizontal" value="0x08"/>
+            <flag name="start" value="0x00800003"/>
+            <flag name="end" value="0x00800005"/>
+        </attr>
+
+        <attr format="boolean" name="logoVisible"/>
+        <attr format="dimension" name="logoBackground"/>
+
+        <attr format="boolean" name="progressVisible"/>
+        <attr format="reference" name="progressDrawable"/>
+        <attr format="boolean" name="progressIndeterminate"/>
+        <attr format="dimension" name="progressMarginRight"/>
+        <attr format="dimension" name="progressHeight"/>
+        <attr format="dimension" name="progressWidth"/>
+
+        <attr format="boolean" name="backVisible"/>
+        <attr format="string" name="backText"/>
+        <attr format="reference" name="backTextAppearance"/>
+        <attr format="color" name="backTextColor"/>
+        <attr format="dimension" name="backTextSize"/>
+        <attr format="reference" name="backIcon"/>
+        <attr format="dimension" name="backMarginRight"/>
+
+        <attr format="boolean" name="rightVisible"/>
+        <attr format="reference" name="rightIcon"/>
+        <attr format="string" name="rightText"/>
+        <attr format="reference" name="rightTextAppearance"/>
+        <attr format="color" name="rightTextColor"/>
+        <attr format="dimension" name="rightTextSize"/>
+        <attr format="dimension" name="rightMarginLeft"/>
+        <attr format="dimension" name="rightMarginRight"/>
+
+        <attr format="reference" name="rightTitleIcon"/>
+        <attr format="reference" name="leftTitleIcon"/>
+    </declare-styleable>
+
+    <!-- 自定义录音波动 -->
+    <declare-styleable name="HorVoiceView">
+        <attr format="color" name="voiceLineColor"/>
+        <attr format="dimension" name="voiceLineWidth"/>
+        <attr format="dimension" name="voiceLineHeight"/>
+        <attr format="dimension" name="voiceLineMaxHeight"/>
+        <attr format="color" name="voiceTextColor"/>
+        <attr format="dimension" name="voiceTextSize"/>
+    </declare-styleable>
+
+    <!-- 自定义录音播放 -->
+    <declare-styleable name="RecordStartView">
+        <attr format="color" name="mRingColor"/>
+        <attr format="color" name="mCenterColor"/>
+        <attr format="color" name="mRingProgressColor"/>
+        <attr format="dimension" name="mRingWidth"/>
+        <attr format="integer" name="mRingMax"/>
+    </declare-styleable>
+
+    <declare-styleable name="SuperSwipeRefreshLayout">
+        <attr format="integer" name="header_view_height"/>
+        <attr format="integer" name="default_circle_target"/>
+    </declare-styleable>
+
+    <!-- 自定义进度条 -->
+    <declare-styleable name="CubeProgressbar">
+        <!-- 进度百分比文字大小 -->
+        <attr format="dimension" name="percent_text_size"/>
+        <!-- 圆形进度条边框大小 -->
+        <attr format="dimension" name="stroke_width"/>
+        <!-- 矩形进度条 四周圆角大小 -->
+        <attr format="dimension" name="rect_round"/>
+        <!-- 矩形进度条 是空心样式还是实心样式 -->
+        <attr format="boolean" name="isHorizonStroke"/>
+        <!-- 进度百分比文字颜色 -->
+        <attr format="color|integer" name="percent_text_color"/>
+        <!-- 进度条背景颜色 -->
+        <attr format="color|integer" name="progressBarBgColor"/>
+        <!-- 扇形进度条颜色 -->
+        <attr format="color|integer" name="sectorColor"/>
+        <!-- 扇形背景颜色 -->
+        <attr format="color|integer" name="unSweepColor"/>
+        <!-- 进度颜色 -->
+        <attr format="color|integer" name="progressColor"/>
+        <!-- 进度文字是否显示百分号 -->
+        <attr format="boolean" name="showPercentSign"/>
+        <!-- 进度条样式圆形还是矩形 -->
+        <attr name="orientation">
+            <enum name="horizontal" value="0"/>
+            <enum name="circle" value="1"/>
+            <enum name="sector" value="2"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="PagerSlidingTabStrip">
+        <attr format="color" name="pstsIndicatorColor"/>
+        <attr format="color" name="pstsUnderlineColor"/>
+        <attr format="color" name="pstsDividerColor"/>
+        <attr format="dimension" name="pstsIndicatorHeight"/>
+        <attr format="dimension" name="pstsUnderlineHeight"/>
+        <attr format="dimension" name="pstsDividerPadding"/>
+        <attr format="dimension" name="pstsTabPaddingLeftRight"/>
+        <attr format="dimension" name="pstsScrollOffset"/>
+        <attr format="reference" name="pstsTabBackground"/>
+        <attr format="boolean" name="pstsShouldExpand"/>
+        <attr format="boolean" name="pstsTextAllCaps"/>
+        <attr format="color" name="selectedTabTextColor"/>
+    </declare-styleable>
+
+    <declare-styleable name="ChatImageView">
+        <attr format="reference" name="chat_image_mask"/>
+    </declare-styleable>
+</resources>

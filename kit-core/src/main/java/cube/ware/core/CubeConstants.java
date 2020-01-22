@@ -24,6 +24,9 @@ public interface CubeConstants {
         //选择人员
         String SelectMemberActivity = "/app/SelectMemberActivity";
 
+        //添加好友
+        String AddFriendActivity = "/app/AddFriendActivity";
+
         // 分享屏幕界面
         String ShareScreenActivity = "/sharedesktop/ShareScreenActivity";
 
@@ -36,11 +39,14 @@ public interface CubeConstants {
         //群组详情
         String GroupDetailsActivity = "/app/GroupDetailsActivity";
 
-        //group聊天
-        String GroupChatActivity = "/app/GroupChatActivity";
-
         //修改昵称
         String ModifyNameActivity = "/app/ModifyNameActivity";
+
+        //p2p聊天
+        String P2PChatActivity = "/app/P2PChatActivity";
+
+        //group聊天
+        String GroupChatActivity = "/app/GroupChatActivity";
     }
 
     /**

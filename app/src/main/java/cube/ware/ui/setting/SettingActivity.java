@@ -12,7 +12,7 @@ import cube.service.CubeEngine;
 import cube.service.setting.Setting;
 import cube.ware.AppConstants;
 import cube.ware.R;
-import cube.ware.ui.chat.BaseToolBarActivity;
+import cube.ware.service.message.chat.BaseToolBarActivity;
 import cube.ware.widget.toolbar.ToolBarOptions;
 
 /**

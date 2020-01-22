@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/back_director_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_item_bg"
+    android:paddingBottom="@dimen/view_space_8"
+    android:paddingLeft="@dimen/view_space_16"
+    android:paddingTop="@dimen/view_space_8"
+    android:visibility="gone"
+    >
+    <ImageView
+        android:id="@+id/file_icon_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_file_back_folder"
+        />
+    <TextView
+        android:id="@+id/file_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/view_space_16"
+        android:layout_marginStart="@dimen/view_space_16"
+        android:layout_toRightOf="@+id/file_icon_iv"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="返回上级目录"
+        android:textColor="@color/selector_black_text"
+        android:textSize="@dimen/text_size_16"
+        />
+</RelativeLayout>

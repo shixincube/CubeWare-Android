@@ -256,7 +256,7 @@ public class CubeMessageRepository {
         return Observable.create(new OnSubscribeRoom<List<CubeMessage>>() {
             @Override
             protected List<CubeMessage> get() {
-                return AppDataBaseFactory.getCubeMessageDao().queryMessageListByType(chatId, messageType.getType());
+                return AppDataBaseFactory.getCubeMessageDao().queryMessageListByType(chatId, messageType.type);
             }
         }).subscribeOn(Schedulers.io());
     }

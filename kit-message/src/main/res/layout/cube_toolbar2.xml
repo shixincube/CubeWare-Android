@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<app:cube.ware.widget.toolbar.CubeToolbar2
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/chat_panel_title_bar_height"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/view_space_10"
+    android:paddingRight="@dimen/view_space_10"
+    app:progressDrawable="@drawable/cube_progress_small"
+    app:progressHeight="@dimen/view_space_20"
+    app:progressIndeterminate="true"
+    app:progressMarginRight="@dimen/view_space_8"
+    app:progressWidth="@dimen/view_space_20"
+    app:titleTextColor="@color/primary_text"
+    app:title_gravity="center"
+    />
+

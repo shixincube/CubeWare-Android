@@ -8,8 +8,8 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import cube.ware.R;
-import cube.ware.ui.chat.activity.group.AtHelper;
-import cube.ware.ui.chat.panel.input.emoticon.EmoticonUtil;
+import cube.ware.service.message.chat.activity.group.AtHelper;
+import cube.ware.service.message.chat.panel.input.emoticon.EmoticonUtil;
 
 /**
  * 表情TextView

@@ -2,7 +2,6 @@ package cube.ware.ui.login;
 
 import android.content.Context;
 import com.common.utils.utils.log.LogUtil;
-import cube.ware.AppManager;
 import cube.ware.data.api.ApiFactory;
 import cube.ware.data.api.ResultData;
 import cube.ware.data.model.dataModel.LoginCubeData;

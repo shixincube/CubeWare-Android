@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.text.format.Formatter;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileFilter;
@@ -1337,6 +1338,18 @@ public final class FileUtil {
             ret[j++] = hexDigits[bytes[i] & 0x0f];
         }
         return new String(ret);
+    }
+
+    /**
+     * 格式化文件大小，如：B、KB、MB等
+     *
+     * @param context
+     * @param sizeBytes 文件总大小
+     *
+     * @return B、KB、MB等
+     */
+    public static String formatFileSize(Context context, long sizeBytes) {
+        return Formatter.formatFileSize(context, sizeBytes);
     }
 
     /**

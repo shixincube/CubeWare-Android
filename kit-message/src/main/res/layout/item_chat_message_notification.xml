@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+    >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/message_item_notification_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/view_space_8"
+            android:layout_marginRight="@dimen/view_space_8"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="2dp"
+            android:maxWidth="@dimen/tips_max_height"
+            android:text=" "
+            android:textColor="#ffffff"
+            android:textSize="@dimen/text_size_12"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>
+

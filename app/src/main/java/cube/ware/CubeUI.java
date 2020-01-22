@@ -14,7 +14,7 @@ import cube.ware.service.conference.ConferenceHandle;
 import cube.ware.service.group.GroupHandle;
 import cube.ware.service.message.MessageHandle;
 import cube.ware.service.user.UserHandle;
-import cube.ware.ui.chat.ChatEventListener;
+import cube.ware.service.message.chat.ChatEventListener;
 import java.util.ArrayList;
 import java.util.List;
 

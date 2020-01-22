@@ -1,6 +1,5 @@
 package cube.ware;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import com.common.mvp.base.BaseApplication;
