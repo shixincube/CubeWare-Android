@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/play_layout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/view_height_245"
+    android:background="@android:color/white"
+    >
+    <cube.ware.widget.voice.PlayStartView
+        android:id="@+id/btn_play"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/ic_chat_record_start"
+        />
+
+    <cube.ware.widget.voice.HorVoiceView
+        android:id="@+id/horvoiceview"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_above="@id/btn_play"
+        app:voiceLineColor="@color/cube_primary"
+        app:voiceLineHeight="@dimen/view_space_2"
+        app:voiceLineWidth="@dimen/view_space_18"
+        app:voiceTextColor="@color/cube_secondary_text"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_size_0.5"
+        android:layout_above="@+id/ll"
+        android:background="@color/cube_primary_divider"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:divider="@drawable/shape_divider"
+        android:orientation="horizontal"
+        android:showDividers="middle"
+        >
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel"
+            android:textColor="@color/cube_primary"
+            style="?android:attr/borderlessButtonStyle"
+            />
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/send"
+            android:textColor="@color/cube_primary"
+            style="?android:attr/borderlessButtonStyle"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

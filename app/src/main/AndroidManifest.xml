@@ -92,26 +92,6 @@
             android:name=".ui.contact.friend.details.FriendDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".service.message.chat.activity.p2p.P2PChatActivity"
-            android:launchMode="singleTask"
-            android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name=".service.message.chat.activity.group.GroupChatActivity"
-            android:launchMode="singleTask"
-            android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name=".service.message.chat.activity.preview.PreviewImageActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity
-            android:name=".service.message.chat.activity.preview.PreviewVideoActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity
             android:name=".service.message.chat.activity.file.FileActivity"
             android:screenOrientation="portrait"
             />

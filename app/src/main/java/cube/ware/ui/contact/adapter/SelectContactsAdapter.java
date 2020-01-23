@@ -10,7 +10,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.glide.GlideUtil;
-import cube.ware.AppConstants;
+import cube.ware.AppManager;
 import cube.ware.R;
 import cube.ware.data.room.model.CubeUser;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class SelectContactsAdapter extends BaseQuickAdapter<CubeUser, BaseViewHo
 
         if (item != null) {
 
-            GlideUtil.loadCircleImage(AppConstants.AVATAR_URL + item.getCubeId(), mContext, mContactsHeadIv, R.drawable.default_head_user);
+            GlideUtil.loadCircleImage(AppManager.getAvatarUrl() + item.getCubeId(), mContext, mContactsHeadIv, R.drawable.default_head_user);
             mContactsNameTv.setText(TextUtils.isEmpty(item.getDisplayName()) ? item.getCubeId() : item.getDisplayName());
 
             final String userCube = item.getCubeId();

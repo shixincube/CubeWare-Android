@@ -1,2 +1,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cube.ware.service.message" />
+    package="cube.ware.service.message">
+
+    <application>
+        <activity
+            android:name=".chat.activity.p2p.P2PChatActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".chat.activity.group.GroupChatActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".chat.activity.preview.PreviewImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".chat.activity.preview.PreviewVideoActivity"
+            android:screenOrientation="portrait" />
+    </application>
+</manifest>

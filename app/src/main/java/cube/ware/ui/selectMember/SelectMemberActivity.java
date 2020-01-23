@@ -21,7 +21,6 @@ import cube.service.conference.model.ConferenceConfig;
 import cube.service.group.GroupType;
 import cube.service.whiteboard.model.Whiteboard;
 import cube.service.whiteboard.model.WhiteboardConfig;
-import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.core.CubeConstants;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
@@ -61,6 +60,8 @@ public class SelectMemberActivity extends BaseActivity<SelectMemberPresenter> im
     private WBListener                      mWBListener;
     private ConferenceCreateListener        mCreateListener;
     private ProgressDialog                  mProgressDialog;
+
+    String BUNDLE = "bundle";
 
     @Override
     protected int getContentViewId() {
@@ -115,7 +116,7 @@ public class SelectMemberActivity extends BaseActivity<SelectMemberPresenter> im
 
     @Override
     public void getArgment() {
-        Bundle bundleExtra = getIntent().getBundleExtra(AppConstants.Value.BUNDLE);
+        Bundle bundleExtra = getIntent().getBundleExtra(BUNDLE);
         selectType = bundleExtra.getInt("select_type");
         ArrayList<String> not_check_list = bundleExtra.getStringArrayList("not_check_list");
         if (not_check_list != null) {

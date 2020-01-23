@@ -7,18 +7,11 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.common.mvp.base.BaseActivity;
 import com.common.utils.utils.ToastUtil;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Set;
-
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.group.GroupType;
@@ -28,13 +21,18 @@ import cube.service.user.model.User;
 import cube.ware.App;
 import cube.ware.AppConstants;
 import cube.ware.R;
+import cube.ware.core.CubeConstants;
 import cube.ware.data.room.model.CubeUser;
 import cube.ware.service.group.GroupHandle;
-import cube.ware.ui.contact.adapter.SelectContactsAdapter;
 import cube.ware.service.group.GroupListenerAdapter;
+import cube.ware.ui.contact.adapter.SelectContactsAdapter;
 import cube.ware.utils.SpUtil;
 import cube.ware.widget.indexbar.CubeIndexBar;
 import cube.ware.widget.indexbar.SuspensionDecoration;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by dth
@@ -42,30 +40,30 @@ import cube.ware.widget.indexbar.SuspensionDecoration;
  * Date: 2018/8/28.
  */
 @Route(path = AppConstants.Router.SelectContactActivity)
-public class SelectContactActivity extends BaseActivity<SelectContactContract.Presenter> implements SelectContactContract.View, SelectContactsAdapter.OnItemSelectedListener{
+public class SelectContactActivity extends BaseActivity<SelectContactContract.Presenter> implements SelectContactContract.View, SelectContactsAdapter.OnItemSelectedListener {
 
-    private   TextView       mBack;
-    private   TextView       mTitle;
-    private   TextView       mComplete;
-    private SwipeRefreshLayout         mRefreshLayout;
-    private RecyclerView               mFriendRv;
-    private TextView                   mSideBarDialogTv;
-    private CubeIndexBar               mCubeIndexBar;
-    private SuspensionDecoration       mDecoration;
-    private RelativeLayout             mEmpty;//无数据
-    private String                     mName;
-    private SelectContactsAdapter mAdapter;
+    private TextView                        mBack;
+    private TextView                        mTitle;
+    private TextView                        mComplete;
+    private SwipeRefreshLayout              mRefreshLayout;
+    private RecyclerView                    mFriendRv;
+    private TextView                        mSideBarDialogTv;
+    private CubeIndexBar                    mCubeIndexBar;
+    private SuspensionDecoration            mDecoration;
+    private RelativeLayout                  mEmpty;//无数据
+    private String                          mName;
+    private SelectContactsAdapter           mAdapter;
     private LinkedHashMap<String, CubeUser> mSelectedList = new LinkedHashMap<>();
 
     public static final String NOT_CHECKED_LIST = "not_checked_list";
-    public static final String TYPE = "type";
-    public static final String GROUP_ID = "group_id";
+    public static final String TYPE             = "type";
+    public static final String GROUP_ID         = "group_id";
 
     @Autowired(name = NOT_CHECKED_LIST)
     public ArrayList<String> mNotCheckedList;
 
     @Autowired(name = TYPE)
-    public int mType = 0;
+    public int    mType = 0;
     @Autowired(name = GROUP_ID)
     public String mGroupId;
 
@@ -76,7 +74,7 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
 
     @Override
     protected SelectContactContract.Presenter createPresenter() {
-        return new SelectContactPresenter(this,this);
+        return new SelectContactPresenter(this, this);
     }
 
     @Override
@@ -92,7 +90,7 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
         mCubeIndexBar = (CubeIndexBar) findViewById(R.id.sidebar);
         mEmpty = (RelativeLayout) findViewById(R.id.empty_rl);
         mAdapter = new SelectContactsAdapter(R.layout.item_select_contact);
-        if(mNotCheckedList==null) {
+        if (mNotCheckedList == null) {
             mNotCheckedList = new ArrayList<>();
             mNotCheckedList.add(SpUtil.getCubeId());
         }
@@ -104,8 +102,8 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
 
         // indexBar初始化
         mCubeIndexBar.setPressedShowTextView(mSideBarDialogTv) // 设置HintTextView
-                .setNeedRealIndex(true)   // 设置需要真实的索引
-                .setLayoutManager(layoutManager); // 设置RecyclerView的LayoutManager
+                     .setNeedRealIndex(true)   // 设置需要真实的索引
+                     .setLayoutManager(layoutManager); // 设置RecyclerView的LayoutManager
     }
 
     @Override
@@ -118,7 +116,7 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
     protected void initListener() {
         mBack.setOnClickListener(this);
         mComplete.setOnClickListener(this);
-        mAdapter.setOnItemSelectedListener(this );
+        mAdapter.setOnItemSelectedListener(this);
         GroupHandle.getInstance().addGroupListener(groupListenerAdapter);
     }
 
@@ -143,11 +141,12 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
                     return;
                 }
                 if (mType == 0) {//create group
-                    GroupConfig groupConfig = new GroupConfig(GroupType.NORMAL, SpUtil.getUserName() ==null?SpUtil.getCubeId()+ "创建的群":SpUtil.getUserName() + "创建的群");
+                    GroupConfig groupConfig = new GroupConfig(GroupType.NORMAL, SpUtil.getUserName() == null ? SpUtil.getCubeId() + "创建的群" : SpUtil.getUserName() + "创建的群");
                     groupConfig.members = strings;
                     CubeEngine.getInstance().getGroupService().create(groupConfig);
-                } else if ((mType == 1)) {//add member
-                    CubeEngine.getInstance().getGroupService().addMembers(mGroupId,strings);
+                }
+                else if ((mType == 1)) {//add member
+                    CubeEngine.getInstance().getGroupService().addMembers(mGroupId, strings);
                 }
                 break;
         }
@@ -157,7 +156,7 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
     public void onResponseUserList(List<CubeUser> list) {
         //移除自己
         for (int i = 0; i < list.size(); i++) {
-            if(list.get(i).getCubeId().equals(SpUtil.getCubeId())){
+            if (list.get(i).getCubeId().equals(SpUtil.getCubeId())) {
                 list.remove(i);
             }
         }
@@ -166,23 +165,24 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
 
     @Override
     public void onItemSelected(String selectedCube) {
-        if (mAdapter.getselectSize() == 0){
+        if (mAdapter.getselectSize() == 0) {
             mComplete.setTextColor(getResources().getColor(R.color.assist_text));
             mComplete.setText("确定");
-        }else {
-            mComplete.setText("确定("+mAdapter.getselectSize()+")");
+        }
+        else {
+            mComplete.setText("确定(" + mAdapter.getselectSize() + ")");
             mComplete.setTextColor(getResources().getColor(R.color.C8));
         }
-
     }
 
     @Override
     public void onItemUnselected(String selectedCube) {
-        if (mAdapter.getselectSize() == 0){
+        if (mAdapter.getselectSize() == 0) {
             mComplete.setTextColor(getResources().getColor(R.color.assist_text));
             mComplete.setText("确定");
-        }else {
-            mComplete.setText("确定("+mAdapter.getselectSize()+")");
+        }
+        else {
+            mComplete.setText("确定(" + mAdapter.getselectSize() + ")");
             mComplete.setTextColor(getResources().getColor(R.color.C8));
         }
     }
@@ -198,11 +198,9 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
         public void onGroupCreated(Group group, User user) {
             //创建群组成功
             Toast.makeText(App.getContext(), "群组创建成功", Toast.LENGTH_SHORT).show();
-            ARouter.getInstance().build(AppConstants.Router.GroupDetailsActivity)
-                    //                .withSerializable("mGroup", group)
-                    .withObject("group", group)
-                    .withString("groupId",group.groupId)
-                    .navigation();
+            ARouter.getInstance().build(CubeConstants.Router.GroupDetailsActivity)
+                   //                .withSerializable("mGroup", group)
+                   .withObject("group", group).withString("groupId", group.groupId).navigation();
             finish();
         }
 
@@ -214,8 +212,7 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
 
         @Override
         public void onGroupFailed(Group group, CubeError cubeError) {
-            ToastUtil.showToast(App.getContext(),cubeError.desc);
+            ToastUtil.showToast(App.getContext(), cubeError.desc);
         }
-
     };
 }

@@ -12,11 +12,6 @@ public interface CubeConstants {
      * 路由地址
      */
     interface Router {
-        //一对一语音通话
-        String P2PCallActivity = "/call/P2PCallActivity";
-
-        //白板
-        String WhiteBoardActivity = "/whiteboard/WhiteBoardActivity";
 
         //选择联系人
         String SelectContactActivity = "/app/SelectContactActivity";
@@ -26,6 +21,18 @@ public interface CubeConstants {
 
         //添加好友
         String AddFriendActivity = "/app/AddFriendActivity";
+
+        //用户详情
+        String FriendDetailsActivity = "/app/FriendDetailsActivity";
+
+        //修改昵称
+        String ModifyNameActivity = "/app/ModifyNameActivity";
+
+        //一对一语音通话
+        String P2PCallActivity = "/call/P2PCallActivity";
+
+        //白板
+        String WhiteBoardActivity = "/whiteboard/WhiteBoardActivity";
 
         // 分享屏幕界面
         String ShareScreenActivity = "/sharedesktop/ShareScreenActivity";
@@ -37,16 +44,13 @@ public interface CubeConstants {
         String CreateConferenceActivity = "/conference/CreateConferenceActivity";
 
         //群组详情
-        String GroupDetailsActivity = "/app/GroupDetailsActivity";
-
-        //修改昵称
-        String ModifyNameActivity = "/app/ModifyNameActivity";
+        String GroupDetailsActivity = "/group/GroupDetailsActivity";
 
         //p2p聊天
-        String P2PChatActivity = "/app/P2PChatActivity";
+        String P2PChatActivity = "/message/P2PChatActivity";
 
         //group聊天
-        String GroupChatActivity = "/app/GroupChatActivity";
+        String GroupChatActivity = "/message/GroupChatActivity";
     }
 
     /**

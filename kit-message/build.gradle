@@ -29,6 +29,14 @@ android {
 }
 
 dependencies {
+  implementation project(':kit-whiteboard')
+  implementation project(':kit-conference')
+  implementation project(':kit-group')
+  implementation project(':cube-whiteboard')
+  implementation project(':cube-conference')
+  implementation developmentDependencies.eventbus
+
+
   implementation project(':kit-core')
   implementation project(':CommonMvp')
   implementation project(':CommonSdk')

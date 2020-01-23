@@ -136,6 +136,16 @@ public class AppManager {
     }
 
     /**
+     * 获取头像地址
+     * 测试环境用户头像固定地址拼接cubeid成完整地址
+     *
+     * @return
+     */
+    public static String getAvatarUrl() {
+        return "https://dev.download.shixincube.cn/file/avatar/";
+    }
+
+    /**
      * 初始化日志工具
      */
     private static void initLogger(Context context) {
@@ -155,7 +165,7 @@ public class AppManager {
         KitCoreConfig config = new KitCoreConfig();
         config.setDebug(isDebug());
         config.setUserCenterUrl(getBaseUrl());
-        config.setAvatarUrl(AppConstants.AVATAR_URL);
+        config.setAvatarUrl(getAvatarUrl());
         CubeCore.getInstance().setDataConfig(config);
     }
 }
