@@ -1,4 +1,4 @@
-package cube.ware.service.sharedesktop.ui;
+package cube.ware.service.sharedesktop.sharescreen;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

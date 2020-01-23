@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
+import cube.service.common.model.CubeConfig;
 
 /**
  * 数据辅助操作类
@@ -15,10 +16,10 @@ public class CubeCore {
 
     private static CubeCore instance = new CubeCore();
 
-    private static Context       context;
-    private        KitCoreConfig config;
-    private        String        cubeId;
-    private        String        userName;
+    private static Context    context;
+    private        CoreConfig config;
+    private        String     cubeId;
+    private        String     userName;
 
     private CubeCore() {}
 
@@ -50,7 +51,7 @@ public class CubeCore {
         this.userName = userName;
     }
 
-    public void setDataConfig(@NonNull KitCoreConfig config) {
+    public void setDataConfig(@NonNull CoreConfig config) {
         this.config = config;
     }
 

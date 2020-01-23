@@ -29,15 +29,10 @@ android {
 }
 
 dependencies {
+  implementation project(':kit-core')
   implementation project(':kit-whiteboard')
   implementation project(':kit-conference')
   implementation project(':kit-group')
-  implementation project(':cube-whiteboard')
-  implementation project(':cube-conference')
-  implementation developmentDependencies.eventbus
-
-
-  implementation project(':kit-core')
   implementation project(':CommonMvp')
   implementation project(':CommonSdk')
   implementation project(':CommonUtils')
@@ -45,11 +40,14 @@ dependencies {
   implementation project(':cube-core')
   implementation project(':cube-media')
   implementation project(':cube-message')
+  implementation project(':cube-whiteboard')
+  implementation project(':cube-conference')
   implementation developmentDependencies.support_appcompat_v7
   implementation developmentDependencies.support_v4
   implementation developmentDependencies.support_recyclerview_v7
   implementation developmentDependencies.support_design
   implementation developmentDependencies.recyclerview_helper
+  implementation developmentDependencies.eventbus
   implementation developmentDependencies.arouter
   annotationProcessor developmentDependencies.arouter_compiler
   implementation developmentDependencies.arouter_annotation

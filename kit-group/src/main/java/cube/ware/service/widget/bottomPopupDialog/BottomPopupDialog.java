@@ -38,7 +38,7 @@ public class BottomPopupDialog extends BottomSheetDialog implements AdapterView.
     private TextView mTitleTextView;    // 标题视图
 
     private BottomPopupListAdapter mAdapter;
-    private List<String> mItemData; // 条目数据
+    private List<String>           mItemData; // 条目数据
 
     private boolean hasHeaderView = false;    // 是否有头部视图
 

@@ -17,7 +17,7 @@ import com.common.utils.utils.DeviceUtil;
 import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.glide.GlideUtil;
 import com.common.utils.utils.log.LogUtil;
-import cube.ware.CubeUI;
+import cube.ware.MessageListenerManager;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
@@ -407,12 +407,12 @@ public abstract class BaseMsgViewHolder implements MessagePopupManager.OnPopMenu
         });
 
         // 头像点击事件响应
-        if (CubeUI.getInstance().getChatEventListeners().size() > 0) {
+        if (MessageListenerManager.getInstance().getChatEventListeners().size() > 0) {
             View.OnClickListener portraitListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    for (int i = 0; i < CubeUI.getInstance().getChatEventListeners().size(); i++) {
-                        CubeUI.getInstance().getChatEventListeners().get(i).onAvatarClicked(mViewHolder.getConvertView().getContext(), mData.mMessage);
+                    for (int i = 0; i < MessageListenerManager.getInstance().getChatEventListeners().size(); i++) {
+                        MessageListenerManager.getInstance().getChatEventListeners().get(i).onAvatarClicked(mViewHolder.getConvertView().getContext(), mData.mMessage);
                     }
                 }
             };
@@ -442,12 +442,12 @@ public abstract class BaseMsgViewHolder implements MessagePopupManager.OnPopMenu
         }
 
         // 头像长按事件响应处理
-        if (CubeUI.getInstance().getChatEventListeners().size() > 0) {
+        if (MessageListenerManager.getInstance().getChatEventListeners().size() > 0) {
             View.OnLongClickListener longClickListener = new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    for (int i = 0; i < CubeUI.getInstance().getChatEventListeners().size(); i++) {
-                        CubeUI.getInstance().getChatEventListeners().get(i).onAvatarLongClicked(v.getContext(), mData.mMessage);
+                    for (int i = 0; i < MessageListenerManager.getInstance().getChatEventListeners().size(); i++) {
+                        MessageListenerManager.getInstance().getChatEventListeners().get(i).onAvatarLongClicked(v.getContext(), mData.mMessage);
                     }
                     return true;
                 }

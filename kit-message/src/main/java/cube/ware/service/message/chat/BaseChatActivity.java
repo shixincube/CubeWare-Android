@@ -19,7 +19,7 @@ import com.common.utils.utils.ReflectionUtil;
 import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
-import cube.ware.CubeUI;
+import cube.ware.MessageListenerManager;
 import cube.ware.service.message.R;
 import cube.ware.service.message.chat.message.MessageFragment;
 import cube.ware.service.message.manager.PlayerManager;
@@ -73,7 +73,7 @@ public abstract class BaseChatActivity extends BaseToolBarActivity implements Se
         super.onCreate(savedInstanceState);
         mMessageFragment = (MessageFragment) switchContent(buildFragment(), false, "MessageFragment");
         parseIntent();
-        CubeUI.getInstance().addChatEventListener(this);
+        MessageListenerManager.getInstance().addChatEventListener(this);
     }
 
     /**
@@ -132,7 +132,7 @@ public abstract class BaseChatActivity extends BaseToolBarActivity implements Se
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        CubeUI.getInstance().removeChatEventListener(this);
+        MessageListenerManager.getInstance().removeChatEventListener(this);
     }
 
     @Override

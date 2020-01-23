@@ -45,7 +45,6 @@ import cube.ware.service.whiteboard.R;
 import cube.ware.service.whiteboard.WhiteBoardHandle;
 import cube.ware.service.whiteboard.WhiteBoardStateListener;
 import cube.ware.service.whiteboard.manager.WBCallManager;
-import cube.ware.service.whiteboard.ui.adapter.JoinedMemberAdapter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

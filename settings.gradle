@@ -1,5 +1,11 @@
-include ':app', ':CommonMvp', ':CommonUtils', ':CommonSdk', ':kit-whiteboard', ':kit-sharedesktop', ':kit-conference', ':kit-group', ':kit-message'/*, ':kit-database'*/, ':kit-call', ':kit-core'
+include ':app'
+include ':CommonMvp', ':CommonUtils', ':CommonSdk'
+
+include ':kit-whiteboard', ':kit-sharedesktop', ':kit-conference', ':kit-group', ':kit-message'
+include ':kit-api', ':kit-call', ':kit-core'
+
 include ':cube-call', ':cube-live', ':cube-instruction', ':cube-whiteboard'
 include ':cube-sharedesktop', ':cube-media', ':cube-message', ':cube-file'
 include ':cube-conference', ':cube-core', ':cube-api'
+
 include ':GenieAndroid'

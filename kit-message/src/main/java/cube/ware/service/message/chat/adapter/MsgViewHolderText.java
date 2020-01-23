@@ -19,7 +19,7 @@ import cube.ware.service.message.R;
 import cube.ware.service.message.manager.MessagePopupManager;
 import cube.ware.utils.ClipBoardUtil;
 import cube.ware.widget.CubeEmoticonTextView;
-import cube.ware.service.widget.bottomPopupDialog.BottomPopupDialog;
+import cube.ware.widget.bottomPopupDialog.BottomPopupDialog;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

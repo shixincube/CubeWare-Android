@@ -1,4 +1,4 @@
-package cube.ware.service.whiteboard.ui.adapter;
+package cube.ware.service.whiteboard.ui;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

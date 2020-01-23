@@ -1,4 +1,4 @@
-package cube.ware;
+package cube.ware.api;
 
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("cube.ware.test", appContext.getPackageName());
+        assertEquals("cube.ware.api.test", appContext.getPackageName());
     }
 }

@@ -17,6 +17,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.umeng.commonsdk.UMConfigure;
+import cube.ware.api.CubeUI;
 import cube.ware.utils.SpUtil;
 
 /**
@@ -59,7 +60,7 @@ public class App extends BaseApplication {
         CubeUI.getInstance().init(this, AppManager.getAppId(), AppManager.getAppKey(), AppManager.getLicenceUrl(), SpUtil.getResourcePath());
 
         // 启动cube引擎
-        CubeUI.getInstance().startupCube(this);
+        CubeUI.getInstance().startup(this);
     }
 
     @Override

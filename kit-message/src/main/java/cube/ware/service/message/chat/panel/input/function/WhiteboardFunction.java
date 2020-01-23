@@ -13,7 +13,6 @@ import cube.service.group.GroupType;
 import cube.service.whiteboard.model.WhiteBoardInfo;
 import cube.service.whiteboard.model.Whiteboard;
 import cube.service.whiteboard.model.WhiteboardConfig;
-import cube.ware.CubeUI;
 import cube.ware.core.CubeConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
@@ -56,7 +55,7 @@ public class WhiteboardFunction extends BaseFunction implements CreateCallback {
             }
         }
         else {//群聊
-            if (CubeUI.getInstance().isCalling()) {
+            if (CubeCore.getInstance().isCalling()) {
                 ToastUtil.showToast(getActivity(), R.string.calling_please_try_again_later);
             }
             else {

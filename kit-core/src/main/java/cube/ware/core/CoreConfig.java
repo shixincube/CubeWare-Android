@@ -6,7 +6,7 @@ package cube.ware.core;
  * @author LiuFeng
  * @data 2020/1/19 16:06
  */
-public class KitCoreConfig {
+public class CoreConfig {
 
     /**
      * 是否为调试模式

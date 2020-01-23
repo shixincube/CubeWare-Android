@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import cube.ware.CubeUI;
-
 public class EmoticonManager {
 
     private static final String EMOJI_DIR = "emoji/";

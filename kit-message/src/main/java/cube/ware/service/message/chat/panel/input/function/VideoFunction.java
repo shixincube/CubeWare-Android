@@ -11,7 +11,6 @@ import cube.service.common.CubeCallback;
 import cube.service.common.model.CubeError;
 import cube.service.conference.model.Conference;
 import cube.service.whiteboard.model.WhiteBoardInfo;
-import cube.ware.CubeUI;
 import cube.ware.core.CubeConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
@@ -50,7 +49,7 @@ public class VideoFunction extends BaseFunction {
         }
         else {//群聊
             if (ClickUtil.isFastClick()) {
-                if (CubeUI.getInstance().isCalling()) {
+                if (CubeCore.getInstance().isCalling()) {
                     ToastUtil.showToast(getActivity(), R.string.calling_please_try_again_later);
                 }
                 else {

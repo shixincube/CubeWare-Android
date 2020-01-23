@@ -1,4 +1,4 @@
-package cube.ware.service.sharedesktop.ui;
+package cube.ware.service.sharedesktop.sharescreen;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;

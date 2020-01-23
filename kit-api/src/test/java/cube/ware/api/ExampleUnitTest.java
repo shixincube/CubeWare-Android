@@ -1,4 +1,4 @@
-package cube.ware;
+package cube.ware.api;
 
 import org.junit.Test;
 

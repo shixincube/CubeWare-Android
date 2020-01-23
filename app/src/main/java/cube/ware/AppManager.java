@@ -4,7 +4,7 @@ import android.content.Context;
 import com.common.utils.utils.AppUtil;
 import com.common.utils.utils.log.LogUtil;
 import cube.ware.core.CubeCore;
-import cube.ware.core.KitCoreConfig;
+import cube.ware.core.CoreConfig;
 import cube.ware.utils.SpUtil;
 
 /**
@@ -162,7 +162,7 @@ public class AppManager {
      */
     private static void initDatabase(Context context) {
         CubeCore.setContext(context);
-        KitCoreConfig config = new KitCoreConfig();
+        CoreConfig config = new CoreConfig();
         config.setDebug(isDebug());
         config.setUserCenterUrl(getBaseUrl());
         config.setAvatarUrl(getAvatarUrl());

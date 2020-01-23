@@ -1,11 +1,10 @@
 package cube.ware.service.group;
 
-import java.util.List;
-
 import cube.service.common.model.CubeError;
 import cube.service.group.GroupListener;
 import cube.service.group.model.Group;
 import cube.service.user.model.User;
+import java.util.List;
 
 /**
  * Created by dth
@@ -13,7 +12,7 @@ import cube.service.user.model.User;
  * Date: 2018/8/28.
  */
 
-public  class GroupListenerAdapter implements GroupListener{
+public class GroupListenerAdapter implements GroupListener {
     @Override
     public void onGroupCreated(Group group, User user) {
 

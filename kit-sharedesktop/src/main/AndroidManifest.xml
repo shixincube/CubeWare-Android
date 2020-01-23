@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name=".ui.ShareScreenActivity"
+            android:name=".sharescreen.ShareScreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
     </application>
