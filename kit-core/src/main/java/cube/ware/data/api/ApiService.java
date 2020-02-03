@@ -21,15 +21,16 @@ public interface ApiService {
 
     @POST("user/created")
     @FormUrlEncoded
-    Call<ResultData<LoginCubeData>> login(@FieldMap Map<String, String> params);
+    Call<ResultData<LoginCubeData>> createUser(@FieldMap Map<String, String> params);
 
-    @POST("user/login")
+    //@POST("user/login")
+    @POST("cube/login")
     @FormUrlEncoded
     Call<ResultData<LoginData>> getCubeToken(@FieldMap Map<String, String> params);
 
     @POST("user/page/findByAppId")
     @FormUrlEncoded
-    Call<ResultData<TotalData>> find(@FieldMap Map<String, String> params);
+    Call<ResultData<TotalData>> queryUsers(@FieldMap Map<String, String> params);
 
     @Multipart
 //     @POST("https://upload.shixincube.com/v3/file/uploadAvatar")//正式服

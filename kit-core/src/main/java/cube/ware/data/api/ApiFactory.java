@@ -25,11 +25,11 @@ public class ApiFactory {
         return instance;
     }
 
-    public void login(String appId, String appKey, Callback<ResultData<LoginCubeData>> callback) {
+    public void createUser(String appId, String appKey, Callback<ResultData<LoginCubeData>> callback) {
         Map<String, String> params = new HashMap<>();
         params.put("appId", appId);
         params.put("appKey", appKey);
-        this.mApiService.login(params).enqueue(callback);
+        this.mApiService.createUser(params).enqueue(callback);
     }
 
     public void getCubeToken(String appId, String appKey, String cube, Callback<ResultData<LoginData>> callback) {
@@ -40,12 +40,13 @@ public class ApiFactory {
         this.mApiService.getCubeToken(params).enqueue(callback);
     }
 
-    public void find(String appId, int page, int rows, Callback<ResultData<TotalData>> callback) {
+    public void queryUsers(String appId, String appKey, int page, int rows, Callback<ResultData<TotalData>> callback) {
         Map<String, String> params = new HashMap<>();
         params.put("appId", appId);
+        params.put("appKey", appKey);
         params.put("page", String.valueOf(page));
         params.put("rows", String.valueOf(rows));
-        this.mApiService.find(params).enqueue(callback);
+        this.mApiService.queryUsers(params).enqueue(callback);
     }
 
     public void uploadAvatar(String token, File file, Callback<ResultData<CubeAvator>> callback) {

@@ -15,29 +15,26 @@ import com.common.sdk.RouterUtil;
 import com.common.utils.manager.ActivityManager;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
-import cube.service.common.model.CubeError;
-import cube.service.common.model.CubeSession;
-import cube.service.common.model.DeviceInfo;
-import cube.service.user.model.User;
+import cube.service.CubeError;
+import cube.service.DeviceInfo;
+import cube.service.Session;
+import cube.service.account.AccountListener;
+import cube.service.account.DeviceListener;
 import cube.ware.AppConstants;
+import cube.ware.AppManager;
 import cube.ware.R;
 import cube.ware.core.CubeCore;
-import cube.ware.data.room.AppDataBase;
 import cube.ware.eventbus.CubeEvent;
-import cube.ware.service.user.UserHandle;
-import cube.ware.service.user.UserStateListener;
-import cube.ware.service.conference.conferenceList.ConferenceListFragment;
+import cube.ware.service.message.recent.RecentFragment;
 import cube.ware.ui.contact.ContactFragment;
 import cube.ware.ui.mine.MineFragment;
-import cube.ware.service.message.recent.RecentFragment;
-import cube.ware.service.message.recent.RecentSessionFragment;
 import cube.ware.utils.SpUtil;
 import cube.ware.widget.tabbar.NavigateTabBar;
 import java.util.List;
 import rx.functions.Action1;
 
 @Route(path = AppConstants.Router.MainActivity)
-public class MainActivity extends BaseActivity implements UserStateListener {
+public class MainActivity extends BaseActivity implements AccountListener, DeviceListener {
 
     private static final String MAIN_PAGE_MESSAGE    = "消息";
     private static final String MAIN_PAGE_CONFERENCE = "会议";
@@ -45,8 +42,7 @@ public class MainActivity extends BaseActivity implements UserStateListener {
     private static final String MAIN_PAGE_MINE       = "我的";
 
     private RecentFragment         mRecentFragment;//基于本地数据的最近会话列表
-    private RecentSessionFragment  mRecentSessionFragment;//基于引擎数据的最近会话列表
-    private ConferenceListFragment mConferenceFragment;
+    //private ConferenceListFragment mConferenceFragment;
     private ContactFragment        mContactMainFragment;
     private MineFragment           mPersonalFragment;
 
@@ -71,13 +67,14 @@ public class MainActivity extends BaseActivity implements UserStateListener {
     @Override
     protected void initView() {
         super.initView();
-        UserHandle.getInstance().addUserStateListener(this);
         this.mFragmentManager = getSupportFragmentManager();
         this.mNavigateTabBar = findViewById(R.id.navigate_tabbar);
     }
 
     @Override
     protected void initListener() {
+        CubeEngine.getInstance().getAccountService().addAccountListener(this);
+        CubeEngine.getInstance().getAccountService().addDeviceListener(this);
         super.initListener();
         // NavigateTabBar 切换监听
         this.mNavigateTabBar.setTabSelectListener(new NavigateTabBar.OnTabSelectedListener() {
@@ -96,10 +93,10 @@ public class MainActivity extends BaseActivity implements UserStateListener {
                         //                        selectFragment(mRecentSessionFragment, MAIN_PAGE_MESSAGE);
                         break;
                     case 1: // 发现
-                        if (null == mConferenceFragment) {
-                            mConferenceFragment = new ConferenceListFragment();
-                        }
-                        selectFragment(mConferenceFragment, MAIN_PAGE_CONFERENCE);
+                        //if (null == mConferenceFragment) {
+                        //    mConferenceFragment = new ConferenceListFragment();
+                        //}
+                        //selectFragment(mConferenceFragment, MAIN_PAGE_CONFERENCE);
                         break;
                     case 2: // + 扩展
                         AddDialogFragment addDialogFragment = AddDialogFragment.getInstance();
@@ -180,34 +177,34 @@ public class MainActivity extends BaseActivity implements UserStateListener {
     @Override
     protected void onDestroy() {
         mRxManager.clear();
-        UserHandle.getInstance().removeUserStateListener(this);
+        CubeEngine.getInstance().getAccountService().removeAccountListener(this);
+        CubeEngine.getInstance().getAccountService().removeDeviceListener(this);
         super.onDestroy();
     }
 
     @Override
-    public void onLogin(CubeSession session, User from) {
-        SpUtil.setCubeId(from.cubeId);
-        SpUtil.setUserName(from.displayName);
-        SpUtil.setUserAvator(from.avatar);
-        CubeCore.getInstance().setCubeId(from.cubeId);
+    public void onLogin(Session session) {
+        SpUtil.setCubeId(session.getCubeId());
+        SpUtil.setUserName(session.getDisplayName());
+        SpUtil.setUserAvator(AppManager.getAvatarUrl() + session.getCubeId());
+        CubeCore.getInstance().setCubeId(session.getCubeId());
     }
 
     @Override
-    public void onLogout(CubeSession session, User from) {
+    public void onLogout(Session session) {
         //退出登录，清空SP
         SpUtil.clear();
-        AppDataBase.getInstance().release();
         RouterUtil.navigation(this, AppConstants.Router.LoginActivity);
         finish();
     }
 
     @Override
-    public void onUserFailed(CubeError error, User from) {
+    public void onAccountFailed(CubeError cubeError) {
 
     }
 
     @Override
-    public void onDeviceOnline(DeviceInfo loginDevice, List<DeviceInfo> onlineDevices, User from) {
+    public void onDeviceOnline(DeviceInfo loginDevice, List<DeviceInfo> onlineDevices) {
         LogUtil.i("有人登录你的账号，强制下线");
         AlertDialog.Builder builder = new AlertDialog.Builder(ActivityManager.getInstance().currentActivity());
         builder.setTitle("重复登录");
@@ -216,9 +213,13 @@ public class MainActivity extends BaseActivity implements UserStateListener {
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                CubeEngine.getInstance().getUserService().logout();
-                //                RouterUtil.navigation(MainActivity.this, AppConstants.Router.LoginActivity);
+                CubeEngine.getInstance().getAccountService().logout();
             }
         }).show();
+    }
+
+    @Override
+    public void onDeviceOffline(DeviceInfo deviceInfo, List<DeviceInfo> list) {
+
     }
 }

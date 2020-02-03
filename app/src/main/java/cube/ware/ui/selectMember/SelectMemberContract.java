@@ -3,9 +3,7 @@ package cube.ware.ui.selectMember;
 import android.content.Context;
 import com.common.mvp.base.BasePresenter;
 import com.common.mvp.base.BaseView;
-import cube.service.conference.model.ConferenceConfig;
-import cube.service.group.GroupType;
-import cube.service.whiteboard.model.WhiteboardConfig;
+import cube.service.conference.ConferenceConfig;
 import cube.ware.data.room.model.CubeUser;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,8 +39,6 @@ public interface SelectMemberContract {
 
         public abstract void getMemberFromGroup(String cubeId);
 
-        public abstract ConferenceConfig initConferenceConfig(GroupType groupType, String groupId);
-
-        public abstract WhiteboardConfig initWhiteboardConfig(GroupType groupType, String mGroupId);
+        public abstract ConferenceConfig initConferenceConfig(String groupId);
     }
 }

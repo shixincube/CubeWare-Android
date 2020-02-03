@@ -1,25 +1,12 @@
 package cube.ware.service.message.chat.activity.group;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.common.mvp.eventbus.Event;
 import com.common.mvp.eventbus.EventBusUtil;
-import com.common.sdk.RouterUtil;
-import com.common.utils.utils.log.LogUtil;
-import cube.service.CubeEngine;
-import cube.service.common.CubeCallback;
-import cube.service.common.model.CubeError;
-import cube.service.conference.model.Conference;
-import cube.service.group.GroupType;
-import cube.service.whiteboard.model.WhiteBoardInfo;
-import cube.service.whiteboard.model.Whiteboard;
 import cube.ware.core.CubeConstants;
-import cube.ware.core.CubeCore;
-import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.service.message.R;
 import cube.ware.service.message.chat.message.MessageFragment;
@@ -105,7 +92,7 @@ public class GroupMessageFragment extends MessageFragment {
     }
 
     private void queryConferenceByFroupId(final List<String> groupIds) {
-        if (!isAdded()) {
+        /*if (!isAdded()) {
             return;
         }
         List<GroupType> typesList = new ArrayList<>();
@@ -132,32 +119,12 @@ public class GroupMessageFragment extends MessageFragment {
                 mTipView.setVisibility(View.GONE);
                 queryWhiteBoardByGroupId(groupIds);
             }
-        });
-
-        //        CubeEngine.getInstance().getConferenceService().queryConferenceByGroupId(groupIds, typesList, new CubeCallback<ConferenceData>() {
-        //            @Override
-        //            public void onSucceed(ConferenceData conferenceData) {
-        //                if (conferenceData.conferences.size() !=0){
-        //                    //表示有会议
-        //                    handleQureyedConference(conferenceData.conferences);
-        //                }else{
-        //                    //表示没有会议
-        //                    queryWhiteBoardByGroupId(groupIds);
-        //                }
-        //            }
-        //
-        //            @Override
-        //            public void onFailed(CubeError error) {
-        //                LogUtil.d("===查询群组会议失败=="+error.desc);
-        //                mTipView.setVisibility(View.GONE);
-        //                queryWhiteBoardByGroupId(groupIds);
-        //            }
-        //        });
+        });*/
     }
 
     private void queryWhiteBoardByGroupId(List<String> groupIds) {
         //查询白板
-        CubeEngine.getInstance().getWhiteboardService().queryWhiteboardByGroupId(groupIds, CubeCore.getInstance().getCubeId(), new CubeCallback<WhiteBoardInfo>() {
+        /*CubeEngine.getInstance().getWhiteboardService().queryWhiteboardByGroupId(groupIds, CubeCore.getInstance().getCubeId(), new CubeCallback<WhiteBoardInfo>() {
             @Override
             public void onSucceed(WhiteBoardInfo whiteBoardData) {
                 if (whiteBoardData.whiteboards.size() != 0 && null != whiteBoardData.whiteboards.get(0)) {
@@ -173,10 +140,10 @@ public class GroupMessageFragment extends MessageFragment {
             public void onFailed(CubeError error) {
                 LogUtil.d("===查询群组白板失败==" + error.desc);
             }
-        });
+        });*/
     }
 
-    private void handleQureyedConference(final List<Conference> conference) {
+    /*private void handleQureyedConference(final List<Conference> conference) {
         if (conference.size() > 0 && conference.get(0).bindGroupId.equals(groupId)) {
             int res = R.drawable.ic_audio_group_call;
             Drawable d = getResources().getDrawable(res);
@@ -222,9 +189,9 @@ public class GroupMessageFragment extends MessageFragment {
         else {
             mTipView.setVisibility(View.GONE);
         }
-    }
+    }*/
 
-    private void handleWhiteBoard(final List<Whiteboard> whiteboards) {
+    /*private void handleWhiteBoard(final List<Whiteboard> whiteboards) {
         if (null != whiteboards && whiteboards.size() > 0) {
             int res = R.drawable.ic_audio_group_call;
             Drawable d = getResources().getDrawable(res);
@@ -257,7 +224,7 @@ public class GroupMessageFragment extends MessageFragment {
                 mTipView.setVisibility(View.GONE);
             }
         }
-    }
+    }*/
 
     @Override
     public void onDestroyView() {

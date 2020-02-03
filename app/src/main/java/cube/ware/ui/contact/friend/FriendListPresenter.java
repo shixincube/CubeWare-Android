@@ -32,7 +32,7 @@ public class FriendListPresenter extends FriendListContract.Presenter{
 
     @Override
     public void getCubeList() {
-        ApiFactory.getInstance().find(AppManager.getAppId(), 0, 20, new Callback<ResultData<TotalData>>() {
+        ApiFactory.getInstance().queryUsers(AppManager.getAppId(), AppManager.getAppKey(), 0, 20, new Callback<ResultData<TotalData>>() {
             @Override
             public void onResponse(Call<ResultData<TotalData>> call, Response<ResultData<TotalData>> response) {
                 if (response.isSuccessful()) {

@@ -47,7 +47,7 @@ public class LVCubeIdListAdapter extends BaseAdapter {
         ImageView cvAvator = convertView.findViewById(R.id.iv_header);
         tvName.setText(mUsers.get(position).getDisplayName());
         tvCubeId.setText(mUsers.get(position).getCubeId());
-        GlideUtil.loadCircleImage(AppManager.getAvatarUrl() + mUsers.get(position).getCubeId(), mContext, cvAvator, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
+        GlideUtil.loadCircleImage(mUsers.get(position).getAvatar(), mContext, cvAvator, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
         return convertView;
     }
 }

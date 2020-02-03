@@ -2,15 +2,8 @@ package cube.ware.service.message.chat.panel.input.function;
 
 import android.os.Bundle;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.common.sdk.RouterUtil;
 import com.common.utils.utils.ClickUtil;
 import com.common.utils.utils.ToastUtil;
-import com.common.utils.utils.log.LogUtil;
-import cube.service.CubeEngine;
-import cube.service.common.CubeCallback;
-import cube.service.common.model.CubeError;
-import cube.service.conference.model.Conference;
-import cube.service.whiteboard.model.WhiteBoardInfo;
 import cube.ware.core.CubeConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
@@ -62,7 +55,7 @@ public class VideoFunction extends BaseFunction {
     private void isHasConference() {
         List<String> list = new ArrayList<>();
         list.add(getChatId());
-        CubeEngine.getInstance().getConferenceService().queryConferencesByGroupIds(list, new CubeCallback<List<Conference>>() {
+        /*CubeEngine.getInstance().getConferenceService().queryConferencesByGroupIds(list, new CubeCallback<List<Conference>>() {
             @Override
             public void onSucceed(List<Conference> conferenceList) {
                 if (conferenceList != null && conferenceList.size() > 0) {
@@ -79,7 +72,7 @@ public class VideoFunction extends BaseFunction {
                 LogUtil.d("====查询会议没有===");
                 isHasWhiteBoard();
             }
-        });
+        });*/
 
         //        CubeEngine.getInstance().getConferenceService().queryConferenceDetails(getChatId(), new CubeCallback<Conference>() {
         //            @Override
@@ -99,7 +92,7 @@ public class VideoFunction extends BaseFunction {
     private void isHasWhiteBoard() {
         List<String> groupId = new ArrayList<>();
         groupId.add(getChatId());
-        CubeEngine.getInstance().getWhiteboardService().queryWhiteboardByGroupId(groupId, CubeCore.getInstance().getCubeId(), new CubeCallback<WhiteBoardInfo>() {
+        /*CubeEngine.getInstance().getWhiteboardService().queryWhiteboardByGroupId(groupId, CubeCore.getInstance().getCubeId(), new CubeCallback<WhiteBoardInfo>() {
             @Override
             public void onSucceed(WhiteBoardInfo whiteBoardData) {
                 if (whiteBoardData.whiteboards.size() != 0 && null != whiteBoardData.whiteboards.get(0)) {
@@ -122,6 +115,6 @@ public class VideoFunction extends BaseFunction {
                 //                bundle.putString("group_id",getChatId()); //mChatId 就是 groupId
                 //                RouterUtil.navigation(AppConstants.Router.SelectMemberActivity,bundle);
             }
-        });
+        });*/
     }
 }

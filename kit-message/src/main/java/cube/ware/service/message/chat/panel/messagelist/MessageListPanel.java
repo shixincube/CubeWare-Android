@@ -27,7 +27,6 @@ import com.common.utils.utils.UIHandler;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
 import cube.service.message.FileMessageStatus;
-import cube.service.message.model.ReceiptMessage;
 import cube.ware.service.message.R;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.CubeMessageViewModel;
@@ -523,9 +522,8 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
      */
     private void receiptMsg(CubeMessage message) {
         if (!message.isReceipt && !isAnonymous && message.isReceivedMessage()) {
-            ReceiptMessage receiptMessage = new ReceiptMessage(message.isGroupMessage() ? message.getGroupId() : message.getSenderId(), CubeCore.getInstance().getCubeId());
-            receiptMessage.setTraceless(true);//设置回执消息是否无踪迹的 true 不存数据库
-            CubeEngine.getInstance().getMessageService().sendMessage(receiptMessage);
+            String sessionId = message.isGroupMessage() ? message.getGroupId() : message.getSenderId();
+            CubeEngine.getInstance().getMessageService().receiptMessages(sessionId, message.getTimestamp());
         }
     }
 

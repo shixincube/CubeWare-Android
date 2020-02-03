@@ -6,25 +6,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.common.mvp.base.BaseActivity;
-import com.common.utils.utils.ToastUtil;
 import cube.service.CubeEngine;
-import cube.service.common.model.CubeError;
-import cube.service.group.GroupType;
-import cube.service.group.model.Group;
-import cube.service.group.model.GroupConfig;
-import cube.service.user.model.User;
-import cube.ware.App;
 import cube.ware.AppConstants;
 import cube.ware.R;
-import cube.ware.core.CubeConstants;
 import cube.ware.data.room.model.CubeUser;
-import cube.ware.service.group.GroupHandle;
-import cube.ware.service.group.GroupListenerAdapter;
 import cube.ware.ui.contact.adapter.SelectContactsAdapter;
 import cube.ware.utils.SpUtil;
 import cube.ware.widget.indexbar.CubeIndexBar;
@@ -117,12 +106,10 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
         mBack.setOnClickListener(this);
         mComplete.setOnClickListener(this);
         mAdapter.setOnItemSelectedListener(this);
-        GroupHandle.getInstance().addGroupListener(groupListenerAdapter);
     }
 
     @Override
     protected void onDestroy() {
-        GroupHandle.getInstance().removeGroupListener(groupListenerAdapter);
         super.onDestroy();
     }
 
@@ -141,9 +128,9 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
                     return;
                 }
                 if (mType == 0) {//create group
-                    GroupConfig groupConfig = new GroupConfig(GroupType.NORMAL, SpUtil.getUserName() == null ? SpUtil.getCubeId() + "创建的群" : SpUtil.getUserName() + "创建的群");
-                    groupConfig.members = strings;
-                    CubeEngine.getInstance().getGroupService().create(groupConfig);
+                    //GroupConfig groupConfig = new GroupConfig(GroupType.NORMAL, SpUtil.getUserName() == null ? SpUtil.getCubeId() + "创建的群" : SpUtil.getUserName() + "创建的群");
+                    //groupConfig.members = strings;
+                    //CubeEngine.getInstance().getGroupService().create(groupConfig);
                 }
                 else if ((mType == 1)) {//add member
                     CubeEngine.getInstance().getGroupService().addMembers(mGroupId, strings);
@@ -192,7 +179,7 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
         mSelectedList = list;
     }
 
-    GroupListenerAdapter groupListenerAdapter = new GroupListenerAdapter() {
+    /*GroupListenerAdapter groupListenerAdapter = new GroupListenerAdapter() {
 
         @Override
         public void onGroupCreated(Group group, User user) {
@@ -214,5 +201,5 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
         public void onGroupFailed(Group group, CubeError cubeError) {
             ToastUtil.showToast(App.getContext(), cubeError.desc);
         }
-    };
+    };*/
 }

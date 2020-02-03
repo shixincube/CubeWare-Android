@@ -7,7 +7,7 @@ import android.os.Message;
 
 import java.util.LinkedList;
 
-import cube.service.message.model.MessageEntity;
+import cube.service.message.MessageEntity;
 import cube.ware.service.message.manager.MessageManager;
 
 /**

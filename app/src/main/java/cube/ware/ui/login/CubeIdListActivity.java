@@ -9,21 +9,19 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.common.mvp.base.BaseActivity;
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.ClickUtil;
-import com.common.utils.utils.GsonUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
-import cube.service.common.model.CubeError;
-import cube.service.common.model.CubeSession;
-import cube.service.common.model.DeviceInfo;
-import cube.service.user.model.User;
+import cube.service.CubeEngine;
+import cube.service.CubeError;
+import cube.service.Session;
+import cube.service.account.AccountListener;
 import cube.ware.AppConstants;
+import cube.ware.AppManager;
 import cube.ware.R;
 import cube.ware.api.CubeUI;
 import cube.ware.core.CubeCore;
 import cube.ware.data.repository.CubeUserRepository;
 import cube.ware.data.room.model.CubeUser;
-import cube.ware.service.user.UserHandle;
-import cube.ware.service.user.UserStateListener;
 import cube.ware.ui.login.adapter.LVCubeIdListAdapter;
 import cube.ware.utils.SpUtil;
 import java.util.ArrayList;
@@ -32,7 +30,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 @Route(path = AppConstants.Router.CubIdListActivity)
-public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implements CubeIdListContract.View, UserStateListener {
+public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implements CubeIdListContract.View, AccountListener {
 
     private ListView mLvCubeId;
     List<CubeUser> mUsers = new ArrayList<>();
@@ -73,7 +71,7 @@ public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implem
     @Override
     protected void initListener() {
         //添加监听
-        UserHandle.getInstance().addUserStateListener(this);
+        CubeEngine.getInstance().getAccountService().addAccountListener(this);
 
         mIvBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,21 +112,18 @@ public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implem
     }
 
     @Override
-    public void loginCubeEngineSuccess(User user) {
+    public void loginCubeEngineSuccess() {
         LogUtil.i("loginSuccess");
         RouterUtil.navigation(this, AppConstants.Router.MainActivity);
         finish();
     }
 
     @Override
-    public void onLogin(CubeSession session, User from) {
-        String userJson = GsonUtil.toJson(from);
-        SpUtil.setUserJson(userJson);
-        SpUtil.setCubeId(from.cubeId);
-        SpUtil.setUserName(from.displayName);
-        SpUtil.setUserAvator(from.avatar);
-        CubeCore.getInstance().setCubeId(from.cubeId);
-        LogUtil.i(from.toString());
+    public void onLogin(Session session) {
+        SpUtil.setCubeId(session.getCubeId());
+        SpUtil.setUserName(session.getDisplayName());
+        SpUtil.setUserAvator(AppManager.getAvatarUrl() + session.getCubeId());
+        CubeCore.getInstance().setCubeId(session.getCubeId());
         CubeUserRepository.getInstance().saveUser(mUsers).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<CubeUser>>() {
             @Override
             public void call(List<CubeUser> cubeUsers) {
@@ -150,12 +145,12 @@ public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implem
     }
 
     @Override
-    public void onLogout(CubeSession session, User from) {
+    public void onLogout(Session session) {
 
     }
 
     @Override
-    public void onUserFailed(CubeError error, User from) {
+    public void onAccountFailed(CubeError error) {
         LogUtil.e("登录失败：" + error);
         ToastUtil.showToast(this, "登录失败：" + error);
         if (mProgressDialog != null) {
@@ -164,13 +159,8 @@ public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implem
     }
 
     @Override
-    public void onDeviceOnline(DeviceInfo loginDevice, List<DeviceInfo> onlineDevices, User from) {
-
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        UserHandle.getInstance().removeUserStateListener(this);
+        CubeEngine.getInstance().getAccountService().removeAccountListener(this);
     }
 }

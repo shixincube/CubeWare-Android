@@ -17,7 +17,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.common.mvp.base.BaseActivity;
 import com.common.utils.utils.ToastUtil;
 
-import cube.service.group.model.Group;
+import cube.service.group.Group;
 import cube.ware.App;
 import cube.ware.AppConstants;
 import cube.ware.R;

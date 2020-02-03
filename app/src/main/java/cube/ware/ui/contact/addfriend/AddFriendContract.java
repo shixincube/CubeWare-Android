@@ -5,7 +5,7 @@ import android.content.Context;
 import com.common.mvp.base.BasePresenter;
 import com.common.mvp.base.BaseView;
 
-import cube.service.group.model.Group;
+import cube.service.group.Group;
 
 public interface AddFriendContract {
 

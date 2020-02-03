@@ -3,9 +3,9 @@ package cube.ware.impl;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import com.common.utils.utils.log.LogUtil;
+import cube.service.CubeConfig;
 import cube.service.CubeEngine;
-import cube.service.common.model.CubeConfig;
-import cube.service.user.UserState;
+import cube.service.account.AccountState;
 import cube.ware.api.CubeUI;
 import cube.ware.service.message.MessageHandle;
 import cube.ware.service.user.UserHandle;
@@ -81,7 +81,7 @@ public final class UIRoot extends CubeUI {
      */
     @Override
     public void login(@NonNull String cubeId, @NonNull String cubeToken, String displayName) {
-        CubeEngine.getInstance().getUserService().login(cubeId, cubeToken, displayName);
+        CubeEngine.getInstance().getAccountService().login(cubeId, "123456", cubeToken, displayName);
     }
 
     /**
@@ -89,7 +89,7 @@ public final class UIRoot extends CubeUI {
      */
     @Override
     public void logout() {
-        CubeEngine.getInstance().getUserService().logout();
+        CubeEngine.getInstance().getAccountService().logout();
     }
 
     @Override
@@ -108,8 +108,8 @@ public final class UIRoot extends CubeUI {
     }
 
     @Override
-    public UserState getAccountState() {
-        return CubeEngine.getInstance().getSession().userState;
+    public AccountState getAccountState() {
+        return CubeEngine.getInstance().getSession().getAccountState();
     }
 
     /**

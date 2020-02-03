@@ -83,10 +83,10 @@ dependencies {
   implementation fileTree(include: ['*.jar'], dir: 'libs')
   implementation project(':kit-core')
   implementation project(':kit-call')
-  implementation project(':kit-whiteboard')
-  implementation project(':kit-conference')
-  implementation project(':kit-sharedesktop')
-  implementation project(':kit-group')
+//  implementation project(':kit-whiteboard')
+//  implementation project(':kit-conference')
+//  implementation project(':kit-sharedesktop')
+//  implementation project(':kit-group')
   implementation project(':kit-message')
   implementation project(':kit-api')
   implementation project(':CommonMvp')
@@ -129,19 +129,19 @@ dependencies {
   //    implementation 'com.shixincube:instruction:3.0.2'  // 指令服务
   //    implementation 'com.shixincube:live:3.0.2'         // 直播服务
 //  implementation 'com.shixincube:genie:2.0.22' // 通信库
-  implementation 'com.shixincube:rtc:2.1.9' // RTC
-  implementation 'com.shixincube:sip:1.1.13' // SIP通信
+//  implementation 'com.shixincube:rtc:2.1.9' // RTC
+//  implementation 'com.shixincube:sip:1.1.13' // SIP通信
 
 
-  implementation project(':cube-api')
-  implementation project(':cube-call')
-  implementation project(':cube-conference')
-  implementation project(':cube-core')
-  implementation project(':cube-file')
-  implementation project(':cube-instruction')
-  implementation project(':cube-live')
-  implementation project(':cube-media')
-  implementation project(':cube-message')
-  implementation project(':cube-sharedesktop')
-  implementation project(':cube-whiteboard')
+//  implementation project(':cube-api')
+//  implementation project(':cube-call')
+//  implementation project(':cube-conference')
+//  implementation project(':cube-core')
+//  implementation project(':cube-file')
+//  implementation project(':cube-instruction')
+//  implementation project(':cube-live')
+//  implementation project(':cube-media')
+//  implementation project(':cube-message')
+//  implementation project(':cube-sharedesktop')
+//  implementation project(':cube-whiteboard')
 }

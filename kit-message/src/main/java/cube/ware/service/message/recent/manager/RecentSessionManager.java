@@ -4,14 +4,14 @@ import android.text.TextUtils;
 import com.common.mvp.rx.RxBus;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.message.MessageDirection;
-import cube.service.message.model.CustomMessage;
-import cube.service.message.model.FileMessage;
-import cube.service.message.model.ImageMessage;
-import cube.service.message.model.MessageEntity;
-import cube.service.message.model.Sender;
-import cube.service.message.model.TextMessage;
-import cube.service.message.model.VideoClipMessage;
-import cube.service.message.model.VoiceClipMessage;
+import cube.service.message.CustomMessage;
+import cube.service.message.FileMessage;
+import cube.service.message.ImageMessage;
+import cube.service.message.MessageEntity;
+import cube.service.message.Sender;
+import cube.service.message.TextMessage;
+import cube.service.message.VideoClipMessage;
+import cube.service.message.VoiceClipMessage;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
@@ -363,7 +363,7 @@ public class RecentSessionManager {
      */
     private void buildGroupRecentSession(MessageEntity messageEntity, CubeRecentSession cubeRecentSession) {
         cubeRecentSession.setSessionId(messageEntity.getGroupId());
-        String displayName = messageEntity.getGroup() == null ? messageEntity.getReceiver().getDisplayName() : messageEntity.getGroup().displayName;
+        String displayName = messageEntity.getGroup() == null ? messageEntity.getReceiver().getDisplayName() : messageEntity.getGroup().getDisplayName();
         cubeRecentSession.setSessionName(TextUtils.isEmpty(displayName) ? messageEntity.getGroupId() : displayName);
         cubeRecentSession.setSessionType(CubeSessionType.Group.getType());
     }

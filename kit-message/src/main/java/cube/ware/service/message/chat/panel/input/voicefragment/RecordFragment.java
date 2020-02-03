@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.common.utils.utils.log.LogUtil;
 
-import cube.service.message.model.VoiceClipMessage;
+import cube.service.message.VoiceClipMessage;
 import cube.ware.service.message.R;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;

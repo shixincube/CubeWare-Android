@@ -27,7 +27,7 @@ import com.common.utils.utils.KeyBoardUtil;
 import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
-import cube.service.message.model.TextMessage;
+import cube.service.message.TextMessage;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;

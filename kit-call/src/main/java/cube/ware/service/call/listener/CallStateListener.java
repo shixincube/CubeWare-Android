@@ -1,8 +1,8 @@
 package cube.ware.service.call.listener;
 
+import cube.service.Session;
 import cube.service.call.CallAction;
-import cube.service.call.model.CallSession;
-import cube.service.common.model.CubeErrorCode;
+import cube.service.CubeErrorCode;
 
 /**
  * 通话状态监听器
@@ -12,13 +12,9 @@ import cube.service.common.model.CubeErrorCode;
  */
 public interface CallStateListener {
 
-    void onInProgress(CallSession session);
+    void onCallConnected(Session session);
 
-    void onCallRinging(CallSession session);
+    void onCallEnded(Session session, CallAction action);
 
-    void onCallConnected(CallSession session);
-
-    void onCallEnded(CallSession session, CallAction action);
-
-    void onCallFailed(CallSession session, CubeErrorCode errorCode);
+    void onCallFailed(Session session, CubeErrorCode errorCode);
 }

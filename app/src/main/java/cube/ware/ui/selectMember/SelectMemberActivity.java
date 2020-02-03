@@ -13,23 +13,11 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.common.mvp.base.BaseActivity;
 import com.common.mvp.eventbus.EventBusUtil;
 import com.common.utils.utils.ToastUtil;
-import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
-import cube.service.common.model.CubeError;
-import cube.service.conference.model.Conference;
-import cube.service.conference.model.ConferenceConfig;
-import cube.service.group.GroupType;
-import cube.service.whiteboard.model.Whiteboard;
-import cube.service.whiteboard.model.WhiteboardConfig;
+import cube.service.conference.Conference;
 import cube.ware.R;
 import cube.ware.core.CubeConstants;
-import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeUser;
-import cube.ware.service.conference.ConferenceHandle;
-import cube.ware.service.conference.listener.ConferenceCreateListener;
-import cube.ware.service.conference.listener.CreateCallback;
-import cube.ware.service.whiteboard.WhiteBoardHandle;
-import cube.ware.service.whiteboard.ui.listener.WBListener;
 import cube.ware.ui.contact.adapter.SelectContactsAdapter;
 import cube.ware.utils.SpUtil;
 import java.util.ArrayList;
@@ -38,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @Route(path = CubeConstants.Router.SelectMemberActivity)
-public class SelectMemberActivity extends BaseActivity<SelectMemberPresenter> implements SelectMemberContract.View, SwipeRefreshLayout.OnRefreshListener, SelectContactsAdapter.OnItemSelectedListener, CreateCallback, cube.ware.service.whiteboard.ui.listener.CreateCallback, SelectMemberAdapter.OnItemSelectedShowToast {
+public class SelectMemberActivity extends BaseActivity<SelectMemberPresenter> implements SelectMemberContract.View, SwipeRefreshLayout.OnRefreshListener, SelectContactsAdapter.OnItemSelectedListener, SelectMemberAdapter.OnItemSelectedShowToast {
     private TextView                        mBack;
     private TextView                        mTitle;
     private TextView                        mComplete;
@@ -56,9 +44,6 @@ public class SelectMemberActivity extends BaseActivity<SelectMemberPresenter> im
     private String                          mShareDeskId;
     private String                          mGroupId;
     private Conference                      mConference;
-    private Whiteboard                      mWhiteBoard;
-    private WBListener                      mWBListener;
-    private ConferenceCreateListener        mCreateListener;
     private ProgressDialog                  mProgressDialog;
 
     String BUNDLE = "bundle";
@@ -152,7 +137,7 @@ public class SelectMemberActivity extends BaseActivity<SelectMemberPresenter> im
         switch (view.getId()) {
             case R.id.title_back:
                 if (mConference != null) {
-                    CubeEngine.getInstance().getConferenceService().destroy(mConference.conferenceId);
+                    CubeEngine.getInstance().getConferenceService().closeConference(mConference.getConferenceId());
                 }
                 finish();
                 break;
@@ -172,55 +157,55 @@ public class SelectMemberActivity extends BaseActivity<SelectMemberPresenter> im
                         EventBusUtil.post(CubeConstants.Event.SelectMemberEvent, cubeUsers);
                     }
                     if (selectType == 2) { //音频首次邀请人员（没有群组）
-                        mCreateListener = new ConferenceCreateListener(this, mGroupId, iniviteList);
-                        mCreateListener.setCreateCallback(this);
-                        ConferenceHandle.getInstance().addConferenceStateListener(mCreateListener);
-                        //音频会议
-                        ConferenceConfig audioConfig = mPresenter.initConferenceConfig(GroupType.VOICE_CALL, mGroupId);
-                        CubeEngine.getInstance().getConferenceService().create(audioConfig);
-                        mProgressDialog.show();
+                        //mCreateListener = new ConferenceCreateListener(this, mGroupId, iniviteList);
+                        //mCreateListener.setCreateCallback(this);
+                        //ConferenceHandle.getInstance().addConferenceStateListener(mCreateListener);
+                        ////音频会议
+                        //ConferenceConfig audioConfig = mPresenter.initConferenceConfig(GroupType.VOICE_CALL, mGroupId);
+                        //CubeEngine.getInstance().getConferenceService().create(audioConfig);
+                        //mProgressDialog.show();
                         return;
                     }
                     if (selectType == 8) { //视频绑定群组首次邀请人员
-                        mCreateListener = new ConferenceCreateListener(this, mGroupId, iniviteList);
-                        mCreateListener.setCreateCallback(this);
-                        ConferenceHandle.getInstance().addConferenceStateListener(mCreateListener);
-                        ConferenceConfig videoConfig = mPresenter.initConferenceConfig(GroupType.VIDEO_CALL, mGroupId);
-                        //                        videoConfig.invites=iniviteList;
-                        CubeEngine.getInstance().getConferenceService().create(videoConfig);
-                        mProgressDialog.show();
+                        //mCreateListener = new ConferenceCreateListener(this, mGroupId, iniviteList);
+                        //mCreateListener.setCreateCallback(this);
+                        //ConferenceHandle.getInstance().addConferenceStateListener(mCreateListener);
+                        //ConferenceConfig videoConfig = mPresenter.initConferenceConfig(GroupType.VIDEO_CALL, mGroupId);
+                        ////                        videoConfig.invites=iniviteList;
+                        //CubeEngine.getInstance().getConferenceService().create(videoConfig);
+                        //mProgressDialog.show();
                         return;
                     }
                     if (selectType == 3) { //白板首次邀请人员
-                        mWBListener = new WBListener(this, CubeSessionType.Group, iniviteList, mGroupId);
-                        mWBListener.setCreateCallback(this);
-                        WhiteBoardHandle.getInstance().addWhiteBoardStateListeners(mWBListener);
-                        WhiteboardConfig whiteboardConfig = mPresenter.initWhiteboardConfig(GroupType.SHARE_WB, mGroupId);
-                        CubeEngine.getInstance().getWhiteboardService().create(whiteboardConfig);
-                        mProgressDialog.show();
+                        //mWBListener = new WBListener(this, CubeSessionType.Group, iniviteList, mGroupId);
+                        //mWBListener.setCreateCallback(this);
+                        //WhiteBoardHandle.getInstance().addWhiteBoardStateListeners(mWBListener);
+                        //WhiteboardConfig whiteboardConfig = mPresenter.initWhiteboardConfig(GroupType.SHARE_WB, mGroupId);
+                        //CubeEngine.getInstance().getWhiteboardService().create(whiteboardConfig);
+                        //mProgressDialog.show();
                         return;
                     }
                     if (selectType == 9) {
                         //创建不依赖群的音频
-                        mCreateListener = new ConferenceCreateListener(this, mGroupId, iniviteList);
-                        mCreateListener.setCreateCallback(this);
-                        ConferenceHandle.getInstance().addConferenceStateListener(mCreateListener);
-                        ConferenceConfig audioConfig = mPresenter.initConferenceConfig(GroupType.VOICE_CALL, mGroupId);
-                        CubeEngine.getInstance().getConferenceService().create(audioConfig);
-                        mProgressDialog.show();
+                        //mCreateListener = new ConferenceCreateListener(this, mGroupId, iniviteList);
+                        //mCreateListener.setCreateCallback(this);
+                        //ConferenceHandle.getInstance().addConferenceStateListener(mCreateListener);
+                        //ConferenceConfig audioConfig = mPresenter.initConferenceConfig(GroupType.VOICE_CALL, mGroupId);
+                        //CubeEngine.getInstance().getConferenceService().create(audioConfig);
+                        //mProgressDialog.show();
                         return;
                     }
                     if (selectType == 10) {
                         //创建不依赖群的白板
-                        mWBListener = new WBListener(this, CubeSessionType.Group, iniviteList, "");
-                        mWBListener.setCreateCallback(this);
-                        WhiteBoardHandle.getInstance().addWhiteBoardStateListeners(mWBListener);
-                        WhiteboardConfig whiteboardConfig = mPresenter.initWhiteboardConfig(GroupType.SHARE_WB, "");
-                        CubeEngine.getInstance().getWhiteboardService().create(whiteboardConfig);
-                        mProgressDialog.show();
+                        //mWBListener = new WBListener(this, CubeSessionType.Group, iniviteList, "");
+                        //mWBListener.setCreateCallback(this);
+                        //WhiteBoardHandle.getInstance().addWhiteBoardStateListeners(mWBListener);
+                        //WhiteboardConfig whiteboardConfig = mPresenter.initWhiteboardConfig(GroupType.SHARE_WB, "");
+                        //CubeEngine.getInstance().getWhiteboardService().create(whiteboardConfig);
+                        //mProgressDialog.show();
                         return;
                     }
-                    if (selectType == 4 || selectType == 5) { //音频视频二次邀请人员,方法是一样的
+                    /*if (selectType == 4 || selectType == 5) { //音频视频二次邀请人员,方法是一样的
                         //会议邀请
                         CubeEngine.getInstance().getConferenceService().inviteMembers(mConferenceId, iniviteList);
                     }
@@ -231,7 +216,7 @@ public class SelectMemberActivity extends BaseActivity<SelectMemberPresenter> im
                     if (selectType == 7) {
                         //分享邀请
                         CubeEngine.getInstance().getConferenceService().inviteMembers(mConferenceId, iniviteList);
-                    }
+                    }*/
                     finish();
                 }
                 break;
@@ -241,8 +226,6 @@ public class SelectMemberActivity extends BaseActivity<SelectMemberPresenter> im
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        WhiteBoardHandle.getInstance().removeWhiteBoardStateListeners(mWBListener);
-        ConferenceHandle.getInstance().removeConferenceStateListener(mCreateListener);
     }
 
     @Override
@@ -278,7 +261,7 @@ public class SelectMemberActivity extends BaseActivity<SelectMemberPresenter> im
         ToastUtil.showToast(this, message);
     }
 
-    //会议的创建回调
+    /*//会议的创建回调
     @Override
     public void onFinish(Conference conference) {
         if (mProgressDialog != null) {
@@ -311,36 +294,7 @@ public class SelectMemberActivity extends BaseActivity<SelectMemberPresenter> im
         }
         ConferenceHandle.getInstance().removeConferenceStateListener(mCreateListener);
         //        showMessage(error.desc);
-    }
-
-    //白板回调
-    @Override
-    public void onWBFinish(Whiteboard whiteboard) {
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
-        }
-        WhiteBoardHandle.getInstance().removeWhiteBoardStateListeners(mWBListener);
-        finish();
-    }
-
-    @Override
-    public void onWBCreate(Whiteboard whiteboard) {
-        mWhiteBoard = whiteboard;
-        mProgressDialog.setMessage("创建成功，进入白板。。。");
-    }
-
-    @Override
-    public void onWBError(Whiteboard whiteboard, CubeError error) {
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
-        }
-        if (mWhiteBoard != null) {//创建失败。destory白板
-            CubeEngine.getInstance().getWhiteboardService().destroy(mWhiteBoard.whiteboardId);
-        }
-        LogUtil.i("创建失败" + error.code + " " + error.desc);
-        WhiteBoardHandle.getInstance().removeWhiteBoardStateListeners(mWBListener);
-        showMessage("创建失败 " + error.desc);
-    }
+    }*/
 
     @Override
     public void onItemSelectedToast() {

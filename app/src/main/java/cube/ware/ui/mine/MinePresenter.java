@@ -1,10 +1,7 @@
 package cube.ware.ui.mine;
 
 import android.content.Context;
-
 import com.common.utils.utils.UIHandler;
-
-import cube.service.user.model.User;
 import cube.ware.data.repository.CubeUserRepository;
 import cube.ware.data.room.model.CubeUser;
 import rx.functions.Action1;
@@ -15,7 +12,7 @@ import rx.functions.Action1;
  * Date: 2018/8/27.
  */
 
-public class MinePresenter extends MineContract.Presenter{
+public class MinePresenter extends MineContract.Presenter {
     /**
      * 构造方法
      *
@@ -34,11 +31,7 @@ public class MinePresenter extends MineContract.Presenter{
                 UIHandler.run(new Runnable() {
                     @Override
                     public void run() {
-                        User user=new User();
-                        user.cubeId=cubeUser.getCubeId();
-                        user.avatar=cubeUser.getAvatar();
-                        user.displayName=cubeUser.getDisplayName();
-                        mView.getUserData(user);
+                        mView.getUserData(cubeUser);
                     }
                 });
             }

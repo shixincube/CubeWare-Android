@@ -1,7 +1,7 @@
 package cube.ware.service.message.chat.message.Listener;
 
 
-import cube.service.message.model.FileMessage;
+import cube.service.message.FileMessage;
 
 /**
  * 文件消息下载监听器

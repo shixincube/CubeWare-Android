@@ -2,7 +2,7 @@ package cube.ware.data.repository;
 
 import com.common.mvp.rx.OnSubscribeRoom;
 import com.common.utils.utils.log.LogUtil;
-import cube.service.message.model.MessageEntity;
+import cube.service.message.MessageEntity;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.room.AppDataBaseFactory;

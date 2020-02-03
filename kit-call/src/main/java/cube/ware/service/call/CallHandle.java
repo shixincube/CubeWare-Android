@@ -6,15 +6,16 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.common.utils.utils.RingtoneUtil;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
+import cube.service.CubeError;
+import cube.service.CubeErrorCode;
+import cube.service.Session;
+import cube.service.account.AccountState;
+import cube.service.call.CallAction;
 import cube.service.call.CallDirection;
 import cube.service.call.CallListener;
-import cube.service.call.model.CallSession;
-import cube.service.common.model.CubeError;
-import cube.service.common.model.CubeErrorCode;
-import cube.service.user.UserState;
-import cube.service.user.model.User;
-import cube.ware.core.CubeCore;
+import cube.service.call.ResponseState;
 import cube.ware.core.CubeConstants;
+import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.service.call.listener.CallStateListener;
 import java.util.ArrayList;
@@ -61,20 +62,17 @@ public class CallHandle implements CallListener {
      * 收到/发起呼叫（第一个呼叫）
      *
      * @param session
-     * @param from
      */
     @Override
-    public void onCall(CallSession session, User from) {
-        LogUtil.d("===收到了邀请通知" + from.cubeId);
-        LogUtil.i("CoreService ===> onCall callDirection=" + session + session.isVideoEnabled());
-        if (CubeCore.getInstance().isCalling() || CubeEngine.getInstance().getSession().userState != UserState.LoginSucceed) {
+    public void onNewCall(CallDirection direction, Session session) {
+        if (CubeCore.getInstance().isCalling() || CubeEngine.getInstance().getSession().getAccountState() != AccountState.LoginSucceed) {
             return;
         }
 
-        String callId = session.getCaller().cubeId;    // 通话id
+        String callId = session.getCallPeer().getCubeId();    // 通话id
         CallStatus callState;    // 通话状态
-        if (session.callDirection == CallDirection.Incoming) {    // 来电  呼叫失败
-            if (session.isVideoEnabled()) {
+        if (session.getCallDirection() == CallDirection.Incoming) {    // 来电  呼叫失败
+            if (session.getVideoEnabled()) {
                 callState = CallStatus.VIDEO_INCOMING;
             }
             else {
@@ -90,42 +88,24 @@ public class CallHandle implements CallListener {
             bundle.putLong("call_time", 0l);
             ARouter.getInstance().build(CubeConstants.Router.P2PCallActivity).withBundle("call_data", bundle).navigation();
         }
-        else if (session.callDirection == CallDirection.Outgoing) {
+        else if (session.getCallDirection() == CallDirection.Outgoing) {
             // 播放呼叫铃声
             RingtoneUtil.play(R.raw.outgoing, mContext);
         }
     }
 
-    /**
-     * 收到新的呼叫（在通话中收到新的呼叫）
-     *
-     * @param session
-     * @param from
-     */
     @Override
-    public void onNewCall(CallSession session, User from) {
+    public void onAnotherCall(String s, String s1, boolean b) {
 
     }
 
-    /**
-     * 呼叫或者接听过程中
-     *
-     * @param session
-     * @param from
-     */
     @Override
-    public void onCallProgress(CallSession session, User from) {
+    public void onInProgress(Session session) {
 
     }
 
-    /**
-     * 对方响铃（目前私有信令未实现）
-     *
-     * @param session
-     * @param from
-     */
     @Override
-    public void onCallRinging(CallSession session, User from) {
+    public void onCallRinging(Session session) {
 
     }
 
@@ -133,10 +113,9 @@ public class CallHandle implements CallListener {
      * 呼叫建立
      *
      * @param session
-     * @param from
      */
     @Override
-    public void onCallConnected(CallSession session, User from) {
+    public void onCallConnected(Session session) {
         // 释放铃声
         RingtoneUtil.release();
         mCallTime = System.currentTimeMillis();
@@ -153,11 +132,10 @@ public class CallHandle implements CallListener {
      * 呼叫挂断
      *
      * @param session
-     * @param from
+     * @param action
      */
     @Override
-    public void onCallEnded(CallSession session, User from) {
-        LogUtil.i("CoreService ===> onCallEnded---session action ==" + session.getAction());
+    public void onCallEnded(Session session, CallAction action) {
         LogUtil.i("CoreService ===> onCallEnded---session 描述 ==" + session.getCallDirection());
         // 释放铃声
         RingtoneUtil.release();
@@ -166,7 +144,7 @@ public class CallHandle implements CallListener {
         if (this.mCallStateListenerList != null && !this.mCallStateListenerList.isEmpty()) {
             for (CallStateListener listener : this.mCallStateListenerList) {
                 if (listener != null) {
-                    listener.onCallEnded(session, session.getAction());
+                    listener.onCallEnded(session, action);
                 }
             }
         }
@@ -175,14 +153,8 @@ public class CallHandle implements CallListener {
         mCallTime = 0;
     }
 
-    /**
-     * 呼叫在其他设备挂断
-     *
-     * @param session
-     * @param from
-     */
     @Override
-    public void onCallEndedOther(CallSession session, User from) {
+    public void onCallEnded(Session session, CallAction callAction, ResponseState responseState) {
 
     }
 
@@ -191,10 +163,9 @@ public class CallHandle implements CallListener {
      *
      * @param session
      * @param error
-     * @param from
      */
     @Override
-    public void onCallFailed(CallSession session, CubeError error, User from) {
+    public void onCallFailed(Session session, CubeError error) {
         // 释放铃声
         RingtoneUtil.release();
         if (error.code == CubeErrorCode.RequestTerminated.code || error.code == CubeErrorCode.DoNotDisturb.code) {

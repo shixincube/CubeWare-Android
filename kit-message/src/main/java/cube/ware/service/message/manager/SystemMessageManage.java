@@ -3,8 +3,8 @@ package cube.ware.service.message.manager;
 import android.content.Context;
 import android.text.TextUtils;
 
-import cube.service.message.model.CustomMessage;
-import cube.service.message.model.MessageEntity;
+import cube.service.message.CustomMessage;
+import cube.service.message.MessageEntity;
 import cube.ware.data.model.dataModel.enmu.CubeCustomMessageType;
 
 /**

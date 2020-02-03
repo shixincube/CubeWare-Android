@@ -14,7 +14,7 @@ import com.common.utils.utils.log.LogUtil;
 
 import java.util.List;
 
-import cube.service.conference.model.Conference;
+import cube.service.conference.Conference;
 import cube.ware.service.message.R;
 import cube.ware.service.message.chat.BaseChatActivity;
 import cube.ware.service.message.chat.panel.input.function.adapter.FunctionPagerAdapter;

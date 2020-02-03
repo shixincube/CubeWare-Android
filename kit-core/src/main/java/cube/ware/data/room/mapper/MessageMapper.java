@@ -6,19 +6,18 @@ import com.common.utils.utils.log.LogUtil;
 import cube.service.message.FileMessageStatus;
 import cube.service.message.MessageDirection;
 import cube.service.message.MessageStatus;
-import cube.service.message.model.CardMessage;
-import cube.service.message.model.CustomMessage;
-import cube.service.message.model.FileMessage;
-import cube.service.message.model.ImageMessage;
-import cube.service.message.model.MessageEntity;
-import cube.service.message.model.ReceiptMessage;
-import cube.service.message.model.ReplyMessage;
-import cube.service.message.model.RichContentMessage;
-import cube.service.message.model.TextMessage;
-import cube.service.message.model.UnKnownMessage;
-import cube.service.message.model.VideoClipMessage;
-import cube.service.message.model.VoiceClipMessage;
-import cube.service.message.model.WhiteboardMessage;
+import cube.service.message.CardMessage;
+import cube.service.message.CustomMessage;
+import cube.service.message.FileMessage;
+import cube.service.message.ImageMessage;
+import cube.service.message.MessageEntity;
+import cube.service.message.ReplyMessage;
+import cube.service.message.RichContentMessage;
+import cube.service.message.TextMessage;
+import cube.service.message.UnKnownMessage;
+import cube.service.message.VideoClipMessage;
+import cube.service.message.VoiceClipMessage;
+import cube.service.message.WhiteboardMessage;
 import cube.ware.core.CubeCore;
 import cube.ware.core.R;
 import cube.ware.data.model.dataModel.enmu.CubeFileMessageStatus;
@@ -85,10 +84,7 @@ public class MessageMapper {
                 cubeMessage.setMessageType(CubeMessageType.Unknown);
                 cubeMessage.setContent(CubeCore.getContext().getString(R.string.unknown_message_type));
             }
-            if (messageEntity instanceof ReceiptMessage) {
-                LogUtil.i("引擎回执消息转化处理====>");
-                return null;
-            } else if (messageEntity instanceof TextMessage) {         // 文本消息
+            else if (messageEntity instanceof TextMessage) {         // 文本消息
                 TextMessage textMessage = (TextMessage) messageEntity;
                 String textContent = textMessage.getContent();
                 cubeMessage.setContent(textContent);

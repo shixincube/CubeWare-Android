@@ -16,10 +16,10 @@ import com.common.utils.utils.log.LogUtil;
 import java.io.File;
 
 import cube.service.CubeEngine;
-import cube.service.common.model.CubeError;
-import cube.service.common.model.CubeErrorCode;
+import cube.service.CubeError;
+import cube.service.CubeErrorCode;
 import cube.service.media.VoiceRecordListener;
-import cube.service.message.model.VoiceClipMessage;
+import cube.service.message.VoiceClipMessage;
 import cube.ware.service.message.R;
 import cube.ware.service.message.chat.BaseChatActivity;
 

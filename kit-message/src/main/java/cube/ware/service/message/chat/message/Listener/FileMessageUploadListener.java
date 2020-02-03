@@ -1,8 +1,8 @@
 package cube.ware.service.message.chat.message.Listener;
 
 
-import cube.service.common.model.CubeError;
-import cube.service.message.model.FileMessage;
+import cube.service.CubeError;
+import cube.service.message.FileMessage;
 
 /**
  * 文件消息上传监听器

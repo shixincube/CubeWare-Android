@@ -9,33 +9,31 @@ import com.common.utils.utils.ThreadUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
+import cube.service.CubeError;
+import cube.service.CubeErrorCode;
+import cube.service.Session;
 import cube.service.call.CallAction;
 import cube.service.call.CallDirection;
-import cube.service.call.model.CallSession;
-import cube.service.common.model.CubeError;
-import cube.service.common.model.CubeErrorCode;
+import cube.service.message.CardMessage;
+import cube.service.message.CustomMessage;
+import cube.service.message.FileMessage;
 import cube.service.message.FileMessageStatus;
+import cube.service.message.ImageMessage;
 import cube.service.message.MessageDirection;
+import cube.service.message.MessageEntity;
 import cube.service.message.MessageStatus;
-import cube.service.message.model.CardMessage;
-import cube.service.message.model.CustomMessage;
-import cube.service.message.model.FileMessage;
-import cube.service.message.model.ImageMessage;
-import cube.service.message.model.MessageEntity;
-import cube.service.message.model.ReceiptMessage;
-import cube.service.message.model.Receiver;
-import cube.service.message.model.ReplyMessage;
-import cube.service.message.model.RichContentMessage;
-import cube.service.message.model.Sender;
-import cube.service.message.model.TextMessage;
-import cube.service.message.model.UnKnownMessage;
-import cube.service.message.model.VideoClipMessage;
-import cube.service.message.model.VoiceClipMessage;
-import cube.service.message.model.WhiteboardClipMessage;
-import cube.service.message.model.WhiteboardFrameMessage;
-import cube.service.message.model.WhiteboardMessage;
-import cube.service.user.model.User;
-import cube.ware.service.message.R;
+import cube.service.message.Receiver;
+import cube.service.message.ReplyMessage;
+import cube.service.message.RichContentMessage;
+import cube.service.message.Sender;
+import cube.service.message.TextMessage;
+import cube.service.message.UnKnownMessage;
+import cube.service.message.VideoClipMessage;
+import cube.service.message.VoiceClipMessage;
+import cube.service.message.WhiteboardClipMessage;
+import cube.service.message.WhiteboardFrameMessage;
+import cube.service.message.WhiteboardMessage;
+import cube.ware.MessageConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeCustomMessageType;
@@ -47,7 +45,7 @@ import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.repository.CubeMessageRepository;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.eventbus.CubeEvent;
-import cube.ware.MessageConstants;
+import cube.ware.service.message.R;
 import cube.ware.service.message.chat.ChatContainer;
 import cube.ware.service.message.recent.manager.RecentSessionManager;
 import cube.ware.utils.FileUtil;
@@ -703,9 +701,8 @@ public class MessageManager {
                         //直接更新本地数据库消息回执状态，不等服务器的回执消息反馈
                         ReceiptManager.getInstance().updateIsReceipted(chatId, message.getTimestamp(), false);
                         //发送回执消息
-                        ReceiptMessage receiptMessage = new ReceiptMessage(message.isGroupMessage() ? message.getGroupId() : message.getSenderId(), CubeCore.getInstance().getCubeId());
-                        receiptMessage.setTraceless(true);
-                        CubeEngine.getInstance().getMessageService().sendMessage(receiptMessage);
+                        String sessionId = message.isGroupMessage() ? message.getGroupId() : message.getSenderId();
+                        CubeEngine.getInstance().getMessageService().receiptMessages(sessionId, message.getTimestamp());
                     }
                 }
 
@@ -990,10 +987,6 @@ public class MessageManager {
             if (messageEntity instanceof UnKnownMessage) {
                 cubeMessage.setMessageType(CubeMessageType.Unknown);
                 cubeMessage.setContent(CubeCore.getContext().getString(R.string.unknown_message_type));
-            }
-            if (messageEntity instanceof ReceiptMessage) {
-                LogUtil.i("引擎回执消息转化处理====>");
-                return null;
             }
             else if (messageEntity instanceof TextMessage) {         // 文本消息
                 TextMessage textMessage = (TextMessage) messageEntity;
@@ -1353,13 +1346,13 @@ public class MessageManager {
      * @param session
      * @param callAction
      */
-    public void onCallEnd(Context context, CallSession session, CallAction callAction) {
+    public void onCallEnd(Context context, Session session, CallAction callAction) {
         onCallEnd(context, session, callAction, null);
     }
 
-    public void onCallEnd(Context context, CallSession session, CallAction callAction, CubeError error) {
+    public void onCallEnd(Context context, Session session, CallAction callAction, CubeError error) {
         boolean isCall = false;
-        if (session.getCaller() != null) {
+        if (session.getCallPeer() != null) {
             String content;
             Sender sender;
             Receiver receiver;
@@ -1389,7 +1382,7 @@ public class MessageManager {
                 isCall = true;
             }
             else if (session.getCallDirection() == CallDirection.Outgoing && CallAction.BYE.equals(callAction) || session.getCallDirection() == CallDirection.Outgoing && CallAction.BYE_ACK.equals(callAction)) {
-                if (session.getStartTime() != 0l) {
+                if (session.getCallTime() != 0l) {
                     content = context.getString(R.string.call_completed);
                     isCall = true;
                 }
@@ -1398,7 +1391,7 @@ public class MessageManager {
                 }
             }
             else if (session.getCallDirection() == CallDirection.Incoming && CallAction.BYE.equals(callAction) || session.getCallDirection() == CallDirection.Incoming && CallAction.BYE_ACK.equals(callAction)) {
-                if (session.getStartTime() != 0l) {
+                if (session.getCallTime() != 0l) {
                     content = context.getString(R.string.call_completed);
                     isCall = true;
                 }
@@ -1411,16 +1404,16 @@ public class MessageManager {
             }
 
             // FIXME: 2017/9/5 暂时避免引擎同时回调callFailed和callEnd的错误
-            if (TextUtils.isEmpty(session.getCaller().cubeId)) {
+            if (TextUtils.isEmpty(session.getCallPeer().getCubeId())) {
                 return;
             }
             if (session.getCallDirection() == CallDirection.Outgoing) {
-                sender = new Sender(session.getCaller().cubeId, session.getCaller().displayName);
-                receiver = new Receiver(session.getCallee().cubeId, session.getCallee().displayName);
+                sender = new Sender(session.getCubeId(), session.getDisplayName());
+                receiver = new Receiver(session.getCallPeer().getCubeId(), session.getCallPeer().getDisplayName());
             }
             else {
-                sender = new Sender(session.getCallee().cubeId, session.getCallee().displayName);
-                receiver = new Receiver(session.getCaller().cubeId, session.getCaller().displayName);
+                sender = new Sender(session.getCallPeer().getCubeId(), session.getCallPeer().getDisplayName());
+                receiver = new Receiver(session.getCubeId(), session.getDisplayName());
             }
             LogUtil.d("===本条消息所封装的sender--->" + sender + "===receiver--->" + receiver);
 
@@ -1442,7 +1435,7 @@ public class MessageManager {
                 }
             }
             CustomMessage message = MessageManager.getInstance().buildCustomMessage(CubeSessionType.P2P, sender, receiver, content);
-            if (session.isVideoEnabled()) {
+            if (session.getVideoEnabled()) {
                 message.setHeader("operate", CubeCustomMessageType.VideoCall.type);
             }
             else {
@@ -1461,9 +1454,9 @@ public class MessageManager {
      * @param session
      * @param cubeError
      */
-    public void onCallFailed(Context context, CallSession session, CubeError cubeError) {
+    public void onCallFailed(Context context, Session session, CubeError cubeError) {
         boolean isCall = false;
-        if (session != null && session.getCaller() != null) {
+        if (session != null && session.getCallPeer() != null) {
             String content = null;
             Sender sender;
             Receiver receiver;
@@ -1471,21 +1464,21 @@ public class MessageManager {
                 content = context.getString(R.string.call_user_busy);
             }
             // FIXME: 2017/9/5 暂时避免引擎同时回调callFailed和callEnd的错误
-            if (TextUtils.isEmpty(session.getCaller().cubeId)) {
+            if (TextUtils.isEmpty(session.getCallPeer().getCubeId())) {
                 return;
             }
             if (session.getCallDirection() == CallDirection.Outgoing) {
-                sender = new Sender(session.getCaller().cubeId, session.getCaller().displayName);
-                receiver = new Receiver(session.getCallee().cubeId, session.getCallee().displayName);
+                sender = new Sender(session.getCubeId(), session.getDisplayName());
+                receiver = new Receiver(session.getCallPeer().getCubeId(), session.getCallPeer().getDisplayName());
             }
             else {
-                sender = new Sender(session.getCallee().cubeId, session.getCallee().displayName);
-                receiver = new Receiver(session.getCaller().cubeId, session.getCaller().displayName);
+                sender = new Sender(session.getCallPeer().getCubeId(), session.getCallPeer().getDisplayName());
+                receiver = new Receiver(session.getCubeId(), session.getDisplayName());
             }
 
             if (!TextUtils.isEmpty(content)) {
                 CustomMessage message = MessageManager.getInstance().buildCustomMessage(CubeSessionType.P2P, sender, receiver, content);
-                if (session.isVideoEnabled()) {
+                if (session.getVideoEnabled()) {
                     message.setHeader("operate", CubeCustomMessageType.VideoCall.type);
                 }
                 else {
@@ -1496,35 +1489,5 @@ public class MessageManager {
                 MessageManager.getInstance().addMessageInLocal(message).subscribe();
             }
         }
-    }
-
-    /**
-     * p2p白板发送创建消息，更新本地
-     *
-     * @param from
-     * @param to
-     */
-    public void sendP2PWBCreateMessage(User from, User to) {
-        Sender sender = new Sender(from.cubeId, from.displayName);//发起者
-        Receiver receiver = new Receiver(to.cubeId, to.displayName);//接受者
-        CustomMessage customMessage = MessageManager.getInstance().buildCustomMessage(CubeSessionType.P2P, sender, receiver, "");
-        customMessage.setHeader("operate", CubeCustomMessageType.P2PWhiteBoardApply.type);
-        customMessage.setHeader("userCube", from.cubeId);
-        customMessage.setHeader("userDN", from.displayName);
-        MessageManager.getInstance().updateMessageInLocal(customMessage).subscribe();
-    }
-
-    /**
-     * p2p白板发送创建消息，更新本地
-     *
-     * @param from
-     * @param to
-     */
-    public void sendP2PWBDestoryMessage(User from, User to) {
-        Sender sender = new Sender(from.cubeId, from.displayName);//发起者
-        Receiver receiver = new Receiver(to.cubeId, to.displayName);//接受者
-        CustomMessage customMessage = MessageManager.getInstance().buildCustomMessage(CubeSessionType.P2P, sender, receiver, "");
-        customMessage.setHeader("operate", CubeCustomMessageType.P2PWhiteBoardClose.type);
-        MessageManager.getInstance().addMessageInLocal(customMessage).subscribe();
     }
 }

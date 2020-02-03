@@ -11,28 +11,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.common.mvp.base.BaseFragment;
+import com.common.mvp.eventbus.Event;
 import com.common.mvp.rx.RxManager;
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.glide.GlideUtil;
-import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
-import cube.service.common.model.CubeError;
-import cube.service.common.model.CubeSession;
-import cube.service.common.model.DeviceInfo;
-import cube.service.user.model.User;
+import cube.service.CubeError;
+import cube.service.Session;
+import cube.service.account.AccountListener;
 import cube.ware.AppConstants;
 import cube.ware.AppManager;
 import cube.ware.R;
 import cube.ware.data.room.model.CubeUser;
 import cube.ware.eventbus.CubeEvent;
-import cube.ware.eventbus.MessageEvent;
-import cube.ware.service.user.UserHandle;
-import cube.ware.service.user.UserStateListener;
 import cube.ware.utils.SpUtil;
-import java.util.List;
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import rx.functions.Action1;
 
 /**
@@ -41,7 +34,7 @@ import rx.functions.Action1;
  * Date: 2018/8/27.
  */
 
-public class MineFragment extends BaseFragment<MineContract.Presenter> implements MineContract.View, UserStateListener {
+public class MineFragment extends BaseFragment<MineContract.Presenter> implements MineContract.View, AccountListener {
 
     private TextView       mTvId;
     private TextView       mTvUserName;
@@ -49,7 +42,6 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
     private RelativeLayout mRlNameLayout;
     private ImageView      mIvAvator;
     private Button         mTvLoginOut;
-    private User           mUser = new User();
     RxManager rxManager = new RxManager();
 
     @Override
@@ -79,22 +71,19 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
         GlideUtil.loadCircleImage(AppManager.getAvatarUrl() + SpUtil.getCubeId(), getContext(), mIvAvator, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
     }
 
-    //修改头像的回调
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void changeAvatarEvent(MessageEvent<User> messageEvent) {
-        if (messageEvent == null) {
-            return;
-        }
-        if (TextUtils.equals(messageEvent.getMsg(), CubeEvent.EVENT_REFRESH_CUBE_USER)) {
-            User user = messageEvent.getData();
-            mTvUserName.setText(user.displayName);
-            GlideUtil.loadCircleImage(user.avatar, getContext(), mIvAvator, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
+    @Override
+    public <T> void onReceiveEvent(Event<T> event) {
+        //修改头像的回调
+        if (TextUtils.equals(event.eventName, CubeEvent.EVENT_REFRESH_CUBE_USER)) {
+            CubeUser user = (CubeUser) event.data;
+            mTvUserName.setText(user.getDisplayName());
+            GlideUtil.loadCircleImage(user.getAvatar(), getContext(), mIvAvator, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
         }
     }
 
     @Override
     protected void initListener() {
-        UserHandle.getInstance().addUserStateListener(this);
+        CubeEngine.getInstance().getAccountService().addAccountListener(this);
         //头像点击
         mIvAvator.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,12 +130,17 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
     }
 
     @Override
-    public void onLogin(CubeSession cubeSession, User user) {
+    public void onLogin(Session cubeSession) {
 
     }
 
     @Override
-    public void onLogout(CubeSession cubeSession, User user) {
+    public void onLogout(Session cubeSession) {
+
+    }
+
+    @Override
+    public void onAccountFailed(CubeError cubeError) {
 
     }
 
@@ -155,17 +149,7 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
         super.onDestroy();
         rxManager.clear();
         EventBus.getDefault().unregister(this);
-        UserHandle.getInstance().removeUserStateListener(this);
-    }
-
-    @Override
-    public void onUserFailed(CubeError cubeError, User user) {
-        LogUtil.i("logout fail:" + cubeError.toString());
-    }
-
-    @Override
-    public void onDeviceOnline(DeviceInfo loginDevice, List<DeviceInfo> onlineDevices, User from) {
-
+        CubeEngine.getInstance().getAccountService().removeAccountListener(this);
     }
 
     private void showDialog() {
@@ -173,16 +157,15 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
         builder.setTitle("退出登录").setMessage("是否退出登录?").setPositiveButton("退出", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                CubeEngine.getInstance().getUserService().logout();
+                CubeEngine.getInstance().getAccountService().logout();
             }
         }).setNegativeButton("取消", null).show();
     }
 
     @Override
-    public void getUserData(User user) {
-        this.mUser = user;
-        mTvId.setText(user.cubeId);
-        mTvUserName.setText(user.displayName);
-        mTvNickName.setText(user.displayName);
+    public void getUserData(CubeUser user) {
+        mTvId.setText(user.getCubeId());
+        mTvUserName.setText(user.getDisplayName());
+        mTvNickName.setText(user.getDisplayName());
     }
 }

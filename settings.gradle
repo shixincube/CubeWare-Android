@@ -1,11 +1,13 @@
 include ':app'
 include ':CommonMvp', ':CommonUtils', ':CommonSdk'
 
-include ':kit-whiteboard', ':kit-sharedesktop', ':kit-conference', ':kit-group', ':kit-message'
-include ':kit-api', ':kit-call', ':kit-core'
+//include ':kit-whiteboard', ':kit-sharedesktop', ':kit-group'
+include ':kit-api', ':kit-core', ':kit-call', ':kit-conference', ':kit-message'
 
-include ':cube-call', ':cube-live', ':cube-instruction', ':cube-whiteboard'
-include ':cube-sharedesktop', ':cube-media', ':cube-message', ':cube-file'
-include ':cube-conference', ':cube-core', ':cube-api'
+//include ':cube-call', ':cube-live', ':cube-instruction', ':cube-whiteboard'
+//include ':cube-sharedesktop', ':cube-media', ':cube-message', ':cube-file'
+//include ':cube-conference', ':cube-core', ':cube-api'
+//
+//include ':GenieAndroid'
 
-include ':GenieAndroid'
+include ':CubeEngine', 'CubeRTC', 'CubeSIP', 'CellcloudAndroid'

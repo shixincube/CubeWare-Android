@@ -11,7 +11,7 @@ import com.common.utils.utils.log.LogUtil;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
-import cube.service.message.model.Receiver;
+import cube.service.message.Receiver;
 import cube.ware.core.CubeConstants;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;

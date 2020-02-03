@@ -24,17 +24,16 @@ import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.glide.GlideUtil;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
+import cube.service.CubeErrorCode;
+import cube.service.Session;
 import cube.service.call.CallAction;
 import cube.service.call.CallDirection;
-import cube.service.call.model.CallSession;
-import cube.service.common.model.CubeErrorCode;
 import cube.service.media.MediaService;
-import cube.service.user.model.User;
+import cube.ware.core.CubeConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.data.repository.CubeUserRepository;
 import cube.ware.data.room.model.CubeUser;
-import cube.ware.core.CubeConstants;
 import cube.ware.service.call.CallHandle;
 import cube.ware.service.call.R;
 import cube.ware.service.call.listener.CallStateListener;
@@ -173,21 +172,20 @@ public class P2PCallActivity extends BaseActivity<P2PCallPresenter> implements C
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.call_cancel_btn) {
-            CubeEngine.getInstance().getCallService().terminateCall(getPeerCubeId());
+            CubeEngine.getInstance().getCallService().terminateCall();
             release();
         }
         else if (i == R.id.call_hang_up_btn) {
-            CubeEngine.getInstance().getCallService().terminateCall(getPeerCubeId());
+            CubeEngine.getInstance().getCallService().terminateCall();
             release();
         }
         else if (i == R.id.call_refuse_btn) {
             LogUtil.d("===拒接了哦===");
-            CubeEngine.getInstance().getCallService().terminateCall(getPeerCubeId());
+            CubeEngine.getInstance().getCallService().terminateCall();
             release();
         }
         else if (i == R.id.call_answer_btn) {
-            String cubeId = CubeEngine.getInstance().getSession().call.caller.cubeId;
-            CubeEngine.getInstance().getCallService().answerCall(cubeId);
+            CubeEngine.getInstance().getCallService().answerCall();
         }
         else if (i == R.id.call_switch_audio_btn) {
             MediaService ms = CubeEngine.getInstance().getMediaService();
@@ -258,13 +256,13 @@ public class P2PCallActivity extends BaseActivity<P2PCallPresenter> implements C
     }
 
     private static String getPeerCubeId() {
-        CallSession call = CubeEngine.getInstance().getSession().call;
+        Session session = CubeEngine.getInstance().getSession();
         String cubeId;
-        if (call.callDirection == CallDirection.Incoming) {
-            cubeId = call.caller.cubeId;
+        if (session.getCallDirection() == CallDirection.Incoming) {
+            cubeId = session.getCallPeer().getCubeId();
         }
         else {
-            cubeId = call.callee.cubeId;
+            cubeId = session.getCubeId();
         }
         LogUtil.d("===获取cueID===" + cubeId);
         return cubeId;
@@ -286,7 +284,7 @@ public class P2PCallActivity extends BaseActivity<P2PCallPresenter> implements C
         //        if (this.mCallState == CallStatus.AUDIO_OUTGOING || mCallState == CallStatus.AUDIO_INCOMING || mCallState == CallStatus.VIDEO_OUTGOING || mCallState == CallStatus.VIDEO_INCOMING) {
         //            this.release();
         //        }
-        CubeEngine.getInstance().getCallService().terminateCall(getPeerCubeId());
+        CubeEngine.getInstance().getCallService().terminateCall();
         release();
     }
 
@@ -672,24 +670,9 @@ public class P2PCallActivity extends BaseActivity<P2PCallPresenter> implements C
         }
     }
 
-    /**
-     * //通话状态监听器
-     *
-     * @param session
-     */
     @Override
-    public void onInProgress(CallSession session) {
-
-    }
-
-    @Override
-    public void onCallRinging(CallSession session) {
-
-    }
-
-    @Override
-    public void onCallConnected(CallSession session) {
-        boolean isVideoCall = session.videoEnabled;
+    public void onCallConnected(Session session) {
+        boolean isVideoCall = session.getVideoEnabled();
         LogUtil.i("===回调了这里了===> onCallConnected" + isVideoCall);
         if (isVideoCall) {
             // 切换到视频通话页面
@@ -716,12 +699,12 @@ public class P2PCallActivity extends BaseActivity<P2PCallPresenter> implements C
     }
 
     @Override
-    public void onCallEnded(CallSession session, CallAction action) {
+    public void onCallEnded(Session session, CallAction action) {
         release();
     }
 
     @Override
-    public void onCallFailed(CallSession session, CubeErrorCode errorCode) {
+    public void onCallFailed(Session session, CubeErrorCode errorCode) {
         LogUtil.i("P2PCallActivity ===> onCallFailed" + "，errorCode：" + errorCode.code);
         if (errorCode == CubeErrorCode.ConnectionFailed) {
             ToastUtil.showToast(this, 0, getString(R.string.connection_failure_please_try_again_later));
@@ -748,21 +731,6 @@ public class P2PCallActivity extends BaseActivity<P2PCallPresenter> implements C
             ToastUtil.showToast(this, "对方正在通话中,请稍后再拨");
         }
         this.release();
-    }
-
-    //获取通话用户成功
-    @Override
-    public void getCallUserSuccess(User callUser) {
-        if (null != callUser) {
-            GlideUtil.loadCircleImage(callUser.avatar, P2PCallActivity.this, mPeerHeadIv, R.drawable.default_head_user);
-            mPeerNameTv.setText(callUser.displayName);
-            if (mCallState == CallStatus.AUDIO_INCOMING) {    // 语音来电
-                mCallHintTv.setText(getResources().getString(R.string.someone_wanted_to_talk_to_you_voice_calls));
-            }
-            else if (mCallState == CallStatus.VIDEO_INCOMING) {    // 视频来电
-                mCallHintTv.setText(getResources().getString(R.string.someone_wanted_to_talk_to_you_video_calls));
-            }
-        }
     }
 }
 

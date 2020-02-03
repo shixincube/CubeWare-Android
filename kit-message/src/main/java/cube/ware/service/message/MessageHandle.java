@@ -6,16 +6,15 @@ import com.common.utils.utils.EmptyUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
-import cube.service.common.model.CubeError;
-import cube.service.common.model.CubeErrorCode;
-import cube.service.common.model.DeviceInfo;
+import cube.service.CubeError;
+import cube.service.CubeErrorCode;
+import cube.service.DeviceInfo;
 import cube.service.message.FileMessageStatus;
 import cube.service.message.MessageListener;
 import cube.service.message.MessageType;
-import cube.service.message.model.CustomMessage;
-import cube.service.message.model.FileMessage;
-import cube.service.message.model.MessageEntity;
-import cube.service.message.model.ReceiptMessage;
+import cube.service.message.CustomMessage;
+import cube.service.message.FileMessage;
+import cube.service.message.MessageEntity;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;
@@ -79,12 +78,12 @@ public class MessageHandle implements MessageListener {
      * @param message
      */
     @Override
-    public void onMessageSent(MessageEntity message) {
+    public void onSent(MessageEntity message) {
         LogUtil.i("发送的消息: " + message.toString());
-        if (message instanceof ReceiptMessage) {
-            ReceiptManager.getInstance().onReceiptedAll(message, message.getFromDevice());
-            return;
-        }
+        //if (message instanceof ReceiptMessage) {
+        //    ReceiptManager.getInstance().onReceiptedAll(message, message.getFromDevice());
+        //    return;
+        //}
         if (isFromMyDevice(message)) {
             MessageManager.getInstance().updateMessageInLocal(message).subscribe();
         }
@@ -101,7 +100,7 @@ public class MessageHandle implements MessageListener {
      * @param total
      */
     @Override
-    public void onMessageUploading(MessageEntity message, long processed, long total) {
+    public void onUploading(MessageEntity message, long processed, long total) {
         LogUtil.i("文件上传中的消息: sn:" + message.getSerialNumber() + "当前大小:" + processed + " 总大小:" + total);
 
         // 监听上传中回调
@@ -119,7 +118,7 @@ public class MessageHandle implements MessageListener {
      * @param message
      */
     @Override
-    public void onMessageUploadCompleted(MessageEntity message) {
+    public void onUploadCompleted(MessageEntity message) {
         LogUtil.i("文件上传完成的消息:" + message.toString());
 
         // 更新消息到数据库
@@ -144,7 +143,7 @@ public class MessageHandle implements MessageListener {
      * @param total
      */
     @Override
-    public void onMessageDownloading(MessageEntity message, long processed, long total) {
+    public void onDownloading(MessageEntity message, long processed, long total) {
 
         LogUtil.i("文件下载中的消息: sn:" + message.getSerialNumber() + "当前大小:" + processed + " 总大小:" + total);
 
@@ -163,7 +162,7 @@ public class MessageHandle implements MessageListener {
      * @param message
      */
     @Override
-    public void onMessageDownloadCompleted(MessageEntity message) {
+    public void onDownloadCompleted(MessageEntity message) {
         LogUtil.i("文件下载完成的消息:" + message.toString());
 
         if (message.getType().equals(MessageType.File) && !message.isGroupMessage() && !message.getSender().getCubeId().equals(CubeCore.getInstance().getCubeId())) {
@@ -193,17 +192,32 @@ public class MessageHandle implements MessageListener {
         }
     }
 
+    @Override
+    public void onForwarded(List<MessageEntity> list, List<MessageEntity> list1) {
+
+    }
+
     /**
      * 消息撤回成功时回调。
      *
      * @param message
      */
     @Override
-    public void onMessageRecalled(MessageEntity message) {
+    public void onRecalled(MessageEntity message) {
         LogUtil.i("撤回的消息:" + message.toString());
         MessageManager.getInstance().reCallMessage(CubeCore.getContext(), message);
         //取消消息的后续处理，如：下载等
         CubeEngine.getInstance().getMessageService().pauseMessage(message.getSerialNumber());
+    }
+
+    @Override
+    public void onReceiptedAll(String s, long l, DeviceInfo deviceInfo) {
+
+    }
+
+    @Override
+    public void onReceipted(List<MessageEntity> list, DeviceInfo deviceInfo) {
+
     }
 
     /**
@@ -212,34 +226,14 @@ public class MessageHandle implements MessageListener {
      * @param message
      */
     @Override
-    public void onMessageReceived(MessageEntity message) {
+    public void onReceived(MessageEntity message) {
         LogUtil.i("接收的消息: " + message.toString());
-        if (message instanceof ReceiptMessage) {
-            //收到的回执消息，表示会话对端已回执（已读），无需求暂时不处理。
-            ReceiptManager.getInstance().onReceiptedAll(message, message.getFromDevice());
-            return;
-        }
+        //if (message instanceof ReceiptMessage) {
+        //    //收到的回执消息，表示会话对端已回执（已读），无需求暂时不处理。
+        //    ReceiptManager.getInstance().onReceiptedAll(message, message.getFromDevice());
+        //    return;
+        //}
         MessageHandler.getInstance().read(message);
-    }
-
-    /**
-     * 当消息被取消时回调。
-     *
-     * @param message
-     */
-    @Override
-    public void onMessageCanceled(MessageEntity message) {
-
-    }
-
-    /**
-     * 消息暂停
-     *
-     * @param message
-     */
-    @Override
-    public void onMessagePaused(MessageEntity message) {
-
     }
 
     /**
@@ -248,7 +242,7 @@ public class MessageHandle implements MessageListener {
      * @param message
      */
     @Override
-    public void onMessageResumed(MessageEntity message) {
+    public void onResumed(MessageEntity message) {
 
     }
 
@@ -277,6 +271,11 @@ public class MessageHandle implements MessageListener {
     @Override
     public void onMessageSyncEnd() {
         LogUtil.i("消息同步结束");
+    }
+
+    @Override
+    public long getSyncBeginTime() {
+        return 0;
     }
 
     /**
@@ -312,6 +311,36 @@ public class MessageHandle implements MessageListener {
             }
             MessageManager.getInstance().updateMessageInLocal(message).subscribe();
         }
+    }
+
+    @Override
+    public void onFileMessageFailed(boolean b, MessageEntity messageEntity, CubeError cubeError) {
+
+    }
+
+    @Override
+    public void onMessageCanceled(MessageEntity messageEntity) {
+
+    }
+
+    @Override
+    public void onUploadStart(MessageEntity messageEntity) {
+
+    }
+
+    @Override
+    public void onDownloadStart(MessageEntity messageEntity) {
+
+    }
+
+    @Override
+    public void onUploadPaused(MessageEntity messageEntity) {
+
+    }
+
+    @Override
+    public void onDownloadPaused(MessageEntity messageEntity) {
+
     }
 
     /**

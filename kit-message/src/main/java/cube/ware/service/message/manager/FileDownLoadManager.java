@@ -4,12 +4,12 @@ import android.content.Context;
 import android.util.LongSparseArray;
 import com.common.utils.receiver.NetworkStateReceiver;
 import cube.service.CubeEngine;
-import cube.service.common.model.CubeError;
+import cube.service.CubeError;
 import cube.service.message.MessageOperate;
-import cube.service.message.model.FileMessage;
-import cube.service.message.model.ImageMessage;
-import cube.service.message.model.MessageEntity;
-import cube.service.message.model.VideoClipMessage;
+import cube.service.message.FileMessage;
+import cube.service.message.ImageMessage;
+import cube.service.message.MessageEntity;
+import cube.service.message.VideoClipMessage;
 import cube.ware.service.message.chat.message.Listener.MessageListenerAdapter;
 import java.util.HashMap;
 
@@ -65,7 +65,7 @@ public class FileDownLoadManager implements NetworkStateReceiver.NetworkStateCha
     private void initAdapter() {
         messageListenerAdapter = new MessageListenerAdapter() {
             @Override
-            public void onMessageDownloading(MessageEntity messageEntity, long processed, long total) {
+            public void onDownloading(MessageEntity messageEntity, long processed, long total) {
                 if (messageEntity == null || !(messageEntity instanceof FileMessage)) {
                     return;
                 }
@@ -74,7 +74,7 @@ public class FileDownLoadManager implements NetworkStateReceiver.NetworkStateCha
             }
 
             @Override
-            public void onMessageDownloadCompleted(MessageEntity messageEntity) {
+            public void onDownloadCompleted(MessageEntity messageEntity) {
                 if (messageEntity == null || !(messageEntity instanceof FileMessage)) {
                     return;
                 }

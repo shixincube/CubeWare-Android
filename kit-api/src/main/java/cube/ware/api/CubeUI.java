@@ -2,7 +2,7 @@ package cube.ware.api;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import cube.service.user.UserState;
+import cube.service.account.AccountState;
 import cube.ware.impl.UIRoot;
 
 /**
@@ -75,7 +75,7 @@ public abstract class CubeUI {
      *
      * @return
      */
-    public abstract UserState getAccountState();
+    public abstract AccountState getAccountState();
 
     /**
      * 判断当前是否正在通话中或响铃中

@@ -29,7 +29,7 @@ public class LoginPresenter extends LoginContract.Presenter {
     }
 
     private void getCubeList(String appId, String appKey) {
-        ApiFactory.getInstance().find(appId, 0, 20, new Callback<ResultData<TotalData>>() {
+        ApiFactory.getInstance().queryUsers(appId, appKey, 0, 20, new Callback<ResultData<TotalData>>() {
             @Override
             public void onResponse(Call<ResultData<TotalData>> call, Response<ResultData<TotalData>> response) {
                 if (response.isSuccessful() && response.body().state.code == 200) {
@@ -57,7 +57,7 @@ public class LoginPresenter extends LoginContract.Presenter {
 
     private void createCubeId(String appId,String appKey) {
         //创建CubeId号
-        ApiFactory.getInstance().login(appId, appKey, new Callback<ResultData<LoginCubeData>>() {
+        ApiFactory.getInstance().createUser(appId, appKey, new Callback<ResultData<LoginCubeData>>() {
             @Override
             public void onResponse(Call<ResultData<LoginCubeData>> call, Response<ResultData<LoginCubeData>> response) {
                 if (response.isSuccessful() && response.body().state.code == 200) {

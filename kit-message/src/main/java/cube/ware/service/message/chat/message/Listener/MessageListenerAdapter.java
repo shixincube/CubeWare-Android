@@ -1,11 +1,12 @@
 package cube.ware.service.message.chat.message.Listener;
 
+import cube.service.DeviceInfo;
 import java.util.HashMap;
 import java.util.List;
 
-import cube.service.common.model.CubeError;
+import cube.service.CubeError;
 import cube.service.message.MessageListener;
-import cube.service.message.model.MessageEntity;
+import cube.service.message.MessageEntity;
 
 /**
  * @author CloudZhang
@@ -13,38 +14,54 @@ import cube.service.message.model.MessageEntity;
  */
 
 public class MessageListenerAdapter implements MessageListener {
+
     @Override
-    public void onMessageSent(MessageEntity messageEntity) {
+    public void onSent(MessageEntity messageEntity) {
 
     }
 
     @Override
-    public void onMessageUploading(MessageEntity messageEntity, long l, long l1) {
+    public void onUploading(MessageEntity messageEntity, long l, long l1) {
 
     }
 
     @Override
-    public void onMessageUploadCompleted(MessageEntity messageEntity) {
+    public void onUploadCompleted(MessageEntity messageEntity) {
 
     }
 
     @Override
-    public void onMessageDownloading(MessageEntity messageEntity, long l, long l1) {
+    public void onDownloading(MessageEntity messageEntity, long l, long l1) {
 
     }
 
     @Override
-    public void onMessageDownloadCompleted(MessageEntity messageEntity) {
+    public void onDownloadCompleted(MessageEntity messageEntity) {
 
     }
 
     @Override
-    public void onMessageRecalled(MessageEntity messageEntity) {
+    public void onForwarded(List<MessageEntity> list, List<MessageEntity> list1) {
 
     }
 
     @Override
-    public void onMessageReceived(MessageEntity messageEntity) {
+    public void onRecalled(MessageEntity messageEntity) {
+
+    }
+
+    @Override
+    public void onReceiptedAll(String s, long l, DeviceInfo deviceInfo) {
+
+    }
+
+    @Override
+    public void onReceipted(List<MessageEntity> list, DeviceInfo deviceInfo) {
+
+    }
+
+    @Override
+    public void onReceived(MessageEntity messageEntity) {
 
     }
 
@@ -54,17 +71,37 @@ public class MessageListenerAdapter implements MessageListener {
     }
 
     @Override
+    public void onFileMessageFailed(boolean b, MessageEntity messageEntity, CubeError cubeError) {
+
+    }
+
+    @Override
     public void onMessageCanceled(MessageEntity messageEntity) {
 
     }
 
     @Override
-    public void onMessagePaused(MessageEntity messageEntity) {
+    public void onUploadStart(MessageEntity messageEntity) {
 
     }
 
     @Override
-    public void onMessageResumed(MessageEntity messageEntity) {
+    public void onDownloadStart(MessageEntity messageEntity) {
+
+    }
+
+    @Override
+    public void onUploadPaused(MessageEntity messageEntity) {
+
+    }
+
+    @Override
+    public void onDownloadPaused(MessageEntity messageEntity) {
+
+    }
+
+    @Override
+    public void onResumed(MessageEntity messageEntity) {
 
     }
 
@@ -81,5 +118,10 @@ public class MessageListenerAdapter implements MessageListener {
     @Override
     public void onMessageSyncEnd() {
 
+    }
+
+    @Override
+    public long getSyncBeginTime() {
+        return 0;
     }
 }

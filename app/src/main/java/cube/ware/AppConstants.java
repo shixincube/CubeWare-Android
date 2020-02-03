@@ -32,10 +32,10 @@ public interface AppConstants {
      * 开发服环境
      */
     interface Develop {
-        String APP_ID      = "c9111d7ccaf14e6bb922c346b9e8fedd";                     // 引擎id
-        String APP_KEY     = "2c96265a9a934735a0b25faa9a410d99";                     // 引擎key
-        String BASE_URL    = "http://125.208.1.66:10021";                            // 基础接口地址
-        String LICENSE_URL = "https://dev.license.shixincube.cn/auth/license/get";   // license地址
+        String APP_ID      = "944f19ab363940118af79ba2ece767c6";                     // 引擎id
+        String APP_KEY     = "4f7ee32b492241f6928d45da5bb79081546";                  // 引擎key
+        String BASE_URL    = "http://103.6.222.234:4000";                            // 基础接口地址
+        String LICENSE_URL = "http://103.6.222.234:9000/auth/license/get";           // license地址
     }
 
     /**

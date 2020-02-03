@@ -15,13 +15,10 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.common.mvp.rx.RxManager;
 import com.common.utils.utils.ToastUtil;
-import cube.service.CubeEngine;
-import cube.service.group.model.Group;
-import cube.service.user.model.User;
+import cube.service.group.Group;
 import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.eventbus.CubeEvent;
-import cube.ware.utils.SpUtil;
 import rx.functions.Action1;
 
 @Route(path = AppConstants.Router.ModifyNameActivity)
@@ -109,7 +106,7 @@ public class ModifyNameActivity extends AppCompatActivity implements View.OnClic
                     return;
                 }
 
-                if (mType == 0) {
+                /*if (mType == 0) {
                     User user = new User(SpUtil.getCubeId());
                     user.displayName = newName;
                     CubeEngine.getInstance().getUserService().update(user);
@@ -117,7 +114,7 @@ public class ModifyNameActivity extends AppCompatActivity implements View.OnClic
                 else {
                     mGroup.displayName = newName;
                     CubeEngine.getInstance().getGroupService().update(mGroup);
-                }
+                }*/
 
                 closeSoftKey();
                 break;

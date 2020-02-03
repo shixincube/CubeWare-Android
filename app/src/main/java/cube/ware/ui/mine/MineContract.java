@@ -1,11 +1,9 @@
 package cube.ware.ui.mine;
 
 import android.content.Context;
-
 import com.common.mvp.base.BasePresenter;
 import com.common.mvp.base.BaseView;
-
-import cube.service.user.model.User;
+import cube.ware.data.room.model.CubeUser;
 
 /**
  * Created by dth
@@ -19,9 +17,8 @@ public interface MineContract {
      */
     interface View extends BaseView {
 
-        void getUserData(User user);
+        void getUserData(CubeUser user);
     }
-
 
     abstract class Presenter extends BasePresenter<MineContract.View> {
 

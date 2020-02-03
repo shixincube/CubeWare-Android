@@ -1,15 +1,10 @@
 package cube.ware.ui.setting;
 
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
-
-import cube.service.CubeEngine;
-import cube.service.setting.Setting;
 import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.service.message.chat.BaseToolBarActivity;
@@ -100,7 +95,6 @@ public class SettingActivity extends BaseToolBarActivity<SettingContract.Present
         setToolBar(toolBarOptions);
     }
 
-
     public void initView() {
         mTvNotify = (TextView) findViewById(R.id.tv_notify);
         mCbIsAlerts = (CheckBox) findViewById(R.id.cb_isAlerts);
@@ -132,13 +126,12 @@ public class SettingActivity extends BaseToolBarActivity<SettingContract.Present
         mTvAddMute.setOnClickListener(this);
         mTvRemoveMute.setOnClickListener(this);
         mTvQuery.setOnClickListener(this);
-
     }
 
     @Override
     public void onClick(View v) {
         String chatId = mEtChat.getText().toString();
-        switch (v.getId()) {
+        /*switch (v.getId()) {
             default:
                 break;
             case R.id.tv_notify:
@@ -187,6 +180,6 @@ public class SettingActivity extends BaseToolBarActivity<SettingContract.Present
                     mTvResult.setText(setting.toString());
                 }
                 break;
-        }
+        }*/
     }
 }

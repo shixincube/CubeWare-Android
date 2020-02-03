@@ -24,7 +24,6 @@ import cube.ware.service.message.chat.panel.input.MessageEditWatcher;
 import cube.ware.service.message.chat.panel.input.function.AudioFunction;
 import cube.ware.service.message.chat.panel.input.function.BaseFunction;
 import cube.ware.service.message.chat.panel.input.function.VideoFunction;
-import cube.ware.service.message.chat.panel.input.function.WhiteboardFunction;
 import cube.ware.service.message.chat.panel.messagelist.MessageListPanel;
 import cube.ware.service.message.manager.MessageManager;
 import java.util.ArrayList;
@@ -392,7 +391,6 @@ public class MessageFragment extends Fragment implements InputPanelProxy, Messag
         List<BaseFunction> functionViewList = new ArrayList<>();
         functionViewList.add(new AudioFunction(mSessionType, container));
         functionViewList.add(new VideoFunction(mSessionType));
-        functionViewList.add(new WhiteboardFunction(mSessionType));
         if (this.mChatCustomization != null && this.mChatCustomization.functionViewList != null) {
             functionViewList.addAll(this.mChatCustomization.functionViewList);
         }

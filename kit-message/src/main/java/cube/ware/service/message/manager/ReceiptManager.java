@@ -2,8 +2,8 @@ package cube.ware.service.message.manager;
 
 import com.common.mvp.rx.RxBus;
 import com.common.utils.utils.log.LogUtil;
-import cube.service.common.model.DeviceInfo;
-import cube.service.message.model.MessageEntity;
+import cube.service.DeviceInfo;
+import cube.service.message.MessageEntity;
 import cube.ware.core.CubeCore;
 import cube.ware.data.repository.CubeMessageRepository;
 import cube.ware.data.room.model.CubeMessage;

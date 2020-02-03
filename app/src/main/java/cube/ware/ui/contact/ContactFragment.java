@@ -25,7 +25,6 @@ import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.ui.contact.adapter.ContactPagerAdapter;
 import cube.ware.ui.contact.friend.FriendListFragment;
-import cube.ware.service.group.groupList.GroupListFragment;
 import cube.ware.utils.TabLayoutUtil;
 import cube.ware.widget.CustomViewPager;
 
@@ -96,7 +95,7 @@ public class ContactFragment extends BaseFragment<ContactContract.Presenter> imp
         int page = mViewPager.getCurrentItem();
         List<Fragment> mFragmentList = new ArrayList<>();
         mFragmentList.add(new FriendListFragment());
-        mFragmentList.add(new GroupListFragment());
+        //mFragmentList.add(new GroupListFragment());
         ContactPagerAdapter adapter = new ContactPagerAdapter(mFragmentList, getChildFragmentManager(), getActivity());
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
