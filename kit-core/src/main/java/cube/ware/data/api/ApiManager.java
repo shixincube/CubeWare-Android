@@ -23,6 +23,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * api网络请求管理器
+ *
+ * @author LiuFeng
+ * @data 2020/2/3 18:23
  */
 public class ApiManager {
     private static final String TAG = "ApiManager";
@@ -33,7 +36,7 @@ public class ApiManager {
     private static final int CONNECT_TIME_OUT = 15;      // 连接超时时间为15秒
 
     private Retrofit     mRetrofit;         // Retrofit实例
-    private OkHttpClient mOkHttpClient; // OkHttpClient实例
+    private OkHttpClient mOkHttpClient;     // OkHttpClient实例
     private ApiService   mApiService;       // api接口
 
     /**

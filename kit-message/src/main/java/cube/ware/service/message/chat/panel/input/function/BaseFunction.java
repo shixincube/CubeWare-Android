@@ -1,13 +1,11 @@
 package cube.ware.service.message.chat.panel.input.function;
 
 import android.content.Intent;
-
-import java.io.Serializable;
-
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
-import cube.ware.service.message.chat.BaseChatActivity;
 import cube.ware.service.message.chat.ChatContainer;
+import cube.ware.service.message.chat.activity.base.BaseChatActivity;
 import cube.ware.service.message.chat.panel.input.InputPanel;
+import java.io.Serializable;
 
 /**
  * 更多功能组件基类

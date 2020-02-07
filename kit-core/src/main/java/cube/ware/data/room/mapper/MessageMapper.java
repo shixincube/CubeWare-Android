@@ -162,7 +162,7 @@ public class MessageMapper {
                 //如果是验证消息 通知刷新最近列表
                 //if (SystemMessageManage.getInstance().isFromVerify(messageEntity) && !isSync) {
                 //    LogUtil.i("EVENT_REFRESH_SYSTEM_MESSAGE");
-                //    RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_SYSTEM_MESSAGE, true);
+                //    RxBus.getInstance().post(MessageConstants.Event.EVENT_REFRESH_SYSTEM_MESSAGE, true);
                 //}
                 CustomMessage customMessage = (CustomMessage) messageEntity;
                 String operate = customMessage.getHeader("operate");

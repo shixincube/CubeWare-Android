@@ -11,7 +11,7 @@ import com.common.utils.utils.log.LogUtil;
 import cube.ware.core.CubeCore;
 import cube.ware.data.room.dao.CubeConferenceDao;
 import cube.ware.data.room.dao.CubeMessageDao;
-import cube.ware.data.room.dao.CubeRecentSessionDao;
+import cube.ware.data.room.dao.CubeSessionDao;
 import cube.ware.data.room.dao.CubeUserDao;
 import cube.ware.data.room.model.CubeConference;
 import cube.ware.data.room.model.CubeMessage;
@@ -82,7 +82,7 @@ public abstract class AppDataBase extends RoomDatabase {
      *
      * @return
      */
-    public abstract CubeRecentSessionDao getCubeRecentSessionDao();
+    public abstract CubeSessionDao getCubeRecentSessionDao();
 
     /**
      * 获取消息dao类

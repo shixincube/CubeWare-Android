@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import cube.ware.core.CubeCore;
-import cube.ware.data.model.HeaderMap;
 import cube.ware.data.model.dataModel.enmu.CubeFileMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
 import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
@@ -27,6 +26,7 @@ import org.json.JSONObject;
 @Entity
 @TypeConverters(CubeMessageType.class)
 public class CubeMessage implements Serializable {
+
     /**
      * 消息唯一序列号
      */

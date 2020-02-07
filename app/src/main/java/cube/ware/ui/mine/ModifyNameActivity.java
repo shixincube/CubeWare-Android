@@ -18,7 +18,7 @@ import com.common.utils.utils.ToastUtil;
 import cube.service.group.Group;
 import cube.ware.AppConstants;
 import cube.ware.R;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.common.MessageConstants;
 import rx.functions.Action1;
 
 @Route(path = AppConstants.Router.ModifyNameActivity)
@@ -76,14 +76,14 @@ public class ModifyNameActivity extends AppCompatActivity implements View.OnClic
         mTvCancel.setOnClickListener(this);
         mTvSave.setOnClickListener(this);
         mEtName.addTextChangedListener(this);
-        rxManager.on(CubeEvent.EVENT_REFRESH_CUBE_USER, new Action1<Object>() {
+        rxManager.on(MessageConstants.Event.EVENT_REFRESH_CUBE_USER, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 finish();
             }
         });
 
-        rxManager.on(CubeEvent.EVENT_UPDATE_GROUP, new Action1<Object>() {
+        rxManager.on(MessageConstants.Event.EVENT_UPDATE_GROUP, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 finish();

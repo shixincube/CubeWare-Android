@@ -18,11 +18,10 @@ import cube.service.message.MessageEntity;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;
-import cube.ware.service.message.chat.message.Listener.FileMessageDownloadListener;
-import cube.ware.service.message.chat.message.Listener.FileMessageUploadListener;
-import cube.ware.service.message.chat.message.MessageHandler;
+import cube.ware.service.message.chat.fragment.Listener.FileMessageDownloadListener;
+import cube.ware.service.message.chat.fragment.Listener.FileMessageUploadListener;
+import cube.ware.service.message.chat.fragment.MessageHandler;
 import cube.ware.service.message.manager.MessageManager;
-import cube.ware.service.message.manager.ReceiptManager;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -205,7 +204,7 @@ public class MessageHandle implements MessageListener {
     @Override
     public void onRecalled(MessageEntity message) {
         LogUtil.i("撤回的消息:" + message.toString());
-        MessageManager.getInstance().reCallMessage(CubeCore.getContext(), message);
+        MessageManager.getInstance().reCallMessage(message);
         //取消消息的后续处理，如：下载等
         CubeEngine.getInstance().getMessageService().pauseMessage(message.getSerialNumber());
     }

@@ -15,7 +15,7 @@ import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.service.message.MessageHandle;
 import cube.ware.service.message.R;
-import cube.ware.service.message.chat.message.Listener.FileMessageUploadListener;
+import cube.ware.service.message.chat.fragment.Listener.FileMessageUploadListener;
 import cube.ware.widget.CubeProgressBar;
 
 /**

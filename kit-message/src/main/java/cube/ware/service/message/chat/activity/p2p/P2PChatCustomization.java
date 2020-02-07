@@ -7,7 +7,7 @@ import cube.ware.core.CubeConstants;
 import cube.ware.data.repository.CubeUserRepository;
 import cube.ware.data.room.model.CubeUser;
 import cube.ware.service.message.R;
-import cube.ware.service.message.chat.ChatCustomization;
+import cube.ware.service.message.chat.activity.base.ChatCustomization;
 import java.util.ArrayList;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;

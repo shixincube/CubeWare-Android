@@ -5,7 +5,10 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * 日志操作器。
+ * 日志操作器基类
+ *
+ * @author LiuFeng
+ * @data 2018/9/20 11:45
  */
 public abstract class BaseLogHandle {
 
@@ -29,17 +32,14 @@ public abstract class BaseLogHandle {
     /**
      * 日志打印
      *
-     * @param level      日志级别
-     * @param tag        日志标签。
-     * @param message    日志内容。
-     * @param stackTrace 堆栈信息
+     * @param logEvent 日志事件
      */
-    public abstract void log(LogLevel level, String tag, String message, StackTraceElement[] stackTrace);
+    public abstract void log(LogEvent logEvent);
 
     /**
      * 获取tag
      *
-     * @return
+     * @return 全局日志标签。
      */
     public String getTag() {
         return TAG;
@@ -48,40 +48,45 @@ public abstract class BaseLogHandle {
     /**
      * 设置tag
      *
-     * @param tag
+     * @param tag 全局日志标签。
      */
     public void setTag(String tag) {
         TAG = tag;
     }
 
     /**
-     * 获取tag
+     * 获取格式化时间
      *
      * @return
      */
-    public String getDateTime() {
-        date.setTime(System.currentTimeMillis());
+    public String getDateTime(long timestamp) {
+        date.setTime(timestamp);
         return timeFormat.format(date);
     }
 
     /**
      * 获取堆栈信息
      *
-     * @param stackTrace
+     * @param currentThread 当前线程
+     * @param stackTraceArr 堆栈数组数据
+     * @param deep          取堆栈数据深度(下标)
      *
      * @return
      */
-    public String getStackTrace(StackTraceElement stackTrace) {
-        if (stackTrace == null) {
+    public String getStackTrace(String currentThread, StackTraceElement[] stackTraceArr, int deep) {
+        if (stackTraceArr == null) {
             return "";
         }
 
+        if (deep >= stackTraceArr.length) {
+            return "Index Out of Bounds! deep:" + deep + " length:" + stackTraceArr.length;
+        }
+
+        StackTraceElement stackTrace = stackTraceArr[deep];
         String format = "[(%s:%d)# %s -> %s]";
         String fileName = stackTrace.getFileName();
         int methodLine = stackTrace.getLineNumber();
         String methodName = stackTrace.getMethodName();
-        String currentThread = Thread.currentThread().getName();
-        //String className = fileName.substring(0, fileName.lastIndexOf("."));
         return String.format(Locale.CHINESE, format, fileName, methodLine, methodName, currentThread);
     }
 }

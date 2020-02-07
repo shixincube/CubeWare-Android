@@ -33,7 +33,7 @@ import cube.service.message.VoiceClipMessage;
 import cube.service.message.WhiteboardClipMessage;
 import cube.service.message.WhiteboardFrameMessage;
 import cube.service.message.WhiteboardMessage;
-import cube.ware.MessageConstants;
+import cube.ware.common.MessageConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeCustomMessageType;
@@ -44,7 +44,6 @@ import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.repository.CubeMessageRepository;
 import cube.ware.data.room.model.CubeMessage;
-import cube.ware.eventbus.CubeEvent;
 import cube.ware.service.message.R;
 import cube.ware.service.message.chat.ChatContainer;
 import cube.ware.service.message.recent.manager.RecentSessionManager;
@@ -214,8 +213,7 @@ public class MessageManager {
             CubeMessageRepository.getInstance().addMessage(messages, true).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<CubeMessage>>() {
                 @Override
                 public void call(List<CubeMessage> cubeMessages) {
-                    RxBus.getInstance().post(CubeEvent.EVENT_SYNCING_MESSAGE, cubeMessages);
-                    //                            MessageBufferPool.getInstance().setNewMessageViewModelList(cubeMessages);
+                    RxBus.getInstance().post(MessageConstants.Event.EVENT_SYNCING_MESSAGE, cubeMessages);
                 }
             });
         }
@@ -224,15 +222,15 @@ public class MessageManager {
     /**
      * 撤回消息
      *
-     * @param context
      * @param messageEntity
      */
-    public void reCallMessage(final Context context, final MessageEntity messageEntity) {
-        LogUtil.d("message sn=" + messageEntity.getSerialNumber());
+    public void reCallMessage(final MessageEntity messageEntity) {
         if (null == messageEntity) {
             throw new IllegalArgumentException("MessageEntity can't be null!");
         }
-        boolean recalled = messageEntity.isRecalled(); //是否是已经撤回过的消息
+
+        //是否是已经撤回过的消息
+        boolean recalled = messageEntity.isRecalled();
         final CubeMessage cubeMessage = convertTo(messageEntity, false);
         Observable<CubeMessage> observable = null;
         Observable<CubeMessage> recallCubeMessage = Observable.create(new Observable.OnSubscribe<CubeMessage>() {
@@ -243,7 +241,6 @@ public class MessageManager {
         });
 
         observable = recalled ? recallCubeMessage : CubeMessageRepository.getInstance().queryMessageBySn(messageEntity.getSerialNumber());
-        ;
         observable.flatMap(new Func1<CubeMessage, Observable<CubeMessage>>() {
             @Override
             public Observable<CubeMessage> call(final CubeMessage cubeMessage) {
@@ -684,7 +681,7 @@ public class MessageManager {
      * @return
      */
     public Observable<List<CubeMessageViewModel>> queryHistoryMessage(final String chatId, final int sessionType, final int limit, long time, final boolean isSecret) {
-        return CubeMessageRepository.getInstance().queryMessage(chatId, sessionType, time, limit).flatMap(new Func1<List<CubeMessage>, Observable<List<CubeMessageViewModel>>>() {
+        return CubeMessageRepository.getInstance().queryMessage(chatId, time, limit).flatMap(new Func1<List<CubeMessage>, Observable<List<CubeMessageViewModel>>>() {
             @Override
             public Observable<List<CubeMessageViewModel>> call(List<CubeMessage> cubeMessages) {
                 if (cubeMessages == null || cubeMessages.isEmpty()) {
@@ -1075,9 +1072,9 @@ public class MessageManager {
             }
             else if (messageEntity instanceof CustomMessage) {      // 自定义消息
                 //如果是验证消息 通知刷新最近列表
-                if (SystemMessageManage.getInstance().isFromVerify(messageEntity) && !isSync) {
+                if (SystemMessageManager.getInstance().isFromVerify(messageEntity) && !isSync) {
                     LogUtil.i("EVENT_REFRESH_SYSTEM_MESSAGE");
-                    RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_SYSTEM_MESSAGE, true);
+                    RxBus.getInstance().post(MessageConstants.Event.EVENT_REFRESH_SYSTEM_MESSAGE, true);
                 }
                 CustomMessage customMessage = (CustomMessage) messageEntity;
                 String operate = customMessage.getHeader("operate");

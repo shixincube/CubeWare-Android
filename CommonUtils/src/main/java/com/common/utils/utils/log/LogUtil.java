@@ -3,10 +3,8 @@ package com.common.utils.utils.log;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
-import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.net.UnknownHostException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -21,11 +19,13 @@ import org.json.JSONTokener;
 
 /**
  * 日志工具类
+ *
+ * @author LiuFeng
+ * @data 2018/9/20 11:46
  */
 public final class LogUtil {
 
-    private LogUtil() {
-    }
+    private LogUtil() {}
 
     /**
      * 打印 DEBUG 级别日志。
@@ -63,6 +63,27 @@ public final class LogUtil {
      */
     public static void i(String tag, String msg) {
         commonLog(LogLevel.INFO, tag, msg);
+    }
+
+    /**
+     * 打印 INFO 级别日志和其堆栈深度信息
+     *
+     * @param msg      日志内容。
+     * @param maxDepth 堆栈深度
+     */
+    public static void i(String msg, int maxDepth) {
+        commonLog(LogLevel.INFO, "", msg + "\n" + StackTraceUtil.getCroppedStackTraceString(maxDepth));
+    }
+
+    /**
+     * 打印 INFO 级别日志和其堆栈深度信息
+     *
+     * @param tag      该条日志的标签。
+     * @param msg      日志内容。
+     * @param maxDepth 堆栈深度
+     */
+    public static void i(String tag, String msg, int maxDepth) {
+        commonLog(LogLevel.INFO, tag, msg + "\n" + StackTraceUtil.getCroppedStackTraceString(maxDepth));
     }
 
     /**
@@ -123,6 +144,17 @@ public final class LogUtil {
     }
 
     /**
+     * 打印 ERROR 级别日志和其堆栈深度信息
+     *
+     * @param tag      该条日志的标签。
+     * @param msg      日志内容。
+     * @param maxDepth 堆栈深度
+     */
+    public static void e(String tag, String msg, int maxDepth) {
+        commonLog(LogLevel.ERROR, tag, msg + "\n" + StackTraceUtil.getCroppedStackTraceString(maxDepth));
+    }
+
+    /**
      * 打印 ERROR 级别日志。
      *
      * @param throwable
@@ -138,6 +170,17 @@ public final class LogUtil {
      */
     public static void e(String tag, Throwable throwable) {
         commonLog(LogLevel.ERROR, tag, getExceptionLog("", throwable));
+    }
+
+    /**
+     * 打印 ERROR 级别日志。
+     *
+     * @param tag
+     * @param msg
+     * @param throwable
+     */
+    public static void e(String tag, String msg, Throwable throwable) {
+        commonLog(LogLevel.ERROR, tag, getExceptionLog(msg, throwable));
     }
 
     /**
@@ -331,18 +374,6 @@ public final class LogUtil {
     }
 
     /**
-     * 获取异常信息的log
-     *
-     * @param msg
-     * @param throwable
-     *
-     * @return
-     */
-    private static String getExceptionLog(String msg, Throwable throwable) {
-        return msg + "\nBe Caught exception: " + getStackTraceString(throwable);
-    }
-
-    /**
      * 添加记录
      *
      * 备注：此方法用于常见的需打印方法执行前后耗时的场景
@@ -388,6 +419,28 @@ public final class LogUtil {
     }
 
     /**
+     * 执行时间记录打印
+     *
+     * @param label
+     * @param msg
+     */
+    public static void toLogTime(String label, String msg) {
+        commonLog(LogLevel.INFO, "", TimingManager.getInstance().toLogTime(Log.INFO, label, msg));
+    }
+
+    /**
+     * 获取异常信息的log
+     *
+     * @param msg
+     * @param throwable
+     *
+     * @return
+     */
+    private static String getExceptionLog(String msg, Throwable throwable) {
+        return msg + "\nBe Caught exception: " + StackTraceUtil.getStackTraceString(throwable);
+    }
+
+    /**
      * 公用日志打印方法
      *
      * @param level
@@ -395,10 +448,7 @@ public final class LogUtil {
      * @param msg
      */
     private static void commonLog(LogLevel level, String tag, String msg) {
-        if (isLoggable()) {
-            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-            LogManager.getInstance().log(level, tag, msg, stackTrace);
-        }
+        LogManager.getInstance().log(level, tag, msg);
     }
 
     /**
@@ -417,6 +467,15 @@ public final class LogUtil {
      */
     public static void setLoggable(boolean loggable) {
         LogManager.getInstance().setLoggable(loggable);
+    }
+
+    /**
+     * 设置usb连接状态
+     *
+     * @param usbConnected
+     */
+    public static void setUsbConnect(boolean usbConnected) {
+        LogManager.getInstance().setUsbConnect(usbConnected);
     }
 
     /**
@@ -452,68 +511,9 @@ public final class LogUtil {
     }
 
     /**
-     * 获取数据的内容
-     *
-     * @param msg
-     *
-     * @return
+     * 立刻刷入日志到文件
      */
-    private static String getLogMessage(Object... msg) {
-        if (msg != null && msg.length > 0) {
-            StringBuilder sb = new StringBuilder();
-            for (Object s : msg) {
-                if (s != null) {
-                    sb.append(s.toString());
-                }
-            }
-            return sb.toString();
-        }
-        return "";
-    }
-
-    /**
-     * 获取异常堆栈信息
-     *
-     * @param tr
-     *
-     * @return
-     */
-    private static String getStackTraceString(Throwable tr) {
-        if (tr == null) {
-            return "";
-        }
-
-        Throwable t = tr;
-        while (t != null) {
-            if (t instanceof UnknownHostException) {
-                return "";
-            }
-            t = t.getCause();
-        }
-
-        StringWriter sw = null;
-        PrintWriter pw = null;
-        try {
-            sw = new StringWriter();
-            pw = new PrintWriter(sw);
-            tr.printStackTrace(pw);
-            pw.flush();
-            return sw.toString();
-        } catch (Exception ie) {
-            commonLog(LogLevel.ERROR, "", getExceptionLog("", ie));
-        } finally {
-            try {
-                if (pw != null) {
-                    pw.close();
-                }
-                if (sw != null) {
-                    sw.close();
-                }
-            } catch (Exception oe) {
-                commonLog(LogLevel.ERROR, "", getExceptionLog("", oe));
-            }
-        }
-
-        return "";
+    public static void flushLog() {
+        LogManager.getInstance().flushLog();
     }
 }

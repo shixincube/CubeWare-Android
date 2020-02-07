@@ -22,7 +22,7 @@ public class VideoFunction extends BaseFunction {
     /**
      * 构造方法
      */
-    public VideoFunction(CubeSessionType mSessionType) {
+    public VideoFunction() {
         super(R.drawable.selector_chat_function_video_btn, R.string.video_chat);
     }
 

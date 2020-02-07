@@ -167,5 +167,6 @@ public class AppManager {
         config.setUserCenterUrl(getBaseUrl());
         config.setAvatarUrl(getAvatarUrl());
         CubeCore.getInstance().setDataConfig(config);
+        CubeCore.getInstance().setCubeId(SpUtil.getCubeId());
     }
 }

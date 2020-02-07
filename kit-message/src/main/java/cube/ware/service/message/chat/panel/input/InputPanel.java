@@ -33,16 +33,16 @@ import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.service.message.R;
-import cube.ware.service.message.chat.BaseChatActivity;
+import cube.ware.service.message.chat.activity.base.BaseChatActivity;
 import cube.ware.service.message.chat.ChatContainer;
-import cube.ware.service.message.chat.ChatCustomization;
-import cube.ware.service.message.chat.activity.group.AtHelper;
+import cube.ware.service.message.chat.activity.base.ChatCustomization;
+import cube.ware.service.message.chat.helper.AtHelper;
 import cube.ware.service.message.chat.panel.input.function.BaseFunction;
 import cube.ware.service.message.chat.panel.input.function.FunctionPanel;
 import cube.ware.service.message.chat.panel.input.voicefragment.RecordFragment;
 import cube.ware.service.message.chat.panel.messagelist.MessageListPanel;
 import cube.ware.service.message.manager.MessageManager;
-import cube.ware.service.message.manager.SystemMessageManage;
+import cube.ware.service.message.manager.SystemMessageManager;
 import cube.ware.utils.SpUtil;
 import cube.ware.utils.StringUtil;
 import cube.ware.widget.CubeEmoticonEditText;
@@ -270,7 +270,7 @@ public class InputPanel implements View.OnClickListener {
         this.service_muns_check_ture = rootView.findViewById(R.id.service_muns_check_ture);
 
         this.refreshStatus(mCustomization.typ);
-        if (mCubeId.equals(SystemMessageManage.SystemSession.SPAP_ASSISTANT.getSessionId())) {
+        if (mCubeId.equals(SystemMessageManager.SystemSession.SPAP_ASSISTANT.getSessionId())) {
             this.mChatMoreBtn.setVisibility(View.GONE);
         }
 

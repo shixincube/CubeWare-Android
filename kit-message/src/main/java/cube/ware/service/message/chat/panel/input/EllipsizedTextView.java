@@ -1,10 +1,5 @@
 package cube.ware.service.message.chat.panel.input;
 
-/**
- * @author CloudZhang
- * @date 2018/1/29 11:13
- */
-
 import android.content.Context;
 import android.util.AttributeSet;
 

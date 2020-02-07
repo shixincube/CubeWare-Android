@@ -1,18 +1,18 @@
 package cube.ware.data.repository;
 
 import com.common.mvp.rx.OnSubscribeRoom;
-import cube.ware.data.room.AppDataBaseFactory;
+import cube.ware.data.room.CubeDataBaseFactory;
 import cube.ware.data.room.model.CubeUser;
 import java.util.List;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by dth
- * Des:
- * Date: 2018/9/3.
+ * 用户仓库类，用于对外提供用户信息数据
+ *
+ * @author LiuFeng
+ * @data 2020/2/3 18:28
  */
-
 public class CubeUserRepository {
 
     private static volatile CubeUserRepository mInstance;
@@ -39,7 +39,7 @@ public class CubeUserRepository {
         return Observable.create(new OnSubscribeRoom<CubeUser>() {
             @Override
             protected CubeUser get() {
-                return AppDataBaseFactory.getCubeUserDao().queryUser(cubeId);
+                return CubeDataBaseFactory.getCubeUserDao().queryUser(cubeId);
             }
         }).subscribeOn(Schedulers.io());
     }
@@ -55,7 +55,7 @@ public class CubeUserRepository {
         return Observable.create(new OnSubscribeRoom<List<CubeUser>>() {
             @Override
             protected List<CubeUser> get() {
-                AppDataBaseFactory.getCubeUserDao().saveOrUpdate(cubeUsers);
+                CubeDataBaseFactory.getCubeUserDao().saveOrUpdate(cubeUsers);
                 return cubeUsers;
             }
         }).subscribeOn(Schedulers.io());
@@ -72,7 +72,7 @@ public class CubeUserRepository {
         return Observable.create(new OnSubscribeRoom<CubeUser>() {
             @Override
             protected CubeUser get() {
-                AppDataBaseFactory.getCubeUserDao().saveOrUpdate(cubeUser);
+                CubeDataBaseFactory.getCubeUserDao().saveOrUpdate(cubeUser);
                 return cubeUser;
             }
         }).subscribeOn(Schedulers.io());
@@ -87,9 +87,8 @@ public class CubeUserRepository {
         return Observable.create(new OnSubscribeRoom<List<CubeUser>>() {
             @Override
             protected List<CubeUser> get() {
-                List<CubeUser> cubeUsers = AppDataBaseFactory.getCubeUserDao().queryAll();
-                return cubeUsers;
+                return CubeDataBaseFactory.getCubeUserDao().queryAll();
             }
-        });
+        }).subscribeOn(Schedulers.io());
     }
 }

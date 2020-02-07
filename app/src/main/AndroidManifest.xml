@@ -92,7 +92,7 @@
             android:name=".ui.contact.friend.details.FriendDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".service.message.chat.activity.file.FileActivity"
+            android:name=".service.message.file.FileActivity"
             android:screenOrientation="portrait"
             />
         <activity

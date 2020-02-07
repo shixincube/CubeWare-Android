@@ -19,7 +19,7 @@ import cube.ware.service.message.R;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.service.message.MessageHandle;
-import cube.ware.service.message.chat.message.Listener.FileMessageDownloadListener;
+import cube.ware.service.message.chat.fragment.Listener.FileMessageDownloadListener;
 import cube.ware.utils.ImageUtil;
 import cube.ware.widget.CubeProgressBar;
 import java.io.File;

@@ -16,27 +16,24 @@ public interface InputPanelProxy {
      *
      * @param cubeMessage
      *
-     * @return
      */
-    boolean onMessageSend(CubeMessage cubeMessage);
+    void onMessageSend(CubeMessage cubeMessage);
 
     /**
      * 消息持久化到数据库回调
      *
      * @param cubeMessage
      *
-     * @return
      */
-    boolean onMessagePersisted(CubeMessage cubeMessage);
+    void onMessagePersisted(CubeMessage cubeMessage);
 
     /**
      * 数据库中的消息状态被更新
      *
      * @param cubeMessage
      *
-     * @return
      */
-    boolean onMessageInLocalUpdated(CubeMessage cubeMessage);
+    void onMessageInLocalUpdated(CubeMessage cubeMessage);
 
     /**
      * 删除聊天记录

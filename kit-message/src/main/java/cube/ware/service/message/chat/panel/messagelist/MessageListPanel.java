@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.IntDef;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
@@ -27,21 +28,20 @@ import com.common.utils.utils.UIHandler;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
 import cube.service.message.FileMessageStatus;
-import cube.ware.service.message.R;
+import cube.ware.common.MessageConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;
-import cube.ware.eventbus.CubeEvent;
-import cube.ware.service.message.chat.BaseChatActivity;
+import cube.ware.service.message.R;
 import cube.ware.service.message.chat.ChatContainer;
-import cube.ware.service.message.chat.ChatCustomization;
+import cube.ware.service.message.chat.activity.base.BaseChatActivity;
+import cube.ware.service.message.chat.activity.base.ChatCustomization;
 import cube.ware.service.message.chat.adapter.ChatMessageAdapter;
 import cube.ware.service.message.chat.panel.input.emoticon.EmoticonUtil;
 import cube.ware.service.message.chat.panel.input.emoticon.gif.AnimatedImageSpan;
-import cube.ware.service.message.chat.panel.itemdecoration.DividerGridItemDecoration;
 import cube.ware.service.message.manager.MessageManager;
 import cube.ware.service.message.manager.PlayerManager;
 import cube.ware.utils.BitmapDecoder;
@@ -179,7 +179,7 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
         this.mContentRv.setLayoutManager(mLayoutManager);
         // mAdapter
         this.mContentRv.setAdapter(mChatMessageAdapter);
-        mContentRv.addItemDecoration(new DividerGridItemDecoration(mContext));
+        mContentRv.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.HORIZONTAL));
         //view加载完成时回调
         //rootView.getViewTreeObserver().addOnGlobalLayoutListener(globalLayoutListener);
     }
@@ -285,7 +285,7 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
             queryHistoryList(true, true);
         }
 
-        mRxManager.on(CubeEvent.EVENT_REFRESH_CUBE_AVATAR, new Action1<Object>() {
+        mRxManager.on(MessageConstants.Event.EVENT_REFRESH_CUBE_AVATAR, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 mChatMessageAdapter.notifyDataSetChanged();
@@ -377,7 +377,7 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
     private void queryHistoryList(final boolean firstLoad, final boolean isHistory) {
         this.isFirstLoad = firstLoad;
         this.isHistory = isHistory;
-        Subscription subscribe = MessageManager.getInstance().queryHistoryMessage(mChatContainer.mChatId, mChatContainer.mSessionType.getType(), LOAD_NUM, mTime, isAnonymous).compose(RxSchedulers.<List<CubeMessageViewModel>>io_main()).subscribe(new Observer<List<CubeMessageViewModel>>() {
+        MessageManager.getInstance().queryHistoryMessage(mChatContainer.mChatId, mChatContainer.mSessionType.getType(), LOAD_NUM, mTime, isAnonymous).compose(RxSchedulers.<List<CubeMessageViewModel>>io_main()).subscribe(new Observer<List<CubeMessageViewModel>>() {
             @Override
             public void onNext(List<CubeMessageViewModel> cubeMessageViewModels) {
                 if (cubeMessageViewModels != null) {
@@ -410,7 +410,6 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
                 }
             }
         });
-        this.mChatContainer.mRxManager.add(subscribe);
     }
 
     /**
@@ -420,7 +419,7 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
      */
     private void queryMessageList(final boolean firstLoad) {
         this.isFirstLoad = firstLoad;
-        Subscription subscribe = MessageManager.getInstance().queryHistoryMessage(mChatContainer.mChatId, mChatContainer.mSessionType.getType(), LOAD_NUM, mTime, isAnonymous).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<CubeMessageViewModel>>() {
+        MessageManager.getInstance().queryHistoryMessage(mChatContainer.mChatId, mChatContainer.mSessionType.getType(), LOAD_NUM, mTime, isAnonymous).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<CubeMessageViewModel>>() {
             @Override
             public void onNext(List<CubeMessageViewModel> cubeMessageViewModels) {
                 if (cubeMessageViewModels != null) {
@@ -439,7 +438,6 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
                 onCompletedView();
             }
         });
-        mChatContainer.mRxManager.add(subscribe);
     }
 
     /**

@@ -13,7 +13,6 @@ public abstract class OnSubscribeRoom<T> implements Observable.OnSubscribe<T>{
 
     @Override
     public void call(Subscriber<? super T> subscriber) {
-
         try {
             T t = get();
             subscriber.onNext(t);

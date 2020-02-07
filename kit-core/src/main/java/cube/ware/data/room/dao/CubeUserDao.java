@@ -6,10 +6,8 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
-
-import java.util.List;
-
 import cube.ware.data.room.model.CubeUser;
+import java.util.List;
 
 /**
  * Created by dth
@@ -67,6 +65,13 @@ public abstract class CubeUserDao {
     @Query("SELECT * FROM CubeUser")
     public abstract List<CubeUser> queryAll();
 
+    /**
+     * 查询指定用户
+     *
+     * @param cubeId
+     *
+     * @return
+     */
     @Query("SELECT * FROM CubeUser WHERE cubeId = :cubeId")
     public abstract CubeUser queryUser(String cubeId);
 }

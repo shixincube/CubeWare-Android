@@ -19,8 +19,8 @@ import cube.ware.AppManager;
 import cube.ware.R;
 import cube.ware.core.CubeConstants;
 import cube.ware.data.room.model.CubeUser;
-import cube.ware.eventbus.CubeEvent;
-import cube.ware.service.message.chat.BaseChatActivity;
+import cube.ware.common.MessageConstants;
+import cube.ware.service.message.chat.activity.base.BaseChatActivity;
 import cube.ware.service.message.chat.activity.p2p.P2PChatCustomization;
 import cube.ware.widget.bottomPopupDialog.BottomPopupDialog;
 import java.util.ArrayList;
@@ -92,7 +92,7 @@ public class FriendDetailsActivity extends BaseActivity<FriendDetailsContract.Pr
             //进入用户的个人页面，刷新签名时间，所有调用loadSignatureCircleImage的方法再次从网络拉取图片
             GlideUtil.setAvatarSignature(System.currentTimeMillis());
             GlideUtil.loadSignatureCircleImage(AppManager.getAvatarUrl() + mUser.getCubeId(), mContext, mFaceIv, R.drawable.default_head_user);
-            RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_CUBE_AVATAR, "");
+            RxBus.getInstance().post(MessageConstants.Event.EVENT_REFRESH_CUBE_AVATAR, "");
             mDisplayNameTv.setText(mUser.getDisplayName());
             mUserNameTv.setText(mUser.getDisplayName());
             mUserNumCodeTv.setText(mUser.getCubeId());

@@ -14,13 +14,11 @@ public class CubeConference {
     @NonNull
     @PrimaryKey
     private String timestamp;
-    private String cubeId;//用户ID
+    private String cubeId;
     private String conferenceName;
     private String ConferenceTime;
 
-    public CubeConference() {
-
-    }
+    public CubeConference() {}
 
     @Ignore
     public CubeConference(String cubeId, String conferenceName, String ConferenceTime) {
@@ -64,12 +62,7 @@ public class CubeConference {
 
     @Override
     public String toString() {
-        return "CubeConference{" +
-                "timestamp='" + timestamp + '\'' +
-                ", cubeId='" + cubeId + '\'' +
-                ", conferenceName='" + conferenceName + '\'' +
-                ", ConferenceTime='" + ConferenceTime + '\'' +
-                '}';
+        return "CubeConference{" + "timestamp='" + timestamp + '\'' + ", cubeId='" + cubeId + '\'' + ", conferenceName='" + conferenceName + '\'' + ", ConferenceTime='" + ConferenceTime + '\'' + '}';
     }
 }
 

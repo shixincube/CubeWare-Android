@@ -15,12 +15,11 @@ import cube.service.message.VoiceClipMessage;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
-import cube.ware.data.repository.CubeRecentSessionRepository;
+import cube.ware.data.repository.CubeSessionRepository;
 import cube.ware.data.room.model.CubeRecentSession;
-import cube.ware.eventbus.CubeEvent;
-import cube.ware.MessageConstants;
+import cube.ware.common.MessageConstants;
 import cube.ware.service.message.manager.MessageManager;
-import cube.ware.service.message.manager.SystemMessageManage;
+import cube.ware.service.message.manager.SystemMessageManager;
 import cube.ware.utils.SpUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,12 +71,11 @@ public class RecentSessionManager {
             return;
         }
 
-        CubeRecentSessionRepository.getInstance().addOrUpdateRecentSession(cubeRecentSession).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<CubeRecentSession>() {
+        CubeSessionRepository.getInstance().saveOrUpdate(cubeRecentSession).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<CubeRecentSession>() {
             @Override
             public void call(CubeRecentSession cubeRecentSession) {
                 // 刷新最近会话列表
-
-                RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_RECENT_SESSION_SINGLE, cubeRecentSession.getSessionId());
+                RxBus.getInstance().post(MessageConstants.Event.EVENT_REFRESH_RECENT_SESSION_SINGLE, cubeRecentSession);
             }
         });
     }
@@ -91,10 +89,9 @@ public class RecentSessionManager {
         if (null == messageList) {
             throw new IllegalArgumentException("MessageEntity can't be null!");
         }
-        LogUtil.i("addOrUpdateRecentSession messageList size=" + messageList.size());
+
         ArrayList<MessageEntity> sortMessageList = sortMessage(messageList);
         final List<CubeRecentSession> cubeRecentSessions = this.convertTo(sortMessageList);
-        LogUtil.i("addOrUpdateRecentSession cubeRecentSessions size=" + cubeRecentSessions.size());
         if (cubeRecentSessions == null || cubeRecentSessions.isEmpty()) {
             LogUtil.e("convertTo comes some wrong");
             return;
@@ -103,7 +100,7 @@ public class RecentSessionManager {
         Observable.from(cubeRecentSessions).subscribeOn(Schedulers.io()).flatMap(new Func1<CubeRecentSession, Observable<CubeRecentSession>>() {
             @Override
             public Observable<CubeRecentSession> call(final CubeRecentSession cubeRecentSession) {
-                return CubeRecentSessionRepository.getInstance().queryBySessionId(cubeRecentSession.getSessionId()).map(new Func1<CubeRecentSession, CubeRecentSession>() {
+                return CubeSessionRepository.getInstance().queryBySessionId(cubeRecentSession.getSessionId()).map(new Func1<CubeRecentSession, CubeRecentSession>() {
                     @Override
                     public CubeRecentSession call(CubeRecentSession cubeRecentSessionDB) {
                         if (cubeRecentSessionDB == null) {
@@ -116,18 +113,17 @@ public class RecentSessionManager {
         }).toList().flatMap(new Func1<List<CubeRecentSession>, Observable<List<CubeRecentSession>>>() {
             @Override
             public Observable<List<CubeRecentSession>> call(List<CubeRecentSession> cubeRecentSessions) {
-                return CubeRecentSessionRepository.getInstance().addOrUpdateRecentSession(cubeRecentSessions);
+                return CubeSessionRepository.getInstance().saveOrUpdate(cubeRecentSessions);
             }
         }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<CubeRecentSession>>() {
             @Override
             public void call(List<CubeRecentSession> cubeRecentSessions) {
                 // 刷新最近会话列表
-
                 if (cubeRecentSessions.size() == 1) {
-                    RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_RECENT_SESSION_SINGLE, cubeRecentSessions.get(0).getSessionId());
+                    RxBus.getInstance().post(MessageConstants.Event.EVENT_REFRESH_RECENT_SESSION_SINGLE, cubeRecentSessions.get(0));
                 }
                 else {
-                    RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_RECENT_SESSION_LIST, cubeRecentSessions);
+                    RxBus.getInstance().post(MessageConstants.Event.EVENT_REFRESH_RECENT_SESSION_LIST, cubeRecentSessions);
                 }
             }
         });
@@ -139,13 +135,13 @@ public class RecentSessionManager {
      * @param sessionId
      */
     public void removeRecentSession(String sessionId) {
-        CubeRecentSessionRepository.getInstance().removeRecentSession(sessionId).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<CubeRecentSession>() {
+        CubeSessionRepository.getInstance().removeRecentSession(sessionId).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<CubeRecentSession>() {
             @Override
             public void call(CubeRecentSession cubeRecentSession) {
                 if (cubeRecentSession == null) {
                     return;
                 }
-                RxBus.getInstance().post(CubeEvent.EVENT_REMOVE_RECENT_SESSION_SINGLE, cubeRecentSession.getSessionId());
+                RxBus.getInstance().post(MessageConstants.Event.EVENT_REMOVE_RECENT_SESSION_SINGLE, cubeRecentSession.getSessionId());
             }
         });
     }
@@ -257,7 +253,7 @@ public class RecentSessionManager {
         }
         String senderId;
         String receiverId = messageEntity.getReceiver().getCubeId();
-        if (SystemMessageManage.getInstance().isAddFriend(messageEntity)) {
+        if (SystemMessageManager.getInstance().isAddFriend(messageEntity)) {
             CustomMessage customMessage = (CustomMessage) messageEntity;
             String operate = customMessage.getHeader("operate");
             String applyCube = customMessage.getHeader("applyUserCube");
@@ -301,7 +297,7 @@ public class RecentSessionManager {
                 sessionName = isSelf ? receiverName : senderName;
                 LogUtil.i("sessionName -------> " + sessionName);
                 cubeRecentSession.setSessionName(TextUtils.isEmpty(sessionName) ? sessionId : sessionName);
-                if (sessionId.equals(CubeCore.getInstance().getCubeId()) || SystemMessageManage.getInstance().isSystemSessionId(senderId)) {
+                if (sessionId.equals(CubeCore.getInstance().getCubeId()) || SystemMessageManager.getInstance().isSystemSessionId(senderId)) {
                     //业务层不显示自己发给自己的消息   一对一不显示自定义消息
                     return null;
                 }
@@ -375,8 +371,8 @@ public class RecentSessionManager {
      * @param cubeRecentSession
      */
     private void buildP2PRecentSession(MessageEntity messageEntity, CubeRecentSession cubeRecentSession) {
-        if (messageEntity.getSender().getCubeId().equals(SystemMessageManage.SystemSession.VERIFY.getSessionId()) && SystemMessageManage.getInstance().isFromVerify(messageEntity)) {
-            cubeRecentSession.setSessionId(SystemMessageManage.SystemSession.VERIFY.getSessionId());
+        if (messageEntity.getSender().getCubeId().equals(SystemMessageManager.SystemSession.VERIFY.getSessionId()) && SystemMessageManager.getInstance().isFromVerify(messageEntity)) {
+            cubeRecentSession.setSessionId(SystemMessageManager.SystemSession.VERIFY.getSessionId());
         }
         if (messageEntity.isAnonymous()) {
             cubeRecentSession.setSessionType(CubeSessionType.Secret.getType());

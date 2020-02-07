@@ -1,14 +1,14 @@
 package cube.ware.service.message.recent;
 
 import android.content.Context;
-import com.common.mvp.rx.RxBus;
+import com.common.mvp.eventbus.EventBusUtil;
 import com.common.mvp.rx.RxManager;
 import com.common.utils.utils.log.LogUtil;
 import cube.ware.data.model.dataModel.CubeRecentViewModel;
-import cube.ware.data.repository.CubeRecentSessionRepository;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.data.repository.CubeSessionRepository;
+import cube.ware.common.MessageConstants;
+import cube.ware.data.room.model.CubeRecentSession;
 import java.util.List;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
@@ -34,24 +34,21 @@ public class RecentPresenter extends RecentContract.Presenter {
 
     @Override
     public void getRecentSessionList() {
-        Subscription subscribe = CubeRecentSessionRepository.getInstance().queryAllUnReadCubeRecentSession().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<CubeRecentViewModel>>() {
+        CubeSessionRepository.getInstance().queryAllSessionsViewModel().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<CubeRecentViewModel>>() {
             @Override
             public void call(List<CubeRecentViewModel> cubeRecentViewModels) {
-
                 mView.onRefreshList(cubeRecentViewModels);
                 queryUnReadAll();
             }
         });
-
-        addSubscribe(subscribe);
     }
 
     @Override
     public void subscribeChange() {
-        mRxManager.on(CubeEvent.EVENT_REFRESH_RECENT_SESSION_LIST, new Action1<Object>() {
+        mRxManager.on(MessageConstants.Event.EVENT_REFRESH_RECENT_SESSION_LIST, new Action1<Object>() {
             @Override
             public void call(Object o) {
-                CubeRecentSessionRepository.getInstance().queryAllUnReadCubeRecentSession().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<CubeRecentViewModel>>() {
+                CubeSessionRepository.getInstance().queryAllSessionsViewModel().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<CubeRecentViewModel>>() {
                     @Override
                     public void call(List<CubeRecentViewModel> cubeRecentViewModels) {
                         mView.onRefreshList(cubeRecentViewModels);
@@ -62,10 +59,11 @@ public class RecentPresenter extends RecentContract.Presenter {
             }
         });
 
-        mRxManager.on(CubeEvent.EVENT_REFRESH_RECENT_SESSION_SINGLE, new Action1<Object>() {
+        mRxManager.on(MessageConstants.Event.EVENT_REFRESH_RECENT_SESSION_SINGLE, new Action1<Object>() {
             @Override
             public void call(Object o) {
-                CubeRecentSessionRepository.getInstance().queryUnReadCubeRecentSession((String) o).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<CubeRecentViewModel>() {
+                CubeRecentSession recentSession = (CubeRecentSession) o;
+                CubeSessionRepository.getInstance().querySessionViewModel(recentSession).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<CubeRecentViewModel>() {
                     @Override
                     public void call(CubeRecentViewModel cubeRecentViewModel) {
                         if (cubeRecentViewModel == null) {
@@ -78,7 +76,7 @@ public class RecentPresenter extends RecentContract.Presenter {
             }
         });
 
-        mRxManager.on(CubeEvent.EVENT_REMOVE_RECENT_SESSION_SINGLE, new Action1<Object>() {
+        mRxManager.on(MessageConstants.Event.EVENT_REMOVE_RECENT_SESSION_SINGLE, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 if (o == null) {
@@ -90,7 +88,7 @@ public class RecentPresenter extends RecentContract.Presenter {
             }
         });
 
-        mRxManager.on(CubeEvent.EVENT_REFRESH_CUBE_AVATAR, new Action1<Object>() {
+        mRxManager.on(MessageConstants.Event.EVENT_REFRESH_CUBE_AVATAR, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 mView.onRefreshListAvatar();
@@ -99,11 +97,11 @@ public class RecentPresenter extends RecentContract.Presenter {
     }
 
     public void queryUnReadAll() {
-        CubeRecentSessionRepository.getInstance().queryUnAllReadCount().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Integer>() {
+        CubeSessionRepository.getInstance().queryAllSessionsUnReadCount().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Integer>() {
             @Override
             public void call(Integer integer) {
                 LogUtil.i("queryUnredadAllCout: " + integer);
-                RxBus.getInstance().post(CubeEvent.EVENT_UNREAD_MESSAGE_SUM, integer);
+                EventBusUtil.post(MessageConstants.Event.EVENT_UNREAD_MESSAGE_SUM, integer);
             }
         });
     }

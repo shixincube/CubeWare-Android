@@ -7,6 +7,7 @@ import cube.service.CubeConfig;
 import cube.service.CubeEngine;
 import cube.service.account.AccountState;
 import cube.ware.api.CubeUI;
+import cube.ware.service.call.CallHandle;
 import cube.ware.service.message.MessageHandle;
 import cube.ware.service.user.UserHandle;
 
@@ -63,7 +64,7 @@ public final class UIRoot extends CubeUI {
         //CubeEngineHandle.getInstance().start();
         UserHandle.getInstance().start();
         MessageHandle.getInstance().start();
-        //CallHandle.getInstance().start();
+        CallHandle.getInstance().start();
         //ConferenceHandle.getInstance().start();
         //FileHandle.getInstance().start();
         //GroupHandle.getInstance().start();

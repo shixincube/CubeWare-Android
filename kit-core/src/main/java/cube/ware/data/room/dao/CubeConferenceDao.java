@@ -6,10 +6,8 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
-
-import java.util.List;
-
 import cube.ware.data.room.model.CubeConference;
+import java.util.List;
 
 /**
  * Created by dth
@@ -65,5 +63,5 @@ public abstract class CubeConferenceDao {
      * @return
      */
     @Query("SELECT * FROM CubeConference")
-    public abstract List<CubeConference> findAll();
+    public abstract List<CubeConference> queryAll();
 }

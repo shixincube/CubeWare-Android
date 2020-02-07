@@ -15,10 +15,10 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".chat.activity.preview.PreviewImageActivity"
+            android:name=".preview.image.PreviewImageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".chat.activity.preview.PreviewVideoActivity"
+            android:name=".preview.video.PreviewVideoActivity"
             android:screenOrientation="portrait" />
     </application>
 </manifest>

@@ -65,7 +65,7 @@ public class CallHandle implements CallListener {
      */
     @Override
     public void onNewCall(CallDirection direction, Session session) {
-        if (CubeCore.getInstance().isCalling() || CubeEngine.getInstance().getSession().getAccountState() != AccountState.LoginSucceed) {
+        if (CubeCore.getInstance().isCalled() || CubeEngine.getInstance().getSession().getAccountState() != AccountState.LoginSucceed) {
             return;
         }
 

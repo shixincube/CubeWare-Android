@@ -17,7 +17,7 @@ import cube.ware.service.message.R;
 import cube.ware.data.repository.CubeMessageRepository;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.service.message.manager.PlayerManager;
-import cube.ware.service.message.chat.adapter.MsgViewHolderAudio;
+import cube.ware.service.message.chat.viewholder.MsgViewHolderAudio;
 
 /**
  * 语音消息播放监听器
@@ -77,8 +77,9 @@ public class VoicePlayClickListener implements View.OnClickListener, SensorEvent
      */
     public void startPlay(String voiceFilePath) {
         if (!mMessage.isPlay()) {
+            mMessage.setPlay(true);
             //更新数据库语音消息播放状态
-            CubeMessageRepository.getInstance().updateMessageIsPlay(mMessage, true);
+            CubeMessageRepository.getInstance().updateMessage(mMessage);
             mAudio.mIndicator.setVisibility(View.GONE);
         }
 

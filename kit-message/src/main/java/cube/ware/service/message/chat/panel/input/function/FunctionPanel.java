@@ -16,7 +16,7 @@ import java.util.List;
 
 import cube.service.conference.Conference;
 import cube.ware.service.message.R;
-import cube.ware.service.message.chat.BaseChatActivity;
+import cube.ware.service.message.chat.activity.base.BaseChatActivity;
 import cube.ware.service.message.chat.panel.input.function.adapter.FunctionPagerAdapter;
 
 /**
@@ -29,7 +29,6 @@ public class FunctionPanel {
 
     // 初始化更多布局adapter
     public static void init(BaseChatActivity activity, List<BaseFunction> actions) {
-        LogUtil.i("功能视图个数====>" + actions.size());
         final ViewPager viewPager = (ViewPager) activity.findViewById(R.id.function_viewPager);
         final ViewGroup indicator = (ViewGroup) activity.findViewById(R.id.function_page_indicator);
         FunctionPagerAdapter adapter = new FunctionPagerAdapter(activity, actions);

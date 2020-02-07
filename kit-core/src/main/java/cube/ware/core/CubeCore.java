@@ -75,6 +75,15 @@ public class CubeCore {
     }
 
     /**
+     * 判断当前是否已在通话中
+     *
+     * @return
+     */
+    public boolean isCalled() {
+        return CubeEngine.getInstance().getSession().isCalled();
+    }
+
+    /**
      * 判断当前是否正在多人音视频
      *
      * @return

@@ -44,7 +44,7 @@ public class CustomMessageManager {
             //            if (CubeUI.getInstance().getFriendOperationListener() != null && !isSync) {
             //                String adverse = CubeSpUtil.getCubeUser().getCubeId().equals(message.getHeader("acceptUserCube")) ? message.getHeader("applyUserCube") : message.getHeader("acceptUserCube");//对方cube
             //                CubeUI.getInstance().getFriendOperationListener().agree(adverse, token);
-            //                RxBus.getInstance().post(CubeEvent.EVENT_ADD_OR_DELETE_FRIEND, new EventAddOrDeleteFriendEventModel(adverse, true));
+            //                RxBus.getInstance().post(MessageConstants.Event.EVENT_ADD_OR_DELETE_FRIEND, new EventAddOrDeleteFriendEventModel(adverse, true));
             //            }
         }
         else if (type.equals(CubeCustomMessageType.DOWNLOAD_COMPLETE.getType()) && !cubeMessage.isGroupMessage()) {
@@ -89,7 +89,7 @@ public class CustomMessageManager {
             //
             //            if (CubeUI.getInstance().getFriendOperationListener() != null) {
             //                CubeUI.getInstance().getFriendOperationListener().delete(adverse, token);
-            //                RxBus.getInstance().post(CubeEvent.EVENT_ADD_OR_DELETE_FRIEND, new EventAddOrDeleteFriendEventModel(adverse, false));
+            //                RxBus.getInstance().post(MessageConstants.Event.EVENT_ADD_OR_DELETE_FRIEND, new EventAddOrDeleteFriendEventModel(adverse, false));
             //            }
         }
         else if (type.equals(CubeCustomMessageType.AddGroupMember.getType())) {

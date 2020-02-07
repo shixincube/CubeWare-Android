@@ -10,7 +10,6 @@ import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.service.message.R;
-import cube.ware.service.message.chat.ChatContainer;
 import cube.ware.utils.SpUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,29 +21,19 @@ import java.util.List;
 
 public class AudioFunction extends BaseFunction {
 
-    private CubeSessionType mCubeSessionType;
-    private ChatContainer   mChatContainer;
-
-    /**
-     * 构造方法
-     *
-     * @param mSessionType
-     */
-    public AudioFunction(CubeSessionType mSessionType, ChatContainer container) {
+    public AudioFunction() {
         super(R.drawable.selector_chat_function_voice_btn, R.string.voice_chat);
-        this.mCubeSessionType = mSessionType;
-        this.mChatContainer = container;
     }
 
     @Override
     public void onClick() {
-        if (mCubeSessionType.equals(CubeSessionType.P2P)) {//单聊
+        if (getChatType() == CubeSessionType.P2P) {//单聊
             if (CubeCore.getInstance().isCalling()) {
                 ToastUtil.showToast(getActivity(), R.string.calling_please_try_again_later);
             }
             else {
                 Bundle bundle = new Bundle();
-                bundle.putString("call_id", mChatContainer.mChatId);
+                bundle.putString("call_id", getChatId());
                 bundle.putSerializable("call_state", CallStatus.AUDIO_OUTGOING);
                 bundle.putLong("call_time", 0l);
                 ARouter.getInstance().build(CubeConstants.Router.P2PCallActivity).withBundle("call_data", bundle).navigation();

@@ -10,7 +10,7 @@ import cube.service.message.FileMessage;
 import cube.service.message.ImageMessage;
 import cube.service.message.MessageEntity;
 import cube.service.message.VideoClipMessage;
-import cube.ware.service.message.chat.message.Listener.MessageListenerAdapter;
+import cube.ware.service.message.chat.fragment.Listener.MessageListenerAdapter;
 import java.util.HashMap;
 
 /**

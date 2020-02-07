@@ -3,7 +3,6 @@ package cube.ware.data.room.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
-
 import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 
@@ -114,25 +113,16 @@ public class CubeRecentSession {
         this.content = content;
     }
 
-    @Override
-    public String toString() {
-        return "CubeRecentSession{" +
-                "sessionId='" + sessionId + '\'' +
-                ", sessionName='" + sessionName + '\'' +
-                ", sessionType=" + sessionType +
-                ", timestamp=" + timestamp +
-                ", messageDirection=" + messageDirection +
-                ", isTop=" + isTop +
-                ", unRead=" + unRead +
-                ", content='" + content + '\'' +
-                '}';
-    }
-
     public int getUnRead() {
         return unRead;
     }
 
     public void setUnRead(int unRead) {
         this.unRead = unRead;
+    }
+
+    @Override
+    public String toString() {
+        return "CubeRecentSession{" + "sessionId='" + sessionId + '\'' + ", sessionName='" + sessionName + '\'' + ", sessionType=" + sessionType + ", timestamp=" + timestamp + ", messageDirection=" + messageDirection + ", isTop=" + isTop + ", unRead=" + unRead + ", content='" + content + '\'' + '}';
     }
 }

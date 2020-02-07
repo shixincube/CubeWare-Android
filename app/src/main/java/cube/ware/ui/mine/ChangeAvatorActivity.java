@@ -27,7 +27,7 @@ import cube.ware.data.api.ApiFactory;
 import cube.ware.data.api.ResultData;
 import cube.ware.data.model.dataModel.CubeAvator;
 import cube.ware.data.room.model.CubeUser;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.common.MessageConstants;
 import cube.ware.ui.mine.dialog.BottomChooseDialog;
 import cube.ware.utils.SpUtil;
 import java.io.File;
@@ -133,7 +133,7 @@ public class ChangeAvatorActivity extends AppCompatActivity {
                         //CubeEngine.getInstance().getUserService().update(user);
                         SpUtil.setUserAvator(response.body().data.getUrl());
                         GlideUtil.loadImage(response.body().data.getUrl(), ChangeAvatorActivity.this, mIvAvator, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
-                        EventBusUtil.post(CubeEvent.EVENT_REFRESH_CUBE_USER, user);
+                        EventBusUtil.post(MessageConstants.Event.EVENT_REFRESH_CUBE_USER, user);
                     }
                     else {
                         ToastUtil.showToast(ChangeAvatorActivity.this, response.body().state.desc);

@@ -1,42 +1,44 @@
 package com.common.utils.utils.log;
 
+import android.util.Log;
+
 /**
  * 日志等级
  *
- * 提示：枚举类型中参数与系统log日志级别的参数一致
- * 从VERBOSE(2)——> ASSERT(7)保持递增
+ * @author LiuFeng
+ * @date 2018-9-01
  */
 public enum LogLevel {
 
     /**
      * VERBOSE 等级。
      */
-    VERBOSE(2),
+    VERBOSE(Log.VERBOSE),
 
     /**
      * Debug 等级。
      */
-    DEBUG(3),
+    DEBUG(Log.DEBUG),
 
     /**
      * Info 等级。
      */
-    INFO(4),
+    INFO(Log.INFO),
 
     /**
      * Warn 等级。
      */
-    WARN(5),
+    WARN(Log.WARN),
 
     /**
      * Error 等级。
      */
-    ERROR(6),
+    ERROR(Log.ERROR),
 
     /**
      * ASSERT 等级。
      */
-    ASSERT(7);
+    ASSERT(Log.ASSERT);
 
     private int code;
 

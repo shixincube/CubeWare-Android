@@ -21,7 +21,7 @@ import cube.service.CubeErrorCode;
 import cube.service.media.VoiceRecordListener;
 import cube.service.message.VoiceClipMessage;
 import cube.ware.service.message.R;
-import cube.ware.service.message.chat.BaseChatActivity;
+import cube.ware.service.message.chat.activity.base.BaseChatActivity;
 
 /**
  * 自定义语音功能布局

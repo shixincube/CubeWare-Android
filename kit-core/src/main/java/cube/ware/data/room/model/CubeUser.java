@@ -4,7 +4,6 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
-
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -22,9 +21,7 @@ public class CubeUser {
     @SerializedName("avator")
     private String avatar;           //用户头像
 
-    public CubeUser() {
-
-    }
+    public CubeUser() {}
 
     @Ignore
     public CubeUser(String cubeId, String displayName, String avatar) {
@@ -56,13 +53,9 @@ public class CubeUser {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
     @Override
     public String toString() {
-        return "CubeUser{" +
-                "cubeId='" + cubeId + '\'' +
-                ", displayName='" + displayName + '\'' +
-                ", avatar='" + avatar + '\'' +
-                '}';
+        return "CubeUser{" + "cubeId='" + cubeId + '\'' + ", displayName='" + displayName + '\'' + ", avatar='" + avatar + '\'' + '}';
     }
-
 }

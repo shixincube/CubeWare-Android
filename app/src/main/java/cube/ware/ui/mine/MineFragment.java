@@ -23,7 +23,7 @@ import cube.ware.AppConstants;
 import cube.ware.AppManager;
 import cube.ware.R;
 import cube.ware.data.room.model.CubeUser;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.common.MessageConstants;
 import cube.ware.utils.SpUtil;
 import org.greenrobot.eventbus.EventBus;
 import rx.functions.Action1;
@@ -74,7 +74,7 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
     @Override
     public <T> void onReceiveEvent(Event<T> event) {
         //修改头像的回调
-        if (TextUtils.equals(event.eventName, CubeEvent.EVENT_REFRESH_CUBE_USER)) {
+        if (TextUtils.equals(event.eventName, MessageConstants.Event.EVENT_REFRESH_CUBE_USER)) {
             CubeUser user = (CubeUser) event.data;
             mTvUserName.setText(user.getDisplayName());
             GlideUtil.loadCircleImage(user.getAvatar(), getContext(), mIvAvator, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
@@ -117,7 +117,7 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
             }
         });*/
 
-        rxManager.on(CubeEvent.EVENT_REFRESH_CUBE_USER, new Action1<Object>() {
+        rxManager.on(MessageConstants.Event.EVENT_REFRESH_CUBE_USER, new Action1<Object>() {
             @Override
             public void call(Object o) {
                 if (o instanceof CubeUser) {

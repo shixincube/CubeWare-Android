@@ -12,6 +12,12 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Callback;
 
+/**
+ * 网络请求api工厂
+ *
+ * @author LiuFeng
+ * @data 2020/2/3 18:16
+ */
 public class ApiFactory {
     private static ApiFactory instance = new ApiFactory();
 
@@ -25,6 +31,13 @@ public class ApiFactory {
         return instance;
     }
 
+    /**
+     * 创建新用户
+     *
+     * @param appId
+     * @param appKey
+     * @param callback
+     */
     public void createUser(String appId, String appKey, Callback<ResultData<LoginCubeData>> callback) {
         Map<String, String> params = new HashMap<>();
         params.put("appId", appId);
@@ -32,6 +45,14 @@ public class ApiFactory {
         this.mApiService.createUser(params).enqueue(callback);
     }
 
+    /**
+     * 获取授权token
+     *
+     * @param appId
+     * @param appKey
+     * @param cube
+     * @param callback
+     */
     public void getCubeToken(String appId, String appKey, String cube, Callback<ResultData<LoginData>> callback) {
         Map<String, String> params = new HashMap<>();
         params.put("appId", appId);
@@ -40,6 +61,15 @@ public class ApiFactory {
         this.mApiService.getCubeToken(params).enqueue(callback);
     }
 
+    /**
+     * 查询appId下的用户列表
+     *
+     * @param appId
+     * @param appKey
+     * @param page
+     * @param rows
+     * @param callback
+     */
     public void queryUsers(String appId, String appKey, int page, int rows, Callback<ResultData<TotalData>> callback) {
         Map<String, String> params = new HashMap<>();
         params.put("appId", appId);
@@ -49,6 +79,13 @@ public class ApiFactory {
         this.mApiService.queryUsers(params).enqueue(callback);
     }
 
+    /**
+     * 上传更新头像
+     *
+     * @param token
+     * @param file
+     * @param callback
+     */
     public void uploadAvatar(String token, File file, Callback<ResultData<CubeAvator>> callback) {
         Map<String, RequestBody> params = new HashMap<>();
         params.put("token", RequestBody.create(null, token));

@@ -4,12 +4,16 @@ import com.common.mvp.rx.RxBus;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.DeviceInfo;
 import cube.service.message.MessageEntity;
+import cube.ware.common.MessageConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.repository.CubeMessageRepository;
+import cube.ware.data.repository.CubeSessionRepository;
 import cube.ware.data.room.model.CubeMessage;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.data.room.model.CubeRecentSession;
 import java.util.List;
+import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 /**
  * 拦截消息处理流程中关于回执的部分
@@ -60,11 +64,16 @@ public class ReceiptManager {
      * @param isReceipted
      */
     public void updateIsReceipted(final String chatId, long time, boolean isReceipted) {
-        CubeMessageRepository.getInstance().updateIsReceipted(chatId, time, isReceipted).subscribe(new Action1<List<CubeMessage>>() {
+        CubeMessageRepository.getInstance().updateMessagesReceipt(chatId, time, isReceipted).flatMap(new Func1<List<CubeMessage>, Observable<CubeRecentSession>>() {
             @Override
-            public void call(List<CubeMessage> cubeMessages) {
+            public Observable<CubeRecentSession> call(List<CubeMessage> cubeMessages) {
+                return CubeSessionRepository.getInstance().queryBySessionId(chatId);
+            }
+        }).subscribe(new Action1<CubeRecentSession>() {
+            @Override
+            public void call(CubeRecentSession recentSession) {
                 // 消息变化通知最近消息界面
-                RxBus.getInstance().post(CubeEvent.EVENT_REFRESH_RECENT_SESSION_SINGLE, chatId);
+                RxBus.getInstance().post(MessageConstants.Event.EVENT_REFRESH_RECENT_SESSION_SINGLE, recentSession);
             }
         });
     }

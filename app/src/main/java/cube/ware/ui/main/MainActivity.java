@@ -10,7 +10,7 @@ import android.view.KeyEvent;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.common.mvp.base.BaseActivity;
 import com.common.mvp.base.BasePresenter;
-import com.common.mvp.rx.RxManager;
+import com.common.mvp.eventbus.Event;
 import com.common.sdk.RouterUtil;
 import com.common.utils.manager.ActivityManager;
 import com.common.utils.utils.log.LogUtil;
@@ -24,14 +24,13 @@ import cube.ware.AppConstants;
 import cube.ware.AppManager;
 import cube.ware.R;
 import cube.ware.core.CubeCore;
-import cube.ware.eventbus.CubeEvent;
+import cube.ware.common.MessageConstants;
 import cube.ware.service.message.recent.RecentFragment;
 import cube.ware.ui.contact.ContactFragment;
 import cube.ware.ui.mine.MineFragment;
 import cube.ware.utils.SpUtil;
 import cube.ware.widget.tabbar.NavigateTabBar;
 import java.util.List;
-import rx.functions.Action1;
 
 @Route(path = AppConstants.Router.MainActivity)
 public class MainActivity extends BaseActivity implements AccountListener, DeviceListener {
@@ -41,10 +40,10 @@ public class MainActivity extends BaseActivity implements AccountListener, Devic
     private static final String MAIN_PAGE_CONTACTS   = "联系人";
     private static final String MAIN_PAGE_MINE       = "我的";
 
-    private RecentFragment         mRecentFragment;//基于本地数据的最近会话列表
+    private RecentFragment  mRecentFragment;//基于本地数据的最近会话列表
     //private ConferenceListFragment mConferenceFragment;
-    private ContactFragment        mContactMainFragment;
-    private MineFragment           mPersonalFragment;
+    private ContactFragment mContactMainFragment;
+    private MineFragment    mPersonalFragment;
 
     private NavigateTabBar  mNavigateTabBar;    //底部NavigateTabBar
     private FragmentManager mFragmentManager;   // Fragment 管理器
@@ -52,7 +51,6 @@ public class MainActivity extends BaseActivity implements AccountListener, Devic
     private long            lastClickTimeStamp = 0;
     public  boolean         isForceSync        = true;//是否强制同步
     private String          aliDeviceToken;
-    RxManager mRxManager = new RxManager();
 
     @Override
     protected int getContentViewId() {
@@ -119,13 +117,18 @@ public class MainActivity extends BaseActivity implements AccountListener, Devic
                 }
             }
         });
+    }
 
-        mRxManager.on(CubeEvent.EVENT_UNREAD_MESSAGE_SUM, new Action1<Object>() {
-            @Override
-            public void call(Object o) {
-                mNavigateTabBar.setRedNum(0, (Integer) o);
-            }
-        });
+    @Override
+    public void onReceiveEvent(Event event) {
+        switch (event.eventName) {
+            case MessageConstants.Event.EVENT_UNREAD_MESSAGE_SUM:
+                mNavigateTabBar.setRedNum(0, (Integer) event.data);
+                break;
+
+            default:
+                break;
+        }
     }
 
     @Override
@@ -176,7 +179,6 @@ public class MainActivity extends BaseActivity implements AccountListener, Devic
 
     @Override
     protected void onDestroy() {
-        mRxManager.clear();
         CubeEngine.getInstance().getAccountService().removeAccountListener(this);
         CubeEngine.getInstance().getAccountService().removeDeviceListener(this);
         super.onDestroy();

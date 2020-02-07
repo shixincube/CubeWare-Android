@@ -129,7 +129,7 @@ public class GroupHandle implements GroupListener {
         //customMessage.setHeader("operate", CubeCustomMessageType.UpdateGroupName.type);
         //customMessage.setReceipted(true);
         //MessageManager.getInstance().addMessageInLocal(customMessage).subscribe();
-        //RxBus.getInstance().post(CubeEvent.EVENT_UPDATE_GROUP, group.displayName);
+        //RxBus.getInstance().post(MessageConstants.Event.EVENT_UPDATE_GROUP, group.displayName);
     }
 
     /**

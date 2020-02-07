@@ -9,7 +9,7 @@ import com.common.mvp.eventbus.EventBusUtil;
 import cube.ware.core.CubeConstants;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.service.message.R;
-import cube.ware.service.message.chat.message.MessageFragment;
+import cube.ware.service.message.chat.fragment.MessageFragment;
 import java.util.ArrayList;
 import java.util.List;
 import org.greenrobot.eventbus.Subscribe;

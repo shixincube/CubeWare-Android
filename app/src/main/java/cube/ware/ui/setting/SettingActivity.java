@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import cube.ware.AppConstants;
 import cube.ware.R;
-import cube.ware.service.message.chat.BaseToolBarActivity;
+import cube.ware.common.BaseToolBarActivity;
 import cube.ware.widget.toolbar.ToolBarOptions;
 
 /**

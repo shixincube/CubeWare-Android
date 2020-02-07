@@ -1,25 +1,23 @@
 package cube.ware.data.repository;
 
 import com.common.mvp.rx.OnSubscribeRoom;
-import com.common.utils.utils.log.LogUtil;
 import cube.service.message.MessageEntity;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
-import cube.ware.data.room.AppDataBaseFactory;
+import cube.ware.data.room.CubeDataBaseFactory;
 import cube.ware.data.room.mapper.MessageMapper;
 import cube.ware.data.room.model.CubeMessage;
 import java.util.List;
 import rx.Observable;
-import rx.Subscriber;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by dth
- * Des: 消息相关仓库类，用于对外提供消息相关数据
- * Date: 2018/9/3.
+ * 消息仓库类，用于对外提供消息相关数据
+ *
+ * @author LiuFeng
+ * @data 2020/2/3 18:25
  */
-
 public class CubeMessageRepository {
 
     private static volatile CubeMessageRepository mInstance;
@@ -36,25 +34,23 @@ public class CubeMessageRepository {
     }
 
     /**
-     * 根据消息SN更新一条语音消息已播放状态
+     * 保存更新消息
      *
      * @param message
-     * @param isPlay
      *
      * @return
      */
-    public void updateMessageIsPlay(CubeMessage message, final boolean isPlay) {
+    public void updateMessage(CubeMessage message) {
         Observable.just(message).observeOn(Schedulers.io()).subscribe(new Action1<CubeMessage>() {
             @Override
             public void call(CubeMessage cubeMessage) {
-                cubeMessage.setPlay(isPlay);
-                AppDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessage);
+                CubeDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessage);
             }
         });
     }
 
     /**
-     * 根据最后一条回执消息时间戳更新多条消息已回执状态
+     * 更新会话消息的回执状态
      *
      * @param chatId
      * @param time
@@ -62,18 +58,17 @@ public class CubeMessageRepository {
      *
      * @return
      */
-    public Observable<List<CubeMessage>> updateIsReceipted(final String chatId, final long time, final boolean isReceipted) {
+    public Observable<List<CubeMessage>> updateMessagesReceipt(final String chatId, final long time, final boolean isReceipted) {
         return Observable.create(new OnSubscribeRoom<List<CubeMessage>>() {
             @Override
             protected List<CubeMessage> get() {
-                List<CubeMessage> cubeMessages = AppDataBaseFactory.getCubeMessageDao().queryMessages(chatId, time, isReceipted);
-
+                List<CubeMessage> cubeMessages = CubeDataBaseFactory.getCubeMessageDao().queryMessages(chatId, time, isReceipted);
                 for (CubeMessage cubeMessage : cubeMessages) {
                     cubeMessage.setReceipt(true);
                     cubeMessage.setRead(true);
                 }
 
-                AppDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessages);
+                CubeDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessages);
                 return cubeMessages;
             }
         }).subscribeOn(Schedulers.io());
@@ -86,17 +81,17 @@ public class CubeMessageRepository {
      *
      * @return
      */
-    public Observable<CubeMessage> addMessage(MessageEntity messageEntity) {
-        final CubeMessage cubeMessage = MessageMapper.convertTo(messageEntity, false);
-        if (cubeMessage == null) {
+    public Observable<CubeMessage> addMessage(final MessageEntity messageEntity) {
+        if (messageEntity == null) {
             return Observable.empty();
         }
 
         return Observable.create(new OnSubscribeRoom<CubeMessage>() {
             @Override
             protected CubeMessage get() {
-                AppDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessage);
-                return cubeMessage;
+                CubeMessage message = MessageMapper.convertTo(messageEntity, false);
+                CubeDataBaseFactory.getCubeMessageDao().saveOrUpdate(message);
+                return message;
             }
         }).subscribeOn(Schedulers.io());
     }
@@ -109,27 +104,24 @@ public class CubeMessageRepository {
      *
      * @return
      */
-    public Observable<List<CubeMessage>> addMessage(List<MessageEntity> messageEntity, boolean isSyncMessage) {
+    public Observable<List<CubeMessage>> addMessage(final List<MessageEntity> messageEntity, final boolean isSyncMessage) {
         if (messageEntity == null || messageEntity.size() == 0) {
-            return Observable.create(new Observable.OnSubscribe<List<CubeMessage>>() {
-                @Override
-                public void call(Subscriber<? super List<CubeMessage>> subscriber) {
-                    subscriber.onCompleted();
-                }
-            });
+            return Observable.empty();
         }
-        LogUtil.i("addMessage==> size=" + messageEntity.size() + "isSyncMessage=" + isSyncMessage);
-        final List<CubeMessage> cubeMessageList = MessageMapper.convertTo(messageEntity, isSyncMessage);
+
         return Observable.create(new OnSubscribeRoom<List<CubeMessage>>() {
             @Override
             protected List<CubeMessage> get() {
-                AppDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessageList);
+                List<CubeMessage> cubeMessageList = MessageMapper.convertTo(messageEntity, isSyncMessage);
+                CubeDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessageList);
                 return cubeMessageList;
             }
         }).subscribeOn(Schedulers.io());
     }
 
     /**
+     * 保存或更新消息
+     *
      * @param cubeMessages
      *
      * @return
@@ -138,23 +130,32 @@ public class CubeMessageRepository {
         if (cubeMessages == null || cubeMessages.size() == 0) {
             return Observable.empty();
         }
+
         return Observable.create(new OnSubscribeRoom<List<CubeMessage>>() {
             @Override
             protected List<CubeMessage> get() {
-                AppDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessages);
+                CubeDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessages);
                 return cubeMessages;
             }
         }).subscribeOn(Schedulers.io());
     }
 
+    /**
+     * 保存或更新消息
+     *
+     * @param cubeMessage
+     *
+     * @return
+     */
     public Observable<CubeMessage> saveOrUpdate(final CubeMessage cubeMessage) {
         if (cubeMessage == null) {
             return Observable.empty();
         }
+
         return Observable.create(new OnSubscribeRoom<CubeMessage>() {
             @Override
             protected CubeMessage get() {
-                AppDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessage);
+                CubeDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessage);
                 return cubeMessage;
             }
         }).subscribeOn(Schedulers.io());
@@ -163,24 +164,23 @@ public class CubeMessageRepository {
     /**
      * 根据聊天时间查询消息
      *
-     * @param receiverId
-     * @param sessionType
+     * @param chatId
      * @param time
      * @param limit
      *
      * @return
      */
-    public Observable<List<CubeMessage>> queryMessage(final String receiverId, int sessionType, final long time, final int limit) {
+    public Observable<List<CubeMessage>> queryMessage(final String chatId, final long time, final int limit) {
         return Observable.create(new OnSubscribeRoom<List<CubeMessage>>() {
             @Override
             protected List<CubeMessage> get() {
-                return AppDataBaseFactory.getCubeMessageDao().queryMessages(receiverId, time, limit);
+                return CubeDataBaseFactory.getCubeMessageDao().queryMessages(chatId, time, limit);
             }
         }).subscribeOn(Schedulers.io());
     }
 
     /**
-     * 根据消息SN删除一条消息
+     * 通过SN删除消息
      *
      * @param messageSN
      */
@@ -188,9 +188,9 @@ public class CubeMessageRepository {
         return Observable.create(new OnSubscribeRoom<Boolean>() {
             @Override
             protected Boolean get() {
-                CubeMessage cubeMessage = AppDataBaseFactory.getCubeMessageDao().queryMessageBySn(messageSN);
+                CubeMessage cubeMessage = CubeDataBaseFactory.getCubeMessageDao().queryMessageBySn(messageSN);
                 if (cubeMessage != null) {
-                    AppDataBaseFactory.getCubeMessageDao().delete(cubeMessage);
+                    CubeDataBaseFactory.getCubeMessageDao().delete(cubeMessage);
                     return true;
                 }
                 return false;
@@ -199,31 +199,33 @@ public class CubeMessageRepository {
     }
 
     /**
+     * 查询会话消息未读数
+     *
      * @param chatId
      *
      * @return
      */
-    public Observable<Integer> queryMessageUnRead(final String chatId) {
+    public Observable<Integer> queryMessageUnReadCount(final String chatId) {
         return Observable.create(new OnSubscribeRoom<Integer>() {
             @Override
             protected Integer get() {
-                return AppDataBaseFactory.getCubeMessageDao().queryUnReadMessagesCount(chatId, CubeCore.getInstance().getCubeId(), false);
+                return CubeDataBaseFactory.getCubeMessageDao().queryUnReadMessagesCount(chatId, CubeCore.getInstance().getCubeId(), false);
             }
         }).subscribeOn(Schedulers.io());
     }
 
     /**
-     * 查询所有未读消息
+     * 查询会话列表的消息的未读总数
      *
      * @param chatIds
      *
      * @return
      */
-    public Observable<Integer> queryAllUnRead(final List<String> chatIds) {
+    public Observable<Integer> queryMessageUnReadCount(final List<String> chatIds) {
         return Observable.create(new OnSubscribeRoom<Integer>() {
             @Override
             protected Integer get() {
-                return AppDataBaseFactory.getCubeMessageDao().queryAllUnReadMessagesCount(chatIds, CubeCore.getInstance().getCubeId(), false);
+                return CubeDataBaseFactory.getCubeMessageDao().queryAllUnReadMessagesCount(chatIds, CubeCore.getInstance().getCubeId(), false);
             }
         }).subscribeOn(Schedulers.io());
     }
@@ -239,7 +241,7 @@ public class CubeMessageRepository {
         return Observable.create(new OnSubscribeRoom<CubeMessage>() {
             @Override
             protected CubeMessage get() {
-                return AppDataBaseFactory.getCubeMessageDao().queryMessageBySn(messageSN);
+                return CubeDataBaseFactory.getCubeMessageDao().queryMessageBySn(messageSN);
             }
         }).subscribeOn(Schedulers.io());
     }
@@ -256,7 +258,7 @@ public class CubeMessageRepository {
         return Observable.create(new OnSubscribeRoom<List<CubeMessage>>() {
             @Override
             protected List<CubeMessage> get() {
-                return AppDataBaseFactory.getCubeMessageDao().queryMessageListByType(chatId, messageType.type);
+                return CubeDataBaseFactory.getCubeMessageDao().queryMessageListByType(chatId, messageType.type);
             }
         }).subscribeOn(Schedulers.io());
     }

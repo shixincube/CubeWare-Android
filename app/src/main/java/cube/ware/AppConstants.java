@@ -36,6 +36,11 @@ public interface AppConstants {
         String APP_KEY     = "4f7ee32b492241f6928d45da5bb79081546";                  // 引擎key
         String BASE_URL    = "http://103.6.222.234:4000";                            // 基础接口地址
         String LICENSE_URL = "http://103.6.222.234:9000/auth/license/get";           // license地址
+
+        //String APP_ID      = "9c2ed36ae5d34131b3768ea432da6cea005";            // 引擎id
+        //String APP_KEY     = "5df6d5495fb74b35ad157c94977527ff005";         // 引擎key
+        //String BASE_URL    = "https://dev.user.shixincube.cn";                      // 服务器接口地址
+        //String LICENSE_URL = "https://dev.license.shixincube.cn/auth/license/get";  // 服务license地址
     }
 
     /**

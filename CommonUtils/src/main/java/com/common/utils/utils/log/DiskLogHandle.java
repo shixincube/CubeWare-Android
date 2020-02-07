@@ -1,5 +1,6 @@
 package com.common.utils.utils.log;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -8,19 +9,39 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
+/**
+ * 磁盘文件日志操作器--写入文件
+ *
+ * @author LiuFeng
+ * @date 2018-9-01
+ */
 public class DiskLogHandle extends BaseLogHandle {
 
-    private final static String LOG_FILE_NAME = "yyyy-MM-dd-HH";
+    private final static String LOG_FILE_NAME      = "yyyy-MM-dd-HH";     // 日志文件名格式
+    private static final int    EMPTY_WHAT         = 100;                 // 空消息what
+    private static final int    LOG_WHAT           = 200;                 // 日志消息what
+    private static final long   SPACE_TIME         = 1000;                // 间隔1s打印
+    private static final long   ONE_DAY_TIME       = 24 * 60 * 60 * 1000; // 一天的时间
+    private static final int    MAX_CHAR_NUM       = 500 * 1024 / 2;      // 500kb的汉字数量
+    private static final int    MAX_BYTES          = 1024 * 1024;         // 单个日志文件1Mb
+    private static final int    SAVE_LOG_MAX_BYTES = 100 * 1024 * 1024;   // 目录保存日志文件最大100Mb
+    private static final int    SAVE_OF_DAYS       = 15;                  // 日志保存天数
 
-    private static final int MAX_BYTES = 500 * 1024; // 500K averages to a 4000 lines per file
-
+    private long    lastLogTime;    // 上次打印日志时间戳
+    private long    lastDelTime;    // 上次删除文件时间戳
     private Handler handler;
     private Context mContext;
     private String  mFolderPath;
@@ -34,24 +55,63 @@ public class DiskLogHandle extends BaseLogHandle {
     }
 
     @Override
-    public void log(LogLevel level, String tag, String message, StackTraceElement[] stackTrace) {
+    public synchronized void log(LogEvent logEvent) {
+        buffer.append(buffer.length() > 0 ? "\n" : "");
         buffer.append(TAG);
         buffer.append(": ");
         buffer.append("[");
-        buffer.append(level.name());
+        buffer.append(logEvent.level.name());
         buffer.append("] ");
-        buffer.append(getDateTime());
+        buffer.append(getDateTime(logEvent.timestamp));
         buffer.append(" ");
-        buffer.append(getStackTrace(stackTrace[4]));
+        buffer.append(getStackTrace(logEvent.threadName, logEvent.stackTrace, 5));
         buffer.append(" ");
-        buffer.append(tag);
+        buffer.append(logEvent.tag);
         buffer.append(" ");
-        buffer.append(message);
-        buffer.append("\n====================================分割线==========================================");
+        buffer.append(logEvent.message);
+        buffer.append("\n");
 
-        handler.sendMessage(handler.obtainMessage(level.getCode(), buffer.toString()));
+        handleLog();
+    }
 
-        buffer.delete(0, buffer.length());
+    /**
+     * 处理日志数据
+     */
+    private void handleLog() {
+        boolean isMoreThanMax = buffer.length() >= MAX_CHAR_NUM;
+        if (!handler.hasMessages(EMPTY_WHAT) || isMoreThanMax) {
+            // 超过最大字符数量或距上次打印超过1s，则立即打印和发一个延时消息
+            if (isMoreThanMax || System.currentTimeMillis() - lastLogTime > SPACE_TIME) {
+                sendLogMessage();
+                handler.sendEmptyMessageDelayed(EMPTY_WHAT, SPACE_TIME);
+            }
+            else {
+                handler.sendEmptyMessageDelayed(EMPTY_WHAT, SPACE_TIME);
+            }
+        }
+    }
+
+    /**
+     * 发送日志消息
+     */
+    private synchronized void sendLogMessage() {
+        int length = buffer.length();
+        if (length > 0) {
+            handler.sendMessage(handler.obtainMessage(LOG_WHAT, buffer.toString()));
+
+            // 日志发送后清空buffer
+            buffer.delete(0, length);
+
+            // 赋新值
+            lastLogTime = System.currentTimeMillis();
+        }
+    }
+
+    /**
+     * 立刻刷入日志到文件
+     */
+    public void flushLog() {
+        sendLogMessage();
     }
 
     /**
@@ -65,13 +125,23 @@ public class DiskLogHandle extends BaseLogHandle {
 
         @Override
         public void handleMessage(Message msg) {
+            // 空消息
+            if (msg.what == EMPTY_WHAT) {
+                sendLogMessage();
+                return;
+            }
+
             // 判断写入权限
-            if (checkPermission(mContext, "android.permission.WRITE_EXTERNAL_STORAGE")) {
+            if (checkPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 String content = (String) msg.obj;
-                LogLevel logLevel = LogLevel.parse(msg.what);
+
+                // 处理文件:过期或过大
+                handleFile();
+
                 // 通过时间戳生成文件名
                 String fileName = String.valueOf(DateFormat.format(LOG_FILE_NAME, System.currentTimeMillis()));
-                File logFile = getErrorLogFile(mFolderPath, fileName, logLevel);
+                File logFile = getLogFile(mFolderPath, fileName);
+                // 写入日志内容到文件
                 writeLogToFile(logFile, content);
             }
         }
@@ -84,7 +154,7 @@ public class DiskLogHandle extends BaseLogHandle {
      *
      * @return
      */
-    public boolean checkPermission(Context context, String permission) {
+    private boolean checkPermission(Context context, String permission) {
         if (context == null) {
             return false;
         }
@@ -92,6 +162,76 @@ public class DiskLogHandle extends BaseLogHandle {
             return true;
         }
         return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    /**
+     * 处理文件:删除过期或过大文件
+     */
+    private void handleFile() {
+        long currentTime = System.currentTimeMillis();
+        // 判断上次执行删除是否在一天以前
+        if ((currentTime - lastDelTime) > ONE_DAY_TIME) {
+            List<File> fileList = listFilesInDir(new File(mFolderPath));
+            if (fileList != null && !fileList.isEmpty()) {
+                try {
+                    // 按修改时间降序排序
+                    Collections.sort(fileList, new Comparator<File>() {
+                        @Override
+                        public int compare(File o1, File o2) {
+                            long diff = o2.lastModified() - o1.lastModified();
+                            return diff > 0 ? 1 : diff == 0 ? 0 : -1;
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e(TAG, "sort log files: ", e);
+                }
+
+                long totalLength = 0;
+                // 过期限定时间
+                long limitTime = currentTime - SAVE_OF_DAYS * ONE_DAY_TIME;
+                for (File file : fileList) {
+                    totalLength += file.length();
+                    // 根据过期或文件总大小判断，执行删除
+                    if (file.lastModified() < limitTime || totalLength > SAVE_LOG_MAX_BYTES) {
+                        file.delete();
+                    }
+                }
+            }
+
+            // 保存删除时间
+            this.lastDelTime = currentTime;
+        }
+    }
+
+    /**
+     * 流出文件目录下所有文件
+     *
+     * @param dir
+     *
+     * @return
+     */
+    private List<File> listFilesInDir(File dir) {
+        if (!isDir(dir)) {
+            return null;
+        }
+
+        List<File> list = new ArrayList<>();
+        File[] files = dir.listFiles();
+        if (files != null && files.length != 0) {
+            list.addAll(Arrays.asList(files));
+        }
+        return list;
+    }
+
+    /**
+     * 判断是否是目录
+     *
+     * @param file 文件
+     *
+     * @return {@code true}: 是<br>{@code false}: 否
+     */
+    private boolean isDir(final File file) {
+        return file != null && file.exists() && file.isDirectory();
     }
 
     /**
@@ -240,6 +380,22 @@ public class DiskLogHandle extends BaseLogHandle {
      * @param content
      */
     private static void writeLogToFile(File logFile, String content) {
+        if (logFile == null || TextUtils.isEmpty(content)) {
+            return;
+        }
+
+        // 不存在时先创建文件
+        if (!logFile.exists()) {
+            try {
+                if (!logFile.createNewFile()) {
+                    return;
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "createNewFile: ", e);
+                return;
+            }
+        }
+
         BufferedWriter bw = null;
         try {
             bw = new BufferedWriter(new FileWriter(logFile, true));

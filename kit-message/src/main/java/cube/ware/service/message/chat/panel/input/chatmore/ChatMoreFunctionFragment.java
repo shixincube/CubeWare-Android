@@ -15,7 +15,7 @@ import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CallStatus;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.service.message.R;
-import cube.ware.service.message.chat.BaseChatActivity;
+import cube.ware.service.message.chat.activity.base.BaseChatActivity;
 import cube.ware.service.message.chat.ChatContainer;
 
 /**

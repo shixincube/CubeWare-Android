@@ -16,7 +16,7 @@ import cube.ware.service.message.R;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.service.message.manager.MessageManager;
-import cube.ware.service.message.chat.BaseChatActivity;
+import cube.ware.service.message.chat.activity.base.BaseChatActivity;
 import cube.ware.service.message.chat.ChatContainer;
 import cube.ware.widget.voice.AudioRecordLayout;
 

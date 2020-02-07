@@ -24,7 +24,7 @@ android {
 
 dependencies {
   implementation project(':kit-core')
-//  implementation project(':kit-call')
+  implementation project(':kit-call')
 //  implementation project(':kit-whiteboard')
 //  implementation project(':kit-conference')
 //  implementation project(':kit-sharedesktop')

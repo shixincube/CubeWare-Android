@@ -10,6 +10,7 @@ import cube.ware.data.room.model.CubeUser;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 /**
@@ -30,25 +31,15 @@ public class SelectMemberPresenter extends SelectMemberContract.Presenter {
     //从数据库拿到所有的成员列表数据
     @Override
     public void getMemberList() {
-        ThreadUtil.request(new Runnable() {
+        CubeUserRepository.getInstance().queryAllUser().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<CubeUser>>() {
             @Override
-            public void run() {
-                CubeUserRepository.getInstance().queryAllUser().subscribe(new Action1<List<CubeUser>>() {
-                    @Override
-                    public void call(final List<CubeUser> cubeUsers) {
+            public void call(final List<CubeUser> cubeUsers) {
+                final LinkedHashMap<String, CubeUser> mSelectedCubeMap = new LinkedHashMap<>();
+                for (int i = 0; i < cubeUsers.size(); i++) {
+                    mSelectedCubeMap.put(cubeUsers.get(i).getCubeId(), cubeUsers.get(i));
+                }
 
-                        final LinkedHashMap<String, CubeUser> mSelectedCubeMap = new LinkedHashMap<>();
-                        for (int i = 0; i < cubeUsers.size(); i++) {
-                            mSelectedCubeMap.put(cubeUsers.get(i).getCubeId(), cubeUsers.get(i));
-                        }
-                        UIHandler.run(new Runnable() {
-                            @Override
-                            public void run() {
-                                mView.getCubeIdListSuccess(mSelectedCubeMap, cubeUsers);
-                            }
-                        });
-                    }
-                });
+                mView.getCubeIdListSuccess(mSelectedCubeMap, cubeUsers);
             }
         });
     }
