@@ -12,12 +12,7 @@ import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Xml;
-
 import cube.ware.core.CubeCore;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -25,6 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 public class EmoticonManager {
 
@@ -36,11 +34,11 @@ public class EmoticonManager {
     private static Pattern pattern;
 
     // default entries
-    private static final List<Entry>        defaultEntries = new ArrayList<Entry>();
+    private static final List<Entry>              defaultEntries = new ArrayList<Entry>();
     // text to entry
-    private static final Map<String, Entry> text2entry     = new HashMap<String, Entry>();
+    private static final Map<String, Entry>       text2entry     = new HashMap<String, Entry>();
     // asset bitmap cache, key: asset path
-    private static LruCache<String, Bitmap> drawableCache;
+    private static       LruCache<String, Bitmap> drawableCache;
 
     static {
         Context context = CubeCore.getContext();

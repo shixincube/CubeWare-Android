@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/emoticonLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:visibility="visible"
+    >
+
+    <cube.ware.widget.SlideViewPager
+        android:id="@+id/emoticon_pager"
+        android:layout_width="fill_parent"
+        android:layout_height="180dp"
+        android:layout_marginBottom="@dimen/view_space_4"
+        android:layout_marginTop="@dimen/view_space_4"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        />
+
+    <LinearLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_space_8"
+        android:layout_marginBottom="@dimen/view_space_4"
+        android:gravity="center"
+        android:orientation="horizontal"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="#fff5fafe"
+        android:layout_height="wrap_content" >
+        <ImageView
+            android:id="@+id/emoticon_add_btn"
+            android:layout_width="50dp"
+            android:layout_height="44dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_emoticon_add"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@color/cube_primary_bg"
+            />
+        <ImageView
+            android:id="@+id/emoticon_add_line"
+            android:layout_width="0.5dp"
+            android:layout_height="44dp"
+            android:layout_toLeftOf="@+id/emoticon_add_btn"
+            android:background="@color/primary_divider"
+             />
+        <LinearLayout
+            android:id="@+id/emoticon_tab_view_ll"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/emoticon_add_line"
+            android:baselineAligned="false"
+            android:orientation="horizontal" >
+            <HorizontalScrollView
+                android:id="@+id/emoticon_tab_view_container"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/cube_primary_bg"
+                android:scrollbars="none" >
+                <LinearLayout
+                    android:id="@+id/emoticon_tab_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="44dp"
+                    android:orientation="horizontal" >
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+    </RelativeLayout>
+
+
+
+</LinearLayout>

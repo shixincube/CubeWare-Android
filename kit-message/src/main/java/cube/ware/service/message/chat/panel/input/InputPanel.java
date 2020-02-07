@@ -12,6 +12,7 @@ import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -27,16 +28,20 @@ import com.common.utils.utils.KeyBoardUtil;
 import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
+import cube.service.message.Receiver;
 import cube.service.message.TextMessage;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.service.message.R;
-import cube.ware.service.message.chat.activity.base.BaseChatActivity;
 import cube.ware.service.message.chat.ChatContainer;
+import cube.ware.service.message.chat.activity.base.BaseChatActivity;
 import cube.ware.service.message.chat.activity.base.ChatCustomization;
 import cube.ware.service.message.chat.helper.AtHelper;
+import cube.ware.service.message.chat.panel.input.emoticon.widget.EmoticonPickerView;
+import cube.ware.service.message.chat.panel.input.emoticon.EmoticonSelectedListener;
+import cube.ware.service.message.chat.panel.input.emoticon.model.StickerItem;
 import cube.ware.service.message.chat.panel.input.function.BaseFunction;
 import cube.ware.service.message.chat.panel.input.function.FunctionPanel;
 import cube.ware.service.message.chat.panel.input.voicefragment.RecordFragment;
@@ -49,6 +54,7 @@ import cube.ware.widget.CubeEmoticonEditText;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 import static android.view.View.GONE;
@@ -59,7 +65,7 @@ import static android.view.View.GONE;
  * @author Wangxx
  * @date 2017/1/3
  */
-public class InputPanel implements View.OnClickListener {
+public class InputPanel implements EmoticonSelectedListener, View.OnClickListener {
     public static final String               TAG        = InputPanel.class.getSimpleName();
     public static final String               REPLY_MARK = "r1p2y" + System.currentTimeMillis() % 9;  //用于在EditText中的ImageSpan中识别出回复消息添加的ImageSpan System.currentTimeMillis() % 9为标识增加一点随机性
     public static final String               REPLY_END  = "\r";
@@ -97,7 +103,7 @@ public class InputPanel implements View.OnClickListener {
 
     private boolean isMessageSearch = false;
 
-    //    private EmoticonPickerView mEmoticonPickerView;  // 贴图表情控件
+    private EmoticonPickerView mEmoticonPickerView;  // 贴图表情控件
 
     private boolean mHasFunctionPanelLayout;    // 是否已设置更多功能操作面板
     private boolean mHasVoiceLayout;    // 是否已经设置语音功能面板
@@ -135,7 +141,7 @@ public class InputPanel implements View.OnClickListener {
                     else {
                         mChatFaceBtn.setSelected(true);
                     }
-                    //                    mEmoticonPickerView.setVisibility(View.VISIBLE);
+                    mEmoticonPickerView.setVisibility(View.VISIBLE);
                     break;
                 case SHOW_KEYBOARD:
                     showKeyboard();
@@ -197,7 +203,7 @@ public class InputPanel implements View.OnClickListener {
      * 同步消息fragment的onDestroy生命周期
      */
     public void onDestroy() {
-        //        mEmoticonPickerView.onDestroy();
+        mEmoticonPickerView.onDestroy();
     }
 
     /**
@@ -228,7 +234,7 @@ public class InputPanel implements View.OnClickListener {
             this.init();
         }
         if (customization != null) {
-            //            this.mEmoticonPickerView.setHasSticker(customization.hasCustomSticker);
+            this.mEmoticonPickerView.setHasSticker(customization.hasCustomSticker);
         }
     }
 
@@ -284,7 +290,7 @@ public class InputPanel implements View.OnClickListener {
         }
 
         // 表情
-        //        this.mEmoticonPickerView = (EmoticonPickerView) rootView.findViewById(R.id.emoticon_picker_view);
+        this.mEmoticonPickerView = (EmoticonPickerView) rootView.findViewById(R.id.emoticon_picker_view);
 
         if (isMessageSearch) {
             this.mChatBottomLayout.setVisibility(GONE);
@@ -693,12 +699,12 @@ public class InputPanel implements View.OnClickListener {
      * 切换表情布局
      */
     private void toggleEmoticonLayout() {
-        //        if (this.mEmoticonPickerView == null || this.mEmoticonPickerView.getVisibility() == GONE) {
-        //            this.showEmoticonLayout();
-        //        }
-        //        else {
-        //            this.hideEmoticonLayout();
-        //        }
+        if (this.mEmoticonPickerView == null || this.mEmoticonPickerView.getVisibility() == GONE) {
+            this.showEmoticonLayout();
+        }
+        else {
+            this.hideEmoticonLayout();
+        }
     }
 
     /**
@@ -706,39 +712,43 @@ public class InputPanel implements View.OnClickListener {
      */
     private void hideEmoticonLayout() {
         //因为有可能handle里可能有一个runnable SHOW_LAYOUT_DELAY后会打开Emotion布局 所以先移除runnable 在隐藏布局
-        //        this.mUIHandler.removeMessages(SHOW_EMOTICON_LAYOUT);
-        //        if (this.mEmoticonPickerView != null) {
-        //            if(mCubeId.equals("s10001")){
-        //                this.mChatEmojiBtn.setSelected(false);
-        //            }
-        //            else{
-        //                this.mChatFaceBtn.setSelected(false);
-        //            }
-        //            this.mEmoticonPickerView.setVisibility(GONE);
-        //        }
+        this.mUIHandler.removeMessages(SHOW_EMOTICON_LAYOUT);
+        if (this.mEmoticonPickerView != null) {
+            if (mCubeId.equals("s10001")) {
+                this.mChatEmojiBtn.setSelected(false);
+            }
+            else {
+                this.mChatFaceBtn.setSelected(false);
+            }
+            this.mEmoticonPickerView.setVisibility(GONE);
+        }
     }
 
     /**
      * 显示表情布局
      */
     private void showEmoticonLayout() {
-        //        if (mIsKeyboardShowed) {
-        //            //如果当前正在显示键盘则先把键盘隐藏
-        //            this.mUIHandler.sendEmptyMessageDelayed(SHOW_EMOTICON_LAYOUT, SHOW_LAYOUT_DELAY);
-        //        }
-        //        else {
-        //            this.mUIHandler.sendEmptyMessage(SHOW_EMOTICON_LAYOUT);
-        //        }
-        //        if (type == 0){
-        //            this.mChatMessageEt.requestFocus();
-        //        }else {
-        //            this.chat_message_service_et.requestFocus();
-        //        }
-        //        this.mEmoticonPickerView.show(this);  // 表情的view
-        //        this.hideVoiceLayout();
-        //        this.hideFunctionMoreLayout();
-        //        this.hideKeyboard();
-        //        this.mChatContainer.mPanelProxy.inputPanelExpanded();
+        if (mIsKeyboardShowed) {
+            //如果当前正在显示键盘则先把键盘隐藏
+            this.mUIHandler.sendEmptyMessageDelayed(SHOW_EMOTICON_LAYOUT, SHOW_LAYOUT_DELAY);
+        }
+        else {
+            this.mUIHandler.sendEmptyMessage(SHOW_EMOTICON_LAYOUT);
+        }
+
+        if (type == 0) {
+            this.mChatMessageEt.requestFocus();
+        }
+        else {
+            this.chat_message_service_et.requestFocus();
+        }
+
+        // 表情的view
+        this.mEmoticonPickerView.show(this);
+        this.hideVoiceLayout();
+        this.hideFunctionMoreLayout();
+        this.hideKeyboard();
+        this.mChatContainer.mPanelProxy.inputPanelExpanded();
     }
 
     /**
@@ -951,7 +961,7 @@ public class InputPanel implements View.OnClickListener {
         upEvent.recycle();
     }
 
-    public void setVisbility(boolean show) {
+    public void setVisibility(boolean show) {
         isShowView = show;
     }
 
@@ -1018,6 +1028,71 @@ public class InputPanel implements View.OnClickListener {
             }
         }, 100);
         checkSendButtonEnable(mChatMessageEt);
+    }
+
+    /**
+     * 选中表情回调方法
+     *
+     * @param key
+     */
+    @Override
+    public void onEmoticonSelected(String key) {
+        this.mChatMessageEt.requestFocus();
+        Editable editable = this.mChatMessageEt.getText();
+        if (key.equals("/DEL")) {
+            this.mChatMessageEt.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
+        }
+        else {
+            int start = this.mChatMessageEt.getSelectionStart();
+            int end = this.mChatMessageEt.getSelectionEnd();
+            start = (start < 0 ? 0 : start);
+            end = (start < 0 ? 0 : end);
+            editable.replace(start, end, key);
+        }
+        this.chat_message_service_et.requestFocus();
+        Editable editables = this.chat_message_service_et.getText();
+        if (key.equals("/DEL")) {
+            this.chat_message_service_et.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
+        }
+        else {
+            int start = this.chat_message_service_et.getSelectionStart();
+            int end = this.chat_message_service_et.getSelectionEnd();
+            start = (start < 0 ? 0 : start);
+            end = (start < 0 ? 0 : end);
+            editables.replace(start, end, key);
+        }
+    }
+
+    /**
+     * 选中贴图表情回调方法
+     */
+    @Override
+    public void onStickerSelected(StickerItem stickerItem) {
+        String emojiText = "[cube_emoji:" + stickerItem.getKey() + "]";
+        boolean isSecret = mChatContainer.mSessionType == CubeSessionType.Secret;
+        final TextMessage textMessage = MessageManager.getInstance().buildTextMessage(mChatType, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, mChatContainer.mChatName, emojiText, isSecret);
+        textMessage.setHeader("textType", "customemoji");
+        textMessage.setHeader("key", stickerItem.getKey());
+        textMessage.setHeader("packageId", stickerItem.getPackgeId());
+        textMessage.setHeader("thumbUrl", stickerItem.getUrl());
+        textMessage.setHeader("url", stickerItem.getUrl());
+        textMessage.setHeader("emojiCName", stickerItem.getName());
+        MessageManager.getInstance().sendMessage(mChatContainer.mChatActivity, textMessage).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Boolean>() {
+            @Override
+            public void call(Boolean aBoolean) {
+                if (aBoolean) {
+                    LogUtil.i("emoji message : 贴图发送成功");
+                }
+                else {
+                    LogUtil.i("emoji message : 贴图发送失败");
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onCollectSelected(String path) {
+        MessageManager.getInstance().sendFileMessage(mChatContainer.mChatActivity, mChatType, new Receiver(mChatContainer.mChatId, mChatContainer.mChatName), path, false, true);
     }
 
     /**

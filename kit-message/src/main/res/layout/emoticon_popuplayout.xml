@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gif_ll"
+    android:layout_width="64dp"
+    android:layout_height="74dp"
+    android:background="@drawable/ic_emoticons_preview"
+    android:gravity="center"
+    android:orientation="vertical"
+    >
+
+    <cube.ware.service.message.chat.panel.input.emoticon.widget.GifView
+        android:id="@+id/gif_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <ImageView
+        android:id="@+id/image_iv"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:visibility="gone"
+        />
+
+    <!--<ImageView-->
+    <!--android:id="@+id/gif_iv"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:scaleType="fitCenter"-->
+    <!--/>-->
+
+</LinearLayout>

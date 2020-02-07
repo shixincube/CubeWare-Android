@@ -152,12 +152,12 @@
 
     </FrameLayout>
 
-    <!--<com.shixinyun.cubeware.ui.chat.panel.input.emoticon.EmoticonPickerView-->
-        <!--android:id="@+id/emoticon_picker_view"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="@dimen/view_height_245"-->
-        <!--android:visibility="gone"-->
-        <!--/>-->
+    <cube.ware.service.message.chat.panel.input.emoticon.widget.EmoticonPickerView
+        android:id="@+id/emoticon_picker_view"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/view_height_245"
+        android:visibility="gone"
+        />
 
 
 </LinearLayout>

@@ -96,7 +96,6 @@
             android:paddingBottom="@dimen/view_space_8"
             android:paddingTop="@dimen/view_space_12"
             android:src="@drawable/ic_chat_camera"
-            android:visibility="gone"
             />
 
         <ImageView
@@ -118,7 +117,6 @@
             android:paddingBottom="@dimen/view_space_8"
             android:paddingTop="@dimen/view_space_12"
             android:src="@drawable/ic_chat_expression"
-            android:visibility="gone"
             />
 
         <ImageView

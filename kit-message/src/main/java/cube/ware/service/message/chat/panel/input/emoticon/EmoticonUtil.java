@@ -10,18 +10,17 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
+import cube.ware.service.message.chat.panel.input.emoticon.gif.AnimatedGifDrawable;
+import cube.ware.service.message.chat.panel.input.emoticon.gif.AnimatedImageSpan;
+import cube.ware.service.message.chat.panel.input.emoticon.manager.EmoticonManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import cube.ware.service.message.chat.panel.input.emoticon.gif.AnimatedGifDrawable;
-import cube.ware.service.message.chat.panel.input.emoticon.gif.AnimatedImageSpan;
-import cube.ware.service.message.chat.panel.input.emoticon.manager.EmoticonManager;
 
 /**
  * 表情工具类
@@ -41,12 +40,14 @@ public class EmoticonUtil {
         while (matcher.find()) {
             len++;
         }
-        // TODO: 2018/5/22 大于4个时不显示动态图 但这个限制应放在业务层做
-        if (len > 4) {
+        // TODO: 2018/5/22 大于10个时不显示动态图 但这个限制应放在业务层做
+        if (len > 10) {
+            Log.d("EmoticonUtil","EmoticonUtil:"+len);
             return replaceEmoticons(context, value, scale, align);
         }
         // TODO: 2018/5/22 开启会造成界面卡顿 找到新的gif解析方案前不建议打开动图emoji
         else {
+            Log.d("EmoticonUtil","EmoticonUtil====:"+len);
             return replaceEmoticons(context, gifTextView, value, scale, align);
         }
     }
@@ -178,12 +179,9 @@ public class EmoticonUtil {
 
         CharSequence s = editable.subSequence(start, start + count);
         Matcher matcher = EmoticonManager.getPattern().matcher(s);
-        int i = 0;
         while (matcher.find()) {
             synchronized (matcher) {
-                if (i > 50) {
-                    break;
-                }
+
                 int from = start + matcher.start();
                 int to = start + matcher.end();
                 String emot = editable.subSequence(from, to).toString();
@@ -192,7 +190,6 @@ public class EmoticonUtil {
                     ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BOTTOM);
                     editable.setSpan(span, from, to, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
-                i++;
             }
         }
     }

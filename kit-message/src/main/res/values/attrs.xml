@@ -142,4 +142,10 @@
     <declare-styleable name="ChatImageView">
         <attr format="reference" name="chat_image_mask"/>
     </declare-styleable>
+
+    <!-- GifView -->
+    <declare-styleable name="GifView">
+        <attr format="reference" name="gif"/>
+        <attr format="boolean" name="paused"/>
+    </declare-styleable>
 </resources>

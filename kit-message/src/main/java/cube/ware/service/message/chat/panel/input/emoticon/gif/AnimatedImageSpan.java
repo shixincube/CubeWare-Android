@@ -6,9 +6,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.style.DynamicDrawableSpan;
 import android.widget.TextView;
-
 import com.common.utils.utils.ThreadUtil;
-
 
 public class AnimatedImageSpan extends DynamicDrawableSpan {
 

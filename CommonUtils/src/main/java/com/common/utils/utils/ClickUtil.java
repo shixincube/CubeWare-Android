@@ -98,6 +98,7 @@ public class ClickUtil {
 
     /**
      * 二次点击
+     *
      * @return
      */
     public static boolean isFastClick() {
@@ -110,8 +111,10 @@ public class ClickUtil {
         lastClickTime = System.currentTimeMillis();
         return flag;
     }
+
     /**
      * 二次点击
+     *
      * @return
      */
     public static boolean isFastClick(long blankClickTime) {

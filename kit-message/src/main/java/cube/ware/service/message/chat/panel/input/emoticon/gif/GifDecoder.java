@@ -2,7 +2,6 @@ package cube.ware.service.message.chat.panel.input.emoticon.gif;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
-
 import java.io.InputStream;
 import java.util.Vector;
 
