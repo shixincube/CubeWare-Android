@@ -63,9 +63,14 @@ public abstract class AppDataBase extends RoomDatabase {
         return DB_NAME + DB_VERSION + "_" + cubeId + ".db";
     }
 
-    public void release() {
-        close();
-        INSTANCE = null;
+    /**
+     * 关闭释放数据库（账号切换时需要）
+     */
+    public static void release() {
+        if (INSTANCE != null) {
+            INSTANCE.close();
+            INSTANCE = null;
+        }
     }
 
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {

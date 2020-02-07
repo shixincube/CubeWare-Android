@@ -4,6 +4,7 @@ import cube.service.CubeEngine;
 import cube.service.CubeError;
 import cube.service.Session;
 import cube.service.account.AccountListener;
+import cube.ware.data.room.AppDataBase;
 
 /**
  * 用户服务处理
@@ -47,7 +48,7 @@ public class UserHandle implements AccountListener {
 
     @Override
     public void onLogout(Session session) {
-
+        AppDataBase.release();
     }
 
     @Override
