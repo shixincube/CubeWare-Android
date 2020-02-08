@@ -28,7 +28,7 @@ public class CubeIdListPresenter extends CubeIdListContract.Presenter {
     }
 
     @Override
-    public void getCubeIdList() {
+    public void queryCubeIdList() {
         ApiFactory.getInstance().queryUsers(AppManager.getAppId(), AppManager.getAppKey(), 0, 40, new Callback<ResultData<TotalData>>() {
             @Override
             public void onResponse(Call<ResultData<TotalData>> call, Response<ResultData<TotalData>> response) {
@@ -40,14 +40,14 @@ public class CubeIdListPresenter extends CubeIdListContract.Presenter {
 
             @Override
             public void onFailure(Call<ResultData<TotalData>> call, Throwable t) {
-                mView.showToast(t.getStackTrace().toString());
+                mView.showMessage(t.getStackTrace().toString());
                 LogUtil.i(t.toString());
             }
         });
     }
 
     @Override
-    void getCubetoken(String cubeId) {
+    void queryCubeToken(String cubeId) {
         ApiFactory.getInstance().getCubeToken(AppManager.getAppId(), AppManager.getAppKey(), cubeId, new Callback<ResultData<LoginData>>() {
             @Override
             public void onResponse(Call<ResultData<LoginData>> call, Response<ResultData<LoginData>> response) {
@@ -55,12 +55,12 @@ public class CubeIdListPresenter extends CubeIdListContract.Presenter {
                     if (response.body().data.cubeToken != null) {
                         SpUtil.setCubeToken(response.body().data.cubeToken);  //保存cubeToken
                         LogUtil.i(response.body().data.cubeToken);
-                        mView.getCubeToken(response.body().data.cubeToken);
+                        mView.queryCubeTokenSuccess(response.body().data.cubeToken);
                     }
                 }
                 else {
                     try {
-                        mView.showToast(response.errorBody().string());
+                        mView.showMessage(response.errorBody().string());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

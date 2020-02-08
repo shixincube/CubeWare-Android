@@ -86,9 +86,10 @@ dependencies {
 //  implementation project(':kit-whiteboard')
 //  implementation project(':kit-conference')
 //  implementation project(':kit-sharedesktop')
-//  implementation project(':kit-group')
+  implementation project(':kit-group')
   implementation project(':kit-message')
-  implementation project(':kit-api')
+//  implementation project(':kit-api')
+
   implementation project(':CommonMvp')
   implementation project(':CommonSdk')
   implementation project(':CommonUtils')
@@ -112,36 +113,5 @@ dependencies {
   implementation developmentDependencies.arouter_annotation
   implementation 'com.lzy.widget:imagepicker:0.6.1'
   implementation 'top.zibin:Luban:1.1.8'
-//  implementation 'android.arch.persistence.room:runtime:1.1.1'
-//  annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
-//  androidTestImplementation 'android.arch.persistence.room:testing:1.1.1'
   implementation 'com.contrarywind:Android-PickerView:4.1.6'
-
-  //    implementation 'com.shixincube:api:3.0.2'          // api调用
-  //    implementation 'com.shixincube:core:3.0.2'         // 基础服务
-  //    implementation 'com.shixincube:call:3.0.2'         // 通话服务
-  //    implementation 'com.shixincube:media:3.0.2'        // 媒体服务
-  //    implementation 'com.shixincube:conference:3.0.2'   // 会议服务
-  //    implementation 'com.shixincube:file:3.0.2'         // 文件服务
-  //    implementation 'com.shixincube:messages:3.0.2'     // 消息服务
-  //    implementation 'com.shixincube:whiteboard:3.0.2'   // 白板服务
-  //    implementation 'com.shixincube:sharedesktop:3.0.2' // 分享桌面
-  //    implementation 'com.shixincube:instruction:3.0.2'  // 指令服务
-  //    implementation 'com.shixincube:live:3.0.2'         // 直播服务
-//  implementation 'com.shixincube:genie:2.0.22' // 通信库
-//  implementation 'com.shixincube:rtc:2.1.9' // RTC
-//  implementation 'com.shixincube:sip:1.1.13' // SIP通信
-
-
-//  implementation project(':cube-api')
-//  implementation project(':cube-call')
-//  implementation project(':cube-conference')
-//  implementation project(':cube-core')
-//  implementation project(':cube-file')
-//  implementation project(':cube-instruction')
-//  implementation project(':cube-live')
-//  implementation project(':cube-media')
-//  implementation project(':cube-message')
-//  implementation project(':cube-sharedesktop')
-//  implementation project(':cube-whiteboard')
 }

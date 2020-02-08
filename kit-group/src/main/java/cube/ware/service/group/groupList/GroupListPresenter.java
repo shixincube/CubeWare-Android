@@ -8,7 +8,7 @@ import android.content.Context;
  * Date: 2018/8/27.
  */
 
-public class GroupListPresenter extends GroupListContract.Presenter{
+public class GroupListPresenter extends GroupListContract.Presenter {
     /**
      * 构造方法
      *

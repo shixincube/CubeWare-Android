@@ -1,14 +1,16 @@
 package cube.ware.impl;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import com.common.sdk.RouterUtil;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeConfig;
 import cube.service.CubeEngine;
 import cube.service.account.AccountState;
 import cube.ware.api.CubeUI;
-import cube.ware.service.call.CallHandle;
-import cube.ware.service.message.MessageHandle;
+import cube.ware.core.CubeConstants;
+import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.service.user.UserHandle;
 
 /**
@@ -53,25 +55,25 @@ public final class UIRoot extends CubeUI {
     public void startup(Context context) {
         if (!isStarted() && CubeEngine.getInstance().startup(context)) {
             // 注册启动监听
-            startListener();
+            //startListener();
         }
     }
 
     /**
      * 启动引擎各服务的监听
      */
-    private void startListener() {
+    /*private void startListener() {
         //CubeEngineHandle.getInstance().start();
         UserHandle.getInstance().start();
         MessageHandle.getInstance().start();
         CallHandle.getInstance().start();
         //ConferenceHandle.getInstance().start();
         //FileHandle.getInstance().start();
-        //GroupHandle.getInstance().start();
+        GroupHandle.getInstance().start();
         //ShareDesktopHandle.getInstance().start();
         //WhiteBoardHandle.getInstance().start();
         //SettingHandle.getInstance().start();
-    }
+    }*/
 
     /**
      * 登录引擎
@@ -131,5 +133,39 @@ public final class UIRoot extends CubeUI {
     @Override
     public boolean isConference() {
         return CubeEngine.getInstance().getSession().isConference();
+    }
+
+    @Override
+    public void startP2PChat(Context context, String chatId, String chatName) {
+        startChat(context, chatId, chatName, CubeSessionType.P2P);
+    }
+
+    @Override
+    public void startGroupChat(Context context, String chatId, String chatName) {
+        startChat(context, chatId, chatName, CubeSessionType.Group);
+    }
+
+    /**
+     * 启动聊天界面
+     *
+     * @param context
+     * @param chatId
+     * @param chatName
+     * @param sessionType
+     */
+    private void startChat(Context context, String chatId, String chatName, CubeSessionType sessionType) {
+        String CHAT_ID = "chat_id";
+        String CHAT_NAME = "chat_name";
+        String CHAT_TYPE = "chat_type";
+        Bundle bundle = new Bundle();
+        bundle.putString(CHAT_ID, chatId);
+        bundle.putString(CHAT_NAME, chatName);
+        bundle.putString(CHAT_TYPE, sessionType.name());
+        if (sessionType == CubeSessionType.P2P) {
+            RouterUtil.navigation(context, bundle, CubeConstants.Router.P2PChatActivity);
+        }
+        else {
+            RouterUtil.navigation(context, bundle, CubeConstants.Router.GroupChatActivity);
+        }
     }
 }

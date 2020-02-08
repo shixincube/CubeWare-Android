@@ -18,8 +18,7 @@ public class RxSchedulers {
         return sInstance;
     }
 
-    private RxSchedulers() {
-    }
+    private RxSchedulers() {}
 
     /**
      * 从io线程切换到android主线程

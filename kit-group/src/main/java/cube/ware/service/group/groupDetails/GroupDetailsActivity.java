@@ -25,15 +25,13 @@ import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.glide.GlideUtil;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
-import cube.service.common.CubeCallback;
-import cube.service.common.model.CubeError;
-import cube.service.group.model.Group;
-import cube.service.group.model.Member;
-import cube.service.user.model.User;
+import cube.service.CubeError;
+import cube.service.group.Group;
+import cube.service.group.GroupDetailsListener;
+import cube.service.group.GroupListener;
+import cube.ware.api.CubeUI;
 import cube.ware.core.CubeConstants;
 import cube.ware.core.CubeCore;
-import cube.ware.service.group.GroupHandle;
-import cube.ware.service.group.GroupListenerAdapter;
 import cube.ware.service.group.R;
 import cube.ware.service.widget.bottomPopupDialog.BottomPopupDialog;
 import java.util.ArrayList;
@@ -46,7 +44,7 @@ import java.util.List;
  * Date: 2018/8/28.
  */
 @Route(path = CubeConstants.Router.GroupDetailsActivity)
-public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Presenter> implements GroupDetailsContract.View {
+public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Presenter> implements GroupDetailsContract.View, GroupListener {
 
     private ImageView      mTitleBack;
     private ImageView      mTitleMore;
@@ -64,11 +62,11 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
     public String mGroupId;
 
     private GroupMembersAdapter mGroupMembersAdapter;
-    List<Member> mMembersData = new ArrayList<>();
+    List<String> mMembersData = new ArrayList<>();
 
-    String EXTRA_CHAT_ID            = "chat_id";
-    String EXTRA_CHAT_NAME          = "chat_name";
-    String EXTRA_CHAT_CUSTOMIZATION = "chat_customization";
+    String EXTRA_CHAT_ID   = "chat_id";
+    String EXTRA_CHAT_NAME = "chat_name";
+    String EXTRA_CHAT_TYPE = "chat_type";
 
     String NOT_CHECKED_LIST = "not_checked_list";
     String TYPE             = "type";
@@ -117,9 +115,9 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
     @Override
     protected void initData() {
         LogUtil.d("Group: " + mGroup + " --- mGroupId: " + mGroupId);
-        CubeEngine.getInstance().getGroupService().queryGroupDetails(mGroupId, new CubeCallback<Group>() {
+        CubeEngine.getInstance().getGroupService().queryGroupDetails(mGroupId, new GroupDetailsListener() {
             @Override
-            public void onSucceed(Group group) {
+            public void onGroupDetails(Group group, List<String> members) {
                 mGroup = group;
                 if (mGroup == null) {
                     ToastUtil.showToast(CubeCore.getContext(), "查询结果为null");
@@ -130,16 +128,15 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
             }
 
             @Override
-            public void onFailed(CubeError cubeError) {
+            public void onGroupDetailFailed(CubeError error) {
 
-                LogUtil.e(cubeError.toString());
             }
         });
     }
 
     @Override
     protected void initListener() {
-        GroupHandle.getInstance().addGroupListener(groupListenerAdapter);
+        CubeEngine.getInstance().getGroupService().addGroupListener(this);
         mTitleBack.setOnClickListener(this);
         mTitleMore.setOnClickListener(this);
         mSendMessageTv.setOnClickListener(this);
@@ -148,13 +145,9 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
         mGroupMembersAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                List<Member> data = mGroupMembersAdapter.getData();
-                if (position == data.size() - 1) {
-                    ArrayList<String> cubeIds = new ArrayList<>();
-                    for (Member datum : data) {
-                        cubeIds.add(datum.cubeId);
-                    }
-                    ARouter.getInstance().build(CubeConstants.Router.SelectContactActivity).withObject(NOT_CHECKED_LIST, cubeIds).withString(GROUP_ID, mGroup.groupId).withInt(TYPE, 1).navigation();
+                List<String> cubeIds = mGroupMembersAdapter.getData();
+                if (position == cubeIds.size() - 1) {
+                    ARouter.getInstance().build(CubeConstants.Router.SelectContactActivity).withObject(NOT_CHECKED_LIST, cubeIds).withString(GROUP_ID, mGroup.getGroupId()).withInt(TYPE, 1).navigation();
                 }
                 else {
                     //                    Member member = data.get(position);
@@ -169,9 +162,9 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
         mGroupMembersAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-                List<Member> data = mGroupMembersAdapter.getData();
-                Member member = data.get(position);
-                if (position != data.size() - 1 && isMaster(mGroup) && !TextUtils.equals(member.cubeId, CubeCore.getInstance().getCubeId())) {
+                List<String> data = mGroupMembersAdapter.getData();
+                String member = data.get(position);
+                if (position != data.size() - 1 && isMaster(mGroup) && !TextUtils.equals(member, CubeCore.getInstance().getCubeId())) {
                     //                    new AlertDialog.Builder(GroupDetailsActivity.this)
                     //                            .setMessage("确认删除群成员" + member.cubeId + "吗")
                     //                            .setPositiveButton("删除", new DialogInterface.OnClickListener() {
@@ -189,7 +182,7 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
                     //                            })
                     //                            .create()
                     //                            .show();
-                    showPop(mGroupId, member.cubeId);
+                    showPop(mGroupId, member);
                 }
                 return true;
             }
@@ -198,71 +191,27 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
 
     private void showData(Group group) {
         //自己创建的群才能修改群名称
-        if (group.founder.equals(CubeCore.getInstance().getCubeId())) {
+        if (group.getFounder().equals(CubeCore.getInstance().getCubeId())) {
             mGroupChatArrowIv.setVisibility(View.VISIBLE);
         }
         else {
             mGroupChatArrowIv.setVisibility(View.GONE);
         }
         mGroup = group;
-        GlideUtil.loadCircleImage(group.avatar, mContext, mFaceIv, R.drawable.default_head_group);
-        mDisplayNameTv.setText(group.displayName);
-        mGroupChatNameTv.setText(group.displayName);
-        mGroupNumCodeTv.setText(group.groupId);
+        GlideUtil.loadCircleImage(group.getGroupId(), mContext, mFaceIv, R.drawable.default_head_group);
+        mDisplayNameTv.setText(group.getDisplayName());
+        mGroupChatNameTv.setText(group.getDisplayName());
+        mGroupNumCodeTv.setText(group.getGroupId());
 
         mMembersData.clear();
-        mMembersData.addAll(group.masters);
-        mMembersData.addAll(group.members);
+        mMembersData.addAll(group.getMasters());
+        mMembersData.addAll(group.getMembers());
         refreshData(mMembersData);
     }
 
-    GroupListenerAdapter groupListenerAdapter = new GroupListenerAdapter() {
-        @Override
-        public void onMasterAdded(Group group, User user, List<User> list) {
-            showData(group);
-        }
-
-        @Override
-        public void onMasterRemoved(Group group, User user, List<User> list) {
-            showData(group);
-        }
-
-        @Override
-        public void onMemberAdded(Group group, User user, List<User> list) {
-            showData(group);
-        }
-
-        @Override
-        public void onMemberRemoved(Group group, User user, List<User> list) {
-            showData(group);
-        }
-
-        @Override
-        public void onGroupFailed(Group group, CubeError cubeError) {
-            ToastUtil.showToast(CubeCore.getContext(), cubeError.desc);
-        }
-
-        @Override
-        public void onGroupDestroyed(Group group, User user) {
-            finish();
-        }
-
-        @Override
-        public void onGroupQuited(Group group, User from) {
-            if (TextUtils.equals(from.cubeId, CubeCore.getInstance().getCubeId())) {
-                finish();
-            }
-        }
-
-        @Override
-        public void onGroupUpdated(Group group, User user) {
-            showData(group);
-        }
-    };
-
     @Override
     protected void onDestroy() {
-        GroupHandle.getInstance().removeGroupListener(groupListenerAdapter);
+        CubeEngine.getInstance().getGroupService().removeGroupListener(this);
         super.onDestroy();
     }
 
@@ -281,12 +230,13 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
             }
         }
         else if (id == R.id.send_message_tv) {
-            //ARouter.getInstance().build(CubeConstants.Router.GroupChatActivity).withString(EXTRA_CHAT_ID, mGroupId).withString(EXTRA_CHAT_NAME, TextUtils.isEmpty(mGroup.displayName) ? mGroupId : mGroup.displayName).withSerializable(EXTRA_CHAT_CUSTOMIZATION, new GroupChatCustomization()).navigation();
+            String chatName = TextUtils.isEmpty(mGroup.getDisplayName()) ? mGroupId : mGroup.getDisplayName();
+            CubeUI.getInstance().startGroupChat(this, mGroupId, chatName);
         }
         else if (id == R.id.group_name_rl) {
             if (isMaster(mGroup)) {
                 Bundle bundle = new Bundle();
-                bundle.putString("displayname", String.valueOf(mGroup.displayName));
+                bundle.putString("displayname", String.valueOf(mGroup.getDisplayName()));
                 bundle.putSerializable("group", mGroup);
                 bundle.putInt("type", 1);
                 RouterUtil.navigation(this, bundle, CubeConstants.Router.ModifyNameActivity);
@@ -297,11 +247,11 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
 
     private boolean isMaster(Group group) {
         String cubeId = CubeCore.getInstance().getCubeId();
-        return TextUtils.equals(group.owner, cubeId) || group.masters.contains(cubeId);
+        return TextUtils.equals(group.getFounder(), cubeId) || group.getMasters().contains(cubeId);
     }
 
-    private void refreshData(List<Member> members) {
-        members.add(new Member("我是加号"));
+    private void refreshData(List<String> members) {
+        members.add("我是加号");
         mGroupMembersAdapter.replaceData(members);
     }
 
@@ -324,7 +274,7 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
             public void onItemClick(View v, int position) {
                 switch (position) {
                     case 0:
-                        CubeEngine.getInstance().getGroupService().quit(mGroup.groupId);
+                        CubeEngine.getInstance().getGroupService().removeMembers(mGroup.getGroupId(), Collections.singletonList(CubeCore.getInstance().getCubeId()));
                         bottomPopupDialog.dismiss();
                         break;
                     default:
@@ -351,12 +301,12 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
             public void onItemClick(View v, int position) {
                 switch (position) {
                     case 0:
-                        CubeEngine.getInstance().getGroupService().destroy(mGroup.groupId);
+                        CubeEngine.getInstance().getGroupService().deleteGroup(mGroup.getGroupId());
                         bottomPopupDialog.dismiss();
                         break;
                     case 1:
                         ToastUtil.showToast(mContext, position + "");
-                        CubeEngine.getInstance().getGroupService().quit(mGroup.groupId);
+                        CubeEngine.getInstance().getGroupService().removeMembers(mGroup.getGroupId(), Collections.singletonList(CubeCore.getInstance().getCubeId()));
                         bottomPopupDialog.dismiss();
                         break;
                     default:
@@ -370,8 +320,8 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
         final BottomPopupDialog bottomPopupDialog;
         List<String> bottomDialogContents;//弹出列表的内容
         bottomDialogContents = new ArrayList<>();
-        if (TextUtils.equals(mGroup.owner, CubeCore.getInstance().getCubeId())) {
-            if (mGroup.masters.contains(cubeId)) {
+        if (TextUtils.equals(mGroup.getFounder(), CubeCore.getInstance().getCubeId())) {
+            if (mGroup.getMasters().contains(cubeId)) {
                 bottomDialogContents.add("删除管理员");
             }
             else {
@@ -390,11 +340,11 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
             public void onItemClick(View v, int position) {
                 switch (position) {
                     case 0:
-                        if (mGroup.masters.contains(cubeId)) {
-                            CubeEngine.getInstance().getGroupService().removeMaster(groupId, Collections.singletonList(cubeId));
+                        if (mGroup.getMasters().contains(cubeId)) {
+                            CubeEngine.getInstance().getGroupService().removeMaster(groupId, cubeId);
                         }
                         else {
-                            CubeEngine.getInstance().getGroupService().addMaster(groupId, Collections.singletonList(cubeId));
+                            CubeEngine.getInstance().getGroupService().addMaster(groupId, cubeId);
                         }
                         bottomPopupDialog.dismiss();
                         break;
@@ -418,8 +368,8 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
             public void onClick(DialogInterface dialog, int which) {
                 String name = editText.getText().toString();
                 if (!TextUtils.isEmpty(name)) {
-                    mGroup.displayName = name;
-                    CubeEngine.getInstance().getGroupService().update(mGroup);
+                    //mGroup.displayName = name;
+                    //CubeEngine.getInstance().getGroupService().update(mGroup);
                     dialog.dismiss();
                 }
                 else {
@@ -433,5 +383,45 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
             }
         }).create();
         alertDialog.show();
+    }
+
+    @Override
+    public void onGroupFailed(CubeError error) {
+        ToastUtil.showToast(CubeCore.getContext(), error.desc);
+    }
+
+    @Override
+    public void onGroupCreated(Group group) {
+        showData(group);
+    }
+
+    @Override
+    public void onGroupDeleted(Group group) {
+        finish();
+    }
+
+    @Override
+    public void onMemberAdded(Group group, List<String> addedMembers) {
+        showData(group);
+    }
+
+    @Override
+    public void onMemberRemoved(Group group, List<String> removedMembers) {
+        showData(group);
+    }
+
+    @Override
+    public void onMasterAdded(Group group, String addedMaster) {
+        showData(group);
+    }
+
+    @Override
+    public void onMasterRemoved(Group group, String removedMaster) {
+        showData(group);
+    }
+
+    @Override
+    public void onGroupNameChanged(Group group) {
+        showData(group);
     }
 }

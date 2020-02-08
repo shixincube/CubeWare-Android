@@ -1,27 +1,28 @@
 package cube.ware.service.message.recent.manager;
 
 import android.text.TextUtils;
-import com.common.mvp.rx.RxBus;
+import com.common.mvp.eventbus.EventBusUtil;
 import com.common.utils.utils.log.LogUtil;
-import cube.service.message.MessageDirection;
 import cube.service.message.CustomMessage;
 import cube.service.message.FileMessage;
 import cube.service.message.ImageMessage;
+import cube.service.message.MessageDirection;
 import cube.service.message.MessageEntity;
 import cube.service.message.Sender;
 import cube.service.message.TextMessage;
 import cube.service.message.VideoClipMessage;
 import cube.service.message.VoiceClipMessage;
+import cube.ware.common.MessageConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.repository.CubeSessionRepository;
 import cube.ware.data.room.model.CubeRecentSession;
-import cube.ware.common.MessageConstants;
 import cube.ware.service.message.manager.MessageManager;
 import cube.ware.service.message.manager.SystemMessageManager;
 import cube.ware.utils.SpUtil;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import rx.Observable;
@@ -75,7 +76,7 @@ public class RecentSessionManager {
             @Override
             public void call(CubeRecentSession cubeRecentSession) {
                 // 刷新最近会话列表
-                RxBus.getInstance().post(MessageConstants.Event.EVENT_REFRESH_RECENT_SESSION_SINGLE, cubeRecentSession);
+                EventBusUtil.post(MessageConstants.Event.EVENT_REFRESH_RECENT_SESSION_LIST, Collections.singletonList(cubeRecentSession));
             }
         });
     }
@@ -119,12 +120,7 @@ public class RecentSessionManager {
             @Override
             public void call(List<CubeRecentSession> cubeRecentSessions) {
                 // 刷新最近会话列表
-                if (cubeRecentSessions.size() == 1) {
-                    RxBus.getInstance().post(MessageConstants.Event.EVENT_REFRESH_RECENT_SESSION_SINGLE, cubeRecentSessions.get(0));
-                }
-                else {
-                    RxBus.getInstance().post(MessageConstants.Event.EVENT_REFRESH_RECENT_SESSION_LIST, cubeRecentSessions);
-                }
+                EventBusUtil.post(MessageConstants.Event.EVENT_REFRESH_RECENT_SESSION_LIST, cubeRecentSessions);
             }
         });
     }
@@ -138,10 +134,7 @@ public class RecentSessionManager {
         CubeSessionRepository.getInstance().removeRecentSession(sessionId).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<CubeRecentSession>() {
             @Override
             public void call(CubeRecentSession cubeRecentSession) {
-                if (cubeRecentSession == null) {
-                    return;
-                }
-                RxBus.getInstance().post(MessageConstants.Event.EVENT_REMOVE_RECENT_SESSION_SINGLE, cubeRecentSession.getSessionId());
+                EventBusUtil.post(MessageConstants.Event.EVENT_REMOVE_RECENT_SESSION_SINGLE, cubeRecentSession.getSessionId());
             }
         });
     }

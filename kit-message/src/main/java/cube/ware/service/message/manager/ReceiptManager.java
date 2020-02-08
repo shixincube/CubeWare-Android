@@ -1,6 +1,6 @@
 package cube.ware.service.message.manager;
 
-import com.common.mvp.rx.RxBus;
+import com.common.mvp.eventbus.EventBusUtil;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.DeviceInfo;
 import cube.service.message.MessageEntity;
@@ -10,6 +10,7 @@ import cube.ware.data.repository.CubeMessageRepository;
 import cube.ware.data.repository.CubeSessionRepository;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.data.room.model.CubeRecentSession;
+import java.util.Collections;
 import java.util.List;
 import rx.Observable;
 import rx.functions.Action1;
@@ -73,7 +74,7 @@ public class ReceiptManager {
             @Override
             public void call(CubeRecentSession recentSession) {
                 // 消息变化通知最近消息界面
-                RxBus.getInstance().post(MessageConstants.Event.EVENT_REFRESH_RECENT_SESSION_SINGLE, recentSession);
+                EventBusUtil.post(MessageConstants.Event.EVENT_REFRESH_RECENT_SESSION_LIST, Collections.singletonList(recentSession));
             }
         });
     }

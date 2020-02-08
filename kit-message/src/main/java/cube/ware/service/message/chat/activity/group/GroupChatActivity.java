@@ -2,7 +2,6 @@ package cube.ware.service.message.chat.activity.group;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -78,14 +77,8 @@ public class GroupChatActivity extends BaseChatActivity implements InputPanel.On
     }
 
     @Override
-    protected void initToolBar() {
-
-    }
-
-    @Override
     protected MessageFragment buildFragment() {
-        Bundle arguments = getIntent().getExtras();
-        MessageFragment fragment = MessageFragment.newInstance(CubeSessionType.Group, arguments);
+        MessageFragment fragment = MessageFragment.newInstance(mChatId, mChatName, CubeSessionType.Group, mChatCustomization);
         fragment.setContainerId(R.id.message_fragment_container);
         fragment.setBottomNavigationListener(this);
         return fragment;
@@ -100,14 +93,14 @@ public class GroupChatActivity extends BaseChatActivity implements InputPanel.On
                 if (resultCode == RecordVideoActivity.TAKE_VIDEO_CODE) {
                     String videoPath = data.getStringExtra(RecordVideoActivity.TAKE_VIDEO_PATH);
                     if (!TextUtils.isEmpty(videoPath)) {
-                        MessageManager.getInstance().sendFileMessage(mContext, CubeSessionType.P2P, new Receiver(mChatId, mChatName), videoPath, isAnonymous, true);
+                        MessageManager.getInstance().sendFileMessage(mContext, CubeSessionType.Group, new Receiver(mChatId, mChatName), videoPath, isAnonymous, true);
                     }
                 }
                 else if (resultCode == RecordVideoActivity.TAKE_PHOTO_CODE) {
                     String photoPath = data.getStringExtra(RecordVideoActivity.TAKE_PHOTO_PATH);
                     boolean isOrigin = data.getBooleanExtra(RecordVideoActivity.PHOTO_IS_ORIGIN, false);
                     if (!TextUtils.isEmpty(photoPath)) {
-                        MessageManager.getInstance().sendFileMessage(mContext, CubeSessionType.P2P, new Receiver(mChatId, mChatName), photoPath, isAnonymous, isOrigin);
+                        MessageManager.getInstance().sendFileMessage(mContext, CubeSessionType.Group, new Receiver(mChatId, mChatName), photoPath, isAnonymous, isOrigin);
                     }
                 }
                 break;

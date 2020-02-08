@@ -5,7 +5,8 @@ import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.common.utils.utils.glide.GlideUtil;
-import cube.service.group.model.Group;
+import cube.service.group.Group;
+import cube.ware.core.CubeCore;
 import cube.ware.service.group.R;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * Date: 2018/8/28.
  */
 
-public class GroupListAdapter extends BaseQuickAdapter<Group,BaseViewHolder>{
+public class GroupListAdapter extends BaseQuickAdapter<Group, BaseViewHolder> {
 
     public GroupListAdapter(int layoutResId) {
         super(layoutResId);
@@ -23,23 +24,20 @@ public class GroupListAdapter extends BaseQuickAdapter<Group,BaseViewHolder>{
 
     @Override
     protected void convert(BaseViewHolder helper, Group item) {
-
         ImageView avatarView = helper.getView(R.id.iv_contact_head);
-        GlideUtil.loadCircleImage(item.avatar, mContext, avatarView , R.drawable.default_head_group);
-        helper.setText(R.id.tv_username, item.displayName)
-                .setText(R.id.tv_cubeId, item.groupId);
+        GlideUtil.loadCircleImage(CubeCore.getInstance().getAvatarUrl() + item.getGroupId(), mContext, avatarView, R.drawable.default_head_group);
+        helper.setText(R.id.tv_username, item.getDisplayName()).setText(R.id.tv_cubeId, item.getGroupId());
     }
 
     public int findPosition(String groupId) {
         List<Group> groups = getData();
-        if (null != groups && !groups.isEmpty()) {
+        if (!groups.isEmpty()) {
             for (int i = 0; i < groups.size(); i++) {
-                if (TextUtils.equals(groups.get(i).groupId,groupId)) {
+                if (TextUtils.equals(groups.get(i).getGroupId(), groupId)) {
                     return i;
                 }
             }
         }
         return -1;
     }
-
 }

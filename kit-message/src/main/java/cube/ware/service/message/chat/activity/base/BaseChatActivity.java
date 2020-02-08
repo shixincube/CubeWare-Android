@@ -1,5 +1,6 @@
 package cube.ware.service.message.chat.activity.base;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -9,21 +10,26 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import com.common.mvp.base.BaseFragment;
 import com.common.utils.receiver.HeadsetReceiver;
 import com.common.utils.utils.ReflectionUtil;
 import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.log.LogUtil;
-import cube.ware.service.message.manager.MessageListenerManager;
 import cube.ware.common.BaseToolBarActivity;
+import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.service.message.R;
+import cube.ware.service.message.chat.activity.group.GroupChatCustomization;
+import cube.ware.service.message.chat.activity.p2p.P2PChatCustomization;
 import cube.ware.service.message.chat.fragment.MessageFragment;
 import cube.ware.service.message.chat.listener.ChatEventListener;
+import cube.ware.service.message.manager.MessageListenerManager;
 import cube.ware.service.message.manager.PlayerManager;
 import java.util.List;
 
@@ -46,6 +52,11 @@ public abstract class BaseChatActivity extends BaseToolBarActivity implements Se
     protected String mChatName;
 
     /**
+     * 聊天类型
+     */
+    protected ChatStatusType mChatType;
+
+    /**
      * 聊天页面定制化信息
      */
     protected ChatCustomization mChatCustomization;
@@ -53,7 +64,8 @@ public abstract class BaseChatActivity extends BaseToolBarActivity implements Se
     /**
      * 是否支持匿名聊天
      */
-    protected boolean         isAnonymous;
+    protected boolean isAnonymous;
+
     /**
      * 消息fragment
      */
@@ -73,8 +85,9 @@ public abstract class BaseChatActivity extends BaseToolBarActivity implements Se
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMessageFragment = (MessageFragment) switchContent(buildFragment(), false, "MessageFragment");
-        parseIntent();
+        parseArguments();
+        mMessageFragment = buildFragment();
+        switchContent(mMessageFragment, false, "MessageFragment");
         MessageListenerManager.getInstance().addChatEventListener(this);
     }
 
@@ -88,11 +101,22 @@ public abstract class BaseChatActivity extends BaseToolBarActivity implements Se
     /**
      * 解析Intent
      */
-    private void parseIntent() {
-        this.mChatId = getIntent().getStringExtra(EXTRA_CHAT_ID);
-        this.mChatName = getIntent().getStringExtra(EXTRA_CHAT_NAME);
-        this.mChatCustomization = (ChatCustomization) getIntent().getSerializableExtra(EXTRA_CHAT_CUSTOMIZATION);
-        this.isAnonymous = mChatCustomization.typ == ChatCustomization.ChatStatusType.Anonymous;
+    private void parseArguments() {
+        Bundle data = getIntent().getBundleExtra("bundle");
+        this.mChatId = data.getString(EXTRA_CHAT_ID);
+        this.mChatName = data.getString(EXTRA_CHAT_NAME);
+        String chatType = data.getString(EXTRA_CHAT_TYPE);
+        if (this.mChatCustomization == null) {
+            if (TextUtils.equals(chatType, CubeSessionType.P2P.name())) {
+                this.mChatType = ChatStatusType.Normal;
+                this.mChatCustomization = new P2PChatCustomization();
+            }
+            else {
+                this.mChatType = ChatStatusType.Group;
+                this.mChatCustomization = new GroupChatCustomization();
+            }
+        }
+        this.isAnonymous = this.mChatType == ChatStatusType.Anonymous;
         LogUtil.i("聊天ID: " + mChatId + "  是否支持匿名: " + isAnonymous);
     }
 
@@ -100,6 +124,7 @@ public abstract class BaseChatActivity extends BaseToolBarActivity implements Se
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
+        parseArguments();
         if (mSavedInstanceState != null) {
             //说明系统将此Activity回收
             mMessageFragment = (MessageFragment) getSupportFragmentManager().findFragmentByTag("MessageFragment");
@@ -107,14 +132,12 @@ public abstract class BaseChatActivity extends BaseToolBarActivity implements Se
         else {
             this.mMessageFragment = (MessageFragment) switchContent(buildFragment(), false, "MessageFragment");
         }
-        parseIntent();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         this.powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-
         this.sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         this.sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         this.sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -155,35 +178,6 @@ public abstract class BaseChatActivity extends BaseToolBarActivity implements Se
         if (this.mChatCustomization != null) {
             this.mChatCustomization.onActivityResult(this, requestCode, resultCode, data);
         }
-    }
-
-    /**
-     * 切换fragment
-     *
-     * @param fragment
-     * @param needAddToBackStack
-     * @param tag
-     *
-     * @return
-     */
-    protected MessageFragment switchContent(MessageFragment fragment, boolean needAddToBackStack, String tag) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        if (tag != null) {
-            fragmentTransaction.replace(fragment.getContainerId(), fragment, tag);
-        }
-        else {
-            fragmentTransaction.replace(fragment.getContainerId(), fragment);
-        }
-        if (needAddToBackStack) {
-            fragmentTransaction.addToBackStack(null);
-        }
-        try {
-            fragmentTransaction.commitAllowingStateLoss();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return fragment;
     }
 
     private void invokeFragmentManagerNoteStateNotSaved() {
@@ -247,6 +241,7 @@ public abstract class BaseChatActivity extends BaseToolBarActivity implements Se
     /**
      * 熄屏
      */
+    @SuppressLint("InvalidWakeLockTag")
     protected void setScreenOff() {
         if (null == this.wakeLock) {
             this.wakeLock = powerManager.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, "BaseChatActivity");

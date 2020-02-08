@@ -15,9 +15,9 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.common.mvp.base.BaseFragment;
+import com.common.mvp.eventbus.Event;
 import com.common.mvp.eventbus.EventBusUtil;
 import com.common.sdk.RouterUtil;
 import com.common.utils.receiver.NetworkStateReceiver;
@@ -27,17 +27,16 @@ import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
 import cube.service.CubeEngineListener;
-import cube.service.CubeState;
 import cube.service.CubeError;
+import cube.service.CubeState;
+import cube.ware.api.CubeUI;
+import cube.ware.common.MessageConstants;
 import cube.ware.core.CubeConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.CubeRecentViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeRecentSession;
-import cube.ware.common.MessageConstants;
 import cube.ware.service.message.R;
-import cube.ware.service.message.chat.activity.group.GroupChatCustomization;
-import cube.ware.service.message.chat.activity.p2p.P2PChatCustomization;
 import cube.ware.widget.emptyview.EmptyView;
 import cube.ware.widget.emptyview.EmptyViewUtil;
 import java.util.List;
@@ -68,12 +67,7 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
     private RecentAdapter  mRecentAdapter;
     private EmptyView      mEmptyView;
     private PopupWindow    popupWindow;
-
     private RelativeLayout tool_bar_layout;
-
-    String EXTRA_CHAT_ID   = "chat_id";
-    String EXTRA_CHAT_NAME = "chat_name";
-    String EXTRA_CHAT_CUSTOMIZATION = "chat_customization";
 
     @Override
     protected int getContentViewId() {
@@ -161,18 +155,27 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
         mRecentAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
                 CubeRecentViewModel cubeRecentViewModel = mRecentAdapter.getData().get(position);
                 CubeRecentSession cubeRecentSession = cubeRecentViewModel.cubeRecentSession;
-
+                String chatName = TextUtils.isEmpty(cubeRecentSession.getSessionName()) ? cubeRecentSession.getSessionId() : cubeRecentSession.getSessionName();
                 if (cubeRecentSession.getSessionType() == CubeSessionType.Group.getType()) {
-                    ARouter.getInstance().build(CubeConstants.Router.GroupChatActivity).withString(EXTRA_CHAT_ID, cubeRecentSession.getSessionId()).withString(EXTRA_CHAT_NAME, TextUtils.isEmpty(cubeRecentSession.getSessionName()) ? cubeRecentSession.getSessionId() : cubeRecentSession.getSessionName()).withSerializable(EXTRA_CHAT_CUSTOMIZATION, new GroupChatCustomization()).navigation();
+                    CubeUI.getInstance().startGroupChat(getContext(), cubeRecentSession.getSessionId(), chatName);
                 }
                 else {
-                    ARouter.getInstance().build(CubeConstants.Router.P2PChatActivity).withString(EXTRA_CHAT_ID, cubeRecentSession.getSessionId()).withString(EXTRA_CHAT_NAME, TextUtils.isEmpty(cubeRecentSession.getSessionName()) ? cubeRecentSession.getSessionId() : cubeRecentSession.getSessionName()).withSerializable(EXTRA_CHAT_CUSTOMIZATION, new P2PChatCustomization()).navigation();
+                    CubeUI.getInstance().startP2PChat(getContext(), cubeRecentSession.getSessionId(), chatName);
                 }
             }
         });
+    }
+
+    @Override
+    protected boolean isRegisterEventBus() {
+        return true;
+    }
+
+    @Override
+    public <T> void onReceiveEvent(Event<T> event) {
+        mPresenter.handleReceiveEvent(event);
     }
 
     @Override
@@ -235,8 +238,7 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
 
     @Override
     protected void initData() {
-        mPresenter.subscribeChange();
-        mPresenter.getRecentSessionList();
+        mPresenter.refreshRecentSessions();
     }
 
     public void closeRecyclerViewAnimator(RecyclerView recyclerView) {
@@ -364,17 +366,18 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
 
     @Override
     public void onRefreshList(List<CubeRecentViewModel> cubeRecentViewModels) {
-        if (cubeRecentViewModels == null) {
-            return;
+        if (cubeRecentViewModels.size() == 1) {
+            onRefresh(cubeRecentViewModels.get(0));
         }
-        mRecentAdapter.replaceData(cubeRecentViewModels);
+        else {
+            mRecentAdapter.replaceData(cubeRecentViewModels);
+        }
     }
 
     @Override
     public void onRefresh(CubeRecentViewModel cubeRecentViewModel) {
         List<CubeRecentViewModel> data = mRecentAdapter.getData();
         int position = mRecentAdapter.findPosition(cubeRecentViewModel.cubeRecentSession.getSessionId());
-        LogUtil.i("onRefresh -------------" + position);
         if (position != -1) {
             //如果是回执消息引起的刷新
             if (cubeRecentViewModel.cubeRecentSession.getTimestamp() == data.get(position).cubeRecentSession.getTimestamp()) {

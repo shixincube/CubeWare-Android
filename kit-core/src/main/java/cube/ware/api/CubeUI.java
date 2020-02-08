@@ -90,4 +90,22 @@ public abstract class CubeUI {
      * @return
      */
     public abstract boolean isConference();
+
+    /**
+     * 打开一个单聊页面
+     *
+     * @param context  上下文
+     * @param chatId   聊天id
+     * @param chatName 聊天名
+     */
+    public abstract void startP2PChat(Context context, String chatId, String chatName);
+
+    /**
+     * 打开一个单聊页面
+     *
+     * @param context  上下文
+     * @param chatId   聊天id
+     * @param chatName 聊天名
+     */
+    public abstract void startGroupChat(Context context, String chatId, String chatName);
 }

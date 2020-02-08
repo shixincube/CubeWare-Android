@@ -1,8 +1,6 @@
 package cube.ware.ui.mine;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -13,16 +11,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.common.mvp.rx.RxManager;
+import com.common.mvp.base.BaseActivity;
+import com.common.mvp.base.BasePresenter;
+import com.common.mvp.eventbus.Event;
 import com.common.utils.utils.ToastUtil;
+import cube.service.CubeEngine;
 import cube.service.group.Group;
 import cube.ware.AppConstants;
 import cube.ware.R;
 import cube.ware.common.MessageConstants;
-import rx.functions.Action1;
+import cube.ware.core.CubeConstants;
 
 @Route(path = AppConstants.Router.ModifyNameActivity)
-public class ModifyNameActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
+public class ModifyNameActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
 
     private TextView  mTvCancel;
     private TextView  mTvSave;
@@ -30,23 +31,29 @@ public class ModifyNameActivity extends AppCompatActivity implements View.OnClic
     private TextView  mTvCount;
     private TextView  mTvTitle;
     private ImageView mIvClear;
-    private int       mMaxLength = 20;
-    RxManager rxManager = new RxManager();//创建群
+
+    private int   mMaxLength = 20;
     private Group mGroup;
     private int   mType;
 
     String BUNDLE = "bundle";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_re_name);
-        initView();
-        initData();
-        initListener();
+    protected int getContentViewId() {
+        return R.layout.activity_re_name;
     }
 
-    private void initView() {
+    @Override
+    protected BasePresenter createPresenter() {
+        return null;
+    }
+
+    @Override
+    protected boolean isRegisterEventBus() {
+        return true;
+    }
+
+    protected void initView() {
         mTvCancel = findViewById(R.id.tv_cancel);
         mTvSave = findViewById(R.id.tv_save);
         mEtName = findViewById(R.id.et_name);
@@ -55,7 +62,7 @@ public class ModifyNameActivity extends AppCompatActivity implements View.OnClic
         mTvTitle = findViewById(R.id.tv_title);
     }
 
-    private void initData() {
+    protected void initData() {
         String displayname = getIntent().getBundleExtra(BUNDLE).getString("displayname");
         //0 修改昵称，1 修改群名
         mType = getIntent().getBundleExtra(BUNDLE).getInt("type", 0);
@@ -71,24 +78,27 @@ public class ModifyNameActivity extends AppCompatActivity implements View.OnClic
         mTvCount.setText(count + "");
     }
 
-    private void initListener() {
+    protected void initListener() {
         mIvClear.setOnClickListener(this);
         mTvCancel.setOnClickListener(this);
         mTvSave.setOnClickListener(this);
         mEtName.addTextChangedListener(this);
-        rxManager.on(MessageConstants.Event.EVENT_REFRESH_CUBE_USER, new Action1<Object>() {
-            @Override
-            public void call(Object o) {
-                finish();
-            }
-        });
+    }
 
-        rxManager.on(MessageConstants.Event.EVENT_UPDATE_GROUP, new Action1<Object>() {
-            @Override
-            public void call(Object o) {
+    @Override
+    public void onReceiveEvent(Event event) {
+        switch (event.eventName) {
+            case CubeConstants.Event.UPDATE_GROUP:
                 finish();
-            }
-        });
+                break;
+
+            case MessageConstants.Event.EVENT_REFRESH_CUBE_USER:
+                finish();
+                break;
+
+            default:
+                break;
+        }
     }
 
     @Override
@@ -106,15 +116,14 @@ public class ModifyNameActivity extends AppCompatActivity implements View.OnClic
                     return;
                 }
 
-                /*if (mType == 0) {
-                    User user = new User(SpUtil.getCubeId());
-                    user.displayName = newName;
-                    CubeEngine.getInstance().getUserService().update(user);
+                if (mType == 0) {
+                    //User user = new User(SpUtil.getCubeId());
+                    //user.displayName = newName;
+                    //CubeEngine.getInstance().getAccountService().update(user);
                 }
                 else {
-                    mGroup.displayName = newName;
-                    CubeEngine.getInstance().getGroupService().update(mGroup);
-                }*/
+                    CubeEngine.getInstance().getGroupService().changeGroupName(mGroup.getGroupId(), newName);
+                }
 
                 closeSoftKey();
                 break;
@@ -122,12 +131,6 @@ public class ModifyNameActivity extends AppCompatActivity implements View.OnClic
                 mEtName.setText("");
                 break;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        rxManager.clear();
-        super.onDestroy();
     }
 
     @Override

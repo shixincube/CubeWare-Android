@@ -65,7 +65,7 @@ public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implem
     protected void initData() {
         super.initData();
         //获取cubeIdList数据
-        mPresenter.getCubeIdList();
+        mPresenter.queryCubeIdList();
     }
 
     @Override
@@ -88,7 +88,7 @@ public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implem
                 }
                 cubeId = mUsers.get(position).getCubeId();
                 disPlayName = mUsers.get(position).getDisplayName();
-                mPresenter.getCubetoken(mUsers.get(position).getCubeId());
+                mPresenter.queryCubeToken(mUsers.get(position).getCubeId());
                 mProgressDialog.show();
             }
         });
@@ -101,21 +101,14 @@ public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implem
     }
 
     @Override
-    public void showToast(String msg) {
+    public void showMessage(String msg) {
         ToastUtil.showToast(this, msg);
     }
 
     @Override
-    public void getCubeToken(String cubeToken) {
+    public void queryCubeTokenSuccess(String cubeToken) {
         //login 引擎
         CubeUI.getInstance().login(cubeId, cubeToken, disPlayName);
-    }
-
-    @Override
-    public void loginCubeEngineSuccess() {
-        LogUtil.i("loginSuccess");
-        RouterUtil.navigation(this, AppConstants.Router.MainActivity);
-        finish();
     }
 
     @Override

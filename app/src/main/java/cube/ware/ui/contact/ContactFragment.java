@@ -18,6 +18,7 @@ import com.common.mvp.base.BaseFragment;
 import com.common.sdk.RouterUtil;
 import com.common.utils.utils.ScreenUtil;
 
+import cube.ware.service.group.groupList.GroupListFragment;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,7 +96,7 @@ public class ContactFragment extends BaseFragment<ContactContract.Presenter> imp
         int page = mViewPager.getCurrentItem();
         List<Fragment> mFragmentList = new ArrayList<>();
         mFragmentList.add(new FriendListFragment());
-        //mFragmentList.add(new GroupListFragment());
+        mFragmentList.add(new GroupListFragment());
         ContactPagerAdapter adapter = new ContactPagerAdapter(mFragmentList, getChildFragmentManager(), getActivity());
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);

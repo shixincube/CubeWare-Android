@@ -30,7 +30,6 @@ public class RecentAdapter extends BaseQuickAdapter<CubeRecentViewModel, BaseVie
 
     @Override
     protected void convert(BaseViewHolder helper, CubeRecentViewModel item) {
-
         CubeRecentSession cubeRecentSession = item.cubeRecentSession;
         ImageView headIv = helper.getView(R.id.head_iv);
         //        GlideUtil.loadCircleImage(item.userFace,mContext,headIv,R.drawable.default_head_user);
@@ -47,7 +46,7 @@ public class RecentAdapter extends BaseQuickAdapter<CubeRecentViewModel, BaseVie
 
     public int findPosition(String sessionId) {
         List<CubeRecentViewModel> cubeRecentViewModels = getData();
-        if (null != cubeRecentViewModels && !cubeRecentViewModels.isEmpty()) {
+        if (!cubeRecentViewModels.isEmpty()) {
             for (int i = 0; i < cubeRecentViewModels.size(); i++) {
                 if (TextUtils.equals(cubeRecentViewModels.get(i).cubeRecentSession.getSessionId(), sessionId)) {
                     return i;

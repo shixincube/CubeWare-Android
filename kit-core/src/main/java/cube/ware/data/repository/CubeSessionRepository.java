@@ -78,11 +78,18 @@ public class CubeSessionRepository {
         return Observable.create(new OnSubscribeRoom<CubeRecentSession>() {
             @Override
             protected CubeRecentSession get() {
-                CubeRecentSession cubeRecentSession = CubeDataBaseFactory.getCubeRecentSessionDao().queryBySessionId(sessionId);
-                if (cubeRecentSession != null) {
-                    CubeDataBaseFactory.getCubeRecentSessionDao().delete(cubeRecentSession);
-                }
-                return cubeRecentSession;
+                return CubeDataBaseFactory.getCubeRecentSessionDao().queryBySessionId(sessionId);
+            }
+        }).filter(new Func1<CubeRecentSession, Boolean>() {
+            @Override
+            public Boolean call(CubeRecentSession recentSession) {
+                return recentSession != null;
+            }
+        }).map(new Func1<CubeRecentSession, CubeRecentSession>() {
+            @Override
+            public CubeRecentSession call(CubeRecentSession recentSession) {
+                CubeDataBaseFactory.getCubeRecentSessionDao().delete(recentSession);
+                return recentSession;
             }
         }).subscribeOn(Schedulers.io());
     }
@@ -141,6 +148,53 @@ public class CubeSessionRepository {
     }
 
     /**
+     * 获取所有最近列表model
+     *
+     * @return
+     */
+    public Observable<List<CubeRecentViewModel>> queryAllSessionViewModel() {
+        return queryAllSessions().filter(new Func1<List<CubeRecentSession>, Boolean>() {
+            @Override
+            public Boolean call(List<CubeRecentSession> cubeRecentSessions) {
+                return cubeRecentSessions != null && !cubeRecentSessions.isEmpty();
+            }
+        }).flatMap(new Func1<List<CubeRecentSession>, Observable<List<CubeRecentViewModel>>>() {
+            @Override
+            public Observable<List<CubeRecentViewModel>> call(List<CubeRecentSession> recentSessions) {
+                return querySessionViewModel(recentSessions);
+            }
+        });
+    }
+
+    /**
+     * 批量查询会话model
+     *
+     * @param recentSessions
+     *
+     * @return
+     */
+    public Observable<List<CubeRecentViewModel>> querySessionViewModel(final List<CubeRecentSession> recentSessions) {
+        return Observable.from(recentSessions).filter(new Func1<CubeRecentSession, Boolean>() {
+            @Override
+            public Boolean call(CubeRecentSession cubeRecentSession) {
+                return cubeRecentSession != null;
+            }
+        }).flatMap(new Func1<CubeRecentSession, Observable<CubeRecentViewModel>>() {
+            @Override
+            public Observable<CubeRecentViewModel> call(final CubeRecentSession cubeRecentSession) {
+                return querySessionViewModel(cubeRecentSession);
+            }
+        }).toSortedList(new Func2<CubeRecentViewModel, CubeRecentViewModel, Integer>() {
+            @Override
+            public Integer call(CubeRecentViewModel cubeRecentViewModel, CubeRecentViewModel cubeRecentViewModel2) {
+                //倒序排列
+                long diff = cubeRecentViewModel.cubeRecentSession.getTimestamp() - cubeRecentViewModel2.cubeRecentSession.getTimestamp();
+                return diff < 0 ? 1 : diff == 0 ? 0 : -1;
+            }
+        });
+    }
+
+    /**
      * 组装最近消息列表model
      *
      * @param recentSession
@@ -171,40 +225,6 @@ public class CubeSessionRepository {
                 cubeRecentViewModel.userName = cubeUser.getDisplayName();
                 cubeRecentViewModel.userFace = cubeUser.getAvatar();
                 return cubeRecentViewModel;
-            }
-        });
-    }
-
-    /**
-     * 获取所有最近列表model
-     *
-     * @return
-     */
-    public Observable<List<CubeRecentViewModel>> queryAllSessionsViewModel() {
-        return queryAllSessions().flatMap(new Func1<List<CubeRecentSession>, Observable<List<CubeRecentViewModel>>>() {
-            @Override
-            public Observable<List<CubeRecentViewModel>> call(List<CubeRecentSession> cubeRecentSessions) {
-                if (cubeRecentSessions == null || cubeRecentSessions.isEmpty()) {
-                    return Observable.empty();
-                }
-                return Observable.from(cubeRecentSessions).filter(new Func1<CubeRecentSession, Boolean>() {
-                    @Override
-                    public Boolean call(CubeRecentSession cubeRecentSession) {
-                        return cubeRecentSession != null;
-                    }
-                }).flatMap(new Func1<CubeRecentSession, Observable<CubeRecentViewModel>>() {
-                    @Override
-                    public Observable<CubeRecentViewModel> call(final CubeRecentSession cubeRecentSession) {
-                        return querySessionViewModel(cubeRecentSession);
-                    }
-                }).toSortedList(new Func2<CubeRecentViewModel, CubeRecentViewModel, Integer>() {
-                    @Override
-                    public Integer call(CubeRecentViewModel cubeRecentViewModel, CubeRecentViewModel cubeRecentViewModel2) {
-                        //倒序排列
-                        long diff = cubeRecentViewModel.cubeRecentSession.getTimestamp() - cubeRecentViewModel2.cubeRecentSession.getTimestamp();
-                        return diff < 0 ? 1 : diff == 0 ? 0 : -1;
-                    }
-                });
             }
         });
     }

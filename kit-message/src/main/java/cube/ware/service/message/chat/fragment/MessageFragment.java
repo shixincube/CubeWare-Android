@@ -3,14 +3,13 @@ package cube.ware.service.message.chat.fragment;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.Editable;
-import android.view.View;
 import com.common.mvp.base.BaseFragment;
 import com.common.mvp.base.BasePresenter;
-import com.common.mvp.rx.RxManager;
+import com.common.mvp.eventbus.Event;
 import com.common.utils.utils.log.LogUtil;
 import cube.ware.common.MessageConstants;
+import cube.ware.core.CubeConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;
@@ -27,19 +26,16 @@ import cube.ware.service.message.chat.panel.messagelist.MessageListPanel;
 import cube.ware.service.message.manager.MessageManager;
 import java.util.ArrayList;
 import java.util.List;
-import rx.functions.Action1;
 
 /**
- * Created by dth
- * Des: 聊天页面fragment
- * Date: 2018/8/30.
+ * 聊天页面fragment
+ *
+ * @author LiuFeng
+ * @data 2020/2/8 13:38
  */
-
 public class MessageFragment extends BaseFragment implements InputPanelProxy, MessageEditWatcher {
 
     private static final String TAG = MessageFragment.class.getSimpleName();
-
-    private boolean hasParseIntent = false;
 
     /**
      * 聊天id
@@ -86,26 +82,29 @@ public class MessageFragment extends BaseFragment implements InputPanelProxy, Me
      */
     protected boolean isDisplaying;
 
-    private Bundle    mBundle;
-    private RxManager mRxManager;
-
-    public static final String EXTRA_CHAT_ID            = "chat_id";
-    public static final String EXTRA_CHAT_NAME          = "chat_name";
-    public static final String EXTRA_CHAT_TYPE          = "chat_type";
-    public static final String EXTRA_CHAT_CUSTOMIZATION = "chat_customization";
-    public static final String EXTRA_CHAT_MESSAGE       = "chat_message";
+    public static final String CHAT_ID            = "chat_id";
+    public static final String CHAT_NAME          = "chat_name";
+    public static final String CHAT_TYPE          = "chat_type";
+    public static final String CHAT_CUSTOMIZATION = "chat_customization";
+    public static final String CHAT_MESSAGE       = "chat_message";
 
     /**
      * 实例化MessageFragment
      *
-     * @param sessionType 聊天类型
-     * @param arguments   聊天页面定制化信息
+     * @param chatId
+     * @param chatName
+     * @param sessionType
+     * @param chatCustomization
      *
      * @return
      */
-    public static MessageFragment newInstance(CubeSessionType sessionType, Bundle arguments) {
+    public static MessageFragment newInstance(String chatId, String chatName, CubeSessionType sessionType, ChatCustomization chatCustomization) {
         MessageFragment fragment = new MessageFragment();
-        arguments.putSerializable(EXTRA_CHAT_TYPE, sessionType);
+        Bundle arguments = new Bundle();
+        arguments.putString(CHAT_ID, chatId);
+        arguments.putString(CHAT_NAME, chatName);
+        arguments.putSerializable(CHAT_TYPE, sessionType);
+        arguments.putSerializable(CHAT_CUSTOMIZATION, chatCustomization);
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -121,26 +120,62 @@ public class MessageFragment extends BaseFragment implements InputPanelProxy, Me
     }
 
     @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            mBundle = savedInstanceState.getBundle("cube_saved_bundle");
-            super.onViewStateRestored(savedInstanceState);
-            this.parseIntent(mBundle);
+    protected void initData() {
+        this.parseArguments();
+        ChatContainer container = new ChatContainer(getActivity(), this.mChatId, this.mChatName, this.mSessionType, this);
+
+        //必须给消息管理器设置聊天容器
+        MessageManager.getInstance().addContainer(this, container);
+        if (this.mMessageListPanel == null) {
+            this.mMessageListPanel = new MessageListPanel(container, mChatCustomization, mRootView, mChatMessageSn);
         }
         else {
-            super.onViewStateRestored(savedInstanceState);
+            this.mMessageListPanel.reload(container, mChatCustomization, mChatMessageSn);
+        }
+
+        if (this.mInputPanel == null) {
+            this.mInputPanel = new InputPanel(mMessageListPanel, CubeCore.getInstance().getCubeId(), container, container.mSessionType, mRootView, this.buildFunctionViewList());
+            this.mInputPanel.setChatCustomization(this.mChatCustomization, false);
+        }
+        else {
+            this.mInputPanel.reload(container, this.mChatCustomization);
+        }
+
+        if (this.mInputPanel != null && this.mOnBottomNavigationListener != null) {
+            this.mInputPanel.setOnBottomNavigationListener(this.mOnBottomNavigationListener);
+        }
+
+        // 设置定制化聊天背景
+        if (this.mChatCustomization != null) {
+            this.mMessageListPanel.setChattingBackground(this.mChatCustomization.backgroundUri, this.mChatCustomization.backgroundColor);
         }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putBundle("cube_saved_bundle", mBundle);
-        super.onSaveInstanceState(outState);
+    protected boolean isRegisterEventBus() {
+        return true;
     }
 
     @Override
-    protected void initView() {
-        this.parseIntent(getArguments());
+    public void onReceiveEvent(Event event) {
+        mMessageListPanel.handleReceiveEvent(event);
+        switch (event.eventName) {
+            case CubeConstants.Event.UPDATE_GROUP:
+                mMessageListPanel.setTitleName((String) event.data);
+                break;
+
+            case MessageConstants.Event.EVENT_SYNCING_MESSAGE:
+                final List<CubeMessage> list = (List<CubeMessage>) event.data;
+                mMessageListPanel.onMessageSync(list);
+                break;
+
+            case MessageConstants.Event.EVENT_REMOVE_RECENT_SESSION_SINGLE:
+                getActivity().finish();
+                break;
+
+            default:
+                break;
+        }
     }
 
     @Override
@@ -170,7 +205,6 @@ public class MessageFragment extends BaseFragment implements InputPanelProxy, Me
     public void onDestroy() {
         super.onDestroy();
         this.isDisplaying = false;
-        mRxManager.clear();
         MessageManager.getInstance().onDestroy(this);
         this.mMessageListPanel.onDestroy();
         this.mInputPanel.onDestroy();
@@ -187,76 +221,13 @@ public class MessageFragment extends BaseFragment implements InputPanelProxy, Me
     /**
      * 初始化聊天控制面板
      */
-    private void parseIntent(Bundle bundle) {
-        if (hasParseIntent) {
-            return;
-        }
-        mRxManager = new RxManager();
-        hasParseIntent = true;
-        this.mChatId = bundle.getString(EXTRA_CHAT_ID);
-        this.mChatName = bundle.getString(EXTRA_CHAT_NAME);
-        this.mSessionType = (CubeSessionType) bundle.getSerializable(EXTRA_CHAT_TYPE);
-        this.mChatCustomization = (ChatCustomization) bundle.getSerializable(EXTRA_CHAT_CUSTOMIZATION);
-        this.mChatMessageSn = bundle.getLong(EXTRA_CHAT_MESSAGE, -1);
-        ChatContainer container = new ChatContainer(getActivity(), this.mChatId, this.mChatName, this.mSessionType, this);
-
-        //必须给消息管理器设置聊天容器
-        MessageManager.getInstance().addContainer(this, container);
-        if (this.mMessageListPanel == null) {
-            this.mMessageListPanel = new MessageListPanel(container, mChatCustomization, mRootView, mChatMessageSn);
-        }
-        else {
-            this.mMessageListPanel.reload(container, mChatCustomization, mChatMessageSn);
-        }
-
-        if (this.mInputPanel == null) {
-            this.mInputPanel = new InputPanel(mMessageListPanel, CubeCore.getInstance().getCubeId(), container, container.mSessionType, mRootView, this.buildFunctionViewList());
-            this.mInputPanel.setChatCustomization(this.mChatCustomization, false);
-        }
-        else {
-            this.mInputPanel.reload(container, this.mChatCustomization);
-        }
-
-        if (this.mInputPanel != null && this.mOnBottomNavigationListener != null) {
-            this.mInputPanel.setOnBottomNavigationListener(this.mOnBottomNavigationListener);
-        }
-
-        // 设置定制化聊天背景
-        if (this.mChatCustomization != null) {
-            this.mMessageListPanel.setChattingBackground(this.mChatCustomization.backgroundUri, this.mChatCustomization.backgroundColor);
-        }
-
-        mRxManager.on(MessageConstants.Event.EVENT_SYNCING_MESSAGE, new Action1<Object>() {
-            @Override
-            public void call(Object o) {
-                if (!(o instanceof List)) {
-                    return;
-                }
-                LogUtil.i(TAG, "receive message sync and updateMessageIsRead");
-                final List<CubeMessage> list = (List<CubeMessage>) o;
-                mMessageListPanel.onMessageSync(list);
-            }
-        });
-
-        mRxManager.on(MessageConstants.Event.EVENT_REMOVE_RECENT_SESSION_SINGLE, new Action1<Object>() {
-            @Override
-            public void call(Object o) {
-                if (o == null) {
-                    return;
-                }
-                getActivity().finish();
-            }
-        });
-
-        mRxManager.on(MessageConstants.Event.EVENT_UPDATE_GROUP, new Action1<Object>() {
-            @Override
-            public void call(Object o) {
-                if (o == null) {
-                    return;
-                }
-                mMessageListPanel.setTitleName((String) o);
-            }
-        });
+    private void parseArguments() {
+        Bundle data = getArguments();
+        this.mChatId = data.getString(CHAT_ID);
+        this.mChatName = data.getString(CHAT_NAME);
+        this.mSessionType = (CubeSessionType) data.getSerializable(CHAT_TYPE);
+        this.mChatCustomization = (ChatCustomization) data.getSerializable(CHAT_CUSTOMIZATION);
+        this.mChatMessageSn = data.getLong(CHAT_MESSAGE, -1);
     }
 
     /**
@@ -299,7 +270,7 @@ public class MessageFragment extends BaseFragment implements InputPanelProxy, Me
         if (cubeMessage == null) {
             return false;
         }
-        return isDisplaying && null != cubeMessage && cubeMessage.getChatId() != null && cubeMessage.getChatId().equals(this.mChatId) && mSessionType != CubeSessionType.Secret;
+        return isDisplaying && cubeMessage.getChatId() != null && cubeMessage.getChatId().equals(this.mChatId) && mSessionType != CubeSessionType.Secret;
     }
 
     /**

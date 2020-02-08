@@ -57,13 +57,13 @@ public class GroupMessageFragment extends MessageFragment {
      */
     public static GroupMessageFragment newInstance(CubeSessionType sessionType, Bundle arguments) {
         GroupMessageFragment fragment = new GroupMessageFragment();
-        arguments.putSerializable(EXTRA_CHAT_TYPE, sessionType);
+        arguments.putSerializable(MessageFragment.CHAT_TYPE, sessionType);
         fragment.setArguments(arguments);
         return fragment;
     }
 
     private void getArgument() {
-        this.groupId = getArguments().getString(EXTRA_CHAT_ID);
+        this.groupId = getArguments().getString(CHAT_ID);
     }
 
     @Override

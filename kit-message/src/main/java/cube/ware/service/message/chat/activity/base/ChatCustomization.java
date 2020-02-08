@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-
+import cube.ware.service.message.chat.panel.input.function.BaseFunction;
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import cube.ware.service.message.chat.panel.input.function.BaseFunction;
 
 /**
  * 聊天界面定制化参数
@@ -102,34 +100,5 @@ public class ChatCustomization implements Serializable {
 
     public abstract class TopBtnClickListener implements Serializable {
         public abstract void onTopBtnClick(Activity activity, View v, String cubeId);
-    }
-
-    public enum ChatStatusType {
-        None(-1),              // 未知
-        NonRegistration(0),    // 非注册单聊
-        Normal(1),             // 正常单聊
-        NotFriend(2),          // 非好友单聊
-        Group(3),              // 群聊
-        Anonymous(4),          // 好友私密聊天
-        ServiceNumber(5);      // 服务号
-
-        private int type;
-
-        ChatStatusType(int type) {
-            this.type = type;
-        }
-
-        public static ChatStatusType parse(int type) {
-            for (ChatStatusType ct : ChatStatusType.values()) {
-                if (ct.type == type) {
-                    return ct;
-                }
-            }
-            return None;
-        }
-
-        public int getType() {
-            return this.type;
-        }
     }
 }

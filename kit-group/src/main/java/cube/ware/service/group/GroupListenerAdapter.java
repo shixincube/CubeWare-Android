@@ -1,90 +1,55 @@
 package cube.ware.service.group;
 
-import cube.service.common.model.CubeError;
+import cube.service.CubeError;
+import cube.service.group.Group;
 import cube.service.group.GroupListener;
-import cube.service.group.model.Group;
-import cube.service.user.model.User;
 import java.util.List;
 
 /**
- * Created by dth
- * Des:
- * Date: 2018/8/28.
+ * 群监听适配器
+ *
+ * @author LiuFeng
+ * @data 2020/2/8 13:52
  */
-
 public class GroupListenerAdapter implements GroupListener {
+
     @Override
-    public void onGroupCreated(Group group, User user) {
+    public void onGroupFailed(CubeError error) {
 
     }
 
     @Override
-    public void onGroupDestroyed(Group group, User user) {
+    public void onGroupCreated(Group group) {
 
     }
 
     @Override
-    public void onGroupQuited(Group group, User from) {
+    public void onGroupDeleted(Group group) {
 
     }
 
     @Override
-    public void onGroupUpdated(Group group, User user) {
+    public void onMemberAdded(Group group, List<String> addedMembers) {
 
     }
 
     @Override
-    public void onMemberAdded(Group group, User user, List<User> list) {
+    public void onMemberRemoved(Group group, List<String> removedMembers) {
 
     }
 
     @Override
-    public void onMemberRemoved(Group group, User user, List<User> list) {
+    public void onMasterAdded(Group group, String addedMaster) {
 
     }
 
     @Override
-    public void onMasterAdded(Group group, User user, List<User> list) {
+    public void onMasterRemoved(Group group, String removedMaster) {
 
     }
 
     @Override
-    public void onMasterRemoved(Group group, User user, List<User> list) {
-
-    }
-
-    @Override
-    public void onGroupApplied(Group group, User user, User user1) {
-
-    }
-
-    @Override
-    public void onGroupApplyJoined(Group group, User user, User user1) {
-
-    }
-
-    @Override
-    public void onGroupRejectApplied(Group group, User user, User user1) {
-
-    }
-
-    @Override
-    public void onGroupInvited(Group group, User user, List<User> list) {
-
-    }
-
-    @Override
-    public void onGroupRejectInvited(Group group, User user, User user1) {
-
-    }
-
-    @Override
-    public void onGroupInviteJoined(Group group, User user, User user1) {
-
-    }
-
-    @Override
-    public void onGroupFailed(Group group, CubeError cubeError) {
+    public void onGroupNameChanged(Group group) {
 
     }
 }

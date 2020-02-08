@@ -6,6 +6,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import cube.ware.core.CubeConstants;
 import cube.ware.service.message.R;
 import cube.ware.service.message.chat.activity.base.ChatCustomization;
+import cube.ware.service.message.chat.activity.base.ChatStatusType;
 import java.util.ArrayList;
 
 /**

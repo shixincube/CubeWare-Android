@@ -1,8 +1,8 @@
 include ':app'
 include ':CommonMvp', ':CommonUtils', ':CommonSdk'
 
-//include ':kit-whiteboard', ':kit-sharedesktop', ':kit-group'
-include ':kit-api', ':kit-core', ':kit-call', ':kit-conference', ':kit-message'
+//include ':kit-whiteboard', ':kit-sharedesktop'
+include /*':kit-api', */':kit-core', ':kit-call', ':kit-conference', ':kit-message', ':kit-group'
 
 //include ':cube-call', ':cube-live', ':cube-instruction', ':cube-whiteboard'
 //include ':cube-sharedesktop', ':cube-media', ':cube-message', ':cube-file'

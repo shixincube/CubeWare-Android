@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.common.mvp.rx.RxManager;
+import com.common.mvp.eventbus.Event;
 import com.common.mvp.rx.RxSchedulers;
 import com.common.utils.utils.DateUtil;
 import com.common.utils.utils.NetworkUtil;
@@ -39,6 +39,7 @@ import cube.ware.service.message.R;
 import cube.ware.service.message.chat.ChatContainer;
 import cube.ware.service.message.chat.activity.base.BaseChatActivity;
 import cube.ware.service.message.chat.activity.base.ChatCustomization;
+import cube.ware.service.message.chat.activity.base.ChatStatusType;
 import cube.ware.service.message.chat.adapter.ChatMessageAdapter;
 import cube.ware.service.message.chat.panel.input.emoticon.EmoticonUtil;
 import cube.ware.service.message.chat.panel.input.emoticon.gif.AnimatedImageSpan;
@@ -62,7 +63,6 @@ import java.util.Iterator;
 import java.util.List;
 import rx.Observable;
 import rx.Observer;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -130,7 +130,7 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
         this.rootView = rootView;
         this.mChatCustomization = chatCustomization;
         this.mContext = (BaseChatActivity) this.mChatContainer.mChatActivity;
-        this.isAnonymous = mChatCustomization.typ == ChatCustomization.ChatStatusType.Anonymous;
+        this.isAnonymous = mChatCustomization.typ == ChatStatusType.Anonymous;
         init();
     }
 
@@ -284,13 +284,23 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
         else {
             queryHistoryList(true, true);
         }
+    }
 
-        mRxManager.on(MessageConstants.Event.EVENT_REFRESH_CUBE_AVATAR, new Action1<Object>() {
-            @Override
-            public void call(Object o) {
+    /**
+     * 处理接收到的事件通知
+     *
+     * @param event
+     * @param <T>
+     */
+    public <T> void handleReceiveEvent(Event<T> event) {
+        switch (event.eventName) {
+            case MessageConstants.Event.EVENT_REFRESH_CUBE_AVATAR:
                 mChatMessageAdapter.notifyDataSetChanged();
-            }
-        });
+                break;
+
+            default:
+                break;
+        }
     }
 
     /**
@@ -307,11 +317,9 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
         queryHistoryList(true, false);
     }
 
-    private RxManager mRxManager = new RxManager();
-
     public void onMessageSync(List<CubeMessage> list) {
         if (list != null && !list.isEmpty() && isMy(list.get(0))) {
-            Subscription subscribe = convertMessageModel(list).compose(RxSchedulers.<List<CubeMessageViewModel>>io_main()).subscribe(new Action1<List<CubeMessageViewModel>>() {
+            convertMessageModel(list).compose(RxSchedulers.<List<CubeMessageViewModel>>io_main()).subscribe(new Action1<List<CubeMessageViewModel>>() {
                 @Override
                 public void call(List<CubeMessageViewModel> cubeMessageViewModels) {
                     List<CubeMessageViewModel> anonymousList = new ArrayList<CubeMessageViewModel>();
@@ -336,7 +344,6 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
                     }
                 }
             });
-            mRxManager.add(subscribe);
         }
     }
 
@@ -974,7 +981,6 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
     }
 
     public void onDestroy() {
-        mRxManager.clear();
         ArrayList<AnimatedImageSpan> imageSpans = EmoticonUtil.imageSpans;
         for (AnimatedImageSpan imageSpan : imageSpans) {
             imageSpan.stopAnimate();

@@ -1,13 +1,11 @@
 package cube.ware.service.message.recent;
 
 import android.content.Context;
-
 import com.common.mvp.base.BasePresenter;
 import com.common.mvp.base.BaseView;
-
-import java.util.List;
-
+import com.common.mvp.eventbus.Event;
 import cube.ware.data.model.dataModel.CubeRecentViewModel;
+import java.util.List;
 
 /**
  * Created by dth
@@ -29,9 +27,7 @@ public interface RecentContract {
         void onRemoveSession(String sessionId);
 
         void onRefreshListAvatar();
-
     }
-
 
     abstract class Presenter extends BasePresenter<RecentContract.View> {
 
@@ -45,10 +41,8 @@ public interface RecentContract {
             super(context, view);
         }
 
+        public abstract void refreshRecentSessions();
 
-        public abstract void getRecentSessionList();
-
-        public abstract void subscribeChange();
-
+        public abstract <T> void handleReceiveEvent(Event<T> event);
     }
 }

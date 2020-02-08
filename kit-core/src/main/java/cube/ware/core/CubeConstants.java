@@ -69,5 +69,10 @@ public interface CubeConstants {
         String CreateConferenceEvent = "CreateConferenceEvent";
 
         String SelectMemberEvent = "SelectMemberEvent";
+
+        /**
+         * 更新群组
+         */
+        String UPDATE_GROUP = "update_group";
     }
 }

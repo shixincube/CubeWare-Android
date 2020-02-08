@@ -18,6 +18,10 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.umeng.commonsdk.UMConfigure;
 import cube.ware.api.CubeUI;
+import cube.ware.service.call.CallHandle;
+import cube.ware.service.group.GroupHandle;
+import cube.ware.service.message.MessageHandle;
+import cube.ware.service.user.UserHandle;
 import cube.ware.utils.SpUtil;
 
 /**
@@ -55,12 +59,26 @@ public class App extends BaseApplication {
 
         // 注册网络状态变化广播接收器
         NetworkStateReceiver.getInstance().register(this);
+        initCubeEngine();
+    }
 
+    private void initCubeEngine() {
         // 初始化CubeUI
         CubeUI.getInstance().init(this, AppManager.getAppId(), AppManager.getAppKey(), AppManager.getLicenceUrl(), SpUtil.getResourcePath());
 
         // 启动cube引擎
         CubeUI.getInstance().startup(this);
+
+        //CubeEngineHandle.getInstance().start();
+        UserHandle.getInstance().start();
+        MessageHandle.getInstance().start();
+        CallHandle.getInstance().start();
+        //ConferenceHandle.getInstance().start();
+        //FileHandle.getInstance().start();
+        GroupHandle.getInstance().start();
+        //ShareDesktopHandle.getInstance().start();
+        //WhiteBoardHandle.getInstance().start();
+        //SettingHandle.getInstance().start();
     }
 
     @Override

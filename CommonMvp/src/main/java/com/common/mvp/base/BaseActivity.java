@@ -265,8 +265,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
      *
      * @return
      */
-    public BaseFragment switchContent(BaseFragment fragment) {
-        return switchContent(fragment, false);
+    public <T extends BaseFragment> T switchContent(T fragment) {
+        return switchContent(fragment, false, null);
     }
 
     /**
@@ -274,16 +274,24 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
      *
      * @param fragment
      * @param needAddToBackStack 是否需要添加到返回栈
+     * @param tag
      *
      * @return
      */
-    protected BaseFragment switchContent(BaseFragment fragment, boolean needAddToBackStack) {
+    protected <T extends BaseFragment> T switchContent(T fragment, boolean needAddToBackStack, String tag) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(fragment.getContainerId(), fragment);
+        if (tag != null) {
+            fragmentTransaction.replace(fragment.getContainerId(), fragment, tag);
+        }
+        else {
+            fragmentTransaction.replace(fragment.getContainerId(), fragment);
+        }
+
         if (needAddToBackStack) {
             fragmentTransaction.addToBackStack(null);
         }
+
         try {
             fragmentTransaction.commitAllowingStateLoss();
         } catch (Exception e) {

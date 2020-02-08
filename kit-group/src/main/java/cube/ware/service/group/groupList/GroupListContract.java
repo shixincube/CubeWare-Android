@@ -1,7 +1,6 @@
 package cube.ware.service.group.groupList;
 
 import android.content.Context;
-
 import com.common.mvp.base.BasePresenter;
 import com.common.mvp.base.BaseView;
 
@@ -18,9 +17,7 @@ public interface GroupListContract {
      */
     interface View extends BaseView {
 
-
     }
-
 
     abstract class Presenter extends BasePresenter<GroupListContract.View> {
 

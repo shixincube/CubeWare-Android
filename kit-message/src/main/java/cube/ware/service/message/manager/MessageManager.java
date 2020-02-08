@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import com.common.mvp.eventbus.EventBusUtil;
-import com.common.mvp.rx.RxBus;
 import com.common.mvp.rx.RxSchedulers;
 import com.common.utils.utils.ThreadUtil;
 import com.common.utils.utils.ToastUtil;
@@ -214,7 +213,7 @@ public class MessageManager {
             CubeMessageRepository.getInstance().addMessage(messages, true).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<CubeMessage>>() {
                 @Override
                 public void call(List<CubeMessage> cubeMessages) {
-                    RxBus.getInstance().post(MessageConstants.Event.EVENT_SYNCING_MESSAGE, cubeMessages);
+                    EventBusUtil.post(MessageConstants.Event.EVENT_SYNCING_MESSAGE, cubeMessages);
                 }
             });
         }

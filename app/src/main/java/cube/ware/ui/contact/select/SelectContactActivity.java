@@ -6,14 +6,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.common.mvp.base.BaseActivity;
+import com.common.utils.utils.ToastUtil;
 import cube.service.CubeEngine;
+import cube.service.CubeError;
+import cube.service.group.Group;
 import cube.ware.AppConstants;
 import cube.ware.R;
+import cube.ware.core.CubeConstants;
+import cube.ware.core.CubeCore;
 import cube.ware.data.room.model.CubeUser;
+import cube.ware.service.group.GroupListenerAdapter;
 import cube.ware.ui.contact.adapter.SelectContactsAdapter;
 import cube.ware.utils.SpUtil;
 import cube.ware.widget.indexbar.CubeIndexBar;
@@ -97,7 +104,6 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
 
     @Override
     protected void initData() {
-
         mPresenter.getCubeList();
     }
 
@@ -106,11 +112,13 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
         mBack.setOnClickListener(this);
         mComplete.setOnClickListener(this);
         mAdapter.setOnItemSelectedListener(this);
+        CubeEngine.getInstance().getGroupService().addGroupListener(groupListenerAdapter);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        CubeEngine.getInstance().getGroupService().removeGroupListener(groupListenerAdapter);
     }
 
     @Override
@@ -122,15 +130,13 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
                 break;
             case R.id.title_complete:
                 Set<String> cubeIds = mSelectedList.keySet();
-                List<String> strings = new ArrayList<>();
-                strings.addAll(cubeIds);
+                List<String> strings = new ArrayList<>(cubeIds);
                 if (strings.size() == 0) {
                     return;
                 }
+
                 if (mType == 0) {//create group
-                    //GroupConfig groupConfig = new GroupConfig(GroupType.NORMAL, SpUtil.getUserName() == null ? SpUtil.getCubeId() + "创建的群" : SpUtil.getUserName() + "创建的群");
-                    //groupConfig.members = strings;
-                    //CubeEngine.getInstance().getGroupService().create(groupConfig);
+                    CubeEngine.getInstance().getGroupService().createGroup(SpUtil.getUserName() + "创建的群", strings, true);
                 }
                 else if ((mType == 1)) {//add member
                     CubeEngine.getInstance().getGroupService().addMembers(mGroupId, strings);
@@ -179,27 +185,25 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
         mSelectedList = list;
     }
 
-    /*GroupListenerAdapter groupListenerAdapter = new GroupListenerAdapter() {
+    GroupListenerAdapter groupListenerAdapter = new GroupListenerAdapter() {
 
         @Override
-        public void onGroupCreated(Group group, User user) {
+        public void onGroupCreated(Group group) {
             //创建群组成功
-            Toast.makeText(App.getContext(), "群组创建成功", Toast.LENGTH_SHORT).show();
-            ARouter.getInstance().build(CubeConstants.Router.GroupDetailsActivity)
-                   //                .withSerializable("mGroup", group)
-                   .withObject("group", group).withString("groupId", group.groupId).navigation();
+            Toast.makeText(CubeCore.getContext(), "群组创建成功", Toast.LENGTH_SHORT).show();
+            ARouter.getInstance().build(CubeConstants.Router.GroupDetailsActivity).withObject("group", group).withString("groupId", group.getGroupId()).navigation();
             finish();
         }
 
         @Override
-        public void onMemberAdded(Group group, User user, List<User> list) {
-            Toast.makeText(App.getContext(), "添加群成员成功", Toast.LENGTH_SHORT).show();
+        public void onMemberAdded(Group group, List<String> addedMembers) {
+            Toast.makeText(CubeCore.getContext(), "添加群成员成功", Toast.LENGTH_SHORT).show();
             finish();
         }
 
         @Override
-        public void onGroupFailed(Group group, CubeError cubeError) {
-            ToastUtil.showToast(App.getContext(), cubeError.desc);
+        public void onGroupFailed(CubeError cubeError) {
+            ToastUtil.showToast(CubeCore.getContext(), cubeError.desc);
         }
-    };*/
+    };
 }

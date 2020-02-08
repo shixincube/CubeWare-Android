@@ -51,11 +51,6 @@ public interface MessageConstants {
         String EVENT_REFRESH_RECENT_SESSION_LIST = "event_refresh_recent_session_list";
 
         /**
-         * 刷新一条最近会话信息
-         */
-        String EVENT_REFRESH_RECENT_SESSION_SINGLE = "event_refresh_recent_session_single";
-
-        /**
          * 删除一条最近会话信息
          */
         String EVENT_REMOVE_RECENT_SESSION_SINGLE = "event_remove_recent_session_single";
@@ -64,11 +59,6 @@ public interface MessageConstants {
          * 批量更新会话页面
          */
         String EVENT_SYNCING_MESSAGE = "event_syncing_message";
-
-        /**
-         * 更新群组
-         */
-        String EVENT_UPDATE_GROUP = "event_update_group";
 
         /**
          * 刷新验证消息

@@ -2,7 +2,6 @@ package cube.ware.service.message.chat.activity.p2p;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.common.mvp.base.BasePresenter;
@@ -58,11 +57,6 @@ public class P2PChatActivity extends BaseChatActivity implements InputPanel.OnBo
         return null;
     }
 
-    @Override
-    protected void initView() {
-        //        ARouter.getInstance().inject(this);
-    }
-
     public static void start(Context context, String chatId, String name, ChatCustomization chatCustomization, long messageSn) {
         Intent intent = new Intent();
         intent.putExtra(EXTRA_CHAT_ID, chatId);
@@ -76,8 +70,7 @@ public class P2PChatActivity extends BaseChatActivity implements InputPanel.OnBo
 
     @Override
     protected MessageFragment buildFragment() {
-        Bundle arguments = getIntent().getExtras();
-        MessageFragment fragment = MessageFragment.newInstance(CubeSessionType.P2P, arguments);
+        MessageFragment fragment = MessageFragment.newInstance(mChatId, mChatName, CubeSessionType.P2P, mChatCustomization);
         fragment.setContainerId(R.id.message_fragment_container);
         fragment.setBottomNavigationListener(this);
         return fragment;

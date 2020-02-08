@@ -8,8 +8,7 @@ import android.content.Context;
  * Date: 2018/8/28.
  */
 
-public class GroupDetailsPresenter extends GroupDetailsContract.Presenter{
-
+public class GroupDetailsPresenter extends GroupDetailsContract.Presenter {
 
     public GroupDetailsPresenter(Context context, GroupDetailsContract.View view) {
         super(context, view);

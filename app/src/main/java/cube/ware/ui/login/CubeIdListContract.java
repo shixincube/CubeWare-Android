@@ -13,26 +13,20 @@ public interface CubeIdListContract {
      */
     interface View extends BaseView {
 
+        @Override
+        void showMessage(String message);
+
         /**
          * 登录成功后回调
          */
         void getCubeIdListSuccess(List<CubeUser> userList);
 
         /**
-         * show toast
-         *
-         * @param msg
-         */
-        void showToast(String msg);
-
-        /**
          * 获取token
          *
          * @param cubeToken
          */
-        void getCubeToken(String cubeToken);
-
-        void loginCubeEngineSuccess();
+        void queryCubeTokenSuccess(String cubeToken);
     }
 
     /**
@@ -53,13 +47,13 @@ public interface CubeIdListContract {
         /**
          * @param
          */
-        abstract void getCubeIdList();
+        abstract void queryCubeIdList();
 
         /**
          * 获取token
          *
          * @param cubeId
          */
-        abstract void getCubetoken(String cubeId);
+        abstract void queryCubeToken(String cubeId);
     }
 }

@@ -12,16 +12,14 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.common.mvp.base.BaseActivity;
-import com.common.mvp.rx.RxBus;
+import com.common.mvp.eventbus.EventBusUtil;
 import com.common.utils.utils.glide.GlideUtil;
 import cube.ware.AppConstants;
 import cube.ware.AppManager;
 import cube.ware.R;
-import cube.ware.core.CubeConstants;
-import cube.ware.data.room.model.CubeUser;
+import cube.ware.api.CubeUI;
 import cube.ware.common.MessageConstants;
-import cube.ware.service.message.chat.activity.base.BaseChatActivity;
-import cube.ware.service.message.chat.activity.p2p.P2PChatCustomization;
+import cube.ware.data.room.model.CubeUser;
 import cube.ware.widget.bottomPopupDialog.BottomPopupDialog;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,10 +90,10 @@ public class FriendDetailsActivity extends BaseActivity<FriendDetailsContract.Pr
             //进入用户的个人页面，刷新签名时间，所有调用loadSignatureCircleImage的方法再次从网络拉取图片
             GlideUtil.setAvatarSignature(System.currentTimeMillis());
             GlideUtil.loadSignatureCircleImage(AppManager.getAvatarUrl() + mUser.getCubeId(), mContext, mFaceIv, R.drawable.default_head_user);
-            RxBus.getInstance().post(MessageConstants.Event.EVENT_REFRESH_CUBE_AVATAR, "");
             mDisplayNameTv.setText(mUser.getDisplayName());
             mUserNameTv.setText(mUser.getDisplayName());
             mUserNumCodeTv.setText(mUser.getCubeId());
+            EventBusUtil.post(MessageConstants.Event.EVENT_REFRESH_CUBE_AVATAR);
         }
     }
 
@@ -121,8 +119,8 @@ public class FriendDetailsActivity extends BaseActivity<FriendDetailsContract.Pr
             case R.id.user_name_rl:
                 break;
             case R.id.send_message_tv:
-
-                ARouter.getInstance().build(CubeConstants.Router.P2PChatActivity).withString(BaseChatActivity.EXTRA_CHAT_ID, mUser.getCubeId()).withString(BaseChatActivity.EXTRA_CHAT_NAME, TextUtils.isEmpty(mUser.getDisplayName()) ? mUser.getCubeId() : mUser.getDisplayName()).withSerializable(BaseChatActivity.EXTRA_CHAT_CUSTOMIZATION, new P2PChatCustomization()).navigation();
+                String chatName = TextUtils.isEmpty(mUser.getDisplayName()) ? mUser.getCubeId() : mUser.getDisplayName();
+                CubeUI.getInstance().startP2PChat(this, mUser.getCubeId(), chatName);
                 break;
         }
     }

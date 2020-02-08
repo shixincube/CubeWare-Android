@@ -38,6 +38,7 @@ import cube.ware.service.message.R;
 import cube.ware.service.message.chat.ChatContainer;
 import cube.ware.service.message.chat.activity.base.BaseChatActivity;
 import cube.ware.service.message.chat.activity.base.ChatCustomization;
+import cube.ware.service.message.chat.activity.base.ChatStatusType;
 import cube.ware.service.message.chat.helper.AtHelper;
 import cube.ware.service.message.chat.panel.input.emoticon.EmoticonSelectedListener;
 import cube.ware.service.message.chat.panel.input.emoticon.model.StickerItem;
@@ -314,7 +315,7 @@ public class InputPanel implements EmoticonSelectedListener, View.OnClickListene
      * Group(3),              // 群聊
      * Anonymous(4);            // 好友私密聊天
      */
-    private void refreshStatus(ChatCustomization.ChatStatusType chatStatusType) {
+    private void refreshStatus(ChatStatusType chatStatusType) {
         switch (chatStatusType.getType()) {
             case 0:
                 this.mChatMoreBtn.setVisibility(View.GONE);
