@@ -4,12 +4,12 @@ import rx.Observable;
 import rx.Subscriber;
 
 /**
- * Created by dth
- * Des:
- * Date: 2018/8/30.
+ * 数据库的订阅Action
+ *
+ * @author LiuFeng
+ * @data 2020/2/8 11:36
  */
-
-public abstract class OnSubscribeRoom<T> implements Observable.OnSubscribe<T>{
+public abstract class OnSubscribeRoom<T> implements Observable.OnSubscribe<T> {
 
     @Override
     public void call(Subscriber<? super T> subscriber) {
@@ -23,7 +23,6 @@ public abstract class OnSubscribeRoom<T> implements Observable.OnSubscribe<T>{
             subscriber.onCompleted();
         }
     }
-
 
     /**
      * 得到数据库返回值

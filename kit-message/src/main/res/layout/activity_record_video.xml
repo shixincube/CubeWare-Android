@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <cube.ware.service.message.takephoto.view.CameraView
+        android:id="@+id/camera_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:duration_max="11000"
+        app:flashMargin="20dp"
+        app:flashSize="25dp"
+        app:iconMargin="20dp"
+        app:iconSize="30dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_space_56"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/ic_camera_bg"
+        android:gravity="center"
+        >
+        <com.lzy.imagepicker.view.SuperCheckBox
+            android:id="@+id/cb_origin_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_14"
+            android:visibility="gone"
+            style="@style/SuperCheckboxTheme"
+            />
+    </LinearLayout>
+</RelativeLayout>

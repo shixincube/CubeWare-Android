@@ -20,5 +20,9 @@
         <activity
             android:name=".preview.video.PreviewVideoActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".takephoto.RecordVideoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

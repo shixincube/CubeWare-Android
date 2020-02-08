@@ -3,6 +3,7 @@ package cube.ware.service.message.manager;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import com.common.mvp.eventbus.EventBusUtil;
 import com.common.mvp.rx.RxBus;
 import com.common.mvp.rx.RxSchedulers;
 import com.common.utils.utils.ThreadUtil;
@@ -1073,8 +1074,8 @@ public class MessageManager {
             else if (messageEntity instanceof CustomMessage) {      // 自定义消息
                 //如果是验证消息 通知刷新最近列表
                 if (SystemMessageManager.getInstance().isFromVerify(messageEntity) && !isSync) {
-                    LogUtil.i("EVENT_REFRESH_SYSTEM_MESSAGE");
-                    RxBus.getInstance().post(MessageConstants.Event.EVENT_REFRESH_SYSTEM_MESSAGE, true);
+                    LogUtil.i("刷新验证消息");
+                    EventBusUtil.post(MessageConstants.Event.EVENT_REFRESH_SYSTEM_MESSAGE, true);
                 }
                 CustomMessage customMessage = (CustomMessage) messageEntity;
                 String operate = customMessage.getHeader("operate");

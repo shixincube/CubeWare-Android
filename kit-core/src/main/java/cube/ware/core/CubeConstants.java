@@ -51,6 +51,9 @@ public interface CubeConstants {
 
         //group聊天
         String GroupChatActivity = "/message/GroupChatActivity";
+
+        // 照相摄像主界面
+        String RecordVideoActivity = "/message/RecordVideoActivity";
     }
 
     /**

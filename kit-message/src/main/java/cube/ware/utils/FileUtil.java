@@ -205,7 +205,6 @@ public class FileUtil {
      * @return B、KB、MB等
      */
     public static String formatFileSize(Context context, long sizeBytes) {
-        // TODO: 2018/5/24   有BUG
         return Formatter.formatFileSize(context, sizeBytes);
     }
 

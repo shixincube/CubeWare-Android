@@ -4,17 +4,16 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import com.common.mvp.base.BaseFragment;
+import com.common.mvp.base.BasePresenter;
 import com.common.mvp.rx.RxManager;
 import com.common.utils.utils.log.LogUtil;
+import cube.ware.common.MessageConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;
-import cube.ware.common.MessageConstants;
 import cube.ware.service.message.R;
 import cube.ware.service.message.chat.ChatContainer;
 import cube.ware.service.message.chat.activity.base.ChatCustomization;
@@ -36,14 +35,11 @@ import rx.functions.Action1;
  * Date: 2018/8/30.
  */
 
-public class MessageFragment extends Fragment implements InputPanelProxy, MessageEditWatcher {
-    private static final String  TAG            = MessageFragment.class.getSimpleName();
-    private              boolean hasParseIntent = false;
+public class MessageFragment extends BaseFragment implements InputPanelProxy, MessageEditWatcher {
 
-    /**
-     * fragment根布局
-     */
-    protected View mRootView;
+    private static final String TAG = MessageFragment.class.getSimpleName();
+
+    private boolean hasParseIntent = false;
 
     /**
      * 聊天id
@@ -90,27 +86,14 @@ public class MessageFragment extends Fragment implements InputPanelProxy, Messag
      */
     protected boolean isDisplaying;
 
-    /**
-     * 当前聊天界面是否第一次加载
-     */
-    protected boolean   isFist = true;
-    private   Bundle    mBundle;
-    private   int       containerId;  //fragment布局资源id
-    private   RxManager mRxManager;
+    private Bundle    mBundle;
+    private RxManager mRxManager;
 
     public static final String EXTRA_CHAT_ID            = "chat_id";
     public static final String EXTRA_CHAT_NAME          = "chat_name";
     public static final String EXTRA_CHAT_TYPE          = "chat_type";
     public static final String EXTRA_CHAT_CUSTOMIZATION = "chat_customization";
     public static final String EXTRA_CHAT_MESSAGE       = "chat_message";
-
-    public int getContainerId() {
-        return containerId;
-    }
-
-    public void setContainerId(int containerId) {
-        this.containerId = containerId;
-    }
 
     /**
      * 实例化MessageFragment
@@ -125,6 +108,16 @@ public class MessageFragment extends Fragment implements InputPanelProxy, Messag
         arguments.putSerializable(EXTRA_CHAT_TYPE, sessionType);
         fragment.setArguments(arguments);
         return fragment;
+    }
+
+    @Override
+    protected int getContentViewId() {
+        return R.layout.cube_fragment_message;
+    }
+
+    @Override
+    protected BasePresenter createPresenter() {
+        return null;
     }
 
     @Override
@@ -146,10 +139,8 @@ public class MessageFragment extends Fragment implements InputPanelProxy, Messag
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        this.mRootView = inflater.inflate(R.layout.cube_fragment_message, container, false);
+    protected void initView() {
         this.parseIntent(getArguments());
-        return this.mRootView;
     }
 
     @Override
@@ -161,17 +152,11 @@ public class MessageFragment extends Fragment implements InputPanelProxy, Messag
         this.mMessageListPanel.onResume();
         getActivity().setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);   // 默认使用听筒播放
         addWritingListener();
-        if (isFist) {
-            this.isFist = false;
-        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (!isFist) {
-            this.isFist = true;
-        }
         this.mInputPanel.onPause();
         this.mMessageListPanel.onPause();
         removeWritingListener();
@@ -289,7 +274,6 @@ public class MessageFragment extends Fragment implements InputPanelProxy, Messag
      * 发送消息回调方法
      *
      * @param cubeMessage
-     *
      */
     @Override
     public void onMessageSend(CubeMessage cubeMessage) {
@@ -304,7 +288,6 @@ public class MessageFragment extends Fragment implements InputPanelProxy, Messag
      * 接收消息回调方法
      *
      * @param cubeMessage
-     *
      */
     @Override
     public void onMessagePersisted(CubeMessage cubeMessage) {
@@ -323,7 +306,6 @@ public class MessageFragment extends Fragment implements InputPanelProxy, Messag
      * 更新消息回调方法
      *
      * @param cubeMessage
-     *
      */
     @Override
     public void onMessageInLocalUpdated(CubeMessage cubeMessage) {

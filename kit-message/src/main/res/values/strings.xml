@@ -14,6 +14,33 @@
     <string name="scan">扫一扫</string>
     <string name="next_step">下一步</string>
 
+    <!--功能选项-->
+    <string name="photo">照片</string>
+    <string name="camera">拍摄</string>
+    <string name="file">文件</string>
+    <string name="record_audio">语音</string>
+    <string name="open_audio">请打开录音权限</string>
+    <string name="flux_download">当前在非WiFi环境，下载将消耗一定流量，是否继续？</string>
+    <string name="flux_send">当前在非WiFi环境，发送文件将消耗一定流量，是否继续？</string>
+    <string name="edit">编辑</string>
+    <string name="pick9pic">你最多可以选择9张图片</string>
+    <string name="pick9file">你最多可以选择9个文件</string>
+
+    <!--图片选择器-->
+    <string name="all_images">全部图片</string>
+    <string name="folder_image_count">共%1$d张</string>
+    <string name="preview_image_count">%1$s/%2$s</string>
+    <string name="select_limit_num">最多选择%1$d张图片</string>
+    <string name="select_limit_size">发送图片单个大小不能超出10M，请重新选择</string>
+    <string name="select_max_size">附件总大小不能超过20M</string>
+    <string name="complete">完成</string>
+    <string name="sche_sele_complete">确定(%1$d)</string>
+    <string name="select_complete">完成(%1$d/%2$d)</string>
+    <string name="preview_count">预览(%1$d)</string>
+    <string name="photo_crop">图片裁剪</string>
+    <string name="origin">原图</string>
+    <string name="origin_size">原图(%1$s)</string>
+
     <string name="user_name">昵称</string>
     <string name="group_name">编辑群聊名称</string>
     <string name="login_out">退出登录</string>

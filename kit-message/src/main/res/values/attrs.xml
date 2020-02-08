@@ -148,4 +148,16 @@
         <attr format="reference" name="gif"/>
         <attr format="boolean" name="paused"/>
     </declare-styleable>
+
+    <!--微信拍照-->
+    <declare-styleable name="CameraView">
+        <attr format="dimension" name="iconSize"/>
+        <attr format="dimension" name="iconMargin"/>
+        <attr format="reference" name="iconSrc"/>
+        <attr format="dimension" name="flashSize"/>
+        <attr format="dimension" name="flashMargin"/>
+        <attr format="reference" name="flashOffSrc"/>
+        <attr format="reference" name="flashOnSrc"/>
+        <attr format="integer" name="duration_max"/>
+    </declare-styleable>
 </resources>

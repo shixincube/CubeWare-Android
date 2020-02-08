@@ -3,7 +3,6 @@ package cube.ware.service.message.chat.panel.input.emoticon.widget;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +11,9 @@ import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import com.common.mvp.rx.RxManager;
 import com.common.utils.utils.ClickUtil;
 import com.common.utils.utils.ScreenUtil;
+import com.common.utils.utils.UIHandler;
 import com.common.utils.utils.log.LogUtil;
 import cube.ware.core.CubeCore;
 import cube.ware.service.message.R;
@@ -36,21 +35,21 @@ import java.util.List;
  */
 public class EmoticonPickerView extends FrameLayout implements EmoticonTypeChangedListener {
 
+    public  EmoticonView         gifView;
+    private SlideViewPager       emoticonPager;
+    private LinearLayout         pagerNumberLayout; //页面布局
+    private HorizontalScrollView scrollView;
+    private LinearLayout         tabView;
+    private ImageView            emoticonAdd;       // 添加表情按钮
+
     private EmoticonSelectedListener listener;
-    private Context                  context;
-    private boolean                  hasSticker; //默认无官方贴图
-    public  EmoticonView             gifView;
-    private SlideViewPager           emoticonPager;
-    private LinearLayout             pagerNumberLayout;//页面布局
-    private HorizontalScrollView     scrollView;
-    private LinearLayout             tabView;
-    private ImageView                emoticonAdd; // 添加表情按钮
-    private int                      categoryIndex;
-    private Handler                  uiHandler;
-    private RxManager                mRxManager;
-    private boolean                  loaded    = false;
-    private       ArrayList<String>        groupName = new ArrayList<>();
-    public static int                      mIndex    = 0;
+
+    private       Context           context;
+    private       boolean           hasSticker; //默认无官方贴图
+    private       int               categoryIndex;
+    private       boolean           loaded;
+    public static int               mIndex;
+    private       ArrayList<String> groupName = new ArrayList<>();
 
     public EmoticonPickerView(Context context) {
         super(context);
@@ -70,9 +69,7 @@ public class EmoticonPickerView extends FrameLayout implements EmoticonTypeChang
 
     private void init(Context context) {
         this.context = context;
-        this.uiHandler = new Handler(context.getMainLooper());
         this.hasSticker = true;
-        this.mRxManager = new RxManager();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.cube_emoticon_layout, this);
     }
@@ -124,10 +121,7 @@ public class EmoticonPickerView extends FrameLayout implements EmoticonTypeChang
     }
 
     public void onDestroy() {
-        if (mRxManager != null) {
-            mRxManager.clear();
-            mRxManager = null;
-        }
+
     }
 
     // 添加各个tab按钮
@@ -271,7 +265,7 @@ public class EmoticonPickerView extends FrameLayout implements EmoticonTypeChang
             @Override
             public void run() {
                 if (scrollView.getChildAt(0).getWidth() == 0) {
-                    uiHandler.postDelayed(this, 100);
+                    UIHandler.getInstance().postDelayed(this, 100);
                 }
                 int x = -1;
                 View child = tabView.getChildAt(index);
@@ -285,7 +279,7 @@ public class EmoticonPickerView extends FrameLayout implements EmoticonTypeChang
                 }
             }
         };
-        uiHandler.postDelayed(runnable, 100);
+        UIHandler.getInstance().postDelayed(runnable, 100);
     }
 
     public void setHasSticker(boolean hasSticker) {

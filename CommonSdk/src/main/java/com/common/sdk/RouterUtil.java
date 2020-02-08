@@ -62,4 +62,8 @@ public class RouterUtil {
     public static void navigation(Context context, Bundle bundle, String path) {
         ARouter.getInstance().build(path).withBundle("bundle", bundle).navigation(context);
     }
+
+    public static void navigation(Activity context, String path, int requestCode) {
+        ARouter.getInstance().build(path).navigation(context, requestCode);
+    }
 }

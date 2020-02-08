@@ -100,7 +100,6 @@ public class RecentPresenter extends RecentContract.Presenter {
         CubeSessionRepository.getInstance().queryAllSessionsUnReadCount().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Integer>() {
             @Override
             public void call(Integer integer) {
-                LogUtil.i("queryUnredadAllCout: " + integer);
                 EventBusUtil.post(MessageConstants.Event.EVENT_UNREAD_MESSAGE_SUM, integer);
             }
         });

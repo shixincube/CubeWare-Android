@@ -39,9 +39,9 @@ import cube.ware.service.message.chat.ChatContainer;
 import cube.ware.service.message.chat.activity.base.BaseChatActivity;
 import cube.ware.service.message.chat.activity.base.ChatCustomization;
 import cube.ware.service.message.chat.helper.AtHelper;
-import cube.ware.service.message.chat.panel.input.emoticon.widget.EmoticonPickerView;
 import cube.ware.service.message.chat.panel.input.emoticon.EmoticonSelectedListener;
 import cube.ware.service.message.chat.panel.input.emoticon.model.StickerItem;
+import cube.ware.service.message.chat.panel.input.emoticon.widget.EmoticonPickerView;
 import cube.ware.service.message.chat.panel.input.function.BaseFunction;
 import cube.ware.service.message.chat.panel.input.function.FunctionPanel;
 import cube.ware.service.message.chat.panel.input.voicefragment.RecordFragment;
@@ -66,36 +66,40 @@ import static android.view.View.GONE;
  * @date 2017/1/3
  */
 public class InputPanel implements EmoticonSelectedListener, View.OnClickListener {
-    public static final String               TAG        = InputPanel.class.getSimpleName();
-    public static final String               REPLY_MARK = "r1p2y" + System.currentTimeMillis() % 9;  //用于在EditText中的ImageSpan中识别出回复消息添加的ImageSpan System.currentTimeMillis() % 9为标识增加一点随机性
-    public static final String               REPLY_END  = "\r";
-    private             ChatContainer        mChatContainer;    // 聊天容器
-    private             CubeSessionType      mChatType; // 聊天类型
-    private             List<BaseFunction>   mFunctionViewList; // 表情更多功能组件列表
-    private             ChatCustomization    mCustomization;    // 聊天页面定制化参数
-    private             String               mCubeId;
-    private             MessageListPanel     mListPanel;
-    private             View                 rootView;
-    private             LinearLayout         mChatBottomLayout;  // 聊天页面底部布局
-    private             View                 mFunctionMoreLayout;    // 聊天页面更多布局
-    private             FrameLayout          mVoiceLayout;    // 聊天页面语音布局
-    private             CubeEmoticonEditText mChatMessageEt;    // 聊天消息输入框
-    private             Button               mChatSendBtn;  // 聊天发送按钮
-    private             ImageView            mChatImageBtn;  // 聊天选择发送图片按钮
-    private             ImageView            mChatCameraBtn; // 聊天选中发送拍照按钮
-    private             ImageView            mChatFileBtn;   // 聊天选择发送文件按钮
-    private             ImageView            mChatVoiceBtn;  // 聊天选择发送语音按钮
-    private             ImageView            mChatEmojiBtn;  // 聊天选择发送表情按钮  在线客服用
-    private             ImageView            mChatFaceBtn;   // 聊天选择发送表情按钮
-    private             ImageView            mChatMoreBtn;   // 聊天更多功能按钮
+    public static final String TAG = InputPanel.class.getSimpleName();
+
+    //用于在EditText中的ImageSpan中识别出回复消息添加的ImageSpan System.currentTimeMillis() % 9为标识增加一点随机性
+    public static final String REPLY_MARK = "r1p2y" + System.currentTimeMillis() % 9;
+    public static final String REPLY_END  = "\r";
+
+    private ChatContainer        mChatContainer;    // 聊天容器
+    private CubeSessionType      mChatType;         // 聊天类型
+    private List<BaseFunction>   mFunctionViewList; // 表情更多功能组件列表
+    private ChatCustomization    mCustomization;    // 聊天页面定制化参数
+    private String               mCubeId;
+    private MessageListPanel     mListPanel;
+    private View                 rootView;
+    private LinearLayout         mChatBottomLayout;      // 聊天页面底部布局
+    private View                 mFunctionMoreLayout;    // 聊天页面更多布局
+    private FrameLayout          mVoiceLayout;           // 聊天页面语音布局
+    private CubeEmoticonEditText mChatMessageEt;         // 聊天消息输入框
+    private Button               mChatSendBtn;           // 聊天发送按钮
+    private ImageView            mChatImageBtn;          // 聊天选择发送图片按钮
+    private ImageView            mChatCameraBtn;         // 聊天选中发送拍照按钮
+    private ImageView            mChatFileBtn;           // 聊天选择发送文件按钮
+    private ImageView            mChatVoiceBtn;          // 聊天选择发送语音按钮
+    private ImageView            mChatEmojiBtn;          // 聊天选择发送表情按钮  在线客服用
+    private ImageView            mChatFaceBtn;           // 聊天选择发送表情按钮
+    private ImageView            mChatMoreBtn;           // 聊天更多功能按钮
     //针对服务号的布局
-    private             Button               chat_send_btn; //发送按钮
-    private             ImageView            chat_more_btn; //更多按钮
-    private             ImageView            chat_numes_btn; //底部菜单切换按钮
-    private             ImageView            chat_servic_face_btn;//底部表情按钮
-    private             CubeEmoticonEditText chat_message_service_et;//底部输入面板
-    private             LinearLayout         service_muns_check_ture, service_muns_check_false;//底部布局两种切换模式
-    private int switching_times = 1;
+    private Button               chat_send_btn;          //发送按钮
+    private ImageView            chat_more_btn;          //更多按钮
+    private ImageView            chat_numes_btn;         //底部菜单切换按钮
+    private ImageView            chat_servic_face_btn;   //底部表情按钮
+    private CubeEmoticonEditText chat_message_service_et;//底部输入面板
+    private LinearLayout         service_muns_check_ture;
+    private LinearLayout         service_muns_check_false;//底部布局两种切换模式
+    private int                  switching_times = 1;
 
     private int type;  //1 是服务号  0是正常聊天
 
@@ -106,8 +110,8 @@ public class InputPanel implements EmoticonSelectedListener, View.OnClickListene
     private EmoticonPickerView mEmoticonPickerView;  // 贴图表情控件
 
     private boolean mHasFunctionPanelLayout;    // 是否已设置更多功能操作面板
-    private boolean mHasVoiceLayout;    // 是否已经设置语音功能面板
-    private boolean mIsKeyboardShowed;      // 是否显示键盘
+    private boolean mHasVoiceLayout;            // 是否已经设置语音功能面板
+    private boolean mIsKeyboardShowed;          // 是否显示键盘
 
     private OnBottomNavigationListener mOnBottomNavigationListener;     // 底部导航栏监听器
     private List<MessageEditWatcher>   mEditWatchers = new ArrayList<MessageEditWatcher>();    // 文本输入框监听

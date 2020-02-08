@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.common.mvp.base.BaseFragment;
-import com.common.mvp.rx.RxBus;
+import com.common.mvp.eventbus.EventBusUtil;
 import com.common.sdk.RouterUtil;
 import com.common.utils.receiver.NetworkStateReceiver;
 import com.common.utils.utils.DateUtil;
@@ -235,20 +235,8 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
 
     @Override
     protected void initData() {
-
         mPresenter.subscribeChange();
         mPresenter.getRecentSessionList();
-
-        //        CubeRecentSessionRepository.getInstance().queryAllUnReadCubeRecentSession()
-        //                .observeOn(AndroidSchedulers.mainThread())
-        //                .subscribe(new Action1<List<CubeRecentViewModel>>() {
-        //                    @Override
-        //                    public void call(List<CubeRecentViewModel> cubeRecentViewModels) {
-        //
-        //                        mRecentAdapter.setNewData(cubeRecentViewModels);
-        //                    }
-        //                });
-
     }
 
     public void closeRecyclerViewAnimator(RecyclerView recyclerView) {
@@ -299,7 +287,7 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
                 mEmptyView.setEmptyText(CubeCore.getContext().getString(R.string.no_data_message));
             }
             mNoNetworkTipLl.setVisibility(View.GONE);
-            RxBus.getInstance().post(MessageConstants.Event.EVENT_REFRESH_SYSTEM_MESSAGE, true);
+            EventBusUtil.post(MessageConstants.Event.EVENT_REFRESH_SYSTEM_MESSAGE, true);
             //            queryOtherPlayLoginTip();
         }
         else {
@@ -408,7 +396,6 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
     @Override
     public void onRemoveSession(String sessionId) {
         int position = mRecentAdapter.findPosition(sessionId);
-        LogUtil.i("onRemoveSession -------------" + position);
         mRecentAdapter.remove(position);
     }
 
