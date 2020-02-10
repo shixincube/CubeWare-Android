@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.common.mvp.base.BaseBottomDialog;
 
 import cube.ware.R;
-import cube.ware.ui.mine.ChangeAvatorActivity;
+import cube.ware.ui.mine.avatar.ModifyAvatarActivity;
 
 public class BottomChooseDialog extends BaseBottomDialog {
 
@@ -39,7 +39,7 @@ public class BottomChooseDialog extends BaseBottomDialog {
         mTvChoose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((ChangeAvatorActivity)getActivity()).selectImageFromLocal();
+                ((ModifyAvatarActivity)getActivity()).selectImageFromLocal();
                 getDialog().dismiss();
             }
         });

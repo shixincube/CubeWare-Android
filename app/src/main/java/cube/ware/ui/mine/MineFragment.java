@@ -88,7 +88,7 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
         mIvAvator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RouterUtil.navigation(getContext(), AppConstants.Router.ChangeAvatorActivity);
+                RouterUtil.navigation(getContext(), AppConstants.Router.ModifyAvatarActivity);
             }
         });
 

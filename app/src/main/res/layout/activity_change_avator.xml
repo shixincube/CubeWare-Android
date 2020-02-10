@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:background="@color/black"
     android:layout_height="match_parent"
-    tools:context=".ui.mine.ChangeAvatorActivity">
+    tools:context=".ui.mine.avatar.ModifyAvatarActivity">
     <ImageView
         android:id="@+id/iv_avator"
         android:src="@drawable/default_head_user"

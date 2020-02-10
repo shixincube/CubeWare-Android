@@ -57,7 +57,7 @@ public interface AppConstants {
         String CubIdListActivity = "/app/CubeIdListActivity";
 
         //修改头像
-        String ChangeAvatorActivity = "/app/ChangeAvatorActivity";
+        String ModifyAvatarActivity = "/app/ModifyAvatarActivity";
 
         //修改昵称
         String ModifyNameActivity = "/app/ModifyNameActivity";

@@ -2,6 +2,7 @@ package cube.ware.ui.contact.friend;
 
 import android.content.Context;
 
+import com.common.mvp.rx.subscriber.OnActionSubscriber;
 import com.common.utils.utils.log.LogUtil;
 
 import cube.ware.AppManager;
@@ -12,6 +13,7 @@ import cube.ware.data.repository.CubeUserRepository;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by dth
@@ -32,23 +34,11 @@ public class FriendListPresenter extends FriendListContract.Presenter{
 
     @Override
     public void getCubeList() {
-        ApiFactory.getInstance().queryUsers(AppManager.getAppId(), AppManager.getAppKey(), 0, 20, new Callback<ResultData<TotalData>>() {
+        ApiFactory.getInstance().queryUsers(AppManager.getAppId(), AppManager.getAppKey(), 0, 20).observeOn(AndroidSchedulers.mainThread()).subscribe(new OnActionSubscriber<TotalData>() {
             @Override
-            public void onResponse(Call<ResultData<TotalData>> call, Response<ResultData<TotalData>> response) {
-                if (response.isSuccessful()) {
-                    ResultData<TotalData> body = response.body();
-                    if (body != null) {
-                        TotalData data = body.data;
-                        CubeUserRepository.getInstance().saveUser(data.list);
-                        mView.onResponseUserList(data.list);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResultData<TotalData>> call, Throwable t) {
-
-                LogUtil.e(t);
+            public void call(TotalData totalData) {
+                CubeUserRepository.getInstance().saveUser(totalData.list);
+                mView.onResponseUserList(totalData.list);
             }
         });
     }
