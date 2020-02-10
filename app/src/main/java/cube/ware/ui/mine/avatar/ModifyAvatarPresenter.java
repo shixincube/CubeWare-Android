@@ -7,7 +7,7 @@ import com.common.utils.utils.log.LogUtil;
 import cube.ware.common.MessageConstants;
 import cube.ware.data.api.ApiException;
 import cube.ware.data.api.ApiFactory;
-import cube.ware.data.model.dataModel.CubeAvatar;
+import cube.ware.data.model.dataModel.CubeAvatarData;
 import cube.ware.data.room.model.CubeUser;
 import cube.ware.utils.SpUtil;
 import java.io.File;
@@ -28,9 +28,9 @@ public class ModifyAvatarPresenter extends ModifyAvatarContract.Presenter {
     @Override
     void modifyAvatar(String dataPath) {
         mView.showLoading();
-        ApiFactory.getInstance().uploadAvatar(SpUtil.getCubeToken(), new File(dataPath)).observeOn(AndroidSchedulers.mainThread()).subscribe(new OnTwiceSubscriber<CubeAvatar>() {
+        ApiFactory.getInstance().uploadAvatar(SpUtil.getCubeToken(), new File(dataPath)).observeOn(AndroidSchedulers.mainThread()).subscribe(new OnTwiceSubscriber<CubeAvatarData>() {
             @Override
-            public void onNext(CubeAvatar cubeAvatar) {
+            public void onNext(CubeAvatarData cubeAvatar) {
                 LogUtil.i("修改头像 --> url:" + cubeAvatar.getUrl());
                 CubeUser user = new CubeUser();
                 user.setCubeId(SpUtil.getCubeId());

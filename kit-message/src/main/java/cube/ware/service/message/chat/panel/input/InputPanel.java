@@ -48,7 +48,7 @@ import cube.ware.service.message.chat.panel.input.function.FunctionPanel;
 import cube.ware.service.message.chat.panel.input.voicefragment.RecordFragment;
 import cube.ware.service.message.chat.panel.messagelist.MessageListPanel;
 import cube.ware.service.message.manager.MessageManager;
-import cube.ware.service.message.manager.SystemMessageManager;
+import cube.ware.service.message.manager.MessageJudge;
 import cube.ware.utils.SpUtil;
 import cube.ware.utils.StringUtil;
 import cube.ware.widget.CubeEmoticonEditText;
@@ -281,7 +281,7 @@ public class InputPanel implements EmoticonSelectedListener, View.OnClickListene
         this.service_muns_check_ture = rootView.findViewById(R.id.service_muns_check_ture);
 
         this.refreshStatus(mCustomization.typ);
-        if (mCubeId.equals(SystemMessageManager.SystemSession.SPAP_ASSISTANT.getSessionId())) {
+        if (MessageJudge.isAssistantSession(mCubeId)) {
             this.mChatMoreBtn.setVisibility(View.GONE);
         }
 

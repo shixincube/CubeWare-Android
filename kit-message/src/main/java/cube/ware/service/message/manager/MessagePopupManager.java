@@ -7,13 +7,12 @@ import android.view.View;
 import com.common.mvp.rx.RxSchedulers;
 import com.common.utils.utils.ToastUtil;
 import cube.service.CubeEngine;
-import cube.ware.data.room.model.HeaderMap;
 import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.room.model.CubeMessage;
-import cube.ware.service.message.chat.viewholder.BaseMsgViewHolder;
 import cube.ware.service.message.chat.adapter.ChatMessageAdapter;
 import cube.ware.service.message.chat.panel.input.emoticon.manager.StickerManager;
+import cube.ware.service.message.chat.viewholder.BaseMsgViewHolder;
 import cube.ware.utils.ClipBoardUtil;
 import cube.ware.widget.PopupHorizontalMenu;
 import java.io.ByteArrayOutputStream;
@@ -21,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import rx.functions.Action1;
 
 /**
@@ -176,16 +176,11 @@ public class MessagePopupManager {
         }
 
         if (messageType == CubeMessageType.CARD) {
-            List<HeaderMap> customHeaders = base.mData.mMessage.getCustomHeaderMap();
+            Map<String, Object> customHeaders = base.mData.mMessage.getCustomHeaderMap();
             boolean isGroupTask = false;
-            for (HeaderMap customHeader : customHeaders) {
-                // 群任务
-                if (customHeader.key.equals("operate") && customHeader.value.equals("groupTask")) {
-                    isGroupTask = true;
-                }
-                // 日程
-                else {
-                }
+            // 群任务
+            if (customHeaders.containsKey("operate") && customHeaders.containsValue("groupTask")) {
+                isGroupTask = true;
             }
 
             popupMenuItemList.clear();

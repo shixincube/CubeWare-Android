@@ -1,4 +1,4 @@
-package cube.ware.data.model.dataModel;
+package cube.ware.data.model;
 
 import cube.ware.data.room.model.CubeRecentSession;
 

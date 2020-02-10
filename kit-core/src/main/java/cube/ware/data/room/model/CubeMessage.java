@@ -4,16 +4,15 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.text.TextUtils;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.common.utils.utils.GsonUtil;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeFileMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
 import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -503,11 +502,11 @@ public class CubeMessage implements Serializable {
         return this.customHeaders;
     }
 
-    public List<HeaderMap> getCustomHeaderMap() {
+    public Map<String, Object> getCustomHeaderMap() {
         if (TextUtils.isEmpty(customHeaders)) {
-            return new ArrayList<HeaderMap>();
+            return new HashMap<>();
         }
-        return new Gson().fromJson(customHeaders, new TypeToken<ArrayList<HeaderMap>>() {}.getType());
+        return GsonUtil.toMap(customHeaders);
     }
 
     public void setCustomHeaders(String customHeaders) {

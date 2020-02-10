@@ -5,15 +5,11 @@ import com.common.mvp.rx.subscriber.OnActionSubscriber;
 import com.common.utils.utils.log.LogUtil;
 import cube.ware.AppManager;
 import cube.ware.data.api.ApiFactory;
-import cube.ware.data.api.ResultData;
-import cube.ware.data.model.dataModel.LoginData;
-import cube.ware.data.model.dataModel.TotalData;
+import cube.ware.data.model.dataModel.CubeTokenData;
+import cube.ware.data.model.dataModel.CubeTotalData;
 import cube.ware.data.room.model.CubeUser;
 import cube.ware.utils.SpUtil;
 import java.util.List;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class CubeIdListPresenter extends CubeIdListContract.Presenter {
@@ -30,9 +26,9 @@ public class CubeIdListPresenter extends CubeIdListContract.Presenter {
 
     @Override
     public void queryCubeIdList() {
-        ApiFactory.getInstance().queryUsers(AppManager.getAppId(), AppManager.getAppKey(), 0, 40).observeOn(AndroidSchedulers.mainThread()).subscribe(new OnActionSubscriber<TotalData>() {
+        ApiFactory.getInstance().queryUsers(AppManager.getAppId(), AppManager.getAppKey(), 0, 40).observeOn(AndroidSchedulers.mainThread()).subscribe(new OnActionSubscriber<CubeTotalData>() {
             @Override
-            public void call(TotalData totalData) {
+            public void call(CubeTotalData totalData) {
                 List<CubeUser> list = totalData.list;
                 mView.getCubeIdListSuccess(list);
             }
@@ -41,9 +37,9 @@ public class CubeIdListPresenter extends CubeIdListContract.Presenter {
 
     @Override
     void queryCubeToken(String cubeId) {
-        ApiFactory.getInstance().queryCubeToken(AppManager.getAppId(), AppManager.getAppKey(), cubeId).observeOn(AndroidSchedulers.mainThread()).subscribe(new OnActionSubscriber<LoginData>() {
+        ApiFactory.getInstance().queryCubeToken(AppManager.getAppId(), AppManager.getAppKey(), cubeId).observeOn(AndroidSchedulers.mainThread()).subscribe(new OnActionSubscriber<CubeTokenData>() {
             @Override
-            public void call(LoginData loginData) {
+            public void call(CubeTokenData loginData) {
                 LogUtil.i(loginData.cubeToken);
                 //保存cubeToken
                 SpUtil.setCubeToken(loginData.cubeToken);

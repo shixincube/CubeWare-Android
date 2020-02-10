@@ -4,7 +4,7 @@ import android.content.Context;
 import com.common.mvp.eventbus.Event;
 import com.common.mvp.eventbus.EventBusUtil;
 import cube.ware.common.MessageConstants;
-import cube.ware.data.model.dataModel.CubeRecentViewModel;
+import cube.ware.data.model.CubeRecentViewModel;
 import cube.ware.data.repository.CubeSessionRepository;
 import cube.ware.data.room.model.CubeRecentSession;
 import java.util.List;

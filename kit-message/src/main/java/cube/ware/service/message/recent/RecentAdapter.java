@@ -8,7 +8,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.common.utils.utils.FriendlyDateUtil;
 import com.common.utils.utils.glide.GlideUtil;
 import cube.ware.core.CubeCore;
-import cube.ware.data.model.dataModel.CubeRecentViewModel;
+import cube.ware.data.model.CubeRecentViewModel;
 import cube.ware.data.room.model.CubeRecentSession;
 import cube.ware.service.message.R;
 import cube.ware.service.message.recent.manager.RecentSessionManager;

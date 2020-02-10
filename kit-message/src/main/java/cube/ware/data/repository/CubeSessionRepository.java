@@ -1,7 +1,7 @@
 package cube.ware.data.repository;
 
 import com.common.mvp.rx.OnSubscribeRoom;
-import cube.ware.data.model.dataModel.CubeRecentViewModel;
+import cube.ware.data.model.CubeRecentViewModel;
 import cube.ware.data.room.CubeDataBaseFactory;
 import cube.ware.data.room.model.CubeRecentSession;
 import cube.ware.data.room.model.CubeUser;

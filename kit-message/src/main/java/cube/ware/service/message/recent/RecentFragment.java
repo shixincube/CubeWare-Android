@@ -33,7 +33,7 @@ import cube.ware.api.CubeUI;
 import cube.ware.common.MessageConstants;
 import cube.ware.core.CubeConstants;
 import cube.ware.core.CubeCore;
-import cube.ware.data.model.dataModel.CubeRecentViewModel;
+import cube.ware.data.model.CubeRecentViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeRecentSession;
 import cube.ware.service.message.R;

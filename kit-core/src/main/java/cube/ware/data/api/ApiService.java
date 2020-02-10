@@ -1,9 +1,9 @@
 package cube.ware.data.api;
 
-import cube.ware.data.model.dataModel.CubeAvatar;
-import cube.ware.data.model.dataModel.LoginCubeData;
-import cube.ware.data.model.dataModel.LoginData;
-import cube.ware.data.model.dataModel.TotalData;
+import cube.ware.data.model.dataModel.CubeAvatarData;
+import cube.ware.data.model.dataModel.CubeIdData;
+import cube.ware.data.model.dataModel.CubeTokenData;
+import cube.ware.data.model.dataModel.CubeTotalData;
 import java.util.Map;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -32,7 +32,7 @@ public interface ApiService {
      */
     @POST("user/created")
     @FormUrlEncoded
-    Observable<ResultData<LoginCubeData>> createUser(@FieldMap Map<String, String> params);
+    Observable<ResultData<CubeIdData>> createUser(@FieldMap Map<String, String> params);
 
     /**
      * 获取授权token
@@ -43,7 +43,7 @@ public interface ApiService {
      */
     @POST("cube/login")
     @FormUrlEncoded
-    Observable<ResultData<LoginData>> queryCubeToken(@FieldMap Map<String, String> params);
+    Observable<ResultData<CubeTokenData>> queryCubeToken(@FieldMap Map<String, String> params);
 
     /**
      * 查询appId下的用户列表
@@ -54,7 +54,7 @@ public interface ApiService {
      */
     @POST("user/page/findByAppId")
     @FormUrlEncoded
-    Observable<ResultData<TotalData>> queryUsers(@FieldMap Map<String, String> params);
+    Observable<ResultData<CubeTotalData>> queryUsers(@FieldMap Map<String, String> params);
 
     /**
      * 上传更新头像
@@ -66,5 +66,5 @@ public interface ApiService {
      */
     @Multipart
     @POST("https://dev.upload.shixincube.cn/v3/file/uploadAvatar")
-    Observable<ResultData<CubeAvatar>> uploadAvatar(@PartMap Map<String, RequestBody> params, @Part MultipartBody.Part file);
+    Observable<ResultData<CubeAvatarData>> uploadAvatar(@PartMap Map<String, RequestBody> params, @Part MultipartBody.Part file);
 }

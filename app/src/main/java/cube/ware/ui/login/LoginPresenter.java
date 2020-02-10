@@ -2,14 +2,9 @@ package cube.ware.ui.login;
 
 import android.content.Context;
 import com.common.mvp.rx.subscriber.OnActionSubscriber;
-import com.common.utils.utils.log.LogUtil;
 import cube.ware.data.api.ApiFactory;
-import cube.ware.data.api.ResultData;
-import cube.ware.data.model.dataModel.LoginCubeData;
-import cube.ware.data.model.dataModel.TotalData;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import cube.ware.data.model.dataModel.CubeIdData;
+import cube.ware.data.model.dataModel.CubeTotalData;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class LoginPresenter extends LoginContract.Presenter {
@@ -31,9 +26,9 @@ public class LoginPresenter extends LoginContract.Presenter {
     }
 
     private void getCubeList(String appId, String appKey) {
-        ApiFactory.getInstance().queryUsers(appId, appKey, 0, 20).observeOn(AndroidSchedulers.mainThread()).subscribe(new OnActionSubscriber<TotalData>() {
+        ApiFactory.getInstance().queryUsers(appId, appKey, 0, 20).observeOn(AndroidSchedulers.mainThread()).subscribe(new OnActionSubscriber<CubeTotalData>() {
             @Override
-            public void call(TotalData totalData) {
+            public void call(CubeTotalData totalData) {
                 if (totalData.total >= 20) {
                     count = totalData.list.size();
                     mView.loginSuccess();
@@ -53,9 +48,9 @@ public class LoginPresenter extends LoginContract.Presenter {
      * @param appKey
      */
     private void createCubeId(String appId,String appKey) {
-        ApiFactory.getInstance().createUser(appId, appKey).observeOn(AndroidSchedulers.mainThread()).subscribe(new OnActionSubscriber<LoginCubeData>() {
+        ApiFactory.getInstance().createUser(appId, appKey).observeOn(AndroidSchedulers.mainThread()).subscribe(new OnActionSubscriber<CubeIdData>() {
             @Override
-            public void call(LoginCubeData loginCubeData) {
+            public void call(CubeIdData loginCubeData) {
                 count++;
                 if (count == 20) {
                     mView.loginSuccess();

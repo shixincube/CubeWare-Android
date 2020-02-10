@@ -3,16 +3,11 @@ package cube.ware.ui.contact.friend;
 import android.content.Context;
 
 import com.common.mvp.rx.subscriber.OnActionSubscriber;
-import com.common.utils.utils.log.LogUtil;
 
 import cube.ware.AppManager;
 import cube.ware.data.api.ApiFactory;
-import cube.ware.data.api.ResultData;
-import cube.ware.data.model.dataModel.TotalData;
+import cube.ware.data.model.dataModel.CubeTotalData;
 import cube.ware.data.repository.CubeUserRepository;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import rx.android.schedulers.AndroidSchedulers;
 
 /**
@@ -34,9 +29,9 @@ public class FriendListPresenter extends FriendListContract.Presenter{
 
     @Override
     public void getCubeList() {
-        ApiFactory.getInstance().queryUsers(AppManager.getAppId(), AppManager.getAppKey(), 0, 20).observeOn(AndroidSchedulers.mainThread()).subscribe(new OnActionSubscriber<TotalData>() {
+        ApiFactory.getInstance().queryUsers(AppManager.getAppId(), AppManager.getAppKey(), 0, 20).observeOn(AndroidSchedulers.mainThread()).subscribe(new OnActionSubscriber<CubeTotalData>() {
             @Override
-            public void call(TotalData totalData) {
+            public void call(CubeTotalData totalData) {
                 CubeUserRepository.getInstance().saveUser(totalData.list);
                 mView.onResponseUserList(totalData.list);
             }

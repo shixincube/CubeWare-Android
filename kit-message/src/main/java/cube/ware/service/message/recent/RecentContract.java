@@ -4,7 +4,7 @@ import android.content.Context;
 import com.common.mvp.base.BasePresenter;
 import com.common.mvp.base.BaseView;
 import com.common.mvp.eventbus.Event;
-import cube.ware.data.model.dataModel.CubeRecentViewModel;
+import cube.ware.data.model.CubeRecentViewModel;
 import java.util.List;
 
 /**

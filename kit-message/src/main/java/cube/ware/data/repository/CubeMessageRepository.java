@@ -5,7 +5,7 @@ import cube.service.message.MessageEntity;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.room.CubeDataBaseFactory;
-import cube.ware.data.room.mapper.MessageMapper;
+import cube.ware.data.mapper.MessageMapper;
 import cube.ware.data.room.model.CubeMessage;
 import java.util.List;
 import rx.Observable;

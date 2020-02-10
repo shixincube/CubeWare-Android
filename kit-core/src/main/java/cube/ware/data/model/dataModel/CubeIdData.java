@@ -2,7 +2,7 @@ package cube.ware.data.model.dataModel;
 
 import cube.ware.data.api.BaseData;
 
-public class LoginCubeData extends BaseData{
+public class CubeIdData extends BaseData {
     public String cube;
 
     public String getCube() {
@@ -15,8 +15,6 @@ public class LoginCubeData extends BaseData{
 
     @Override
     public String toString() {
-        return "LoginCubeData{" +
-                "cube='" + cube + '\'' +
-                '}';
+        return "LoginCubeData{" + "cube='" + cube + '\'' + '}';
     }
 }

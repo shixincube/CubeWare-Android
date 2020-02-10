@@ -1,16 +1,17 @@
-package cube.ware.data.room.mapper;
+package cube.ware.data.mapper;
 
 import android.content.Context;
 import android.text.TextUtils;
+import com.common.mvp.eventbus.EventBusUtil;
 import com.common.utils.utils.log.LogUtil;
-import cube.service.message.FileMessageStatus;
-import cube.service.message.MessageDirection;
-import cube.service.message.MessageStatus;
 import cube.service.message.CardMessage;
 import cube.service.message.CustomMessage;
 import cube.service.message.FileMessage;
+import cube.service.message.FileMessageStatus;
 import cube.service.message.ImageMessage;
+import cube.service.message.MessageDirection;
 import cube.service.message.MessageEntity;
+import cube.service.message.MessageStatus;
 import cube.service.message.ReplyMessage;
 import cube.service.message.RichContentMessage;
 import cube.service.message.TextMessage;
@@ -18,6 +19,7 @@ import cube.service.message.UnKnownMessage;
 import cube.service.message.VideoClipMessage;
 import cube.service.message.VoiceClipMessage;
 import cube.service.message.WhiteboardMessage;
+import cube.ware.common.MessageConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.core.R;
 import cube.ware.data.model.dataModel.enmu.CubeFileMessageStatus;
@@ -25,6 +27,9 @@ import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
 import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.room.model.CubeMessage;
+import cube.ware.service.message.manager.CustomMessageManager;
+import cube.ware.service.message.manager.MessageJudge;
+import cube.ware.service.message.manager.ReceiptManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +41,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * @author: LiuFeng
- * @data: 2020/1/19
+ * 消息转换
+ *
+ * @author LiuFeng
+ * @data 2020/2/10 20:46
  */
 public class MessageMapper {
     /**
@@ -45,6 +52,7 @@ public class MessageMapper {
      *
      * @param messages
      * @param isSync   是否为同步下来的消息
+     *
      * @return
      */
     public static List<CubeMessage> convertTo(List<MessageEntity> messages, boolean isSync) {
@@ -72,6 +80,7 @@ public class MessageMapper {
      *
      * @param messageEntity
      * @param isSync
+     *
      * @return
      */
     public static CubeMessage convertTo(MessageEntity messageEntity, boolean isSync) {
@@ -92,11 +101,13 @@ public class MessageMapper {
                     cubeMessage.setMessageType(CubeMessageType.Emoji);
                     cubeMessage.setContent("[图片]");
                     cubeMessage.setEmojiContent(textContent);
-                } else {
+                }
+                else {
                     cubeMessage.setMessageType(CubeMessageType.Text);
                     cubeMessage.setContent(textContent);
                 }
-            } else if (messageEntity instanceof CardMessage) {    //卡片消息
+            }
+            else if (messageEntity instanceof CardMessage) {    //卡片消息
                 CardMessage cardMessage = (CardMessage) messageEntity;
                 cubeMessage.setMessageType(CubeMessageType.CARD);
                 cubeMessage.setContent(cardMessage.getContent());
@@ -104,7 +115,8 @@ public class MessageMapper {
                 cubeMessage.setCardIcon(cardMessage.getIcon());
                 JSONObject json = cardMessage.toJSON();
                 cubeMessage.setCardContentJson(json.getJSONArray("cardContents").toString());
-            } else if (messageEntity instanceof FileMessage) {    // 文件消息
+            }
+            else if (messageEntity instanceof FileMessage) {    // 文件消息
                 FileMessage fileMessage = (FileMessage) messageEntity;
                 File file = fileMessage.getFile();
                 if (null != file && file.exists()) {
@@ -130,13 +142,15 @@ public class MessageMapper {
                     cubeMessage.setImgHeight(imageMessage.getHeight());
                     cubeMessage.setMessageType(CubeMessageType.Image);
                     cubeMessage.setContent(CubeCore.getContext().getString(R.string.image_message));
-                } else if (fileMessage instanceof VoiceClipMessage) { // 语音
+                }
+                else if (fileMessage instanceof VoiceClipMessage) { // 语音
                     VoiceClipMessage voiceClipMessage = (VoiceClipMessage) fileMessage;
                     cubeMessage.setDuration(voiceClipMessage.getDuration());
                     cubeMessage.setMessageType(CubeMessageType.Voice);
                     cubeMessage.setContent(CubeCore.getContext().getString(R.string.voice_message));
                     //                    cubeMessage.setPlay(messageEntity.getDirection() == MessageDirection.Sent || messageEntity.isReceipted());
-                } else if (fileMessage instanceof VideoClipMessage) { // 视频
+                }
+                else if (fileMessage instanceof VideoClipMessage) { // 视频
                     VideoClipMessage videoClipMessage = (VideoClipMessage) fileMessage;
                     File thumbFile = videoClipMessage.getThumbFile();
                     if (null != thumbFile && thumbFile.exists()) {
@@ -148,7 +162,8 @@ public class MessageMapper {
                     cubeMessage.setImgHeight(videoClipMessage.getHeight());
                     cubeMessage.setMessageType(CubeMessageType.Video);
                     cubeMessage.setContent(CubeCore.getContext().getString(R.string.video_message));
-                } else if (fileMessage instanceof WhiteboardMessage) {    // 白板
+                }
+                else if (fileMessage instanceof WhiteboardMessage) {    // 白板
                     WhiteboardMessage whiteboardMessage = (WhiteboardMessage) fileMessage;
                     File thumbFile = whiteboardMessage.getThumbFile();
                     if (null != thumbFile && thumbFile.exists()) {
@@ -158,12 +173,13 @@ public class MessageMapper {
                     cubeMessage.setMessageType(CubeMessageType.Whiteboard);
                     cubeMessage.setContent(CubeCore.getContext().getString(R.string.whiteboard_message));
                 }
-            } else if (messageEntity instanceof CustomMessage) {      // 自定义消息
+            }
+            else if (messageEntity instanceof CustomMessage) {      // 自定义消息
                 //如果是验证消息 通知刷新最近列表
-                //if (SystemMessageManage.getInstance().isFromVerify(messageEntity) && !isSync) {
-                //    LogUtil.i("EVENT_REFRESH_SYSTEM_MESSAGE");
-                //    RxBus.getInstance().post(MessageConstants.Event.EVENT_REFRESH_SYSTEM_MESSAGE, true);
-                //}
+                if (MessageJudge.isVerifyUpdateMessage(messageEntity) && !isSync) {
+                    LogUtil.i("EVENT_REFRESH_SYSTEM_MESSAGE");
+                    EventBusUtil.post(MessageConstants.Event.EVENT_REFRESH_SYSTEM_MESSAGE, true);
+                }
                 CustomMessage customMessage = (CustomMessage) messageEntity;
                 String operate = customMessage.getHeader("operate");
                 cubeMessage.setOperate(operate);
@@ -173,11 +189,12 @@ public class MessageMapper {
                     LogUtil.i("不是发给自己的自定义消息不做处理====>" + customMessage.toString());
                     return null;
                 }
-                //if (!CustomMessageManager.getCustomText(cubeMessage, customMessage, operate, isSync)) {
-                //    LogUtil.i("不做处理的自定义消息====>" + customMessage.toString());
-                //    return null;
-                //}
-            } else if (messageEntity instanceof RichContentMessage) {
+                if (!CustomMessageManager.getCustomText(cubeMessage, customMessage, operate, isSync)) {
+                    LogUtil.i("不做处理的自定义消息====>" + customMessage.toString());
+                    return null;
+                }
+            }
+            else if (messageEntity instanceof RichContentMessage) {
                 cubeMessage.setMessageType(CubeMessageType.RICHTEXT);
                 StringBuilder stringBuilder = new StringBuilder();
                 RichContentMessage richContentMessage = (RichContentMessage) messageEntity;
@@ -188,28 +205,34 @@ public class MessageMapper {
                         String content = ((TextMessage) entity).getContent();
                         if (isEmoji(content)) {
                             stringBuilder.append("[图片]");
-                        } else {
+                        }
+                        else {
                             stringBuilder.append(content);
                         }
-                    } else if (entity instanceof ImageMessage) {
+                    }
+                    else if (entity instanceof ImageMessage) {
                         stringBuilder.append("[图片]");
-                    } else if (entity instanceof FileMessage) {
+                    }
+                    else if (entity instanceof FileMessage) {
                         stringBuilder.append("[文件]");
                     }
                 }
                 cubeMessage.setContent(stringBuilder.toString());  //给最近聊天列表显示的内容
-            } else if (messageEntity instanceof ReplyMessage) {
+            }
+            else if (messageEntity instanceof ReplyMessage) {
                 cubeMessage.setMessageType(CubeMessageType.REPLYMESSAGE);
                 ReplyMessage messageEntity1 = (ReplyMessage) messageEntity;
                 cubeMessage.setReplyContentJson(messageEntity1.toString());
                 MessageEntity reply = messageEntity1.getReply();
                 if (!(reply instanceof ReplyMessage)) {
                     cubeMessage.setContent(getMessageContent(reply));
-                } else {
+                }
+                else {
                     //回复消息在最近列表中显示reply消息的内容 如果reply消息仍然 intanceof ReplyMessage则说明出错了 概率很低 简单容错处理一下
                     cubeMessage.setContent("回复消息");
                 }
-            } else {
+            }
+            else {
                 cubeMessage.setMessageType(CubeMessageType.Unknown);
                 cubeMessage.setContent(CubeCore.getContext().getString(R.string.unknown_message_type));
             }
@@ -226,11 +249,11 @@ public class MessageMapper {
             cubeMessage.setRead(messageEntity.getDirection() == MessageDirection.Sent || cubeMessage.getMessageType() == CubeMessageType.CustomTips || messageEntity.isReceipted());
             cubeMessage.setReceipt(messageEntity.isReceipted());
             cubeMessage.setAnonymous(messageEntity.isAnonymous());
-            //boolean alreadyReceiptedMessage = ReceiptManager.getInstance().isAlreadyReceiptedMessage(cubeMessage.getTimestamp());
-            //if (alreadyReceiptedMessage) {
-            //    cubeMessage.setRead(true);
-            //    cubeMessage.setReceipt(true);
-            //}
+            boolean alreadyReceiptedMessage = ReceiptManager.getInstance().isAlreadyReceiptedMessage(cubeMessage);
+            if (alreadyReceiptedMessage) {
+                cubeMessage.setRead(true);
+                cubeMessage.setReceipt(true);
+            }
             if (cubeMessage.getCustomHeaders() == null || cubeMessage.getCustomHeaders().isEmpty()) {
 
                 cubeMessage.setCustomHeaders(getHeaders(messageEntity));
@@ -247,18 +270,23 @@ public class MessageMapper {
      * 获取CubeWare的文件消息状态
      *
      * @param fileMessage
+     *
      * @return
      */
     public static CubeFileMessageStatus getFileMessageStatus(FileMessage fileMessage) {
         if (fileMessage.getFileStatus() == FileMessageStatus.Uploading) {
             return CubeFileMessageStatus.Uploading;
-        } else if (fileMessage.getFileStatus() == FileMessageStatus.Downloading) {
+        }
+        else if (fileMessage.getFileStatus() == FileMessageStatus.Downloading) {
             return CubeFileMessageStatus.Downloading;
-        } else if (fileMessage.getFileStatus() == FileMessageStatus.Succeed) {
+        }
+        else if (fileMessage.getFileStatus() == FileMessageStatus.Succeed) {
             return CubeFileMessageStatus.Succeed;
-        } else if (fileMessage.getFileStatus() == FileMessageStatus.Failed) {
+        }
+        else if (fileMessage.getFileStatus() == FileMessageStatus.Failed) {
             return CubeFileMessageStatus.Failed;
-        } else {
+        }
+        else {
             return CubeFileMessageStatus.Unknown;
         }
     }
@@ -267,14 +295,17 @@ public class MessageMapper {
      * 获取CubeWare的消息接收方向
      *
      * @param messageEntity
+     *
      * @return
      */
     public static CubeMessageDirection getMessageDirection(MessageEntity messageEntity) {
         if (messageEntity.getDirection() == MessageDirection.Sent) {
             return CubeMessageDirection.Sent;
-        } else if (messageEntity.getDirection() == MessageDirection.Received) {
+        }
+        else if (messageEntity.getDirection() == MessageDirection.Received) {
             return CubeMessageDirection.Received;
-        } else {
+        }
+        else {
             return CubeMessageDirection.None;
         }
     }
@@ -283,18 +314,23 @@ public class MessageMapper {
      * 获取CubeWare的消息状态
      *
      * @param messageEntity
+     *
      * @return
      */
     public static CubeMessageStatus getMessageStatus(MessageEntity messageEntity) {
         if (messageEntity.getStatus() == MessageStatus.Sending) {
             return CubeMessageStatus.Sending;
-        } else if (messageEntity.getStatus() == MessageStatus.Receiving) {
+        }
+        else if (messageEntity.getStatus() == MessageStatus.Receiving) {
             return CubeMessageStatus.Receiving;
-        } else if (messageEntity.getStatus() == MessageStatus.Succeed) {
+        }
+        else if (messageEntity.getStatus() == MessageStatus.Succeed) {
             return CubeMessageStatus.Succeed;
-        } else if (messageEntity.getStatus() == MessageStatus.Failed) {
+        }
+        else if (messageEntity.getStatus() == MessageStatus.Failed) {
             return CubeMessageStatus.Failed;
-        } else {
+        }
+        else {
             return CubeMessageStatus.None;
         }
     }
@@ -306,7 +342,8 @@ public class MessageMapper {
             jsonObject.put("key", entry.getKey());
             if (entry.getValue() instanceof Map) {
                 jsonObject.put("value", entry.getValue().toString());
-            } else {
+            }
+            else {
                 jsonObject.put("value", entry.getValue());
             }
             jsonArray.put(jsonObject);
@@ -319,33 +356,42 @@ public class MessageMapper {
      * 因为只有回复消息真正需要这个方法 其他消息走这个方法增加消耗
      *
      * @param messageEntity
+     *
      * @return
      */
     public static String getMessageContent(MessageEntity messageEntity) {
         Context context = CubeCore.getContext();
         if (messageEntity == null || messageEntity instanceof UnKnownMessage) {
             return context.getString(R.string.unknown_message_type);
-        } else if (messageEntity instanceof TextMessage) {
+        }
+        else if (messageEntity instanceof TextMessage) {
             String textContent = ((TextMessage) messageEntity).getContent();
             if (isEmoji(textContent)) {
                 return "[图片]";
-            } else {
+            }
+            else {
                 return textContent;
             }
-        } else if (messageEntity instanceof CardMessage) {
+        }
+        else if (messageEntity instanceof CardMessage) {
             CardMessage cardMessage = (CardMessage) messageEntity;
             return cardMessage.getContent();
-        } else if (messageEntity instanceof FileMessage) {
+        }
+        else if (messageEntity instanceof FileMessage) {
             if (messageEntity instanceof ImageMessage) {  // 图片
                 return context.getString(R.string.image_message);
-            } else if (messageEntity instanceof VoiceClipMessage) { // 语音
+            }
+            else if (messageEntity instanceof VoiceClipMessage) { // 语音
                 return context.getString(R.string.voice_message);
-            } else if (messageEntity instanceof VideoClipMessage) { // 视频
+            }
+            else if (messageEntity instanceof VideoClipMessage) { // 视频
                 return context.getString(R.string.video_message);
-            } else if (messageEntity instanceof WhiteboardMessage) {    // 白板
+            }
+            else if (messageEntity instanceof WhiteboardMessage) {    // 白板
                 return context.getString(R.string.whiteboard_message);
             }
-        } else if (messageEntity instanceof RichContentMessage) {
+        }
+        else if (messageEntity instanceof RichContentMessage) {
             StringBuilder stringBuilder = new StringBuilder();
             RichContentMessage richContentMessage = (RichContentMessage) messageEntity;
             //获取富文本消息中的消息
@@ -355,25 +401,31 @@ public class MessageMapper {
                     String content = ((TextMessage) entity).getContent();
                     if (isEmoji(content)) {
                         stringBuilder.append("[图片]");
-                    } else {
+                    }
+                    else {
                         stringBuilder.append(content);
                     }
-                } else if (entity instanceof ImageMessage) {
+                }
+                else if (entity instanceof ImageMessage) {
                     stringBuilder.append("[图片]");
-                } else if (entity instanceof FileMessage) {
+                }
+                else if (entity instanceof FileMessage) {
                     stringBuilder.append("[文件]");
                 }
             }
             return stringBuilder.toString();  //给最近聊天列表显示的内容
-        } else if (messageEntity instanceof ReplyMessage) {
+        }
+        else if (messageEntity instanceof ReplyMessage) {
             ReplyMessage replyMessage = (ReplyMessage) messageEntity;
             MessageEntity reply = replyMessage.getReply();
             if (reply instanceof ReplyMessage) {
                 return "回复消息";
-            } else {
+            }
+            else {
                 return getMessageContent(reply);
             }
-        } else if (messageEntity instanceof CustomMessage) {
+        }
+        else if (messageEntity instanceof CustomMessage) {
             //CustomMessage customMessage = (CustomMessage) messageEntity;
             //String type = customMessage.getHeader("operate");
             //if (type.equals(CubeCustomMessageType.GroupShareQr.getType())) {

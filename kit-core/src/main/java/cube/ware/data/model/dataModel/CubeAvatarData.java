@@ -6,7 +6,7 @@ import cube.ware.data.api.BaseData;
  * author: kun .
  * date:   On 2018/9/7
  */
-public class CubeAvatar extends BaseData {
+public class CubeAvatarData extends BaseData {
     /**
      * fileId : f86291ae-a632-4757-a7f3-97ccb7f73b47
      * name : avatar.jpg

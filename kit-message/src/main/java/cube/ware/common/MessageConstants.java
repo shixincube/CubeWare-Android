@@ -36,6 +36,12 @@ public interface MessageConstants {
         String MESSAGE_DRAFT = "message_draft_";
     }
 
+    interface SystemSession {
+        String SYSTEM    = "10000";     //系统消息
+        String ASSISTANT = "10001";     //司派助手
+        String VERIFY    = "10002";     //验证消息
+    }
+
     /**
      * 事件通知Key
      */
