@@ -20,7 +20,6 @@ import com.common.utils.utils.glide.GlideUtil;
 import cube.ware.AppConstants;
 import cube.ware.AppManager;
 import cube.ware.R;
-import cube.ware.ui.mine.dialog.BottomChooseDialog;
 import cube.ware.utils.SpUtil;
 import rx.functions.Action1;
 

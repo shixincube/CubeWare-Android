@@ -696,7 +696,7 @@ public class MessageManager {
                     //发送消息回执
                     if (!message.isReceipt && message.isReceivedMessage()) {
                         //直接更新本地数据库消息回执状态，不等服务器的回执消息反馈
-                        ReceiptManager.getInstance().updateIsReceipted(chatId, message.getTimestamp(), false);
+                        ReceiptManager.getInstance().onReceiptedAll(chatId, message.getTimestamp());
                         //发送回执消息
                         String sessionId = message.isGroupMessage() ? message.getGroupId() : message.getSenderId();
                         CubeEngine.getInstance().getMessageService().receiptMessages(sessionId, message.getTimestamp());
@@ -1145,7 +1145,7 @@ public class MessageManager {
             cubeMessage.setRead(messageEntity.getDirection() == MessageDirection.Sent || cubeMessage.getMessageType() == CubeMessageType.CustomTips || messageEntity.isReceipted());
             cubeMessage.setReceipt(messageEntity.isReceipted());
             cubeMessage.setAnonymous(messageEntity.isAnonymous());
-            boolean alreadyReceiptedMessage = ReceiptManager.getInstance().isAlreadyReceiptedMessage(cubeMessage.getTimestamp());
+            boolean alreadyReceiptedMessage = ReceiptManager.getInstance().isAlreadyReceiptedMessage(cubeMessage);
             if (alreadyReceiptedMessage) {
                 cubeMessage.setRead(true);
                 cubeMessage.setReceipt(true);

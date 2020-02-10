@@ -99,7 +99,7 @@
             android:name=".ui.setting.SettingActivity"
             android:screenOrientation="portrait"
             />
-        <activity android:name=".ui.mine.ModifyNameActivity"
+        <activity android:name=".ui.mine.name.ModifyNameActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.contact.addfriend.AddFriendActivity"
             android:screenOrientation="portrait" />

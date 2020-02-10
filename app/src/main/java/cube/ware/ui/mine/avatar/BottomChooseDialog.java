@@ -1,4 +1,4 @@
-package cube.ware.ui.mine.dialog;
+package cube.ware.ui.mine.avatar;
 
 import android.os.Bundle;
 import android.view.View;
@@ -7,7 +7,6 @@ import android.widget.TextView;
 import com.common.mvp.base.BaseBottomDialog;
 
 import cube.ware.R;
-import cube.ware.ui.mine.avatar.ModifyAvatarActivity;
 
 public class BottomChooseDialog extends BaseBottomDialog {
 

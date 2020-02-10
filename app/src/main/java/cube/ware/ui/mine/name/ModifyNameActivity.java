@@ -1,4 +1,4 @@
-package cube.ware.ui.mine;
+package cube.ware.ui.mine.name;
 
 import android.content.Context;
 import android.text.Editable;

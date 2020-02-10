@@ -54,15 +54,14 @@ public class CubeMessageRepository {
      *
      * @param chatId
      * @param time
-     * @param isReceipted
      *
      * @return
      */
-    public Observable<List<CubeMessage>> updateMessagesReceipt(final String chatId, final long time, final boolean isReceipted) {
+    public Observable<List<CubeMessage>> updateReceiptState(final String chatId, final long time) {
         return Observable.create(new OnSubscribeRoom<List<CubeMessage>>() {
             @Override
             protected List<CubeMessage> get() {
-                List<CubeMessage> cubeMessages = CubeDataBaseFactory.getCubeMessageDao().queryMessages(chatId, time, isReceipted);
+                List<CubeMessage> cubeMessages = CubeDataBaseFactory.getCubeMessageDao().queryMessages(chatId, time, false);
                 for (CubeMessage cubeMessage : cubeMessages) {
                     cubeMessage.setReceipt(true);
                     cubeMessage.setRead(true);

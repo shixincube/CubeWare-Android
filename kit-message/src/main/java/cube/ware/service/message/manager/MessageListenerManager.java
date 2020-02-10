@@ -57,7 +57,7 @@ public class MessageListenerManager {
      * @param chatEventListener
      */
     public void removeChatEventListener(ChatEventListener chatEventListener) {
-        if (chatEventListener != null && sChatEventListeners.contains(chatEventListener)) {
+        if (chatEventListener != null) {
             sChatEventListeners.remove(chatEventListener);
         }
     }

@@ -22,6 +22,7 @@ import cube.ware.service.message.chat.fragment.Listener.FileMessageDownloadListe
 import cube.ware.service.message.chat.fragment.Listener.FileMessageUploadListener;
 import cube.ware.service.message.chat.fragment.MessageHandler;
 import cube.ware.service.message.manager.MessageManager;
+import cube.ware.service.message.manager.ReceiptManager;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -79,10 +80,6 @@ public class MessageHandle implements MessageListener {
     @Override
     public void onSent(MessageEntity message) {
         LogUtil.i("发送的消息: " + message.toString());
-        //if (message instanceof ReceiptMessage) {
-        //    ReceiptManager.getInstance().onReceiptedAll(message, message.getFromDevice());
-        //    return;
-        //}
         if (isFromMyDevice(message)) {
             MessageManager.getInstance().updateMessageInLocal(message).subscribe();
         }
@@ -143,7 +140,6 @@ public class MessageHandle implements MessageListener {
      */
     @Override
     public void onDownloading(MessageEntity message, long processed, long total) {
-
         LogUtil.i("文件下载中的消息: sn:" + message.getSerialNumber() + "当前大小:" + processed + " 总大小:" + total);
 
         // 监听下载中回调
@@ -210,8 +206,9 @@ public class MessageHandle implements MessageListener {
     }
 
     @Override
-    public void onReceiptedAll(String s, long l, DeviceInfo deviceInfo) {
-
+    public void onReceiptedAll(String sessionId, long timestamp, DeviceInfo deviceInfo) {
+        LogUtil.i("回执全部普通消息");
+        ReceiptManager.getInstance().onReceiptedAll(sessionId, timestamp);
     }
 
     @Override

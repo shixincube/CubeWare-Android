@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.common.mvp.base.BaseActivity;
@@ -23,8 +24,8 @@ import cube.service.account.DeviceListener;
 import cube.ware.AppConstants;
 import cube.ware.AppManager;
 import cube.ware.R;
-import cube.ware.core.CubeCore;
 import cube.ware.common.MessageConstants;
+import cube.ware.core.CubeCore;
 import cube.ware.service.message.recent.RecentFragment;
 import cube.ware.ui.contact.ContactFragment;
 import cube.ware.ui.mine.MineFragment;
@@ -33,7 +34,7 @@ import cube.ware.widget.tabbar.NavigateTabBar;
 import java.util.List;
 
 @Route(path = AppConstants.Router.MainActivity)
-public class MainActivity extends BaseActivity implements AccountListener, DeviceListener {
+public class MainActivity extends BaseActivity implements AccountListener {
 
     private static final String MAIN_PAGE_MESSAGE    = "消息";
     private static final String MAIN_PAGE_CONFERENCE = "会议";
@@ -72,7 +73,6 @@ public class MainActivity extends BaseActivity implements AccountListener, Devic
     @Override
     protected void initListener() {
         CubeEngine.getInstance().getAccountService().addAccountListener(this);
-        CubeEngine.getInstance().getAccountService().addDeviceListener(this);
         super.initListener();
         // NavigateTabBar 切换监听
         this.mNavigateTabBar.setTabSelectListener(new NavigateTabBar.OnTabSelectedListener() {
@@ -117,6 +117,11 @@ public class MainActivity extends BaseActivity implements AccountListener, Devic
                 }
             }
         });
+    }
+
+    @Override
+    protected boolean isRegisterEventBus() {
+        return true;
     }
 
     @Override
@@ -180,7 +185,6 @@ public class MainActivity extends BaseActivity implements AccountListener, Devic
     @Override
     protected void onDestroy() {
         CubeEngine.getInstance().getAccountService().removeAccountListener(this);
-        CubeEngine.getInstance().getAccountService().removeDeviceListener(this);
         super.onDestroy();
     }
 
@@ -202,26 +206,6 @@ public class MainActivity extends BaseActivity implements AccountListener, Devic
 
     @Override
     public void onAccountFailed(CubeError cubeError) {
-
-    }
-
-    @Override
-    public void onDeviceOnline(DeviceInfo loginDevice, List<DeviceInfo> onlineDevices) {
-        LogUtil.i("有人登录你的账号，强制下线");
-        AlertDialog.Builder builder = new AlertDialog.Builder(ActivityManager.getInstance().currentActivity());
-        builder.setTitle("重复登录");
-        builder.setCancelable(false);
-        builder.setMessage("有人登录你的账号，强制下线");
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                CubeEngine.getInstance().getAccountService().logout();
-            }
-        }).show();
-    }
-
-    @Override
-    public void onDeviceOffline(DeviceInfo deviceInfo, List<DeviceInfo> list) {
 
     }
 }
