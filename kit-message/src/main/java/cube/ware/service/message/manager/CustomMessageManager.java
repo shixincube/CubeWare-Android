@@ -41,11 +41,6 @@ public class CustomMessageManager {
         if (type.equals(CubeCustomMessageType.AddFriend.getType())) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildAddFriendNotification(message);
-            //            if (CubeUI.getInstance().getFriendOperationListener() != null && !isSync) {
-            //                String adverse = CubeSpUtil.getCubeUser().getCubeId().equals(message.getHeader("acceptUserCube")) ? message.getHeader("applyUserCube") : message.getHeader("acceptUserCube");//对方cube
-            //                CubeUI.getInstance().getFriendOperationListener().agree(adverse, token);
-            //                RxBus.getInstance().post(MessageConstants.Event.EVENT_ADD_OR_DELETE_FRIEND, new EventAddOrDeleteFriendEventModel(adverse, true));
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.DOWNLOAD_COMPLETE.getType()) && !cubeMessage.isGroupMessage()) {
             if (!cubeMessage.isReceivedMessage()) {//如果是自己发的文件下载成功消息可以不显示fldy
@@ -56,41 +51,23 @@ public class CustomMessageManager {
         }
         else if (type.equals(CubeCustomMessageType.ApplyFriend.getType()) && !isSync) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
-            //            if (CubeUI.getInstance().getFriendOperationListener() != null) {
-            //                CubeUI.getInstance().getFriendOperationListener().apply(message.getHeader("applyUserCube"));
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.RefuseFriend.getType()) && !isSync) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
-            //            if (CubeUI.getInstance().getFriendOperationListener() != null) {
-            //                CubeUI.getInstance().getFriendOperationListener().refuse();
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.AddGroupManager.getType())) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildAddGroupManagerNotification(message);
-            //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
-            //                CubeUI.getInstance().getGroupOperationListener().addGroupManager(groupCube, message.getHeader("managerCube"), token);
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.DelGroupManager.getType())) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildDelGroupManagerNotification(message);
-            //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
-            //                CubeUI.getInstance().getGroupOperationListener().delGroupManager(groupCube, message.getHeader("managerCube"), token);
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.DelFriend.getType()) && !isSync) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
             String userCube = message.getHeader("fromUserCube");
             String friendUserCube = message.getHeader("friendUserCube");
             String adverse = CubeCore.getInstance().getCubeId().equals(userCube) ? friendUserCube : userCube;//对方cube
-            //            MessageManager.getInstance().deleteMessagesBySessionId(adverse, CubeSessionType.P2P, false);
-            //
-            //            if (CubeUI.getInstance().getFriendOperationListener() != null) {
-            //                CubeUI.getInstance().getFriendOperationListener().delete(adverse, token);
-            //                RxBus.getInstance().post(MessageConstants.Event.EVENT_ADD_OR_DELETE_FRIEND, new EventAddOrDeleteFriendEventModel(adverse, false));
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.AddGroupMember.getType())) {
             try {
@@ -98,9 +75,6 @@ public class CustomMessageManager {
                 JSONArray memberCubeArray = new JSONArray(memberCubeJsonArray);
                 cubeMessage.setMessageType(CubeMessageType.CustomTips);
                 text = buildAddGroupMemberNotification(message);
-                //                if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
-                //                    CubeUI.getInstance().getGroupOperationListener().addMember(groupCube, memberCubeArray, token);
-                //                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -112,9 +86,6 @@ public class CustomMessageManager {
                 JSONArray memberCubeArray = new JSONArray(memberCubeJsonArray);
                 boolean isMyself = isMyself(memberCubeArray);
                 text = buildDelGroupMemberNotification(message, groupCube, isMyself);
-                //                if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
-                //                    CubeUI.getInstance().getGroupOperationListener().delMember(groupCube, memberCubeArray, isMyself, token);
-                //                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -122,87 +93,46 @@ public class CustomMessageManager {
         else if (type.equals(CubeCustomMessageType.GroupMemberQuit.getType()) && !isSync) {
             //退出后的群组应该都是valid=false的 但是退出群组这一条服务器无法处理
             String quitCube = message.getHeader("managerCube");
-            //if (quitCube.equals(SpUtil.getCubeUser().getCubeId()) && isSync) {
-            //    return "";
-            //}
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildGroupMemberQuitNotification(message, groupCube);
-            //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
-            //                CubeUI.getInstance().getGroupOperationListener().memberQuit(groupCube, quitCube, token, quitCube.equals(CubeSpUtil.getCubeUser().getCubeId()));
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.DismissGroup.getType()) && !isSync) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
-            //            MessageManager.getInstance().deleteMessagesBySessionId(groupCube, CubeSessionType.Group, false);
-            //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
-            //                CubeUI.getInstance().getGroupOperationListener().dismiss(groupCube, token);
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.UpdateGroupName.getType())) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildUpdateGroupNameNotification(message);
-            //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
-            //                CubeUI.getInstance().getGroupOperationListener().updateGroupName(groupCube, message.getHeader("groupName"), token);
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.UpdateGroupNotice.getType())) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildUpdateGroupNoticeNotification(message);
-            //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
-            //                CubeUI.getInstance().getGroupOperationListener().updateGroupNotice(groupCube, message.getHeader("noticeContent"), token);
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.UpdateGroupFace.getType()) && !isSync) {
-            //            if (CubeUI.getInstance().getGroupOperationListener() != null) {
-            //                CubeUI.getInstance().getGroupOperationListener().updateGroupFace(groupCube, message.getHeader("groupFaceSrc"), token);
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.TransferGroupMaster.getType())) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildTransferGroupMasterNotification(message);
-            //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
-            //                CubeUI.getInstance().getGroupOperationListener().transferGroupMaster(groupCube, message.getHeader("newMasterCube"), token);
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.NewGroup.getType())) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildNewGroupNotification(message);
-            //            if (CubeUI.getInstance().getGroupOperationListener() != null && !isSync) {
-            //                CubeUI.getInstance().getGroupOperationListener().newGroup(groupCube, token);
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.UpdateUserInfo.getType()) && !isSync) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
-            //            if (CubeUI.getInstance().getFriendOperationListener() != null) {
-            //                CubeUI.getInstance().getFriendOperationListener().update(message.getHeader("cube"));
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.UpdateGroupMemberRemark.getType()) && !isSync) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
-            //            if (CubeUI.getInstance().getGroupOperationListener() != null) {
-            //                CubeUI.getInstance().getGroupOperationListener().updateMemberRemark(groupCube, message.getHeader("memberCube"), message.getHeader("memberRemark"), token);
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.Logout.getType()) && !isSync) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
-            //            if (CubeUI.getInstance().getLoginListener() != null) {
-            //                String plat = message.getHeader("plat");
-            //                CubeUI.getInstance().getLoginListener().loginOut(plat);
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.Login.getType()) && !isSync) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
             String plat = message.getHeader("plat");
             String timestamp = message.getHeader("timestamp");
-            //            if (CubeUI.getInstance().getLoginListener() != null) {
-            //                CubeUI.getInstance().getLoginListener().loginIn(plat, Long.parseLong(timestamp), token);
-            //            }
         }
         else if (type.equals(CubeMessageType.UpdateUserPwd.type) && !isSync) {
             cubeMessage.setMessageType(CubeMessageType.UpdateUserPwd);
-            //            if (CubeUI.getInstance().getLoginListener() != null) {
-            //                CubeUI.getInstance().getLoginListener().updateUserPwd();
-            //            }
         }
         else if (type.equals(CubeCustomMessageType.VideoCall.getType())) {
             cubeMessage.setMessageType(CubeMessageType.CustomCallVideo);
@@ -224,15 +154,12 @@ public class CustomMessageManager {
         }
         else if (type.equals(CubeCustomMessageType.ApplyOrAgreeToGroup.getType()) && !isSync) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
-            //            CubeUI.getInstance().getGroupOperationListener().applyOrAgreeToGroup(message.getHeader("groupCube"), message.getHeader("groupName"), message.getHeader("userCube"), message.getHeader("userDisplayName"));
         }
         else if (type.equals(CubeCustomMessageType.InviteToGroup.getType()) && !isSync) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
-            //            CubeUI.getInstance().getGroupOperationListener().inviteToGroup(message.getHeader("groupCube"), message.getHeader("groupName"), message.getHeader("userCube"), message.getHeader("userDisplayName"));
         }
         else if (type.equals(CubeCustomMessageType.RefuseInviteToGroup.getType()) && !isSync) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
-            //            CubeUI.getInstance().getGroupOperationListener().refuseInviteToGroup(message.getHeader("groupCube"), message.getHeader("groupName"), message.getHeader("userCube"), message.getHeader("userDisplayName"));
         }
         else if (type.equals(CubeCustomMessageType.CallAbnormal.getType())) {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
@@ -290,17 +217,6 @@ public class CustomMessageManager {
             cubeMessage.setMessageType(CubeMessageType.CustomTips);
             text = buildCloseWhiteBoard(message);
         }
-        //        else if (type.equals(CubeCustomMessageType.CompletedTates.getType())) {
-        //            cubeMessage.setMessageType(CubeMessageType.CustomTips.getType());
-        //            CubeUI.getInstance().getGroupOperationListener().compledeGroupTask(message.getHeader("taskId"), Long.parseLong(message.getHeader("groupId")));
-        //            text = buildTaskStatus(message);
-        //        }
-        //        else if (type.equals(CubeCustomMessageType.GroupFileAdd.getType())) {
-        //            CubeUI.getInstance().getGroupOperationListener().groupFileAdd(Long.parseLong(message.getHeader("userId")), message.getHeader("groupId"), Boolean.parseBoolean(message.getHeader("isFolder")), message.getHeader("fileName"), message.getHeader("fileId"), Long.parseLong(message.getHeader("timestamp")));
-        //        }
-        //        else if (type.equals(CubeCustomMessageType.GroupFileDelete.getType())) {
-        //            CubeUI.getInstance().getGroupOperationListener().groupFileDelete(Long.parseLong(message.getHeader("userId")), message.getHeader("groupId"), message.getHeader("fileNameArray"), message.getHeader("fileIdArray"), Long.parseLong(message.getHeader("timestamp")));
-        //        }
         else {
             text = null;
         }
@@ -454,10 +370,6 @@ public class CustomMessageManager {
         return (message.isSendMessage() ? "抖了一下" : "抖了你一下");
     }
 
-    public static String buildShake(CubeMessage message) {
-        return (message.isReceivedMessage() ? "抖了你一下" : "抖了一下");
-    }
-
     /**
      * 构建添加好友成功消息通知
      *
@@ -532,26 +444,6 @@ public class CustomMessageManager {
         return sb.toString();
     }
 
-    private static String buildTaskStatus(CustomMessage message) {
-        StringBuilder sb = new StringBuilder();
-        if (message.getHeader("actionCube").equals(CubeCore.getInstance().getCubeId())) {
-            sb.append("你把任务" + " ");
-        }
-        else {
-            sb.append(message.getHeader("actionDisName") + "把任务" + " ");
-        }
-        String taskName = message.getHeader("taskName");
-        //sb.append("<font color='#8da5ff'>" + taskName + "</font>" + " ");
-        sb.append(taskName + " ");
-        if (message.getHeader("actionType").equals("1")) {
-            sb.append("标记完成");
-        }
-        else {
-            sb.append("取消完成");
-        }
-        return sb.toString();
-    }
-
     /**
      * 构建移除群管理员消息通知
      *
@@ -587,7 +479,6 @@ public class CustomMessageManager {
      */
     private static String buildDelGroupMemberNotification(CustomMessage message, String groupCube, boolean isMyself) {
         if (isMyself) {
-            //            MessageManager.getInstance().deleteMessagesBySessionId(groupCube, CubeSessionType.Group, false);
             return null;
         }
         StringBuilder sb = new StringBuilder();

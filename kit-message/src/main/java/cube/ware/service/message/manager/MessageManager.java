@@ -1,6 +1,7 @@
 package cube.ware.service.message.manager;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import com.common.mvp.eventbus.EventBusUtil;
@@ -14,7 +15,6 @@ import cube.service.CubeErrorCode;
 import cube.service.Session;
 import cube.service.call.CallAction;
 import cube.service.call.CallDirection;
-import cube.service.message.CardMessage;
 import cube.service.message.CustomMessage;
 import cube.service.message.FileMessage;
 import cube.service.message.FileMessageStatus;
@@ -24,23 +24,17 @@ import cube.service.message.MessageEntity;
 import cube.service.message.MessageStatus;
 import cube.service.message.Receiver;
 import cube.service.message.ReplyMessage;
-import cube.service.message.RichContentMessage;
 import cube.service.message.Sender;
 import cube.service.message.TextMessage;
-import cube.service.message.UnKnownMessage;
 import cube.service.message.VideoClipMessage;
 import cube.service.message.VoiceClipMessage;
-import cube.service.message.WhiteboardClipMessage;
 import cube.service.message.WhiteboardFrameMessage;
-import cube.service.message.WhiteboardMessage;
+import cube.ware.api.CubeUI;
 import cube.ware.common.MessageConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.mapper.MessageMapper;
 import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeCustomMessageType;
-import cube.ware.data.model.dataModel.enmu.CubeFileMessageStatus;
-import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
-import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.repository.CubeMessageRepository;
@@ -51,7 +45,6 @@ import cube.ware.service.message.recent.manager.RecentSessionManager;
 import cube.ware.utils.FileUtil;
 import cube.ware.utils.ImageUtil;
 import cube.ware.utils.SpUtil;
-import cube.ware.utils.StringUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,9 +53,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import rx.Observable;
@@ -75,16 +68,16 @@ import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
 /**
- * Created by dth
- * Des: 消息管理器，用于处理引擎和本地消息的交互
- * Date: 2018/8/29.
+ * 消息管理器，用于处理引擎和本地消息的交互
+ *
+ * @author LiuFeng
+ * @data 2020/2/11 16:05
  */
-
 public class MessageManager {
 
     public static final long SHOW_TIME_PERIOD = 5 * 60 * 1000;  //消息显示时间的最小间隔时间
 
-    private Map<Fragment, ChatContainer> mContainer = new HashMap<>();
+    private Map<Fragment, ChatContainer> mContainer = new ConcurrentHashMap<>();
 
     public static MessageManager getInstance() {
         return MessageManagerHolder.INSTANCE;
@@ -105,7 +98,12 @@ public class MessageManager {
         mContainer.put(fragment, container);
     }
 
-    public void onDestroy(Fragment fragment) {
+    /**
+     * 移除消息容器
+     *
+     * @param fragment
+     */
+    public void removeContainer(Fragment fragment) {
         if (!mContainer.isEmpty()) {
             mContainer.remove(fragment);
         }
@@ -164,7 +162,7 @@ public class MessageManager {
         return matcher.find();
     }
 
-    public void onSyncingMessage(final Context context, final HashMap<String, List<MessageEntity>> hashMap) {
+    public void onSyncingMessage(final HashMap<String, List<MessageEntity>> hashMap) {
         if (hashMap == null) {
             return;
         }
@@ -175,7 +173,7 @@ public class MessageManager {
                 Collection<List<MessageEntity>> values = hashMap.values();
                 for (List<MessageEntity> value : values) {
                     LinkedList<MessageEntity> list = new LinkedList<>(value);
-                    MessageManager.getInstance().onSyncingMessage(context, list);
+                    MessageManager.getInstance().onSyncingMessage(list);
                 }
             }
         });
@@ -184,10 +182,9 @@ public class MessageManager {
     /**
      * 拉取离线消息 sync
      *
-     * @param context
      * @param messages onMessagesSyncing
      */
-    public void onSyncingMessage(final Context context, final LinkedList<MessageEntity> messages) {
+    public void onSyncingMessage(final List<MessageEntity> messages) {
         if (null == messages) {
             throw new IllegalArgumentException("MessageEntity can't be null!");
         }
@@ -529,7 +526,6 @@ public class MessageManager {
     /**
      * 构建图片消息
      *
-     * @param context
      * @param sessionType
      * @param sender
      * @param receiver
@@ -539,12 +535,12 @@ public class MessageManager {
      *
      * @return
      */
-    public ImageMessage buildImageMessage(Context context, CubeSessionType sessionType, Sender sender, Receiver receiver, String imagePath, boolean isOrigin, boolean isAnonymous) {
+    public ImageMessage buildImageMessage(CubeSessionType sessionType, Sender sender, Receiver receiver, String imagePath, boolean isOrigin, boolean isAnonymous) {
         try {
             if (!ImageUtil.isGif(imagePath) && !isOrigin) { // 如果不是gif图，也不是原图
                 String fileName = imagePath.substring(imagePath.lastIndexOf("/"));
                 String thumbImagePath = MessageConstants.Sp.PATH_APP + File.separator + "image" + fileName;    // 生成缩略图
-                imagePath = ImageUtil.createThumbnailImage(context, imagePath, thumbImagePath, 1920, 20);
+                imagePath = ImageUtil.createThumbnailImage(imagePath, thumbImagePath, 1920, 20);
             }
             ImageMessage message = new ImageMessage(new File(imagePath));
             message.setSender(sender);
@@ -566,7 +562,6 @@ public class MessageManager {
     /**
      * 构建视频消息
      *
-     * @param context
      * @param sessionType
      * @param sender
      * @param receiver
@@ -574,7 +569,7 @@ public class MessageManager {
      *
      * @return
      */
-    public VideoClipMessage buildVideoMessage(Context context, CubeSessionType sessionType, Sender sender, Receiver receiver, String videoPath, boolean isAnonymous) {
+    public VideoClipMessage buildVideoMessage(CubeSessionType sessionType, Sender sender, Receiver receiver, String videoPath, boolean isAnonymous) {
         VideoClipMessage message = new VideoClipMessage(new File(videoPath));
         message.setSender(sender);
         message.setReceiver(receiver);
@@ -589,33 +584,8 @@ public class MessageManager {
     }
 
     /**
-     * 构建语音消息
-     *
-     * @param context
-     * @param sessionType
-     * @param senderId
-     * @param receiverId
-     * @param voiceMessage
-     * @param isSecret
-     *
-     * @return
-     */
-    public VoiceClipMessage buildVoiceMessage(Context context, CubeSessionType sessionType, String senderId, String receiverId, VoiceClipMessage voiceMessage, boolean isSecret) {
-        voiceMessage.setSender(senderId);
-        voiceMessage.setReceiver(receiverId);
-        voiceMessage.setDirection(MessageDirection.Sent);
-        voiceMessage.setStatus(MessageStatus.Sending);
-        voiceMessage.setAnonymous(isSecret);
-        if (sessionType == CubeSessionType.Group) {  // 群消息
-            voiceMessage.setGroupId(receiverId);
-        }
-        return voiceMessage;
-    }
-
-    /**
      * 构建视频消息
      *
-     * @param context
      * @param sessionType
      * @param senderId
      * @param receiverId
@@ -623,7 +593,7 @@ public class MessageManager {
      *
      * @return
      */
-    public VideoClipMessage buildVideoMessage(Context context, CubeSessionType sessionType, String senderId, String receiverId, VideoClipMessage videoMessage) {
+    public VideoClipMessage buildVideoMessage(CubeSessionType sessionType, String senderId, String receiverId, VideoClipMessage videoMessage) {
         videoMessage.setSender(senderId);
         videoMessage.setReceiver(receiverId);
         videoMessage.setDirection(MessageDirection.Sent);
@@ -636,9 +606,31 @@ public class MessageManager {
     }
 
     /**
+     * 构建语音消息
+     *
+     * @param sessionType
+     * @param senderId
+     * @param receiverId
+     * @param voiceMessage
+     * @param isSecret
+     *
+     * @return
+     */
+    public VoiceClipMessage buildVoiceMessage(CubeSessionType sessionType, String senderId, String receiverId, VoiceClipMessage voiceMessage, boolean isSecret) {
+        voiceMessage.setSender(senderId);
+        voiceMessage.setReceiver(receiverId);
+        voiceMessage.setDirection(MessageDirection.Sent);
+        voiceMessage.setStatus(MessageStatus.Sending);
+        voiceMessage.setAnonymous(isSecret);
+        if (sessionType == CubeSessionType.Group) {  // 群消息
+            voiceMessage.setGroupId(receiverId);
+        }
+        return voiceMessage;
+    }
+
+    /**
      * 构建白板消息
      *
-     * @param context
      * @param sessionType
      * @param senderId
      * @param receiverId
@@ -646,7 +638,7 @@ public class MessageManager {
      *
      * @return
      */
-    public WhiteboardFrameMessage buildWhiteboardMessage(Context context, CubeSessionType sessionType, String senderId, String receiverId, WhiteboardFrameMessage whiteboardMessage) {
+    public WhiteboardFrameMessage buildWhiteboardMessage(CubeSessionType sessionType, String senderId, String receiverId, WhiteboardFrameMessage whiteboardMessage) {
         whiteboardMessage.setSender(senderId);
         whiteboardMessage.setReceiver(receiverId);
         whiteboardMessage.setDirection(MessageDirection.Sent);
@@ -727,14 +719,9 @@ public class MessageManager {
     /**
      * 发送消息 封装引擎发送消息方法
      *
-     * @param context
      * @param messageEntity
      */
-    public Observable<Boolean> sendMessage(final Context context, final MessageEntity messageEntity) {
-        if (null == messageEntity) {
-            ToastUtil.showToast(context, "消息发送失败!");
-            throw new IllegalArgumentException("MessageEntity can't be null!");
-        }
+    public Observable<Boolean> sendMessage(@NonNull final MessageEntity messageEntity) {
         if (messageEntity instanceof FileMessage) {
             ((FileMessage) messageEntity).setFileStatus(FileMessageStatus.Uploading);
         }
@@ -766,11 +753,11 @@ public class MessageManager {
         });
     }
 
-    public void sendFileMessage(final Context context, final CubeSessionType sessionType, final Receiver receiver, final String filePath, final boolean isAnonymous, boolean isCompress) {
+    public void sendFileMessage(final CubeSessionType sessionType, final Receiver receiver, final String filePath, final boolean isAnonymous, boolean isCompress) {
         LogUtil.i("sendFileMessage==>isCompress=" + isCompress);
         File file = new File(filePath);
         if (TextUtils.isEmpty(filePath) || !file.exists() || file.length() == 0) {
-            ToastUtil.showToast(context, R.string.invilid_file);
+            ToastUtil.showToast(CubeUI.getInstance().getContext(), R.string.invilid_file);
             return;
         }
         final MessageEntity messageEntity;
@@ -790,31 +777,31 @@ public class MessageManager {
                          public void onSuccess(File newfile) {
                              // TODO 压缩成功后调用，返回压缩后的图片文件
                              LogUtil.i("Luban ==>onSuccess file=" + newfile.getPath());
-                             MessageEntity innermessageEntity = MessageManager.getInstance().buildImageMessage(context, sessionType, new Sender(CubeCore.getInstance().getCubeId(), SpUtil.getUserName()), receiver, newfile.getPath(), true, isAnonymous);
-                             sendMessage(context, innermessageEntity).subscribe();
+                             MessageEntity innermessageEntity = MessageManager.getInstance().buildImageMessage(sessionType, new Sender(CubeCore.getInstance().getCubeId(), SpUtil.getUserName()), receiver, newfile.getPath(), true, isAnonymous);
+                             sendMessage(innermessageEntity).subscribe();
                          }
 
                          @Override
                          public void onError(Throwable e) {
                              // TODO 当压缩过程出现问题时调用
-                             MessageEntity innermessageEntity = MessageManager.getInstance().buildImageMessage(context, sessionType, new Sender(CubeCore.getInstance().getCubeId(), SpUtil.getUserName()), receiver, filePath, true, isAnonymous);
-                             sendMessage(context, innermessageEntity).subscribe();
+                             MessageEntity innermessageEntity = MessageManager.getInstance().buildImageMessage(sessionType, new Sender(CubeCore.getInstance().getCubeId(), SpUtil.getUserName()), receiver, filePath, true, isAnonymous);
+                             sendMessage(innermessageEntity).subscribe();
                          }
                      }).launch();    //启动压缩
             }
             else {
-                messageEntity = MessageManager.getInstance().buildImageMessage(context, sessionType, new Sender(CubeCore.getInstance().getCubeId(), SpUtil.getUserName()), receiver, filePath, true, isAnonymous);
-                sendMessage(context, messageEntity).subscribe();
+                messageEntity = MessageManager.getInstance().buildImageMessage(sessionType, new Sender(CubeCore.getInstance().getCubeId(), SpUtil.getUserName()), receiver, filePath, true, isAnonymous);
+                sendMessage(messageEntity).subscribe();
             }
         }
         else if (fileType == 1) {
-            messageEntity = MessageManager.getInstance().buildVideoMessage(context, sessionType, new Sender(CubeCore.getInstance().getCubeId(), SpUtil.getUserName()), receiver, filePath, isAnonymous);
+            messageEntity = MessageManager.getInstance().buildVideoMessage(sessionType, new Sender(CubeCore.getInstance().getCubeId(), SpUtil.getUserName()), receiver, filePath, isAnonymous);
             ((VideoClipMessage) messageEntity).setDuration(FileUtil.getVideoDuration(filePath));
-            sendMessage(context, messageEntity).subscribe();
+            sendMessage(messageEntity).subscribe();
         }
         else {
             messageEntity = MessageManager.getInstance().buildFileMessage(sessionType, new Sender(CubeCore.getInstance().getCubeId(), SpUtil.getUserName()), receiver, filePath);
-            sendMessage(context, messageEntity).subscribe();
+            sendMessage(messageEntity).subscribe();
         }
     }
 
@@ -942,16 +929,16 @@ public class MessageManager {
     /**
      * P2P音视频结束消息封装，更新界面显示
      *
-     * @param context
      * @param session
      * @param callAction
      */
-    public void onCallEnd(Context context, Session session, CallAction callAction) {
-        onCallEnd(context, session, callAction, null);
+    public void onCallEnd(Session session, CallAction callAction) {
+        onCallEnd(session, callAction, null);
     }
 
-    public void onCallEnd(Context context, Session session, CallAction callAction, CubeError error) {
+    public void onCallEnd(Session session, CallAction callAction, CubeError error) {
         boolean isCall = false;
+        Context context = CubeUI.getInstance().getContext();
         if (session.getCallPeer() != null) {
             String content;
             Sender sender;
@@ -1050,12 +1037,12 @@ public class MessageManager {
     /**
      * P2P处理音视频错误回调消息，如对方正在通话中
      *
-     * @param context
      * @param session
      * @param cubeError
      */
-    public void onCallFailed(Context context, Session session, CubeError cubeError) {
+    public void onCallFailed(Session session, CubeError cubeError) {
         boolean isCall = false;
+        Context context = CubeUI.getInstance().getContext();
         if (session != null && session.getCallPeer() != null) {
             String content = null;
             Sender sender;

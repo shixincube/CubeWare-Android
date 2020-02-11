@@ -85,14 +85,14 @@ public class P2PChatActivity extends BaseChatActivity implements InputPanel.OnBo
                 if (resultCode == RecordVideoActivity.TAKE_VIDEO_CODE) {
                     String videoPath = data.getStringExtra(RecordVideoActivity.TAKE_VIDEO_PATH);
                     if (!TextUtils.isEmpty(videoPath)) {
-                        MessageManager.getInstance().sendFileMessage(mContext, CubeSessionType.P2P, new Receiver(mChatId, mChatName), videoPath, isAnonymous, true);
+                        MessageManager.getInstance().sendFileMessage(CubeSessionType.P2P, new Receiver(mChatId, mChatName), videoPath, isAnonymous, true);
                     }
                 }
                 else if (resultCode == RecordVideoActivity.TAKE_PHOTO_CODE) {
                     String photoPath = data.getStringExtra(RecordVideoActivity.TAKE_PHOTO_PATH);
                     boolean isOrigin = data.getBooleanExtra(RecordVideoActivity.PHOTO_IS_ORIGIN, false);
                     if (!TextUtils.isEmpty(photoPath)) {
-                        MessageManager.getInstance().sendFileMessage(mContext, CubeSessionType.P2P, new Receiver(mChatId, mChatName), photoPath, isAnonymous, isOrigin);
+                        MessageManager.getInstance().sendFileMessage(CubeSessionType.P2P, new Receiver(mChatId, mChatName), photoPath, isAnonymous, isOrigin);
                     }
                 }
                 break;
@@ -106,7 +106,7 @@ public class P2PChatActivity extends BaseChatActivity implements InputPanel.OnBo
                         Observable.from(filePathList).subscribe(new Action1<String>() {
                             @Override
                             public void call(String filePath) {
-                                MessageManager.getInstance().sendFileMessage(mContext, CubeSessionType.P2P, new Receiver(mChatId, mChatName), filePath, isAnonymous, false);
+                                MessageManager.getInstance().sendFileMessage(CubeSessionType.P2P, new Receiver(mChatId, mChatName), filePath, isAnonymous, false);
                             }
                         });
                     }
@@ -126,7 +126,7 @@ public class P2PChatActivity extends BaseChatActivity implements InputPanel.OnBo
                             public void onNext(ImageItem imageItem) {
                                 LogUtil.i("选中图片的路径：" + imageItem.path);
                                 String imagePath = imageItem.path;
-                                MessageManager.getInstance().sendFileMessage(mContext, CubeSessionType.P2P, new Receiver(mChatId, mChatName), imagePath, isAnonymous, isOrigin);
+                                MessageManager.getInstance().sendFileMessage(CubeSessionType.P2P, new Receiver(mChatId, mChatName), imagePath, isAnonymous, isOrigin);
                             }
 
                             @Override

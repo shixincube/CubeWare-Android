@@ -258,7 +258,7 @@ public class MessageHandle implements MessageListener {
     @Override
     public void onMessagesSyncing(HashMap<String, List<MessageEntity>> map) {
         LogUtil.i("消息同步中--> 消息数量为：" + (map != null ? map.values().size() : 0));
-        MessageManager.getInstance().onSyncingMessage(CubeCore.getContext(), map);
+        MessageManager.getInstance().onSyncingMessage(map);
     }
 
     /**

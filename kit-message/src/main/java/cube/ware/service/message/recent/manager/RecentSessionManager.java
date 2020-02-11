@@ -1,5 +1,6 @@
 package cube.ware.service.message.recent.manager;
 
+import android.text.TextUtils;
 import com.common.mvp.eventbus.EventBusUtil;
 import com.common.utils.utils.log.LogUtil;
 import cube.service.message.MessageDirection;
@@ -53,16 +54,7 @@ public class RecentSessionManager {
      * @param messageEntity
      */
     public void addOrUpdateRecentSession(final MessageEntity messageEntity) {
-        if (null == messageEntity) {
-            throw new IllegalArgumentException("MessageEntity can't be null!");
-        }
-        LogUtil.i("addOrUpdateRecentSession MessageEntity sn=" + messageEntity.getSerialNumber());
-
-        final CubeRecentSession cubeRecentSession = SessionMapper.convertTo(messageEntity);
-        if (cubeRecentSession == null) {
-            return;
-        }
-
+        CubeRecentSession cubeRecentSession = SessionMapper.convertTo(messageEntity);
         CubeSessionRepository.getInstance().saveOrUpdate(cubeRecentSession).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<CubeRecentSession>() {
             @Override
             public void call(CubeRecentSession cubeRecentSession) {
@@ -77,19 +69,10 @@ public class RecentSessionManager {
      *
      * @param messageList
      */
-    public void addOrUpdateRecentSession(final List<MessageEntity> messageList) {
-        if (null == messageList) {
-            throw new IllegalArgumentException("MessageEntity can't be null!");
-        }
-
-        ArrayList<MessageEntity> sortMessageList = sortMessage(messageList);
-        final List<CubeRecentSession> cubeRecentSessions = SessionMapper.convertTo(sortMessageList);
-        if (cubeRecentSessions == null || cubeRecentSessions.isEmpty()) {
-            LogUtil.e("convertTo comes some wrong");
-            return;
-        }
-
-        Observable.from(cubeRecentSessions).subscribeOn(Schedulers.io()).flatMap(new Func1<CubeRecentSession, Observable<CubeRecentSession>>() {
+    public void addOrUpdateRecentSession(List<MessageEntity> messageList) {
+        List<MessageEntity> sortMessageList = sortMessage(messageList);
+        List<CubeRecentSession> cubeRecentSessions = SessionMapper.convertTo(sortMessageList);
+        Observable.from(cubeRecentSessions).flatMap(new Func1<CubeRecentSession, Observable<CubeRecentSession>>() {
             @Override
             public Observable<CubeRecentSession> call(final CubeRecentSession cubeRecentSession) {
                 return CubeSessionRepository.getInstance().queryBySessionId(cubeRecentSession.getSessionId()).map(new Func1<CubeRecentSession, CubeRecentSession>() {
@@ -98,6 +81,7 @@ public class RecentSessionManager {
                         if (cubeRecentSessionDB == null) {
                             return cubeRecentSession;
                         }
+
                         return cubeRecentSession.getTimestamp() > cubeRecentSessionDB.getTimestamp() ? cubeRecentSession : cubeRecentSessionDB;
                     }
                 });
@@ -107,7 +91,7 @@ public class RecentSessionManager {
             public Observable<List<CubeRecentSession>> call(List<CubeRecentSession> cubeRecentSessions) {
                 return CubeSessionRepository.getInstance().saveOrUpdate(cubeRecentSessions);
             }
-        }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<CubeRecentSession>>() {
+        }).subscribe(new Action1<List<CubeRecentSession>>() {
             @Override
             public void call(List<CubeRecentSession> cubeRecentSessions) {
                 // 刷新最近会话列表
@@ -122,7 +106,7 @@ public class RecentSessionManager {
      * @param sessionId
      */
     public void removeRecentSession(String sessionId) {
-        CubeSessionRepository.getInstance().removeRecentSession(sessionId).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<CubeRecentSession>() {
+        CubeSessionRepository.getInstance().removeRecentSession(sessionId).subscribe(new Action1<CubeRecentSession>() {
             @Override
             public void call(CubeRecentSession cubeRecentSession) {
                 EventBusUtil.post(MessageConstants.Event.EVENT_REMOVE_RECENT_SESSION_SINGLE, cubeRecentSession.getSessionId());
@@ -135,15 +119,16 @@ public class RecentSessionManager {
      *
      * @param messageList
      */
-    private ArrayList<MessageEntity> sortMessage(List<MessageEntity> messageList) {
+    private List<MessageEntity> sortMessage(List<MessageEntity> messageList) {
         // 消息仓库最大存储量
         HashMap<String, MessageEntity> messageCache = new HashMap<>();
         HashMap<String, MessageEntity> messageSecretCache = new HashMap<>();
         for (int i = 0; i < messageList.size(); i++) {
             MessageEntity message = messageList.get(i);
-       /*     if (message.getSender().getCubeId().equals("10000")) {
+            if (TextUtils.equals(message.getSender().getCubeId(), MessageConstants.SystemSession.SYSTEM)) {
                 continue;
-            }*/
+            }
+
             String sessionId;
             if (message.isAnonymous()) {
                 sessionId = "secret_chat";
@@ -196,7 +181,6 @@ public class RecentSessionManager {
             }
         }
 
-        //addOrUpdateRecentSecretSession(context, new ArrayList<>(messageSecretCache.values()));
         return new ArrayList<>(messageCache.values());
     }
 }

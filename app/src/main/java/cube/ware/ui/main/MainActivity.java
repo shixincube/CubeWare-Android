@@ -1,26 +1,19 @@
 package cube.ware.ui.main;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.common.mvp.base.BaseActivity;
 import com.common.mvp.base.BasePresenter;
 import com.common.mvp.eventbus.Event;
 import com.common.sdk.RouterUtil;
-import com.common.utils.manager.ActivityManager;
-import com.common.utils.utils.log.LogUtil;
 import cube.service.CubeEngine;
 import cube.service.CubeError;
-import cube.service.DeviceInfo;
 import cube.service.Session;
 import cube.service.account.AccountListener;
-import cube.service.account.DeviceListener;
 import cube.ware.AppConstants;
 import cube.ware.AppManager;
 import cube.ware.R;
@@ -31,7 +24,6 @@ import cube.ware.ui.contact.ContactFragment;
 import cube.ware.ui.mine.MineFragment;
 import cube.ware.utils.SpUtil;
 import cube.ware.widget.tabbar.NavigateTabBar;
-import java.util.List;
 
 @Route(path = AppConstants.Router.MainActivity)
 public class MainActivity extends BaseActivity implements AccountListener {
@@ -200,7 +192,7 @@ public class MainActivity extends BaseActivity implements AccountListener {
     public void onLogout(Session session) {
         //退出登录，清空SP
         SpUtil.clear();
-        RouterUtil.navigation(this, AppConstants.Router.LoginActivity);
+        RouterUtil.navigation(this, AppConstants.Router.AppIdActivity);
         finish();
     }
 

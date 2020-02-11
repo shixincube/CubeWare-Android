@@ -155,7 +155,7 @@ public class ImageUtil {
      *
      * @return
      */
-    public static String saveImage(Context context, String imagePath, int quality) {
+    public static String saveImage(String imagePath, int quality) {
         try {
             File imageFile = new File(imagePath);
             if (!imageFile.exists()) {
@@ -187,7 +187,7 @@ public class ImageUtil {
      *
      * @return
      */
-    public static String saveImage(Context context, String imagePath, Bitmap bitmap, int quality) {
+    public static String saveImage(String imagePath, Bitmap bitmap, int quality) {
         try {
             File imageFile = new File(imagePath);
             if (!imageFile.exists()) {
@@ -276,7 +276,7 @@ public class ImageUtil {
                     view.setDrawingCacheEnabled(true);
                     view.buildDrawingCache();
                     Bitmap bmp = view.getDrawingCache(); // 获取view的图片
-                    String savePath = ImageUtil.saveImage(context, filePath, bmp, quality);
+                    String savePath = ImageUtil.saveImage(filePath, bmp, quality);
                     if (filePath != null) {
                         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                         Uri contentUri = Uri.fromFile(new File(savePath));
@@ -566,13 +566,12 @@ public class ImageUtil {
     /**
      * 创建缩略图
      *
-     * @param context
      * @param originalImagePath 原始图片路径
      * @param thumbImagePath    输出缩略图路径
      * @param targetWidth       输出图片宽度
      * @param quality           输出图片质量
      */
-    public static String createThumbnailImage(Context context, String originalImagePath, String thumbImagePath, int targetWidth, int quality) {
+    public static String createThumbnailImage(String originalImagePath, String thumbImagePath, int targetWidth, int quality) {
         BitmapFactory.Options opts = getBitmapOptions(originalImagePath);
         int[] originalSize = new int[] { opts.outWidth, opts.outHeight };   // 原始图片的高宽
         int[] newSize = scaleImageSize(originalSize, targetWidth);   // 计算原始图片缩放后的宽高
@@ -584,7 +583,7 @@ public class ImageUtil {
             scaleBitmap = rotateImage(scaleBitmap, imageDegree);
         }
         Bitmap zoomBitmap = zoomBitmap(scaleBitmap, scaleBitmap.getWidth(), scaleBitmap.getHeight());   // 缩放图片
-        return saveImage(context, thumbImagePath, zoomBitmap, quality);    // 保存并返回
+        return saveImage(thumbImagePath, zoomBitmap, quality);    // 保存并返回
     }
 
     /**
@@ -598,7 +597,7 @@ public class ImageUtil {
      */
     public static String createThumbnailImage(Context context, String imagePath, int targetWidth) {
         Bitmap scaleBitmap = decodeScaleImage(imagePath, targetWidth, targetWidth);
-        return saveImage(context, imagePath, scaleBitmap, 100); // 保存图片并返回
+        return saveImage(imagePath, scaleBitmap, 100); // 保存图片并返回
     }
 
     /**

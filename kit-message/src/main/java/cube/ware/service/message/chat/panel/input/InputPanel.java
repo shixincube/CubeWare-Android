@@ -543,7 +543,7 @@ public class InputPanel implements EmoticonSelectedListener, View.OnClickListene
         }
         else {
             final TextMessage textMessage = MessageManager.getInstance().buildTextMessage(mChatType, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, mChatContainer.mChatName, text, isSecret);
-            MessageManager.getInstance().sendMessage(mChatContainer.mChatActivity, textMessage).compose(RxSchedulers.<Boolean>io_main()).subscribe(new Action1<Boolean>() {
+            MessageManager.getInstance().sendMessage(textMessage).compose(RxSchedulers.<Boolean>io_main()).subscribe(new Action1<Boolean>() {
                 @Override
                 public void call(Boolean aBoolean) {
                     restoreText(aBoolean);
@@ -1082,7 +1082,7 @@ public class InputPanel implements EmoticonSelectedListener, View.OnClickListene
         textMessage.setHeader("thumbUrl", stickerItem.getUrl());
         textMessage.setHeader("url", stickerItem.getUrl());
         textMessage.setHeader("emojiCName", stickerItem.getName());
-        MessageManager.getInstance().sendMessage(mChatContainer.mChatActivity, textMessage).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Boolean>() {
+        MessageManager.getInstance().sendMessage(textMessage).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Boolean>() {
             @Override
             public void call(Boolean aBoolean) {
                 if (aBoolean) {
@@ -1097,7 +1097,7 @@ public class InputPanel implements EmoticonSelectedListener, View.OnClickListene
 
     @Override
     public void onCollectSelected(String path) {
-        MessageManager.getInstance().sendFileMessage(mChatContainer.mChatActivity, mChatType, new Receiver(mChatContainer.mChatId, mChatContainer.mChatName), path, false, true);
+        MessageManager.getInstance().sendFileMessage(mChatType, new Receiver(mChatContainer.mChatId, mChatContainer.mChatName), path, false, true);
     }
 
     /**

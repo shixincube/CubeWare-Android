@@ -67,8 +67,8 @@ public class RecordFragment extends Fragment {
             public void onRecordComplete(VoiceClipMessage vcm) {
                 Log.v("test", "完成");
                 boolean isSecret = mChatContainer.mSessionType == CubeSessionType.Secret;
-                VoiceClipMessage voiceClipMessage = MessageManager.getInstance().buildVoiceMessage(mChatContainer.mChatActivity, CubeSessionType.P2P, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, vcm, isSecret);
-                MessageManager.getInstance().sendMessage(mChatContainer.mChatActivity, voiceClipMessage).subscribe();
+                VoiceClipMessage voiceClipMessage = MessageManager.getInstance().buildVoiceMessage(CubeSessionType.P2P, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, vcm, isSecret);
+                MessageManager.getInstance().sendMessage(voiceClipMessage).subscribe();
             }
 
             @Override

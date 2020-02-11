@@ -205,7 +205,7 @@ public class MessageFragment extends BaseFragment implements InputPanelProxy, Me
     public void onDestroy() {
         super.onDestroy();
         this.isDisplaying = false;
-        MessageManager.getInstance().onDestroy(this);
+        MessageManager.getInstance().removeContainer(this);
         this.mMessageListPanel.onDestroy();
         this.mInputPanel.onDestroy();
     }
@@ -231,26 +231,12 @@ public class MessageFragment extends BaseFragment implements InputPanelProxy, Me
     }
 
     /**
-     * 是否允许发送消息
-     *
-     * @param message
-     *
-     * @return
-     */
-    public boolean isAllowSendMessage(CubeMessage message) {
-        return true;
-    }
-
-    /**
      * 发送消息回调方法
      *
      * @param cubeMessage
      */
     @Override
     public void onMessageSend(CubeMessage cubeMessage) {
-        if (!isAllowSendMessage(cubeMessage)) {
-            return;
-        }
         // send message to server and save to db
         mMessageListPanel.onMessageSend(cubeMessage);
     }

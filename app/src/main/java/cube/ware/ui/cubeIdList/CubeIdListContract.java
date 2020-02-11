@@ -1,8 +1,10 @@
-package cube.ware.ui.login;
+package cube.ware.ui.cubeIdList;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import com.common.mvp.base.BasePresenter;
 import com.common.mvp.base.BaseView;
+import cube.service.Session;
 import cube.ware.data.room.model.CubeUser;
 import java.util.List;
 
@@ -27,6 +29,10 @@ public interface CubeIdListContract {
          * @param cubeToken
          */
         void queryCubeTokenSuccess(String cubeToken);
+
+        void loginSuccess();
+
+        void loginFailed(String desc);
     }
 
     /**
@@ -55,5 +61,16 @@ public interface CubeIdListContract {
          * @param cubeId
          */
         abstract void queryCubeToken(String cubeId);
+
+        /**
+         * 登录引擎
+         *
+         * @param cubeId
+         * @param cubeToken
+         * @param displayName
+         */
+        abstract void login(@NonNull String cubeId, @NonNull String cubeToken, String displayName);
+
+        abstract void saveUsers(List<CubeUser> cubeUsers);
     }
 }

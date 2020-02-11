@@ -126,8 +126,8 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         else if (v.getId() == R.id.btn_send) {
             PlayerManager.getInstance().stop();
             boolean isSecret = mChatContainer.mSessionType == CubeSessionType.Secret;
-            VoiceClipMessage voiceClipMessage = MessageManager.getInstance().buildVoiceMessage(mChatContainer.mChatActivity, CubeSessionType.P2P, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, mVoiceClipMessage, isSecret);
-            MessageManager.getInstance().sendMessage(mChatContainer.mChatActivity, voiceClipMessage).subscribe();
+            VoiceClipMessage voiceClipMessage = MessageManager.getInstance().buildVoiceMessage(CubeSessionType.P2P, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, mVoiceClipMessage, isSecret);
+            MessageManager.getInstance().sendMessage(voiceClipMessage).subscribe();
             //从栈中将当前fragment退出
             getFragmentManager().popBackStack();
         }

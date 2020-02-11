@@ -56,7 +56,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".ui.appid.AppIdActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
@@ -78,7 +78,7 @@
         <!-- cube核心服务 -->
         <service android:name=".service.core.CoreAliveService" />
 
-        <activity android:name=".ui.login.CubeIdListActivity"
+        <activity android:name=".ui.cubeIdList.CubeIdListActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.mine.avatar.ModifyAvatarActivity"
             android:screenOrientation="portrait"/>

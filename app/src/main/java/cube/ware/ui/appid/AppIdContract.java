@@ -1,4 +1,4 @@
-package cube.ware.ui.login;
+package cube.ware.ui.appid;
 
 import android.content.Context;
 import com.common.mvp.base.BasePresenter;
@@ -10,7 +10,7 @@ import com.common.mvp.base.BaseView;
  * @author LiuFeng
  * @date 2018-7-16
  */
-public interface LoginContract {
+public interface AppIdContract {
 
     /**
      * Activity将实现的回调接口
@@ -18,12 +18,13 @@ public interface LoginContract {
     interface View extends BaseView {
 
         /**
-         * 登录成功后回调
+         * 检查用户成功后回调
          */
-        void loginSuccess();
+        void checkUsersSuccess();
 
         /**
          * show toast
+         *
          * @param msg
          */
         void showToast(String msg);
@@ -45,8 +46,8 @@ public interface LoginContract {
         }
 
         /**
-         * login
+         * checkUsers
          */
-        abstract void login(String appId,String appKey);
+        abstract void checkUsers(String appId, String appKey);
     }
 }

@@ -48,7 +48,7 @@ public interface AppConstants {
      */
     interface Router {
         // 登陆界面
-        String LoginActivity = "/app/LoginActivity";
+        String AppIdActivity = "/app/AppIdActivity";
 
         // 主界面
         String MainActivity = "/app/MainActivity";

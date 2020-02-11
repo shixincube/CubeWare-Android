@@ -69,7 +69,7 @@ public class SplashActivity extends BaseActivity {
      * 跳转登录界面
      */
     public void goToLogin() {
-        RouterUtil.navigation(this, AppConstants.Router.LoginActivity);
+        RouterUtil.navigation(this, AppConstants.Router.AppIdActivity);
         finish();
     }
 

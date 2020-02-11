@@ -1,36 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.login.CubeIdListActivity">
+    tools:context=".ui.cubeIdList.CubeIdListActivity"
+    >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        >
         <ImageView
-            android:padding="15dp"
             android:id="@+id/iv_back"
-            android:src="@drawable/icon_back"
             android:layout_width="@dimen/view_height_50"
-            android:layout_height="@dimen/view_height_50" />
+            android:layout_height="@dimen/view_height_50"
+            android:padding="15dp"
+            android:src="@drawable/icon_back"
+            />
         <TextView
             android:layout_width="wrap_content"
-            android:gravity="center"
-            android:textSize="16sp"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
+            android:gravity="center"
             android:text="选择账号"
             android:textColor="@color/text_primary"
-            android:layout_height="match_parent" />
+            android:textSize="16sp"
+            />
     </RelativeLayout>
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/lv_cubeid"
-        android:layout_marginTop="0dp"
-        android:paddingRight="20dp"
-        android:scrollbars="none"
-        android:paddingLeft="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </ListView>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/view_space_20"
+        android:layout_marginStart="@dimen/view_space_20"
+        />
 </LinearLayout>
