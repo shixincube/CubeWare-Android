@@ -6,8 +6,10 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 /**
- * author: kun .
- * date:   On 2018/9/3
+ * 会议信息表
+ *
+ * @author LiuFeng
+ * @data 2020/2/12 20:32
  */
 @Entity
 public class CubeConference {

@@ -2,7 +2,7 @@ package cube.ware.data.repository;
 
 import com.common.mvp.rx.OnSubscribeRoom;
 import cube.ware.data.model.CubeRecentViewModel;
-import cube.ware.data.room.CubeDataBaseFactory;
+import cube.ware.data.room.CubeDBFactory;
 import cube.ware.data.room.model.CubeRecentSession;
 import cube.ware.data.room.model.CubeUser;
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class CubeSessionRepository {
         return Observable.create(new OnSubscribeRoom<CubeRecentSession>() {
             @Override
             protected CubeRecentSession get() {
-                CubeDataBaseFactory.getCubeRecentSessionDao().saveOrUpdate(cubeRecentSession);
+                CubeDBFactory.getCubeRecentSessionDao().saveOrUpdate(cubeRecentSession);
                 return cubeRecentSession;
             }
         }).subscribeOn(Schedulers.io());
@@ -61,7 +61,7 @@ public class CubeSessionRepository {
         return Observable.create(new OnSubscribeRoom<List<CubeRecentSession>>() {
             @Override
             protected List<CubeRecentSession> get() {
-                CubeDataBaseFactory.getCubeRecentSessionDao().saveOrUpdate(cubeRecentSessions);
+                CubeDBFactory.getCubeRecentSessionDao().saveOrUpdate(cubeRecentSessions);
                 return cubeRecentSessions;
             }
         }).subscribeOn(Schedulers.io());
@@ -78,7 +78,7 @@ public class CubeSessionRepository {
         return Observable.create(new OnSubscribeRoom<CubeRecentSession>() {
             @Override
             protected CubeRecentSession get() {
-                return CubeDataBaseFactory.getCubeRecentSessionDao().queryBySessionId(sessionId);
+                return CubeDBFactory.getCubeRecentSessionDao().queryBySessionId(sessionId);
             }
         }).filter(new Func1<CubeRecentSession, Boolean>() {
             @Override
@@ -88,7 +88,7 @@ public class CubeSessionRepository {
         }).map(new Func1<CubeRecentSession, CubeRecentSession>() {
             @Override
             public CubeRecentSession call(CubeRecentSession recentSession) {
-                CubeDataBaseFactory.getCubeRecentSessionDao().delete(recentSession);
+                CubeDBFactory.getCubeRecentSessionDao().delete(recentSession);
                 return recentSession;
             }
         }).subscribeOn(Schedulers.io());
@@ -103,7 +103,7 @@ public class CubeSessionRepository {
         return Observable.create(new OnSubscribeRoom<List<CubeRecentSession>>() {
             @Override
             protected List<CubeRecentSession> get() {
-                return CubeDataBaseFactory.getCubeRecentSessionDao().queryAll();
+                return CubeDBFactory.getCubeRecentSessionDao().queryAll();
             }
         }).subscribeOn(Schedulers.io());
     }
@@ -119,7 +119,7 @@ public class CubeSessionRepository {
         return Observable.create(new OnSubscribeRoom<CubeRecentSession>() {
             @Override
             protected CubeRecentSession get() {
-                return CubeDataBaseFactory.getCubeRecentSessionDao().queryBySessionId(sessionId);
+                return CubeDBFactory.getCubeRecentSessionDao().queryBySessionId(sessionId);
             }
         }).subscribeOn(Schedulers.io());
     }
@@ -221,9 +221,9 @@ public class CubeSessionRepository {
             public CubeRecentViewModel call(Integer unreadCount, CubeUser cubeUser) {
                 CubeRecentViewModel cubeRecentViewModel = new CubeRecentViewModel();
                 recentSession.setUnRead(unreadCount == null ? 0 : unreadCount);
+                recentSession.setSessionName(cubeUser.getDisplayName());
+                //recentSession.setFaceUrl(cubeUser.getAvatar());
                 cubeRecentViewModel.cubeRecentSession = recentSession;
-                cubeRecentViewModel.userName = cubeUser.getDisplayName();
-                cubeRecentViewModel.userFace = cubeUser.getAvatar();
                 return cubeRecentViewModel;
             }
         });

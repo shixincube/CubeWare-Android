@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import com.common.mvp.eventbus.Event;
 import com.common.mvp.eventbus.EventBusUtil;
+import com.common.utils.receiver.NetworkStateReceiver;
+import com.common.utils.utils.NetworkUtil;
 import com.common.utils.utils.log.LogUtil;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -22,22 +24,24 @@ import org.greenrobot.eventbus.ThreadMode;
  * @author LiuFeng
  * @date 2017-11-01
  */
-public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements View.OnClickListener,BaseView {
+public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements View.OnClickListener, BaseView, NetworkStateReceiver.NetworkStateChangedListener {
 
     protected View     mRootView;
     protected Activity mActivity;
 
     protected P mPresenter;
 
-    private int containerId;  //fragment布局资源id
+    //fragment布局资源id
+    private int containerId;
 
-    private boolean destroyed;  //是否销毁
-    private boolean mIsViewPrepared;    // 标识fragment视图已经初始化完毕
-    private boolean mHasLoadData;   // 标识已经触发过懒加载数据
+    //是否销毁
+    private boolean destroyed;
 
-    protected final boolean isDestroyed() {
-        return destroyed;
-    }
+    // 标识fragment视图已经初始化完毕
+    private boolean mIsViewPrepared;
+
+    // 标识已经触发过懒加载数据
+    private boolean mHasLoadData;
 
     public int getContainerId() {
         return containerId;
@@ -45,6 +49,47 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
 
     public void setContainerId(int containerId) {
         this.containerId = containerId;
+    }
+
+    /**
+     * 获取布局文件id
+     *
+     * @return
+     */
+    protected abstract int getContentViewId();
+
+    /**
+     * 创建presenter
+     *
+     * @return
+     */
+    protected abstract P createPresenter();
+
+    /**
+     * 初始化组件
+     */
+    protected void initView() {}
+
+    /**
+     * 初始化监听器
+     */
+    protected void initListener() {}
+
+    /**
+     * 初始化数据
+     */
+    protected void initData() {}
+
+    /**
+     * 点击事件
+     *
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {}
+
+    protected final boolean isDestroyed() {
+        return destroyed;
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -62,8 +107,11 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     public void onCreate(@Nullable Bundle savedInstanceState) {
         LogUtil.i("onCreate");
         super.onCreate(savedInstanceState);
-        if (isRegisterEventBus()) {
+        if (openEventBus()) {
             EventBusUtil.register(this);
+        }
+        if (openNetworkListener()) {
+            NetworkStateReceiver.getInstance().addNetworkStateChangedListener(this);
         }
     }
 
@@ -98,12 +146,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
 
     @Override
-    public void onResume() {
-        LogUtil.i("onResume");
-        super.onResume();
-    }
-
-    @Override
     public void onDestroyView() {
         LogUtil.i("onDestroyView");
         super.onDestroyView();
@@ -118,8 +160,11 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         LogUtil.i("onDestroy");
         super.onDestroy();
         destroyed = true;
-        if (isRegisterEventBus()) {
+        if (openEventBus()) {
             EventBusUtil.unregister(this);
+        }
+        if (openNetworkListener()) {
+            NetworkStateReceiver.getInstance().removeNetworkStateChangedListener(this);
         }
         if (this.mPresenter != null) {
             this.mPresenter.onDestroy();
@@ -137,45 +182,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
             this.initData();
         }
     }
-
-    /**
-     * 获取布局文件id
-     *
-     * @return
-     */
-    protected abstract int getContentViewId();
-
-    /**
-     * 创建presenter
-     *
-     * @return
-     */
-    protected abstract P createPresenter();
-
-    /**
-     * 初始化组件
-     */
-    protected void initView() {}
-
-    /**
-     * 初始化监听器
-     */
-    protected void initListener() {}
-
-
-
-    /**
-     * 初始化数据
-     */
-    protected void initData() {}
-
-    /**
-     * 点击事件
-     *
-     * @param v
-     */
-    @Override
-    public void onClick(View v) {}
 
     protected void showKeyboard(boolean isShow) {
         Activity activity = getActivity();
@@ -238,11 +244,39 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
 
     /**
+     * 网络状态变化回调
+     *
+     * @param isNetAvailable 网络是否可用
+     */
+    @Override
+    public void onNetworkStateChanged(boolean isNetAvailable) {
+        LogUtil.i("网络是否可用：" + isNetAvailable);
+    }
+
+    /**
+     * 判断网络是否可用
+     *
+     * @return
+     */
+    protected boolean isNetAvailable() {
+        return NetworkUtil.isNetAvailable(mActivity);
+    }
+
+    /**
+     * 是否打开网络监听
+     *
+     * @return
+     */
+    protected boolean openNetworkListener() {
+        return false;
+    }
+
+    /**
      * 是否注册事件分发
      *
      * @return true绑定EventBus事件分发，false不绑定
      */
-    protected boolean isRegisterEventBus() {
+    protected boolean openEventBus() {
         return false;
     }
 

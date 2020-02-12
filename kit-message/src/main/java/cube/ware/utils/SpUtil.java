@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import com.common.utils.utils.FileUtil;
+import com.common.utils.utils.GsonUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import cube.ware.core.CubeCore;
@@ -161,7 +162,7 @@ public class SpUtil {
      * @param value     @全体成员的值map（key:2017-9-8 value:1）
      */
     public static void setAtAll(String groupCube, Map<String, Integer> value) {
-        String json = new Gson().toJson(value, new TypeToken<Map<String, Integer>>() {}.getType());
+        String json = GsonUtil.toJson(value, new TypeToken<Map<String, Integer>>() {}.getType());
         SpUtil.setString(MessageConstants.Sp.SP_CUBE_AT_ALL + getCubeId() + groupCube, json);
     }
 
@@ -210,7 +211,7 @@ public class SpUtil {
      */
     public static Map<String, Integer> getAtAll(String groupCube) {
         String json = SpUtil.getString(MessageConstants.Sp.SP_CUBE_AT_ALL + getCubeId() + groupCube, "");
-        return new Gson().fromJson(json, new TypeToken<Map<String, Integer>>() {}.getType());
+        return GsonUtil.toMap(json);
     }
 
     /**

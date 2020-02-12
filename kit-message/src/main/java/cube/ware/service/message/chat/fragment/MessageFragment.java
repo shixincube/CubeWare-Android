@@ -152,7 +152,7 @@ public class MessageFragment extends BaseFragment implements InputPanelProxy, Me
     }
 
     @Override
-    protected boolean isRegisterEventBus() {
+    protected boolean openEventBus() {
         return true;
     }
 

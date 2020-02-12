@@ -29,7 +29,7 @@ import java.util.concurrent.ExecutionException;
 import cube.ware.service.message.R;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.repository.CubeMessageRepository;
-import cube.ware.data.room.CubeDataBaseFactory;
+import cube.ware.data.room.CubeDBFactory;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.service.message.manager.MessageManager;
 import cube.ware.utils.SpUtil;
@@ -166,7 +166,7 @@ public class PreviewImageFragment extends BaseLazyFragment {
                     String saveBitmapPath = BitmapUtils.saveBitmap(mBitmap, SpUtil.getImagePath(), cubeMessage.getFileName());
                     if (saveBitmapPath != null) {
                         cubeMessage.setFilePath(saveBitmapPath);
-                        CubeDataBaseFactory.getCubeMessageDao().saveOrUpdate(cubeMessage);
+                        CubeDBFactory.getCubeMessageDao().saveOrUpdate(cubeMessage);
                         MessageManager.getInstance().updateMessageLite(cubeMessage);
                     }
 

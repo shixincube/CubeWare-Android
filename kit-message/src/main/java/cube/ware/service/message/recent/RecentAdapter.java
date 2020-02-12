@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.common.utils.utils.FriendlyDateUtil;
+import com.common.utils.utils.ToastUtil;
 import com.common.utils.utils.glide.GlideUtil;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.CubeRecentViewModel;
@@ -41,7 +42,7 @@ public class RecentAdapter extends BaseQuickAdapter<CubeRecentViewModel, BaseVie
             helper.setText(R.id.message_time_tv, time);
         }
 
-        //        showPopWindow(helper.itemView,item);
+        showPopWindow(helper.itemView, item);
     }
 
     public int findPosition(String sessionId) {
@@ -74,9 +75,10 @@ public class RecentAdapter extends BaseQuickAdapter<CubeRecentViewModel, BaseVie
             @Override
             public void onPopupListClick(View contextView, int contextPosition, String type, int position) {
                 switch (position) {
-                    //                    case 0://置顶/取消置顶
-                    //                        ToastUtil.showToast(mContext,"置顶");
-                    //                        break;
+                    case 0://置顶/取消置顶
+                        ToastUtil.showToast(mContext, "置顶");
+                        break;
+
                     case 1://删除
                         RecentSessionManager.getInstance().removeRecentSession(cubeRecentViewModel.cubeRecentSession.getSessionId());
                         break;

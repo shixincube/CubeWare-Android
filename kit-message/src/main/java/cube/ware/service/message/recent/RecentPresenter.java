@@ -35,7 +35,12 @@ public class RecentPresenter extends RecentContract.Presenter {
             @Override
             public void call(List<CubeRecentViewModel> cubeRecentViewModels) {
                 mView.onRefreshList(cubeRecentViewModels);
-                queryUnReadAll();
+
+                int unread = 0;
+                for (CubeRecentViewModel model : cubeRecentViewModels) {
+                    unread += model.cubeRecentSession.getUnRead();
+                }
+                EventBusUtil.post(MessageConstants.Event.EVENT_UNREAD_MESSAGE_SUM, unread);
             }
         });
     }

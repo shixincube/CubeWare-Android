@@ -19,7 +19,6 @@ import cube.ware.data.room.model.CubeUser;
 import cube.ware.utils.SpUtil;
 import java.util.List;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 public class CubeIdListPresenter extends CubeIdListContract.Presenter implements AccountListener {
 
@@ -41,7 +40,7 @@ public class CubeIdListPresenter extends CubeIdListContract.Presenter implements
             @Override
             public void call(CubeTotalData totalData) {
                 List<CubeUser> list = totalData.list;
-                mView.getCubeIdListSuccess(list);
+                mView.queryCubeIdListSuccess(list);
             }
         });
     }

@@ -7,23 +7,29 @@ import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 
 /**
- * Created by dth
- * Des: 最近会话信息
- * Date: 2018/8/30.
+ * 最近会话信息表
+ *
+ * @author LiuFeng
+ * @data 2020/2/12 20:29
  */
 @Entity
 public class CubeRecentSession {
     /**
      * 最近会话的cube号
      */
-    @PrimaryKey
     @NonNull
+    @PrimaryKey
     private String sessionId;
 
     /**
      * 最近会话名字
      */
     private String sessionName;
+
+    /**
+     * 最近会话的头像
+     */
+    private String faceUrl;
 
     /**
      * 聊天类型 {@link CubeSessionType}，默认值：none(-1)
@@ -71,6 +77,14 @@ public class CubeRecentSession {
 
     public void setSessionName(String sessionName) {
         this.sessionName = sessionName;
+    }
+
+    public String getFaceUrl() {
+        return faceUrl;
+    }
+
+    public void setFaceUrl(String faceUrl) {
+        this.faceUrl = faceUrl;
     }
 
     public int getSessionType() {

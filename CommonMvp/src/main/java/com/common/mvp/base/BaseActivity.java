@@ -44,13 +44,16 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         ActivityManager.getInstance().addActivity(this);
         setContentView(this.getContentViewId());
         this.mContext = this;
-        if (isRegisterEventBus()) {
-            EventBusUtil.register(this);
-        }
         this.mPresenter = this.createPresenter();
         this.initToolBar();
         this.initView();
         this.initListener();
+        if (openEventBus()) {
+            EventBusUtil.register(this);
+        }
+        if (openNetworkListener()) {
+            NetworkStateReceiver.getInstance().addNetworkStateChangedListener(this);
+        }
         this.mSavedInstanceState = savedInstanceState;
         this.initData();
     }
@@ -96,9 +99,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     /**
      * 初始化监听器
      */
-    protected void initListener() {
-        NetworkStateReceiver.getInstance().addNetworkStateChangedListener(this);
-    }
+    protected void initListener() {}
 
     /**
      * 网络状态变化回调
@@ -348,10 +349,12 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         ActivityManager.getInstance().finishActivity(this);
         super.onDestroy();
         ClickUtil.clear();
-        NetworkStateReceiver.getInstance().removeNetworkStateChangedListener(this);
         this.mDestroyed = true;
-        if (isRegisterEventBus()) {
+        if (openEventBus()) {
             EventBusUtil.unregister(this);
+        }
+        if (openNetworkListener()) {
+            NetworkStateReceiver.getInstance().removeNetworkStateChangedListener(this);
         }
         if (this.mPresenter != null) {
             this.mPresenter.onDestroy();
@@ -359,11 +362,20 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     /**
-     * 是否注册事件分发
+     * 是否打开网络监听
+     *
+     * @return
+     */
+    protected boolean openNetworkListener() {
+        return false;
+    }
+
+    /**
+     * 是否打开注册事件分发
      *
      * @return true绑定EventBus事件分发，false不绑定
      */
-    protected boolean isRegisterEventBus() {
+    protected boolean openEventBus() {
         return false;
     }
 

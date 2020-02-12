@@ -49,7 +49,7 @@ public class ModifyNameActivity extends BaseActivity implements View.OnClickList
     }
 
     @Override
-    protected boolean isRegisterEventBus() {
+    protected boolean openEventBus() {
         return true;
     }
 

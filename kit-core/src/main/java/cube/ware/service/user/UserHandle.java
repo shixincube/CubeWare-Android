@@ -11,7 +11,7 @@ import cube.service.DeviceInfo;
 import cube.service.Session;
 import cube.service.account.AccountListener;
 import cube.service.account.DeviceListener;
-import cube.ware.data.room.AppDataBase;
+import cube.ware.data.room.CubeDBHelper;
 import java.util.List;
 
 /**
@@ -53,12 +53,12 @@ public class UserHandle implements AccountListener, DeviceListener {
 
     @Override
     public void onLogin(Session session) {
-
+        CubeDBHelper.checkUpdateDB(session.getCubeId());
     }
 
     @Override
     public void onLogout(Session session) {
-        AppDataBase.release();
+        CubeDBHelper.closeDB();
     }
 
     @Override

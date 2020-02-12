@@ -51,7 +51,7 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
     }
 
     @Override
-    protected boolean isRegisterEventBus() {
+    protected boolean openEventBus() {
         return true;
     }
 

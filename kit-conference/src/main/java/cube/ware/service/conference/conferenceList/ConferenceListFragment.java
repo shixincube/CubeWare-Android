@@ -52,7 +52,7 @@ public class ConferenceListFragment extends BaseFragment<ConferenceListContract.
     }
 
     @Override
-    protected boolean isRegisterEventBus() {
+    protected boolean openEventBus() {
         return true;
     }
 

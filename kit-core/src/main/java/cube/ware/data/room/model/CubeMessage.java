@@ -18,9 +18,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by dth
- * Des: 应用层消息表，根据引擎MessageEntity转换而来
- * Date: 2018/8/30.
+ * 应用层消息表
+ * 描述：根据引擎MessageEntity转换而来
+ *
+ * @author LiuFeng
+ * @data 2020/2/12 20:31
  */
 @Entity
 @TypeConverters(CubeMessageType.class)

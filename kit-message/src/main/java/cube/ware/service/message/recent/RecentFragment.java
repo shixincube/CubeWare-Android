@@ -20,8 +20,6 @@ import com.common.mvp.base.BaseFragment;
 import com.common.mvp.eventbus.Event;
 import com.common.mvp.eventbus.EventBusUtil;
 import com.common.sdk.RouterUtil;
-import com.common.utils.receiver.NetworkStateReceiver;
-import com.common.utils.utils.DateUtil;
 import com.common.utils.utils.NetworkUtil;
 import com.common.utils.utils.ScreenUtil;
 import com.common.utils.utils.log.LogUtil;
@@ -42,32 +40,31 @@ import cube.ware.widget.emptyview.EmptyViewUtil;
 import java.util.List;
 
 /**
- * Created by dth
- * Des: 基于本地数据构建的最近会话的fragment
- * Date: 2018/8/27.
+ * 最近会话消息
+ *
+ * @author LiuFeng
+ * @data 2020/2/12 15:20
  */
-
-public class RecentFragment extends BaseFragment<RecentPresenter> implements RecentContract.View, NetworkStateReceiver.NetworkStateChangedListener, CubeEngineListener {
+public class RecentFragment extends BaseFragment<RecentPresenter> implements RecentContract.View, CubeEngineListener {
 
     private RecyclerView   mMessageRecyclerView;
     private ImageView      mToolbarSearch;
     private ImageView      mToolbarAdd;
     private TextView       mTitleTv;
-    private RelativeLayout mToolBarLayout;
     private View           mHeaderView;
-    private TextView       mRecentMessageTv;// 消息大文字标题
-    private TextView       mRecentMessageErrorTv;// 引擎连接失败标题
+    private TextView       mRecentMessageTv;        // 消息大文字标题
+    private TextView       mRecentMessageErrorTv;   // 引擎连接失败标题
     private ProgressBar    mRecentMessagePb;
-    private TextView       mRecentStatusTv;// 引擎连接状态标题
+    private TextView       mRecentStatusTv;         // 引擎连接状态标题
     private RelativeLayout mRecentMessageRl;
-    private LinearLayout   mNoNetworkTipLl; //网络未连接tips
-    private ImageView      mOtherPlatLoginTipIv;//其他端登录文字
-    private TextView       mOtherPlatLoginTipTv;//网络未连接文字
-    private LinearLayout   mOtherPlatLoginTipLl;//其他端登录tips
+    private LinearLayout   mNoNetworkTipLl;         //网络未连接tips
+    private ImageView      mOtherPlatLoginTipIv;    //其他端登录文字
+    private TextView       mOtherPlatLoginTipTv;    //网络未连接文字
+    private LinearLayout   mOtherPlatLoginTipLl;    //其他端登录tips
     private RecentAdapter  mRecentAdapter;
     private EmptyView      mEmptyView;
     private PopupWindow    popupWindow;
-    private RelativeLayout tool_bar_layout;
+    private RelativeLayout mToolBarLayout;
 
     @Override
     protected int getContentViewId() {
@@ -85,12 +82,11 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
         mToolbarSearch = (ImageView) mRootView.findViewById(R.id.toolbar_search);
         mToolbarAdd = (ImageView) mRootView.findViewById(R.id.toolbar_add);
         mTitleTv = (TextView) mRootView.findViewById(R.id.title_tv);
-        mToolBarLayout = (RelativeLayout) mRootView.findViewById(R.id.tool_bar_layout);
         mRecentAdapter = new RecentAdapter(R.layout.item_recent);
         mMessageRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.HORIZONTAL);
         mMessageRecyclerView.addItemDecoration(itemDecoration);
-        tool_bar_layout = ((RelativeLayout) mRootView.findViewById(R.id.tool_bar_layout));
+        mToolBarLayout = ((RelativeLayout) mRootView.findViewById(R.id.tool_bar_layout));
 
         //        mHeaderView = View.inflate(getContext(),R.layout.header_recent_session_recyclerview, null);
         mHeaderView = getLayoutInflater().inflate(R.layout.header_recent_session_recyclerview, (ViewGroup) mMessageRecyclerView.getParent(), false);
@@ -108,18 +104,14 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
         mRecentMessageErrorTv.setVisibility(View.GONE);
         mRecentMessagePb.setVisibility(View.GONE);
         mRecentStatusTv.setVisibility(View.VISIBLE);
-        CubeState cubeEngineState = CubeEngine.getInstance().getCubeEngineState();
-        onStateChange(cubeEngineState);
 
         mRecentAdapter.addHeaderView(mHeaderView);//添加头视图
         mMessageRecyclerView.setAdapter(mRecentAdapter);
         closeRecyclerViewAnimator(mMessageRecyclerView);
 
         if (NetworkUtil.isNetworkConnected(getContext()) && NetworkUtil.isNetAvailable(getContext())) {
-            //if (!CubeSpUtil.isFirstSync(CubeSpUtil.getCubeUser().getCubeId())) {
-            //    设置无数据时显示内容
+            // 设置无数据时显示内容
             mEmptyView = EmptyViewUtil.EmptyViewBuilder.getInstance(getActivity()).setItemCountToShowEmptyView(1).setEmptyText(R.string.no_data_message).setShowText(true).setIconSrc(R.drawable.ic_nodata_message).setShowIcon(true).bindView(this.mMessageRecyclerView);
-            //}
             mNoNetworkTipLl.setVisibility(View.GONE);
         }
         else {
@@ -131,27 +123,28 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
 
     @Override
     protected void initListener() {
-        NetworkStateReceiver.getInstance().addNetworkStateChangedListener(this);
-        CubeEngine.getInstance().addCubeEngineListener(this);
         this.mNoNetworkTipLl.setOnClickListener(this);
         this.mOtherPlatLoginTipLl.setOnClickListener(this);
-
         this.mToolbarAdd.setOnClickListener(this);
+        // 引擎状态监听
+        CubeEngine.getInstance().addCubeEngineListener(this);
 
+        // 滚动距离
         this.mMessageRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int result = getScollYDistance(recyclerView);
+                int result = getScrollYDistance(recyclerView);
                 if (result < 100) {
                     mTitleTv.setVisibility(View.GONE);
                 }
-                else if (result >= 100) {
+                else {
                     mTitleTv.setVisibility(View.VISIBLE);
                 }
             }
         });
 
+        // 会话点击
         mRecentAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -169,7 +162,18 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
     }
 
     @Override
-    protected boolean isRegisterEventBus() {
+    protected void initData() {
+        onStateChange(CubeEngine.getInstance().getCubeEngineState());
+        mPresenter.refreshRecentSessions();
+    }
+
+    @Override
+    protected boolean openNetworkListener() {
+        return true;
+    }
+
+    @Override
+    protected boolean openEventBus() {
         return true;
     }
 
@@ -208,7 +212,7 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
         int popWidth = popupWindow.getContentView().getMeasuredWidth();
         int windowWidth = ScreenUtil.getDisplayWidth();
         int xOff = windowWidth - popWidth - ScreenUtil.dip2px(12);    // x轴的偏移量
-        popupWindow.showAsDropDown(tool_bar_layout, xOff, -ScreenUtil.dip2px(4));  // 设置弹出框显示的位置
+        popupWindow.showAsDropDown(mToolBarLayout, xOff, -ScreenUtil.dip2px(4));  // 设置弹出框显示的位置
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -236,11 +240,6 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
         });
     }
 
-    @Override
-    protected void initData() {
-        mPresenter.refreshRecentSessions();
-    }
-
     public void closeRecyclerViewAnimator(RecyclerView recyclerView) {
         recyclerView.getItemAnimator().setAddDuration(0);
         recyclerView.getItemAnimator().setChangeDuration(0);
@@ -248,12 +247,12 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
         recyclerView.getItemAnimator().setRemoveDuration(0);
     }
 
-    private int getScollYDistance(RecyclerView recyclerView) {
+    private int getScrollYDistance(RecyclerView recyclerView) {
         LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         int position = layoutManager.findFirstVisibleItemPosition();
-        View firstVisiableChildView = layoutManager.findViewByPosition(position);
-        int itemHeight = firstVisiableChildView.getHeight();
-        return (position) * itemHeight - firstVisiableChildView.getTop();
+        View firstVisibleChildView = layoutManager.findViewByPosition(position);
+        int itemHeight = firstVisibleChildView.getHeight();
+        return (position) * itemHeight - firstVisibleChildView.getTop();
     }
 
     /**
@@ -290,7 +289,6 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
             }
             mNoNetworkTipLl.setVisibility(View.GONE);
             EventBusUtil.post(MessageConstants.Event.EVENT_REFRESH_SYSTEM_MESSAGE, true);
-            //            queryOtherPlayLoginTip();
         }
         else {
             if (mEmptyView != null) {
@@ -313,17 +311,20 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
 
     @Override
     public void onStateChange(CubeState cubeState) {
-        LogUtil.i("CubeEngine_state -> time: " + DateUtil.formatTimestamp(System.currentTimeMillis()) + " , state: " + cubeState);
+        LogUtil.i("onStateChange -> cubeState: " + cubeState);
         mRecentMessageTv.setVisibility(View.GONE);
         mRecentMessageErrorTv.setVisibility(View.GONE);
         mRecentStatusTv.setVisibility(View.VISIBLE);
-        if (cubeState == CubeState.START) {  // 引擎正在连接
+
+        // 引擎正在连接
+        if (cubeState == CubeState.START) {
             if (mRecentMessagePb != null) {
                 mRecentMessagePb.setVisibility(View.VISIBLE);
             }
             mRecentStatusTv.setText(CubeCore.getContext().getString(R.string.connecting));
         }
-        else if (cubeState == CubeState.PAUSE) { // 未连接
+        // 未连接
+        else if (cubeState == CubeState.PAUSE) {
             if (mRecentMessagePb != null) {
                 mRecentMessagePb.setVisibility(View.GONE);
             }
@@ -331,7 +332,8 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
             mRecentMessageTv.setVisibility(View.VISIBLE);
             mRecentMessageErrorTv.setVisibility(View.VISIBLE);
         }
-        else if (cubeState == CubeState.BUSY) {    // 正在收消息
+        // 正在收消息
+        else if (cubeState == CubeState.BUSY) {
             if (mRecentMessagePb != null) {
                 mRecentMessagePb.setVisibility(View.VISIBLE);
             }
@@ -377,18 +379,14 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
     @Override
     public void onRefresh(CubeRecentViewModel cubeRecentViewModel) {
         List<CubeRecentViewModel> data = mRecentAdapter.getData();
-        int position = mRecentAdapter.findPosition(cubeRecentViewModel.cubeRecentSession.getSessionId());
+        int position = data.indexOf(cubeRecentViewModel);
         if (position != -1) {
             //如果是回执消息引起的刷新
             if (cubeRecentViewModel.cubeRecentSession.getTimestamp() == data.get(position).cubeRecentSession.getTimestamp()) {
                 mRecentAdapter.setData(position, cubeRecentViewModel);
             }
             else {
-                //                mRecentAdapter.remove(position);
-                //                mRecentAdapter.addData(0,cubeRecentViewModel);
-                data.remove(position);
-                data.add(0, cubeRecentViewModel);
-                mRecentAdapter.notifyDataSetChanged();
+                mRecentAdapter.setData(0, cubeRecentViewModel);
             }
         }
         else {

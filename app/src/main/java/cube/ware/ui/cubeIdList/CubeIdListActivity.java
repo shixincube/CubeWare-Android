@@ -89,7 +89,7 @@ public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implem
     }
 
     @Override
-    public void getCubeIdListSuccess(List<CubeUser> userList) {
+    public void queryCubeIdListSuccess(List<CubeUser> userList) {
         mUsers.addAll(userList);
         mAdapter.setNewData(mUsers);
     }

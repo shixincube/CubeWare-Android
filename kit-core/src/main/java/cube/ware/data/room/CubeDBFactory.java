@@ -11,7 +11,7 @@ import cube.ware.data.room.dao.CubeUserDao;
  * @author LiuFeng
  * @data 2020/2/7 16:12
  */
-public class CubeDataBaseFactory {
+public class CubeDBFactory {
 
     /**
      * 获取最近会话Dao
@@ -19,7 +19,7 @@ public class CubeDataBaseFactory {
      * @return
      */
     public static CubeSessionDao getCubeRecentSessionDao() {
-        return AppDataBase.getInstance().getCubeRecentSessionDao();
+        return CubeDataBase.getInstance().getCubeRecentSessionDao();
     }
 
     /**
@@ -28,7 +28,7 @@ public class CubeDataBaseFactory {
      * @return
      */
     public static CubeMessageDao getCubeMessageDao() {
-        return AppDataBase.getInstance().getCubeMessageDao();
+        return CubeDataBase.getInstance().getCubeMessageDao();
     }
 
     /**
@@ -37,7 +37,7 @@ public class CubeDataBaseFactory {
      * @return
      */
     public static CubeUserDao getCubeUserDao() {
-        return AppDataBase.getInstance().getCubeUserDao();
+        return CubeDataBase.getInstance().getCubeUserDao();
     }
 
     /**
@@ -46,6 +46,6 @@ public class CubeDataBaseFactory {
      * @return
      */
     public static CubeConferenceDao getCubeConferenceDao() {
-        return AppDataBase.getInstance().getCubeConferenceDao();
+        return CubeDataBase.getInstance().getCubeConferenceDao();
     }
 }

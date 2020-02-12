@@ -7,9 +7,10 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by dth
- * Des: user表，开发者可以根据自身应用定制
- * Date: 2018/9/3.
+ * 用户信息表
+ *
+ * @author LiuFeng
+ * @data 2020/2/12 20:32
  */
 @Entity
 public class CubeUser {

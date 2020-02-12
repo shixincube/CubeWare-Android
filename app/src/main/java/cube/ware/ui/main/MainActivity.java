@@ -60,6 +60,12 @@ public class MainActivity extends BaseActivity implements AccountListener {
         super.initView();
         this.mFragmentManager = getSupportFragmentManager();
         this.mNavigateTabBar = findViewById(R.id.navigate_tabbar);
+        this.mNavigateTabBar.onRestoreInstanceState(mSavedInstanceState);
+        this.mNavigateTabBar.addTab(new NavigateTabBar.TabParam(R.drawable.tab_msg_btn_unselected, R.drawable.tab_msg_btn_selected, MAIN_PAGE_MESSAGE, 0));
+        this.mNavigateTabBar.addTab(new NavigateTabBar.TabParam(R.drawable.tab_consert_btn_unselected, R.drawable.tab_consert_btn_selected, MAIN_PAGE_CONFERENCE, 1));
+        this.mNavigateTabBar.addTab(new NavigateTabBar.TabParam(R.drawable.ic_tab_more, R.drawable.ic_tab_more, null, 2));
+        this.mNavigateTabBar.addTab(new NavigateTabBar.TabParam(R.drawable.tab_contact_btn_unselected, R.drawable.tab_contact_btn_selected, MAIN_PAGE_CONTACTS, 3));
+        this.mNavigateTabBar.addTab(new NavigateTabBar.TabParam(R.drawable.tab_person_btn_unselected, R.drawable.tab_person_btn_selected, MAIN_PAGE_MINE, 4));
     }
 
     @Override
@@ -112,7 +118,7 @@ public class MainActivity extends BaseActivity implements AccountListener {
     }
 
     @Override
-    protected boolean isRegisterEventBus() {
+    protected boolean openEventBus() {
         return true;
     }
 
@@ -130,19 +136,9 @@ public class MainActivity extends BaseActivity implements AccountListener {
 
     @Override
     protected void initData() {
-        this.mNavigateTabBar.onRestoreInstanceState(mSavedInstanceState);
-        this.mNavigateTabBar.addTab(new NavigateTabBar.TabParam(R.drawable.tab_msg_btn_unselected, R.drawable.tab_msg_btn_selected, MAIN_PAGE_MESSAGE, 0));
-        this.mNavigateTabBar.addTab(new NavigateTabBar.TabParam(R.drawable.tab_consert_btn_unselected, R.drawable.tab_consert_btn_selected, MAIN_PAGE_CONFERENCE, 1));
-        this.mNavigateTabBar.addTab(new NavigateTabBar.TabParam(R.drawable.ic_tab_more, R.drawable.ic_tab_more, null, 2));
-        this.mNavigateTabBar.addTab(new NavigateTabBar.TabParam(R.drawable.tab_contact_btn_unselected, R.drawable.tab_contact_btn_selected, MAIN_PAGE_CONTACTS, 3));
-        this.mNavigateTabBar.addTab(new NavigateTabBar.TabParam(R.drawable.tab_person_btn_unselected, R.drawable.tab_person_btn_selected, MAIN_PAGE_MINE, 4));
-
         // 打开默认Fragment
         mRecentFragment = new RecentFragment();
         selectFragment(mRecentFragment, MAIN_PAGE_MESSAGE);
-        //        mRecentSessionFragment = new RecentSessionFragment();
-        //        selectFragment(mRecentSessionFragment, MAIN_PAGE_MESSAGE);
-        //        IntentWrapper.whiteListMatters(this, "");
     }
 
     /**

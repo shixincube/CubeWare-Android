@@ -1,5 +1,6 @@
 package cube.ware.data.model;
 
+import android.text.TextUtils;
 import cube.ware.data.room.model.CubeRecentSession;
 
 /**
@@ -11,7 +12,13 @@ import cube.ware.data.room.model.CubeRecentSession;
 public class CubeRecentViewModel {
 
     public CubeRecentSession cubeRecentSession;
-    public String      userName;
-    public String      userFace;
-    public String      remark;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof CubeRecentViewModel)) {
+            return false;
+        }
+
+        return TextUtils.equals(this.cubeRecentSession.getSessionId(), ((CubeRecentViewModel) obj).cubeRecentSession.getSessionId());
+    }
 }

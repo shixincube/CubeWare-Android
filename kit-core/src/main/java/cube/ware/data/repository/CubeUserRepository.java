@@ -1,7 +1,7 @@
 package cube.ware.data.repository;
 
 import com.common.mvp.rx.OnSubscribeRoom;
-import cube.ware.data.room.CubeDataBaseFactory;
+import cube.ware.data.room.CubeDBFactory;
 import cube.ware.data.room.model.CubeUser;
 import java.util.List;
 import rx.Observable;
@@ -39,7 +39,7 @@ public class CubeUserRepository {
         return Observable.create(new OnSubscribeRoom<CubeUser>() {
             @Override
             protected CubeUser get() {
-                return CubeDataBaseFactory.getCubeUserDao().queryUser(cubeId);
+                return CubeDBFactory.getCubeUserDao().queryUser(cubeId);
             }
         }).subscribeOn(Schedulers.io());
     }
@@ -55,7 +55,7 @@ public class CubeUserRepository {
         return Observable.create(new OnSubscribeRoom<List<CubeUser>>() {
             @Override
             protected List<CubeUser> get() {
-                CubeDataBaseFactory.getCubeUserDao().saveOrUpdate(cubeUsers);
+                CubeDBFactory.getCubeUserDao().saveOrUpdate(cubeUsers);
                 return cubeUsers;
             }
         }).subscribeOn(Schedulers.io());
@@ -72,7 +72,7 @@ public class CubeUserRepository {
         return Observable.create(new OnSubscribeRoom<CubeUser>() {
             @Override
             protected CubeUser get() {
-                CubeDataBaseFactory.getCubeUserDao().saveOrUpdate(cubeUser);
+                CubeDBFactory.getCubeUserDao().saveOrUpdate(cubeUser);
                 return cubeUser;
             }
         }).subscribeOn(Schedulers.io());
@@ -87,7 +87,7 @@ public class CubeUserRepository {
         return Observable.create(new OnSubscribeRoom<List<CubeUser>>() {
             @Override
             protected List<CubeUser> get() {
-                return CubeDataBaseFactory.getCubeUserDao().queryAll();
+                return CubeDBFactory.getCubeUserDao().queryAll();
             }
         }).subscribeOn(Schedulers.io());
     }

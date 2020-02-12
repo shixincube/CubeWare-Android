@@ -19,9 +19,9 @@ public interface CubeIdListContract {
         void showMessage(String message);
 
         /**
-         * 登录成功后回调
+         * 查询成功后回调
          */
-        void getCubeIdListSuccess(List<CubeUser> userList);
+        void queryCubeIdListSuccess(List<CubeUser> userList);
 
         /**
          * 获取token
