@@ -34,6 +34,7 @@ import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;
+import cube.ware.service.message.MessageApi;
 import cube.ware.service.message.R;
 import cube.ware.service.message.chat.ChatContainer;
 import cube.ware.service.message.chat.activity.base.BaseChatActivity;
@@ -47,8 +48,9 @@ import cube.ware.service.message.chat.panel.input.function.BaseFunction;
 import cube.ware.service.message.chat.panel.input.function.FunctionPanel;
 import cube.ware.service.message.chat.panel.input.voicefragment.RecordFragment;
 import cube.ware.service.message.chat.panel.messagelist.MessageListPanel;
-import cube.ware.service.message.manager.MessageManager;
+import cube.ware.service.message.manager.MessageBuilder;
 import cube.ware.service.message.manager.MessageJudge;
+import cube.ware.service.message.manager.MessageManager;
 import cube.ware.utils.SpUtil;
 import cube.ware.utils.StringUtil;
 import cube.ware.widget.CubeEmoticonEditText;
@@ -531,24 +533,18 @@ public class InputPanel implements EmoticonSelectedListener, View.OnClickListene
      */
     private void sendMessage(int type) {
         String text = this.mChatMessageEt.getText().toString();
-        boolean isSecret = mChatContainer.mSessionType == CubeSessionType.Secret;
         if (mChatMessageEt.isInReplyMode()) {
-            //// TODO: 2018/1/31 目前移动端只需要能回复文本消息即可
             String replyContentSource = mChatMessageEt.getReplyContentSource();
-            text = text.substring(replyContentSource.length() + 1, text.length());
-            TextMessage textMessage = MessageManager.getInstance().buildTextMessage(mChatType, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, mChatContainer.mChatName, text, isSecret);
-            MessageManager.getInstance().replyMessage(mCubeMessage, textMessage);
+            text = text.substring(replyContentSource.length() + 1);
+            TextMessage textMessage = MessageBuilder.buildTextMessage(mChatType, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, text);
+            MessageApi.replyMessage(mCubeMessage, textMessage);
             mChatMessageEt.getText().clear();
             mListPanel.scrollToBottom();
         }
         else {
-            final TextMessage textMessage = MessageManager.getInstance().buildTextMessage(mChatType, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, mChatContainer.mChatName, text, isSecret);
-            MessageManager.getInstance().sendMessage(textMessage).compose(RxSchedulers.<Boolean>io_main()).subscribe(new Action1<Boolean>() {
-                @Override
-                public void call(Boolean aBoolean) {
-                    restoreText(aBoolean);
-                }
-            });
+            final TextMessage textMessage = MessageBuilder.buildTextMessage(mChatType, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, text);
+            MessageManager.getInstance().sendMessage(textMessage);
+            restoreText(true);
         }
     }
 
@@ -1074,25 +1070,14 @@ public class InputPanel implements EmoticonSelectedListener, View.OnClickListene
     @Override
     public void onStickerSelected(StickerItem stickerItem) {
         String emojiText = "[cube_emoji:" + stickerItem.getKey() + "]";
-        boolean isSecret = mChatContainer.mSessionType == CubeSessionType.Secret;
-        final TextMessage textMessage = MessageManager.getInstance().buildTextMessage(mChatType, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, mChatContainer.mChatName, emojiText, isSecret);
+        final TextMessage textMessage = MessageBuilder.buildTextMessage(mChatType, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, emojiText);
         textMessage.setHeader("textType", "customemoji");
         textMessage.setHeader("key", stickerItem.getKey());
         textMessage.setHeader("packageId", stickerItem.getPackgeId());
         textMessage.setHeader("thumbUrl", stickerItem.getUrl());
         textMessage.setHeader("url", stickerItem.getUrl());
         textMessage.setHeader("emojiCName", stickerItem.getName());
-        MessageManager.getInstance().sendMessage(textMessage).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Boolean>() {
-            @Override
-            public void call(Boolean aBoolean) {
-                if (aBoolean) {
-                    LogUtil.i("emoji message : 贴图发送成功");
-                }
-                else {
-                    LogUtil.i("emoji message : 贴图发送失败");
-                }
-            }
-        });
+        MessageManager.getInstance().sendMessage(textMessage);
     }
 
     @Override

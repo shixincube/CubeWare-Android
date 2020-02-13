@@ -58,6 +58,14 @@ public abstract class CubeMessageDao {
     public abstract void delete(CubeMessage... CubeMessages);
 
     /**
+     * 通过sn删除消息
+     *
+     * @param sn
+     */
+    @Query("DELETE FROM CubeMessage WHERE messageSN = :sn")
+    public abstract void deleteMessageBySn(long sn);
+
+    /**
      * 查询全部数据
      *
      * @return

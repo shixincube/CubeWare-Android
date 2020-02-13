@@ -163,8 +163,8 @@ public class RecentFragment extends BaseFragment<RecentPresenter> implements Rec
 
     @Override
     protected void initData() {
-        onStateChange(CubeEngine.getInstance().getCubeEngineState());
         mPresenter.refreshRecentSessions();
+        onStateChange(CubeEngine.getInstance().getCubeEngineState());
     }
 
     @Override

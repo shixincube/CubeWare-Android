@@ -11,6 +11,7 @@ import com.common.utils.utils.log.LogUtil;
 import cube.ware.common.MessageConstants;
 import cube.ware.core.CubeConstants;
 import cube.ware.core.CubeCore;
+import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.service.message.R;
@@ -33,7 +34,7 @@ import java.util.List;
  * @author LiuFeng
  * @data 2020/2/8 13:38
  */
-public class MessageFragment extends BaseFragment implements InputPanelProxy, MessageEditWatcher {
+public class MessageFragment extends BaseFragment<MessagePresenter> implements MessageContract.View, InputPanelProxy, MessageEditWatcher {
 
     private static final String TAG = MessageFragment.class.getSimpleName();
 
@@ -115,14 +116,14 @@ public class MessageFragment extends BaseFragment implements InputPanelProxy, Me
     }
 
     @Override
-    protected BasePresenter createPresenter() {
-        return null;
+    protected MessagePresenter createPresenter() {
+        return new MessagePresenter(mActivity, this);
     }
 
     @Override
     protected void initData() {
         this.parseArguments();
-        ChatContainer container = new ChatContainer(getActivity(), this.mChatId, this.mChatName, this.mSessionType, this);
+        ChatContainer container = new ChatContainer(getActivity(), this.mChatId, this.mChatName, this.mSessionType, this, mPresenter);
 
         //必须给消息管理器设置聊天容器
         MessageManager.getInstance().addContainer(this, container);
@@ -361,5 +362,10 @@ public class MessageFragment extends BaseFragment implements InputPanelProxy, Me
         if (mInputPanel != null) {
             mInputPanel.removeWatcher(this);
         }
+    }
+
+    @Override
+    public void queryMessagesSuccess(List<CubeMessageViewModel> messages) {
+        mMessageListPanel.updateView(messages);
     }
 }

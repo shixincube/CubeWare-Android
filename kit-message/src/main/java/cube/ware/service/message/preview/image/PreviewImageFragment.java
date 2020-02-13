@@ -167,7 +167,7 @@ public class PreviewImageFragment extends BaseLazyFragment {
                     if (saveBitmapPath != null) {
                         cubeMessage.setFilePath(saveBitmapPath);
                         CubeDBFactory.getCubeMessageDao().saveOrUpdate(cubeMessage);
-                        MessageManager.getInstance().updateMessageLite(cubeMessage);
+                        MessageManager.getInstance().messagePersisted(cubeMessage);
                     }
 
                 } catch (InterruptedException e) {

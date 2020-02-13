@@ -75,6 +75,9 @@ public abstract class BaseMsgViewHolder implements MessagePopupManager.OnPopMenu
     //超时时间常量
     long TIME_OUT = 3 * 60 * 1000;
 
+    //消息显示时间的最小间隔时间
+    public static final long SHOW_TIME_PERIOD = 5 * 60 * 1000;
+
     public BaseMsgViewHolder(ChatMessageAdapter adapter, BaseViewHolder viewHolder, CubeMessageViewModel data, int position, Map<String, CubeMessage> selectedMap) {
         this.mAdapter = adapter;
         this.mViewHolder = viewHolder;
@@ -590,7 +593,7 @@ public abstract class BaseMsgViewHolder implements MessagePopupManager.OnPopMenu
             if (cubeMessageViewModel != null) {
                 long lastMessageTimestamp = cubeMessageViewModel.mMessage.getTimestamp();
                 long thisMessageTimestamp = mData.mMessage.getTimestamp();
-                if (thisMessageTimestamp - lastMessageTimestamp > MessageManager.SHOW_TIME_PERIOD) {
+                if (thisMessageTimestamp - lastMessageTimestamp > SHOW_TIME_PERIOD) {
                     mData.mMessage.setShowTime(true);
                 }
                 else {

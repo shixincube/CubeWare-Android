@@ -58,6 +58,14 @@ public abstract class CubeSessionDao {
     public abstract void delete(CubeRecentSession... cubeRecentSessions);
 
     /**
+     * 通过sessionId删除数据
+     *
+     * @param sessionId
+     */
+    @Query("DELETE FROM cuberecentsession WHERE sessionId = :sessionId")
+    public abstract void deleteSessionById(String sessionId);
+
+    /**
      * 查询全部数据
      *
      * @return

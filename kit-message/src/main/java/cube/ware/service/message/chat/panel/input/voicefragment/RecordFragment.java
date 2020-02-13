@@ -8,16 +8,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.common.utils.utils.log.LogUtil;
-
 import cube.service.message.VoiceClipMessage;
-import cube.ware.service.message.R;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
-import cube.ware.service.message.manager.MessageManager;
-import cube.ware.service.message.chat.activity.base.BaseChatActivity;
+import cube.ware.service.message.R;
 import cube.ware.service.message.chat.ChatContainer;
+import cube.ware.service.message.chat.activity.base.BaseChatActivity;
+import cube.ware.service.message.manager.MessageBuilder;
+import cube.ware.service.message.manager.MessageManager;
 import cube.ware.widget.voice.AudioRecordLayout;
 
 /**
@@ -33,6 +32,7 @@ public class RecordFragment extends Fragment {
 
     /**
      * Fragment必须要有空的构造函数，否则直接crash。因为Fragment源码中用到反射构造了对象，是无参数的构造函数
+     *
      * @SuppressLint("ValidFragment")按理说忽略警告是有用的，但是在这好像没用
      */
     public RecordFragment() {
@@ -66,9 +66,8 @@ public class RecordFragment extends Fragment {
             @Override
             public void onRecordComplete(VoiceClipMessage vcm) {
                 Log.v("test", "完成");
-                boolean isSecret = mChatContainer.mSessionType == CubeSessionType.Secret;
-                VoiceClipMessage voiceClipMessage = MessageManager.getInstance().buildVoiceMessage(CubeSessionType.P2P, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, vcm, isSecret);
-                MessageManager.getInstance().sendMessage(voiceClipMessage).subscribe();
+                VoiceClipMessage voiceClipMessage = MessageBuilder.buildMessage(CubeSessionType.P2P, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, vcm);
+                MessageManager.getInstance().sendMessage(voiceClipMessage);
             }
 
             @Override

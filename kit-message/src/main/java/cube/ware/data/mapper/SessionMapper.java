@@ -17,7 +17,6 @@ import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeRecentSession;
 import cube.ware.service.message.manager.MessageJudge;
-import cube.ware.service.message.manager.MessageManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +82,7 @@ public class SessionMapper {
         }
         try {
             CubeRecentSession cubeRecentSession = new CubeRecentSession();
-            if (MessageManager.getInstance().isGroupMessage(messageEntity)) {
+            if (messageEntity.isGroupMessage()) {
                 buildGroupRecentSession(messageEntity, cubeRecentSession);
             }
             else {

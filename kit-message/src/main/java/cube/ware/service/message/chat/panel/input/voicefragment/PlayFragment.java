@@ -8,16 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
 import com.common.utils.utils.log.LogUtil;
-
 import cube.service.message.VoiceClipMessage;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.service.message.R;
+import cube.ware.service.message.chat.ChatContainer;
+import cube.ware.service.message.manager.MessageBuilder;
 import cube.ware.service.message.manager.MessageManager;
 import cube.ware.service.message.manager.PlayerManager;
-import cube.ware.service.message.chat.ChatContainer;
 import cube.ware.utils.NoDoubleClickListener;
 import cube.ware.widget.voice.HorVoiceView;
 import cube.ware.widget.voice.PlayStartView;
@@ -125,9 +124,8 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         }
         else if (v.getId() == R.id.btn_send) {
             PlayerManager.getInstance().stop();
-            boolean isSecret = mChatContainer.mSessionType == CubeSessionType.Secret;
-            VoiceClipMessage voiceClipMessage = MessageManager.getInstance().buildVoiceMessage(CubeSessionType.P2P, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, mVoiceClipMessage, isSecret);
-            MessageManager.getInstance().sendMessage(voiceClipMessage).subscribe();
+            VoiceClipMessage voiceClipMessage = MessageBuilder.buildMessage(CubeSessionType.P2P, CubeCore.getInstance().getCubeId(), mChatContainer.mChatId, mVoiceClipMessage);
+            MessageManager.getInstance().sendMessage(voiceClipMessage);
             //从栈中将当前fragment退出
             getFragmentManager().popBackStack();
         }

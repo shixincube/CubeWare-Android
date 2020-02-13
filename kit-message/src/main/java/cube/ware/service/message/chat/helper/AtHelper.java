@@ -19,9 +19,9 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import cube.ware.common.MessageConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.room.model.CubeMessage;
-import cube.ware.common.MessageConstants;
 import cube.ware.service.message.R;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,6 +34,47 @@ import java.util.regex.Pattern;
  */
 
 public class AtHelper {
+
+    /**
+     * 判断是否是有人@我
+     *
+     * @param messageContent
+     *
+     * @return
+     */
+    public static boolean isAtMe(String messageContent) {
+        if (TextUtils.isEmpty(messageContent)) {
+            return false;
+        }
+
+        Pattern pattern = Pattern.compile(MessageConstants.REGEX.REGEX_AT_MEMBER);
+        Matcher matcher = pattern.matcher(messageContent);
+        while (matcher.find()) {
+            String oldContent = matcher.group();
+            if (oldContent.contains(CubeCore.getInstance().getCubeId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断是否是@全体成员
+     *
+     * @param messageContent
+     *
+     * @return
+     */
+    public static boolean isAtAll(String messageContent) {
+        if (TextUtils.isEmpty(messageContent)) {
+            return false;
+        }
+
+        Pattern pattern = Pattern.compile(MessageConstants.REGEX.REGEX_AT_ALL);
+        Matcher matcher = pattern.matcher(messageContent);
+        return matcher.find();
+    }
+
     public static String getAtAlertString(String content) {
         return "[有人@你] " + content;
     }

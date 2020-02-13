@@ -187,12 +187,8 @@ public class CubeMessageRepository {
         return Observable.create(new OnSubscribeRoom<Boolean>() {
             @Override
             protected Boolean get() {
-                CubeMessage cubeMessage = CubeDBFactory.getCubeMessageDao().queryMessageBySn(messageSN);
-                if (cubeMessage != null) {
-                    CubeDBFactory.getCubeMessageDao().delete(cubeMessage);
-                    return true;
-                }
-                return false;
+                CubeDBFactory.getCubeMessageDao().deleteMessageBySn(messageSN);
+                return true;
             }
         }).subscribeOn(Schedulers.io());
     }

@@ -80,7 +80,7 @@ public class RecentAdapter extends BaseQuickAdapter<CubeRecentViewModel, BaseVie
                         break;
 
                     case 1://删除
-                        RecentSessionManager.getInstance().removeRecentSession(cubeRecentViewModel.cubeRecentSession.getSessionId());
+                        RecentSessionManager.getInstance().deleteSessionById(cubeRecentViewModel.cubeRecentSession.getSessionId());
                         break;
                 }
             }

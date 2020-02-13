@@ -10,6 +10,7 @@ import cube.service.CubeEngine;
 import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.room.model.CubeMessage;
+import cube.ware.service.message.MessageApi;
 import cube.ware.service.message.chat.adapter.ChatMessageAdapter;
 import cube.ware.service.message.chat.panel.input.emoticon.manager.StickerManager;
 import cube.ware.service.message.chat.viewholder.BaseMsgViewHolder;
@@ -293,7 +294,7 @@ public class MessagePopupManager {
      */
     private static void deleteMessage(CubeMessage message, final ChatMessageAdapter adapter) {
         final int itemPosition = adapter.findCurrentPosition(message.getMessageSN());
-        MessageManager.getInstance().deleteMessage(message).compose(RxSchedulers.<Boolean>io_main()).subscribe(new Action1<Boolean>() {
+        MessageApi.deleteMessage(message).compose(RxSchedulers.<Boolean>io_main()).subscribe(new Action1<Boolean>() {
             @Override
             public void call(Boolean aBoolean) {
                 if (aBoolean) {

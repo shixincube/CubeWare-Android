@@ -11,7 +11,7 @@ import cube.ware.core.CubeCore;
 import cube.ware.data.mapper.SessionMapper;
 import cube.ware.data.repository.CubeSessionRepository;
 import cube.ware.data.room.model.CubeRecentSession;
-import cube.ware.service.message.manager.MessageManager;
+import cube.ware.service.message.chat.helper.AtHelper;
 import cube.ware.utils.SpUtil;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +21,6 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by dth
@@ -105,11 +104,11 @@ public class RecentSessionManager {
      *
      * @param sessionId
      */
-    public void removeRecentSession(String sessionId) {
-        CubeSessionRepository.getInstance().removeRecentSession(sessionId).subscribe(new Action1<CubeRecentSession>() {
+    public void deleteSessionById(String sessionId) {
+        CubeSessionRepository.getInstance().deleteSessionById(sessionId).subscribe(new Action1<String>() {
             @Override
-            public void call(CubeRecentSession cubeRecentSession) {
-                EventBusUtil.post(MessageConstants.Event.EVENT_REMOVE_RECENT_SESSION_SINGLE, cubeRecentSession.getSessionId());
+            public void call(String sessionId) {
+                EventBusUtil.post(MessageConstants.Event.EVENT_REMOVE_RECENT_SESSION_SINGLE, sessionId);
             }
         });
     }
@@ -160,12 +159,12 @@ public class RecentSessionManager {
 
             if (message instanceof TextMessage && message.getDirection() != MessageDirection.Sent && !message.isReceipted()) {
                 TextMessage textMessage = (TextMessage) message;
-                if (MessageManager.getInstance().isAtMe(textMessage.getContent())) {
+                if (AtHelper.isAtMe(textMessage.getContent())) {
                     // 若消息中包含@自己的信息，则显示有人@我
                     SpUtil.setReceiveAt(MessageConstants.Sp.SP_CUBE_AT + SpUtil.getCubeId() + sessionId, true);
                     LogUtil.d("有人@我: " + sessionId);
                 }
-                else if (MessageManager.getInstance().isAtAll(textMessage.getContent()) && message.isGroupMessage()) {
+                else if (AtHelper.isAtAll(textMessage.getContent()) && message.isGroupMessage()) {
                     SpUtil.setReceiveAtAll(MessageConstants.Sp.SP_CUBE_RECEIVE_ATALL + SpUtil.getCubeId() + sessionId, true);
                     LogUtil.d("有@全体: " + sessionId);
                 }

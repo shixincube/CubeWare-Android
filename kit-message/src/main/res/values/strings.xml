@@ -72,6 +72,7 @@
     <string name="at_all_x">\&#064;全体成员%1$d/%2$d</string>
     <string name="all_member">全体成员</string>
     <string name="message_notify">%1$d条新消息</string>
+    <string name="message_notify_at">\@我(%1$d)</string>
     <string name="unknown_message_type">不支持的消息类型,请到其他终端查看</string>
     <string name="chat_msg_back">消息</string>
     <string name="secret_chat_msg_back">密聊</string>

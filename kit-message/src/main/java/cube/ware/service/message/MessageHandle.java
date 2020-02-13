@@ -21,6 +21,7 @@ import cube.ware.data.room.model.CubeMessage;
 import cube.ware.service.message.chat.fragment.Listener.FileMessageDownloadListener;
 import cube.ware.service.message.chat.fragment.Listener.FileMessageUploadListener;
 import cube.ware.service.message.chat.fragment.MessageHandler;
+import cube.ware.service.message.manager.MessageBuilder;
 import cube.ware.service.message.manager.MessageManager;
 import cube.ware.service.message.manager.ReceiptManager;
 import java.util.HashMap;
@@ -81,7 +82,7 @@ public class MessageHandle implements MessageListener {
     public void onSent(MessageEntity message) {
         LogUtil.i("发送的消息: " + message.toString());
         if (isFromMyDevice(message)) {
-            MessageManager.getInstance().updateMessageInLocal(message).subscribe();
+            MessageManager.getInstance().updateMessageToLocal(message).subscribe();
         }
         else {
             MessageHandler.getInstance().read(message);
@@ -118,7 +119,7 @@ public class MessageHandle implements MessageListener {
         LogUtil.i("文件上传完成的消息:" + message.toString());
 
         // 更新消息到数据库
-        MessageManager.getInstance().updateMessageInLocal(message).subscribeOn(Schedulers.io()).compose(RxSchedulers.<CubeMessage>io_main()).subscribe();
+        MessageManager.getInstance().updateMessageToLocal(message).subscribeOn(Schedulers.io()).compose(RxSchedulers.<CubeMessage>io_main()).subscribe();
 
         // 监听上传完成回调
         Map<String, FileMessageUploadListener> uploadMap = uploadListenerMap.get(message.getSerialNumber());
@@ -162,7 +163,7 @@ public class MessageHandle implements MessageListener {
 
         if (message.getType().equals(MessageType.File) && !message.isGroupMessage() && !message.getSender().getCubeId().equals(CubeCore.getInstance().getCubeId())) {
             FileMessage fileMessage = (FileMessage) message;
-            CustomMessage customMessage = MessageManager.getInstance().buildCustomMessage(CubeSessionType.P2P, CubeCore.getInstance().getCubeId(), message.getSender().getCubeId(), "");
+            CustomMessage customMessage = MessageBuilder.buildCustomMessage(CubeSessionType.P2P, CubeCore.getInstance().getCubeId(), message.getSender().getCubeId(), "");
             customMessage.setHeader("operate", "download");
             customMessage.setHeader("type", "notify");
             customMessage.setHeader("sn", String.valueOf(message.getSerialNumber()));
@@ -175,7 +176,7 @@ public class MessageHandle implements MessageListener {
         }
 
         // 更新消息到数据库
-        MessageManager.getInstance().updateMessageInLocal(message).compose(RxSchedulers.<CubeMessage>io_main()).subscribe();
+        MessageManager.getInstance().updateMessageToLocal(message).compose(RxSchedulers.<CubeMessage>io_main()).subscribe();
 
         // 监听下载完成回调
         Map<String, FileMessageDownloadListener> downloadMap = downloadListenerMap.get(message.getSerialNumber());
@@ -200,7 +201,7 @@ public class MessageHandle implements MessageListener {
     @Override
     public void onRecalled(MessageEntity message) {
         LogUtil.i("撤回的消息:" + message.toString());
-        MessageManager.getInstance().reCallMessage(message);
+        MessageManager.getInstance().onRecalled(message);
         //取消消息的后续处理，如：下载等
         CubeEngine.getInstance().getMessageService().pauseMessage(message.getSerialNumber());
     }
@@ -305,7 +306,7 @@ public class MessageHandle implements MessageListener {
                     uploadListenerMap.remove(message.getSerialNumber());
                 }
             }
-            MessageManager.getInstance().updateMessageInLocal(message).subscribe();
+            MessageManager.getInstance().updateMessageToLocal(message).subscribe();
         }
     }
 

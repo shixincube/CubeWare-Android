@@ -1,42 +1,42 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".service.message.chat.panel.input.chatmore.ChatMoreFunctionFragment">
+    >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/white"
         android:layout_marginTop="@dimen/dp_40"
+        android:background="@color/white"
+        android:orientation="horizontal"
         >
         <LinearLayout
             android:id="@+id/audio_call_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             >
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_chat_function_voice_pressed"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/audio_calling_title"/>
-    </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_chat_function_voice_pressed"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/audio_calling_title"
+                />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/video_call_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             >
             <ImageView
                 android:layout_width="wrap_content"
@@ -46,7 +46,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/video_calling_title"/>
+                android:text="@string/video_calling_title"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -54,8 +55,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             >
             <ImageView
                 android:layout_width="wrap_content"
@@ -65,7 +66,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/wb_calling"/>
+                android:text="@string/wb_calling"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -73,8 +75,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             >
             <ImageView
                 android:layout_width="wrap_content"
@@ -84,9 +86,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sharescreen_calling"/>
+                android:text="@string/sharescreen_calling"
+                />
         </LinearLayout>
 
-    </LinearLayout>>
+    </LinearLayout>
+    >
 
 </RelativeLayout>

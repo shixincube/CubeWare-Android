@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.common.mvp.eventbus.Event;
-import com.common.mvp.rx.RxSchedulers;
 import com.common.utils.utils.DateUtil;
 import com.common.utils.utils.NetworkUtil;
 import com.common.utils.utils.ScreenUtil;
@@ -30,11 +29,13 @@ import cube.service.CubeEngine;
 import cube.service.message.FileMessageStatus;
 import cube.ware.common.MessageConstants;
 import cube.ware.core.CubeCore;
+import cube.ware.data.mapper.MessageMapper;
 import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import cube.ware.data.room.model.CubeMessage;
+import cube.ware.service.message.MessageApi;
 import cube.ware.service.message.R;
 import cube.ware.service.message.chat.ChatContainer;
 import cube.ware.service.message.chat.activity.base.BaseChatActivity;
@@ -43,7 +44,6 @@ import cube.ware.service.message.chat.activity.base.ChatStatusType;
 import cube.ware.service.message.chat.adapter.ChatMessageAdapter;
 import cube.ware.service.message.chat.panel.input.emoticon.EmoticonUtil;
 import cube.ware.service.message.chat.panel.input.emoticon.gif.AnimatedImageSpan;
-import cube.ware.service.message.manager.MessageManager;
 import cube.ware.service.message.manager.PlayerManager;
 import cube.ware.utils.BitmapDecoder;
 import cube.ware.utils.ImageUtil;
@@ -61,11 +61,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import rx.Observable;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
 
 import static cube.ware.service.message.manager.MessagePopupManager.REPLY;
 
@@ -317,33 +312,35 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
         queryHistoryList(true, false);
     }
 
-    public void onMessageSync(List<CubeMessage> list) {
-        if (list != null && !list.isEmpty() && isMy(list.get(0))) {
-            convertMessageModel(list).compose(RxSchedulers.<List<CubeMessageViewModel>>io_main()).subscribe(new Action1<List<CubeMessageViewModel>>() {
-                @Override
-                public void call(List<CubeMessageViewModel> cubeMessageViewModels) {
-                    List<CubeMessageViewModel> anonymousList = new ArrayList<CubeMessageViewModel>();
-                    List<CubeMessageViewModel> messageList = new ArrayList<CubeMessageViewModel>();
-                    for (CubeMessageViewModel model : cubeMessageViewModels) {
-                        if (model.mMessage.isAnonymous()) {
-                            anonymousList.add(model);
-                        }
-                        else {
-                            messageList.add(model);
-                        }
-                    }
-                    if (isAnonymous && anonymousList.size() > 0) {
-                        //                        setStackFromEnd(anonymousList);
-                        mChatMessageAdapter.addRefreshDataList(anonymousList);
-                        isShowMessageTip(anonymousList.get(anonymousList.size() - 1));
-                    }
-                    else if (messageList.size() > 0) {
-                        //                        setStackFromEnd(messageList);
-                        mChatMessageAdapter.addRefreshDataList(messageList);
-                        isShowMessageTip(messageList.get(messageList.size() - 1));
-                    }
+    /**
+     * 消息同步刷新数据
+     *
+     * @param cubeMessages
+     */
+    public void onMessageSync(List<CubeMessage> cubeMessages) {
+        if (cubeMessages != null && !cubeMessages.isEmpty() && isMy(cubeMessages.get(0))) {
+            List<CubeMessageViewModel> messageViewModels = MessageMapper.convertViewModel(cubeMessages);
+            List<CubeMessageViewModel> anonymousList = new ArrayList<>();
+            List<CubeMessageViewModel> messageList = new ArrayList<>();
+            for (CubeMessageViewModel model : messageViewModels) {
+                if (model.mMessage.isAnonymous()) {
+                    anonymousList.add(model);
                 }
-            });
+                else {
+                    messageList.add(model);
+                }
+            }
+
+            if (isAnonymous && anonymousList.size() > 0) {
+                //                        setStackFromEnd(anonymousList);
+                mChatMessageAdapter.addRefreshDataList(anonymousList);
+                isShowMessageTip(anonymousList.get(anonymousList.size() - 1));
+            }
+            else if (messageList.size() > 0) {
+                //                        setStackFromEnd(messageList);
+                mChatMessageAdapter.addRefreshDataList(messageList);
+                isShowMessageTip(messageList.get(messageList.size() - 1));
+            }
         }
     }
 
@@ -384,39 +381,7 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
     private void queryHistoryList(final boolean firstLoad, final boolean isHistory) {
         this.isFirstLoad = firstLoad;
         this.isHistory = isHistory;
-        MessageManager.getInstance().queryHistoryMessage(mChatContainer.mChatId, mChatContainer.mSessionType.getType(), LOAD_NUM, mTime, isAnonymous).compose(RxSchedulers.<List<CubeMessageViewModel>>io_main()).subscribe(new Observer<List<CubeMessageViewModel>>() {
-            @Override
-            public void onNext(List<CubeMessageViewModel> cubeMessageViewModels) {
-                if (cubeMessageViewModels != null) {
-                    updateView(cubeMessageViewModels);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                LogUtil.e(e);
-                hideRefreshProgress();
-            }
-
-            @Override
-            public void onCompleted() {
-                onCompletedView();
-                if (isFirstLoad && !isHistory) {
-                    mContentRv.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isShowAt()) {
-                                //                                        showNotify(R.string.message_notify_at, R.color.tips_text, R.drawable.ic_message_notify_arrow_at, true);
-                            }
-                            else {
-                                mAtPosition = 0;
-                                showNotify(R.string.message_notify, R.color.cube_link_text, R.drawable.ic_message_notify_arrow, false);
-                            }
-                        }
-                    }, 200);
-                }
-            }
-        });
+        mChatContainer.mPresenter.queryMessages(mChatContainer.mSessionType, mChatContainer.mChatId, LOAD_NUM, mTime, isAnonymous);
     }
 
     /**
@@ -426,33 +391,28 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
      */
     private void queryMessageList(final boolean firstLoad) {
         this.isFirstLoad = firstLoad;
-        MessageManager.getInstance().queryHistoryMessage(mChatContainer.mChatId, mChatContainer.mSessionType.getType(), LOAD_NUM, mTime, isAnonymous).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<CubeMessageViewModel>>() {
-            @Override
-            public void onNext(List<CubeMessageViewModel> cubeMessageViewModels) {
-                if (cubeMessageViewModels != null) {
-                    updateView(cubeMessageViewModels);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                LogUtil.i(e.toString());
-                hideRefreshProgress();
-            }
-
-            @Override
-            public void onCompleted() {
-                onCompletedView();
-            }
-        });
+        mChatContainer.mPresenter.queryMessages(mChatContainer.mSessionType, mChatContainer.mChatId, LOAD_NUM, mTime, isAnonymous);
     }
 
     /**
      * 加载完成聊天界面
      */
     private void onCompletedView() {
-        LogUtil.i(TAG, "onCompletedView==>");
         hideRefreshProgress();
+        if (isFirstLoad && !isHistory) {
+            mContentRv.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (isShowAt()) {
+                        showNotify(R.string.message_notify_at, R.color.tips_text, R.drawable.ic_red_arraw, true);
+                    }
+                    else {
+                        mAtPosition = 0;
+                        showNotify(R.string.message_notify, R.color.cube_link_text, R.drawable.ic_message_notify_arrow, false);
+                    }
+                }
+            }, 200);
+        }
     }
 
     /**
@@ -460,8 +420,9 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
      *
      * @param cubeMessages
      */
-    private void updateView(List<CubeMessageViewModel> cubeMessages) {
-        LogUtil.d(TAG, "updateView cubeMessages size=" + cubeMessages.size());
+    public void updateView(List<CubeMessageViewModel> cubeMessages) {
+        onCompletedView();
+
         if (!cubeMessages.isEmpty() && cubeMessages.get(0) != null) {
             Collections.sort(cubeMessages, new Comparator<CubeMessageViewModel>() {
                 @Override
@@ -741,26 +702,6 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
      */
     private boolean isMy(CubeMessage cubeMessage) {
         return null != cubeMessage && cubeMessage.getChatId().equals(this.mChatContainer.mChatId);
-    }
-
-    private Observable<List<CubeMessageViewModel>> convertMessageModel(List<CubeMessage> cubeMessages) {
-        return Observable.just(cubeMessages).flatMap(new Func1<List<CubeMessage>, Observable<List<CubeMessageViewModel>>>() {
-            @Override
-            public Observable<List<CubeMessageViewModel>> call(List<CubeMessage> cubeMessages) {
-                return Observable.from(cubeMessages).flatMap(new Func1<CubeMessage, Observable<CubeMessageViewModel>>() {
-                    @Override
-                    public Observable<CubeMessageViewModel> call(final CubeMessage cubeMessage) {
-                        //自定义消息特殊处理
-                        if (cubeMessage.getMessageType() == CubeMessageType.CustomTips) {
-                            return MessageManager.getInstance().buildCustom(cubeMessage);
-                        }
-                        else {
-                            return MessageManager.getInstance().buildUserInfo(cubeMessage);
-                        }
-                    }
-                }).toList();
-            }
-        });
     }
 
     /**
@@ -1084,10 +1025,10 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
                 onMessageSend(item.mMessage);
             }
             if (CubeMessageType.isFileMessage(cubeMessage.getMessageType())) {
-                MessageManager.getInstance().resumeMessage(cubeMessage.getMessageSN());
+                MessageApi.resumeMessage(cubeMessage.getMessageSN());
             }
             else {
-                MessageManager.getInstance().resendMessage(cubeMessage.getMessageSN());
+                MessageApi.resendMessage(cubeMessage.getMessageSN());
             }
         }
     }

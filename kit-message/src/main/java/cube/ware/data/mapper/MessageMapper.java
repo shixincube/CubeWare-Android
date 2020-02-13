@@ -22,6 +22,7 @@ import cube.service.message.WhiteboardMessage;
 import cube.ware.common.MessageConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.core.R;
+import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeFileMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;
 import cube.ware.data.model.dataModel.enmu.CubeMessageStatus;
@@ -57,19 +58,15 @@ public class MessageMapper {
      */
     public static List<CubeMessage> convertTo(List<MessageEntity> messages, boolean isSync) {
         if (messages == null || messages.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
-        List<CubeMessage> cubeMessageList = new ArrayList<>();
+
+        List<CubeMessage> cubeMessageList = new ArrayList<>(messages.size());
         for (int i = 0; i < messages.size(); i++) {
             MessageEntity messageEntity = messages.get(i);
-            try {
-                CubeMessage cubeMessage = convertTo(messageEntity, isSync);
-                if (cubeMessage != null) {
-                    cubeMessageList.add(cubeMessage);
-                }
-            } catch (Exception e) {
-                LogUtil.e("将MessageEntity转换为CubeMessage出错!" + e.getMessage());
-                return cubeMessageList;
+            CubeMessage cubeMessage = convertTo(messageEntity, isSync);
+            if (cubeMessage != null) {
+                cubeMessageList.add(cubeMessage);
             }
         }
         return cubeMessageList;
@@ -84,9 +81,6 @@ public class MessageMapper {
      * @return
      */
     public static CubeMessage convertTo(MessageEntity messageEntity, boolean isSync) {
-        if (null == messageEntity) {
-            throw new IllegalArgumentException("MessageEntity can't be null!");
-        }
         try {
             CubeMessage cubeMessage = new CubeMessage();
             if (messageEntity instanceof UnKnownMessage) {
@@ -453,5 +447,56 @@ public class MessageMapper {
             temp = true;
         }
         return temp;
+    }
+
+    /**
+     * CubeMessage转ViewModel
+     *
+     * @param messages
+     * @return
+     */
+    public static List<CubeMessageViewModel> convertViewModel(List<CubeMessage> messages) {
+        List<CubeMessageViewModel> messageViewModels = new ArrayList<>(messages.size());
+        for (CubeMessage message : messages) {
+            if (message.getMessageType() == CubeMessageType.CustomTips) {
+                CubeMessageViewModel viewModel = buildCustom(message);
+                messageViewModels.add(viewModel);
+            }
+            else {
+                CubeMessageViewModel viewModel = buildUserInfo(message);
+                messageViewModels.add(viewModel);
+            }
+        }
+
+        return messageViewModels;
+    }
+
+    /**
+     * 构建自定义消息model
+     *
+     * @param cubeMessage
+     *
+     * @return
+     */
+    public static CubeMessageViewModel buildCustom(CubeMessage cubeMessage) {
+        CubeMessageViewModel viewModel = new CubeMessageViewModel();
+        viewModel.mMessage = cubeMessage;
+        return viewModel;
+    }
+
+    /**
+     * 构建用户信息model
+     *
+     * @param cubeMessage
+     *
+     * @return
+     */
+    public static CubeMessageViewModel buildUserInfo(CubeMessage cubeMessage) {
+        CubeMessageViewModel viewModel = new CubeMessageViewModel();
+        viewModel.userNme = cubeMessage.getSenderName();
+        viewModel.userFace = CubeCore.getInstance().getAvatarUrl() + cubeMessage.getSenderId();
+        viewModel.remark = cubeMessage.getSenderName();
+        viewModel.mMessage = cubeMessage;
+        return viewModel;
     }
 }

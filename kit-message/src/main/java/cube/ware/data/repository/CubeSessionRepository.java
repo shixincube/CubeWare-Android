@@ -74,22 +74,12 @@ public class CubeSessionRepository {
      *
      * @return
      */
-    public Observable<CubeRecentSession> removeRecentSession(final String sessionId) {
-        return Observable.create(new OnSubscribeRoom<CubeRecentSession>() {
+    public Observable<String> deleteSessionById(final String sessionId) {
+        return Observable.create(new OnSubscribeRoom<String>() {
             @Override
-            protected CubeRecentSession get() {
-                return CubeDBFactory.getCubeRecentSessionDao().queryBySessionId(sessionId);
-            }
-        }).filter(new Func1<CubeRecentSession, Boolean>() {
-            @Override
-            public Boolean call(CubeRecentSession recentSession) {
-                return recentSession != null;
-            }
-        }).map(new Func1<CubeRecentSession, CubeRecentSession>() {
-            @Override
-            public CubeRecentSession call(CubeRecentSession recentSession) {
-                CubeDBFactory.getCubeRecentSessionDao().delete(recentSession);
-                return recentSession;
+            protected String get() {
+                CubeDBFactory.getCubeRecentSessionDao().deleteSessionById(sessionId);
+                return sessionId;
             }
         }).subscribeOn(Schedulers.io());
     }

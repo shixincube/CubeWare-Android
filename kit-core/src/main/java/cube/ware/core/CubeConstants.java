@@ -74,5 +74,7 @@ public interface CubeConstants {
          * 更新群组
          */
         String UPDATE_GROUP = "update_group";
+
+        String addMessageInLocal = "addMessageInLocal";
     }
 }
