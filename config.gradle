@@ -1,6 +1,6 @@
 /* Gradle依赖的统一管理 */
 ext {
-  def supportVersion = '26.1.0'
+  def supportVersion = '28.0.0'
   def multidexVersion = '1.0.1'
   def rxjavaVersion = '1.3.0'
   def rxandroidVersion = '1.2.1'
@@ -24,11 +24,11 @@ ext {
   def smartrefreshVersion = '1.1.0-alpha-5'
 
   // android依赖
-  android = [compileSdkVersion: 27,
+  android = [compileSdkVersion: 29,
              buildToolsVersion: "27.0.3",
              applicationId    : "cube.ware",
-             minSdkVersion    : 16,
-             targetSdkVersion : 27,
+             minSdkVersion    : 19,
+             targetSdkVersion : 29,
              versionCode      : 9,
              versionName      : "1.0.9"]
 
@@ -37,7 +37,7 @@ ext {
                              support_appcompat_v7    : "com.android.support:appcompat-v7:${supportVersion}",
                              support_v4              : "com.android.support:support-v4:${supportVersion}",
                              support_recyclerview_v7 : "com.android.support:recyclerview-v7:${supportVersion}",
-                             support_design          : "com.android.support:design:26.1.0",
+                             support_design          : "com.android.support:design:${supportVersion}",
                              support_cardview_v7     : "com.android.support:cardview-v7:${supportVersion}",
 
                              // multidex

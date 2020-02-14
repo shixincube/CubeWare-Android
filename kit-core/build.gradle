@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-//  api fileTree(include: ['*.jar'], dir: 'libs')
+  api fileTree(include: ['*.jar'], dir: 'libs')
   implementation project(':CommonMvp')
   implementation project(':CommonSdk')
   implementation project(':CommonUtils')
@@ -31,7 +31,7 @@ dependencies {
   annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
   androidTestImplementation 'android.arch.persistence.room:testing:1.1.1'
 
-  api project(':CubeEngine')
-  implementation project(':CubeRTC')
-  implementation project(':CubeSIP')
+//  api project(':CubeEngine')
+//  implementation project(':CubeRTC')
+//  implementation project(':CubeSIP')
 }

@@ -10,4 +10,4 @@ include /*':kit-api', */':kit-core', ':kit-call', ':kit-conference', ':kit-messa
 //
 //include ':GenieAndroid'
 
-include ':CubeEngine', 'CubeRTC', 'CubeSIP', 'CellcloudAndroid'
+//include ':CubeEngine', 'CubeRTC', 'CubeSIP', 'CellcloudAndroid'

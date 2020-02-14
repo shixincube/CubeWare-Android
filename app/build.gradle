@@ -113,5 +113,5 @@ dependencies {
   implementation developmentDependencies.arouter_annotation
   implementation 'com.lzy.widget:imagepicker:0.6.1'
   implementation 'top.zibin:Luban:1.1.8'
-  implementation 'com.contrarywind:Android-PickerView:4.1.6'
+  implementation 'com.contrarywind:Android-PickerView:4.1.8'
 }

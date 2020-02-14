@@ -354,7 +354,7 @@ public class CallHandle implements CallListener {
         else if (error.code == CubeErrorCode.RequestTimeout.code) {
             //对端不正常挂断错误码 例如对方杀死进程或闪退
             this.mCallTime = System.currentTimeMillis() - mCallTime;
-            handleCallEnd(session, CallAction.UNKNOWN, error);
+            handleCallEnd(session, CallAction.NUKNOW, error);
         }
         else {
             handleCallFailed(session, error);
