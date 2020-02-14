@@ -4,7 +4,6 @@ import android.app.ActivityManager;
 import android.content.Context;
 import com.common.base.BaseApplication;
 import com.common.crash.AppCrashHandler;
-import com.common.router.CommonSdk;
 import com.common.receiver.NetworkStateReceiver;
 import com.common.utils.CommonUtils;
 import com.common.utils.log.LogUtil;
@@ -43,7 +42,6 @@ public class App extends BaseApplication {
 
         // 通用模块
         CommonUtils.init(this);
-        CommonSdk.init(this);
 
         // App管理者
         AppManager.init(this);

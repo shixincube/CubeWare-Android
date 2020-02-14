@@ -1,9 +1,11 @@
 package com.common.router;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.common.base.BuildConfig;
 
 /**
  * 路由工具类
@@ -12,8 +14,20 @@ import com.alibaba.android.arouter.launcher.ARouter;
  * @date 2018-8-15
  */
 public class RouterUtil {
-    private RouterUtil() {
-        throw new IllegalStateException("you can't instantiate me!");
+
+    /**
+     * 初始化Router
+     *
+     * @param application
+     */
+    public static void init(Application application) {
+        if (BuildConfig.DEBUG) {
+            // 打印日志
+            ARouter.openLog();
+            // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
+            ARouter.openDebug();
+        }
+        ARouter.init(application);
     }
 
     /**
