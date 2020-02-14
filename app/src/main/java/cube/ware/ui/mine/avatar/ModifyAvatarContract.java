@@ -1,8 +1,8 @@
 package cube.ware.ui.mine.avatar;
 
 import android.content.Context;
-import com.common.mvp.base.BasePresenter;
-import com.common.mvp.base.BaseView;
+import com.common.base.BasePresenter;
+import com.common.base.BaseView;
 
 /**
  * 修改头像契约类

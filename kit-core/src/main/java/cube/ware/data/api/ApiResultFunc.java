@@ -1,6 +1,6 @@
 package cube.ware.data.api;
 
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.log.LogUtil;
 import java.util.Map;
 import rx.functions.Func1;
 

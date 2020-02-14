@@ -8,7 +8,7 @@ import android.hardware.SensorEventListener;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.common.utils.utils.ToastUtil;
+import com.common.utils.ToastUtil;
 
 import java.io.File;
 

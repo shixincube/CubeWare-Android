@@ -3,7 +3,7 @@ package cube.ware.service.conference.listener;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
-import com.common.sdk.RouterUtil;
+import com.common.router.RouterUtil;
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.conference.ConferenceListener;

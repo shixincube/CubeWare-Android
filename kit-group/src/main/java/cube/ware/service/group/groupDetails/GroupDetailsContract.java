@@ -1,8 +1,8 @@
 package cube.ware.service.group.groupDetails;
 
 import android.content.Context;
-import com.common.mvp.base.BasePresenter;
-import com.common.mvp.base.BaseView;
+import com.common.base.BasePresenter;
+import com.common.base.BaseView;
 
 /**
  * Created by dth

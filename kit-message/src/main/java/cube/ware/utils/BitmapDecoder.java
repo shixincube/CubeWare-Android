@@ -8,7 +8,7 @@ import android.media.ThumbnailUtils;
 import android.os.Build;
 import android.provider.MediaStore;
 
-import com.common.utils.utils.ScreenUtil;
+import com.common.utils.ScreenUtil;
 
 import java.io.File;
 import java.io.FileInputStream;

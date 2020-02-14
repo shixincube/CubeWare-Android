@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.log.LogUtil;
 import cube.service.CubeError;
 import cube.service.message.FileMessage;
 import cube.service.message.ImageMessage;

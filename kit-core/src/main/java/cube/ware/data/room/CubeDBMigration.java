@@ -3,7 +3,7 @@ package cube.ware.data.room;
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.migration.Migration;
 import android.support.annotation.NonNull;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.log.LogUtil;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package cube.ware.service.whiteboard.ui;
 
 import android.content.Context;
-import com.common.mvp.base.BasePresenter;
-import com.common.mvp.base.BaseView;
+import com.common.base.BasePresenter;
+import com.common.base.BaseView;
 import cube.service.group.model.Member;
 import cube.service.user.model.User;
 import java.util.List;

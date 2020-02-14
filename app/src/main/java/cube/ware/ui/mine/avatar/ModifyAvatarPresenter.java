@@ -1,9 +1,9 @@
 package cube.ware.ui.mine.avatar;
 
 import android.content.Context;
-import com.common.mvp.eventbus.EventBusUtil;
-import com.common.mvp.rx.subscriber.OnTwiceSubscriber;
-import com.common.utils.utils.log.LogUtil;
+import com.common.eventbus.EventBusUtil;
+import com.common.rx.subscriber.OnTwiceSubscriber;
+import com.common.utils.log.LogUtil;
 import cube.ware.common.MessageConstants;
 import cube.ware.data.api.ApiException;
 import cube.ware.data.api.ApiFactory;

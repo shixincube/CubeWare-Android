@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.common.utils.utils.glide.GlideUtil;
+import com.common.utils.glide.GlideUtil;
 import cube.ware.service.sharedesktop.R;
 import java.util.ArrayList;
 import java.util.List;

@@ -90,9 +90,7 @@ dependencies {
   implementation project(':kit-message')
 //  implementation project(':kit-api')
 
-  implementation project(':CommonMvp')
-  implementation project(':CommonSdk')
-  implementation project(':CommonUtils')
+  implementation project(':CommonBase')
   implementation developmentDependencies.support_appcompat_v7
   implementation developmentDependencies.support_v4
   implementation developmentDependencies.support_recyclerview_v7

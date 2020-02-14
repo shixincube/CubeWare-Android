@@ -2,7 +2,7 @@ package cube.ware.service.message.chat.panel.input.emoticon.manager;
 
 import android.content.Context;
 import android.util.Log;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.log.LogUtil;
 import cube.ware.service.message.chat.panel.input.emoticon.model.StickerType;
 import java.util.ArrayList;
 import java.util.HashMap;

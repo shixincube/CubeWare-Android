@@ -3,7 +3,7 @@ package cube.ware.utils;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.log.LogUtil;
 
 
 /**

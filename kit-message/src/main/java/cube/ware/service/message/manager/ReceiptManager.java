@@ -1,7 +1,7 @@
 package cube.ware.service.message.manager;
 
-import com.common.mvp.eventbus.EventBusUtil;
-import com.common.mvp.rx.subscriber.OnActionSubscriber;
+import com.common.eventbus.EventBusUtil;
+import com.common.rx.subscriber.OnActionSubscriber;
 import cube.ware.common.MessageConstants;
 import cube.ware.data.repository.CubeMessageRepository;
 import cube.ware.data.repository.CubeSessionRepository;

@@ -1,6 +1,6 @@
 package cube.ware.widget.indexbar.helper;
 
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.log.LogUtil;
 
 import java.util.Collections;
 import java.util.Comparator;

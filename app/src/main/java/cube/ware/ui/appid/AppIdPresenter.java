@@ -1,7 +1,7 @@
 package cube.ware.ui.appid;
 
 import android.content.Context;
-import com.common.mvp.rx.subscriber.OnActionSubscriber;
+import com.common.rx.subscriber.OnActionSubscriber;
 import cube.ware.data.api.ApiFactory;
 import cube.ware.data.model.dataModel.CubeIdData;
 import cube.ware.data.model.dataModel.CubeTotalData;

@@ -24,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.common.utils.utils.ToastUtil;
+import com.common.utils.ToastUtil;
 
 import cube.ware.service.message.R;
 import java.lang.reflect.Constructor;

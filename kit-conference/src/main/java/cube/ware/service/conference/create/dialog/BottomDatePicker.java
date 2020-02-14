@@ -8,7 +8,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import com.bigkoo.pickerview.adapter.ArrayWheelAdapter;
-import com.common.mvp.base.BaseBottomDialog;
+import com.common.base.BaseBottomDialog;
 import com.contrarywind.listener.OnItemSelectedListener;
 import com.contrarywind.view.WheelView;
 import cube.ware.service.conference.R;

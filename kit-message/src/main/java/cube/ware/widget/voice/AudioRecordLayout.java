@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.common.utils.utils.ToastUtil;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.ToastUtil;
+import com.common.utils.log.LogUtil;
 
 import java.io.File;
 

@@ -1,8 +1,8 @@
 package cube.ware.service.conference.conference;
 
 import android.content.Context;
-import com.common.utils.utils.UIHandler;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.UIHandler;
+import com.common.utils.log.LogUtil;
 import cube.service.CubeEngine;
 import cube.service.group.model.Member;
 import cube.service.user.model.User;

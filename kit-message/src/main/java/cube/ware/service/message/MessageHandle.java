@@ -1,10 +1,10 @@
 package cube.ware.service.message;
 
 import android.text.TextUtils;
-import com.common.mvp.rx.RxSchedulers;
-import com.common.utils.utils.EmptyUtil;
-import com.common.utils.utils.ToastUtil;
-import com.common.utils.utils.log.LogUtil;
+import com.common.rx.RxSchedulers;
+import com.common.utils.EmptyUtil;
+import com.common.utils.ToastUtil;
+import com.common.utils.log.LogUtil;
 import cube.service.CubeEngine;
 import cube.service.CubeError;
 import cube.service.CubeErrorCode;

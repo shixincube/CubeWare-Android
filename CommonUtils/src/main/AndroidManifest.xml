@@ -12,7 +12,7 @@
 
     <application android:label="@string/app_name">
         <receiver
-            android:name=".alive.WakeUpReceiver"
+            android:name="com.common.alive.WakeUpReceiver"
             android:process=":watch">
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT"/>
@@ -23,7 +23,7 @@
         </receiver>
 
         <receiver
-            android:name=".alive.WakeUpReceiver$WakeUpAutoStartReceiver"
+            android:name="com.common.alive.WakeUpReceiver$WakeUpAutoStartReceiver"
             android:process=":watch">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
@@ -36,21 +36,21 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".alive.AbsWorkService$WorkNotificationService"/>
+        <service android:name="com.common.alive.AbsWorkService$WorkNotificationService"/>
 
         <service
-            android:name=".alive.JobSchedulerService"
+            android:name="com.common.alive.JobSchedulerService"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:enabled="true"
             android:exported="true"
             android:process=":watch"/>
 
         <service
-            android:name=".alive.WatchDogService"
+            android:name="com.common.alive.WatchDogService"
             android:process=":watch"/>
 
         <service
-            android:name=".alive.WatchDogService$WatchDogNotificationService"
+            android:name="com.common.alive.WatchDogService$WatchDogNotificationService"
             android:process=":watch"/>
 
     </application>

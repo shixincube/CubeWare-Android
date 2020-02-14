@@ -1,6 +1,6 @@
 package cube.ware.data.repository;
 
-import com.common.mvp.rx.OnSubscribeRoom;
+import com.common.rx.OnSubscribeRoom;
 import cube.ware.data.room.CubeDBFactory;
 import cube.ware.data.room.model.CubeUser;
 import java.util.List;

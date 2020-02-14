@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.log.LogUtil;
 import cube.service.message.VoiceClipMessage;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;

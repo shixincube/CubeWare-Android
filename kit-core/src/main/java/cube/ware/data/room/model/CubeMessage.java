@@ -4,7 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.text.TextUtils;
-import com.common.utils.utils.GsonUtil;
+import com.common.utils.GsonUtil;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeFileMessageStatus;
 import cube.ware.data.model.dataModel.enmu.CubeMessageDirection;

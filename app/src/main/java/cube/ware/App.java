@@ -2,12 +2,12 @@ package cube.ware;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import com.common.mvp.base.BaseApplication;
-import com.common.mvp.crash.AppCrashHandler;
-import com.common.sdk.CommonSdk;
-import com.common.utils.receiver.NetworkStateReceiver;
-import com.common.utils.utils.CommonUtils;
-import com.common.utils.utils.log.LogUtil;
+import com.common.base.BaseApplication;
+import com.common.crash.AppCrashHandler;
+import com.common.router.CommonSdk;
+import com.common.receiver.NetworkStateReceiver;
+import com.common.utils.CommonUtils;
+import com.common.utils.log.LogUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;

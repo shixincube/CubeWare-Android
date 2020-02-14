@@ -1,7 +1,7 @@
 package cube.ware.service.message.manager;
 
 import android.text.TextUtils;
-import com.common.utils.utils.FileUtil;
+import com.common.utils.FileUtil;
 import com.google.gson.Gson;
 import cube.service.message.CustomMessage;
 import cube.service.message.Receiver;

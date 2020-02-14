@@ -14,8 +14,8 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.common.mvp.base.BaseActivity;
-import com.common.utils.utils.ToastUtil;
+import com.common.base.BaseActivity;
+import com.common.utils.ToastUtil;
 
 import cube.service.group.Group;
 import cube.ware.App;

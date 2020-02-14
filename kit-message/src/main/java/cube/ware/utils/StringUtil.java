@@ -6,7 +6,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 
-import com.common.utils.utils.MD5Util;
+import com.common.utils.MD5Util;
 
 import java.util.ArrayList;
 import java.util.List;

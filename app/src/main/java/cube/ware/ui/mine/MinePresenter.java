@@ -1,7 +1,6 @@
 package cube.ware.ui.mine;
 
 import android.content.Context;
-import com.common.utils.utils.UIHandler;
 import cube.ware.data.repository.CubeUserRepository;
 import cube.ware.data.room.model.CubeUser;
 import rx.android.schedulers.AndroidSchedulers;

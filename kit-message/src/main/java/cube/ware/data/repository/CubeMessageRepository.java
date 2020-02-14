@@ -1,6 +1,6 @@
 package cube.ware.data.repository;
 
-import com.common.mvp.rx.OnSubscribeRoom;
+import com.common.rx.OnSubscribeRoom;
 import cube.service.message.MessageEntity;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CubeMessageType;

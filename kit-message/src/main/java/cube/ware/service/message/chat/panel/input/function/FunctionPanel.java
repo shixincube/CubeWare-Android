@@ -9,8 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.common.utils.utils.ScreenUtil;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.ScreenUtil;
 
 import java.util.List;
 

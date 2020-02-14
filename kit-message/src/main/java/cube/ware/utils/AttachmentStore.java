@@ -3,7 +3,7 @@ package cube.ware.utils;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.log.LogUtil;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

@@ -1,7 +1,7 @@
 package cube.ware.service.whiteboard.ui;
 
 import android.content.Context;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.log.LogUtil;
 import cube.service.CubeEngine;
 import cube.service.group.model.Member;
 import cube.service.user.model.User;

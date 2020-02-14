@@ -1,8 +1,8 @@
 package cube.ware.service.sharedesktop;
 
 import android.content.Context;
-import com.common.utils.utils.RingtoneUtil;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.RingtoneUtil;
+import com.common.utils.log.LogUtil;
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.sharedesktop.ShareDesktopExtListener;

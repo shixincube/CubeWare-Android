@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="cube.ware">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -30,7 +31,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/BaseAppTheme">
+        android:theme="@style/BaseAppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
 
         <!-- FileProvider配置访问路径，适配7.0及其以上 -->
         <provider

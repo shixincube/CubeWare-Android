@@ -3,15 +3,14 @@ package cube.ware.impl;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import com.common.sdk.RouterUtil;
-import com.common.utils.utils.log.LogUtil;
+import com.common.router.RouterUtil;
+import com.common.utils.log.LogUtil;
 import cube.service.CubeConfig;
 import cube.service.CubeEngine;
 import cube.service.account.AccountState;
 import cube.ware.api.CubeUI;
 import cube.ware.core.CubeConstants;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
-import cube.ware.service.user.UserHandle;
 
 /**
  * CubeWare组件接口实现类

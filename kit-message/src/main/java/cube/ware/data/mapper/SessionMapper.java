@@ -1,7 +1,7 @@
 package cube.ware.data.mapper;
 
 import android.text.TextUtils;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.log.LogUtil;
 import cube.service.message.CustomMessage;
 import cube.service.message.FileMessage;
 import cube.service.message.ImageMessage;

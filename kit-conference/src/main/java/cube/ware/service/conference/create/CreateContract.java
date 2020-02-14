@@ -2,8 +2,8 @@ package cube.ware.service.conference.create;
 
 import android.content.Context;
 import com.bigkoo.pickerview.view.TimePickerView;
-import com.common.mvp.base.BasePresenter;
-import com.common.mvp.base.BaseView;
+import com.common.base.BasePresenter;
+import com.common.base.BaseView;
 import cube.service.conference.model.ConferenceConfig;
 import cube.service.user.model.User;
 import cube.ware.data.room.model.CubeUser;

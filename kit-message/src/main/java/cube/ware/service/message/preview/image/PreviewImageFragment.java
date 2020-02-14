@@ -17,11 +17,11 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.Target;
-import com.common.mvp.base.BaseLazyFragment;
-import com.common.utils.utils.BitmapUtils;
-import com.common.utils.utils.ThreadUtil;
-import com.common.utils.utils.ToastUtil;
-import com.common.utils.utils.log.LogUtil;
+import com.common.base.BaseLazyFragment;
+import com.common.utils.BitmapUtils;
+import com.common.utils.ThreadUtil;
+import com.common.utils.ToastUtil;
+import com.common.utils.log.LogUtil;
 
 import java.io.File;
 import java.util.concurrent.ExecutionException;

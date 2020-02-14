@@ -2,8 +2,8 @@ package cube.ware.data.mapper;
 
 import android.content.Context;
 import android.text.TextUtils;
-import com.common.mvp.eventbus.EventBusUtil;
-import com.common.utils.utils.log.LogUtil;
+import com.common.eventbus.EventBusUtil;
+import com.common.utils.log.LogUtil;
 import cube.service.message.CardMessage;
 import cube.service.message.CustomMessage;
 import cube.service.message.FileMessage;

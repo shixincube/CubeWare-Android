@@ -2,9 +2,9 @@ package cube.ware.service.message.chat.panel.input.function;
 
 import android.os.Bundle;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.common.utils.utils.ClickUtil;
-import com.common.utils.utils.ToastUtil;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.ClickUtil;
+import com.common.utils.ToastUtil;
+import com.common.utils.log.LogUtil;
 import cube.ware.core.CubeConstants;
 import cube.ware.core.CubeCore;
 import cube.ware.data.model.dataModel.enmu.CallStatus;

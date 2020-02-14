@@ -1,7 +1,7 @@
 package cube.ware.service.message.chat.fragment;
 
 import android.content.Context;
-import com.common.mvp.rx.RxSchedulers;
+import com.common.rx.RxSchedulers;
 import cube.service.CubeEngine;
 import cube.service.message.CustomMessage;
 import cube.ware.core.CubeCore;

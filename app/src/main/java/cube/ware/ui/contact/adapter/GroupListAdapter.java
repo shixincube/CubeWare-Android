@@ -4,7 +4,7 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.common.utils.utils.glide.GlideUtil;
+import com.common.utils.glide.GlideUtil;
 import cube.service.group.Group;
 import cube.ware.R;
 import java.util.List;

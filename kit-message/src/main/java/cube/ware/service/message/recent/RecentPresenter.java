@@ -1,8 +1,8 @@
 package cube.ware.service.message.recent;
 
 import android.content.Context;
-import com.common.mvp.eventbus.Event;
-import com.common.mvp.eventbus.EventBusUtil;
+import com.common.eventbus.Event;
+import com.common.eventbus.EventBusUtil;
 import cube.ware.common.MessageConstants;
 import cube.ware.data.model.CubeRecentViewModel;
 import cube.ware.data.repository.CubeSessionRepository;

@@ -29,9 +29,9 @@ import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.common.utils.utils.ScreenUtil;
-import com.common.utils.utils.glide.GlideRoundTransform;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.ScreenUtil;
+import com.common.utils.glide.GlideRoundTransform;
+import com.common.utils.log.LogUtil;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;

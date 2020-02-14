@@ -2,7 +2,7 @@ package cube.ware.service.message.manager;
 
 import android.content.Context;
 import android.util.LongSparseArray;
-import com.common.utils.receiver.NetworkStateReceiver;
+import com.common.receiver.NetworkStateReceiver;
 import cube.service.CubeEngine;
 import cube.service.CubeError;
 import cube.service.message.MessageOperate;

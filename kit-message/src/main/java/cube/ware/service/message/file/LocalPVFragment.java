@@ -7,10 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 
-import com.common.mvp.base.BaseFragment;
-import com.common.mvp.base.BasePresenter;
-import com.common.utils.utils.ScreenUtil;
-import com.common.utils.utils.log.LogUtil;
+import com.common.base.BaseFragment;
+import com.common.base.BasePresenter;
+import com.common.utils.ScreenUtil;
+import com.common.utils.log.LogUtil;
 
 import cube.ware.service.message.file.adapter.PVFileAdapter;
 import cube.ware.service.message.file.entity.LocalMedia;

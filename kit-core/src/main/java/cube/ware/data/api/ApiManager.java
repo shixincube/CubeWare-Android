@@ -2,7 +2,7 @@ package cube.ware.data.api;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.log.LogUtil;
 import cube.ware.core.CubeCore;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;

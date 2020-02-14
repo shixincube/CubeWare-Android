@@ -1,15 +1,13 @@
 package cube.ware.ui.cubeIdList;
 
-import android.support.annotation.Nullable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.common.utils.utils.glide.GlideUtil;
+import com.common.utils.glide.GlideUtil;
 import cube.ware.R;
 import cube.ware.data.room.model.CubeUser;
-import java.util.List;
 
 public class CubeIdListAdapter extends BaseQuickAdapter<CubeUser, BaseViewHolder> {
 

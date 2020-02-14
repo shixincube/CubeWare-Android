@@ -13,10 +13,10 @@ import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
-import com.common.mvp.rx.RxPermissionUtil;
-import com.common.mvp.rx.subscriber.OnActionSubscriber;
-import com.common.utils.utils.DeviceUtil;
-import com.common.utils.utils.ToastUtil;
+import com.common.rx.RxPermissionUtil;
+import com.common.rx.subscriber.OnActionSubscriber;
+import com.common.utils.DeviceUtil;
+import com.common.utils.ToastUtil;
 import cube.ware.service.message.R;
 import cube.ware.service.message.takephoto.lisenter.CaptureListener;
 

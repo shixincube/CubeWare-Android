@@ -13,8 +13,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import com.common.sdk.RouterUtil;
-import com.common.utils.utils.ToastUtil;
+import com.common.router.RouterUtil;
+import com.common.utils.ToastUtil;
 import cube.ware.AppConstants;
 import cube.ware.R;
 

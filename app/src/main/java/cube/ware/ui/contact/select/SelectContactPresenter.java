@@ -2,7 +2,7 @@ package cube.ware.ui.contact.select;
 
 import android.content.Context;
 
-import com.common.mvp.rx.subscriber.OnActionSubscriber;
+import com.common.rx.subscriber.OnActionSubscriber;
 
 import cube.ware.AppManager;
 import cube.ware.data.api.ApiFactory;

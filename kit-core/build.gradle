@@ -24,9 +24,7 @@ android {
 
 dependencies {
   api fileTree(include: ['*.jar'], dir: 'libs')
-  implementation project(':CommonMvp')
-  implementation project(':CommonSdk')
-  implementation project(':CommonUtils')
+  implementation project(':CommonBase')
   implementation 'android.arch.persistence.room:runtime:1.1.1'
   annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
   androidTestImplementation 'android.arch.persistence.room:testing:1.1.1'

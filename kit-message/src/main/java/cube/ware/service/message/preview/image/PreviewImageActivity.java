@@ -9,10 +9,10 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.widget.TextView;
 
-import com.common.mvp.base.BaseActivity;
-import com.common.mvp.base.BasePresenter;
-import com.common.utils.utils.ScreenUtil;
-import com.common.utils.utils.log.LogUtil;
+import com.common.base.BaseActivity;
+import com.common.base.BasePresenter;
+import com.common.utils.ScreenUtil;
+import com.common.utils.log.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;

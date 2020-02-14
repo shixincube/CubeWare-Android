@@ -2,8 +2,8 @@ package cube.ware.common;
 
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import com.common.mvp.base.BaseActivity;
-import com.common.mvp.base.BasePresenter;
+import com.common.base.BaseActivity;
+import com.common.base.BasePresenter;
 import cube.ware.service.message.R;
 import cube.ware.widget.toolbar.CubeToolbar;
 import cube.ware.widget.toolbar.ICubeToolbar;

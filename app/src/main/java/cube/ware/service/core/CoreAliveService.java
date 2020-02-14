@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import com.common.utils.alive.AbsWorkService;
-import com.common.utils.alive.IntentWrapper;
+import com.common.alive.AbsWorkService;
+import com.common.alive.IntentWrapper;
 
 /**
  * Created by dth

@@ -2,9 +2,8 @@ package cube.ware.ui.cubeIdList;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import com.common.mvp.base.BasePresenter;
-import com.common.mvp.base.BaseView;
-import cube.service.Session;
+import com.common.base.BasePresenter;
+import com.common.base.BaseView;
 import cube.ware.data.room.model.CubeUser;
 import java.util.List;
 

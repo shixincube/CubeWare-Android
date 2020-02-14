@@ -12,7 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.common.utils.utils.ScreenUtil;
+import com.common.utils.ScreenUtil;
 import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.room.model.CubeMessage;
 import cube.ware.service.message.R;

@@ -2,8 +2,8 @@ package cube.ware.ui.contact.select;
 
 import android.content.Context;
 
-import com.common.mvp.base.BasePresenter;
-import com.common.mvp.base.BaseView;
+import com.common.base.BasePresenter;
+import com.common.base.BaseView;
 
 import java.util.List;
 

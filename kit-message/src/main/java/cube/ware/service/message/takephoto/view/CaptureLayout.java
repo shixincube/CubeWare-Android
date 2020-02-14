@@ -13,7 +13,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.log.LogUtil;
 import cube.ware.service.message.R;
 import cube.ware.service.message.takephoto.lisenter.CaptureListener;
 import cube.ware.service.message.takephoto.lisenter.ReturnListener;

@@ -3,7 +3,7 @@ package cube.ware.service.message.chat.viewholder;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.common.utils.utils.ScreenUtil;
+import com.common.utils.ScreenUtil;
 import cube.ware.service.message.R;
 import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.room.model.CubeMessage;

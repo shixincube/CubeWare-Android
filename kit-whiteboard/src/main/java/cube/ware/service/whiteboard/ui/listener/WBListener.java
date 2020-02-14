@@ -3,7 +3,7 @@ package cube.ware.service.whiteboard.ui.listener;
 import android.content.Context;
 import android.os.Bundle;
 import com.common.sdk.RouterUtil;
-import com.common.utils.utils.ToastUtil;
+import com.common.utils.ToastUtil;
 import cube.service.CubeEngine;
 import cube.service.common.model.CubeError;
 import cube.service.user.model.User;

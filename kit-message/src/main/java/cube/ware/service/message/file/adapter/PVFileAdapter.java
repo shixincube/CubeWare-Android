@@ -14,9 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.common.utils.utils.ToastUtil;
-import com.common.utils.utils.glide.GlideUtil;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.ToastUtil;
+import com.common.utils.glide.GlideUtil;
+import com.common.utils.log.LogUtil;
 
 import cube.ware.service.message.file.entity.LocalMedia;
 import java.io.File;

@@ -1,9 +1,9 @@
 package cube.ware.service.message.recent;
 
 import android.content.Context;
-import com.common.mvp.base.BasePresenter;
-import com.common.mvp.base.BaseView;
-import com.common.mvp.eventbus.Event;
+import com.common.base.BasePresenter;
+import com.common.base.BaseView;
+import com.common.eventbus.Event;
 import cube.ware.data.model.CubeRecentViewModel;
 import java.util.List;
 

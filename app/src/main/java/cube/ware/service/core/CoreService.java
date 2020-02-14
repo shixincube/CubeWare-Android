@@ -13,7 +13,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.log.LogUtil;
 
 /**
  * cube核心service

@@ -1,7 +1,7 @@
 package cube.ware.service.message;
 
 import android.support.annotation.NonNull;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.log.LogUtil;
 import cube.service.CubeEngine;
 import cube.service.message.FileMessage;
 import cube.service.message.FileMessageStatus;

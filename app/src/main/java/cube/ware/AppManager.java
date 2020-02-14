@@ -1,8 +1,8 @@
 package cube.ware;
 
 import android.content.Context;
-import com.common.utils.utils.AppUtil;
-import com.common.utils.utils.log.LogUtil;
+import com.common.utils.AppUtil;
+import com.common.utils.log.LogUtil;
 import cube.ware.core.CubeCore;
 import cube.ware.core.CoreConfig;
 import cube.ware.utils.SpUtil;

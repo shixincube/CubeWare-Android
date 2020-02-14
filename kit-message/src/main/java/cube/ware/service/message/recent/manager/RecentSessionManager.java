@@ -1,8 +1,8 @@
 package cube.ware.service.message.recent.manager;
 
 import android.text.TextUtils;
-import com.common.mvp.eventbus.EventBusUtil;
-import com.common.utils.utils.log.LogUtil;
+import com.common.eventbus.EventBusUtil;
+import com.common.utils.log.LogUtil;
 import cube.service.message.MessageDirection;
 import cube.service.message.MessageEntity;
 import cube.service.message.TextMessage;

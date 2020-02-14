@@ -14,9 +14,9 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.common.mvp.base.BaseFragment;
-import com.common.sdk.RouterUtil;
-import com.common.utils.utils.ScreenUtil;
+import com.common.base.BaseFragment;
+import com.common.router.RouterUtil;
+import com.common.utils.ScreenUtil;
 
 import cube.ware.service.group.groupList.GroupListFragment;
 import java.util.ArrayList;

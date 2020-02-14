@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.common.utils.utils.ThemeUtils;
+import com.common.utils.ThemeUtils;
 
 import java.util.ArrayList;
 import java.util.List;

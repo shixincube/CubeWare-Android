@@ -3,7 +3,7 @@ package cube.ware.service.group.groupDetails;
 import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.common.utils.utils.glide.GlideUtil;
+import com.common.utils.glide.GlideUtil;
 import cube.ware.core.CubeCore;
 import cube.ware.service.group.R;
 

@@ -8,9 +8,9 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
 
-import com.common.mvp.base.BasePresenter;
-import com.common.utils.utils.ToastUtil;
-import com.common.utils.utils.log.LogUtil;
+import com.common.base.BasePresenter;
+import com.common.utils.ToastUtil;
+import com.common.utils.log.LogUtil;
 
 import cube.ware.service.message.file.entity.LocalMedia;
 import cube.ware.service.message.file.listener.OnFileItemSelected;

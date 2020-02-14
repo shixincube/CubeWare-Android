@@ -1,8 +1,8 @@
 package cube.ware.ui.selectMember;
 
 import android.content.Context;
-import com.common.mvp.base.BasePresenter;
-import com.common.mvp.base.BaseView;
+import com.common.base.BasePresenter;
+import com.common.base.BaseView;
 import cube.service.conference.ConferenceConfig;
 import cube.ware.data.room.model.CubeUser;
 import java.util.LinkedHashMap;

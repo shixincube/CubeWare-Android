@@ -1,6 +1,6 @@
 package cube.ware.service.group;
 
-import com.common.mvp.eventbus.EventBusUtil;
+import com.common.eventbus.EventBusUtil;
 import cube.service.CubeEngine;
 import cube.service.CubeError;
 import cube.service.group.Group;

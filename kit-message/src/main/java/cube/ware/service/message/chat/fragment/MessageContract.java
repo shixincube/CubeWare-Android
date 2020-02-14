@@ -1,8 +1,8 @@
 package cube.ware.service.message.chat.fragment;
 
 import android.content.Context;
-import com.common.mvp.base.BasePresenter;
-import com.common.mvp.base.BaseView;
+import com.common.base.BasePresenter;
+import com.common.base.BaseView;
 import cube.ware.data.model.CubeMessageViewModel;
 import cube.ware.data.model.dataModel.enmu.CubeSessionType;
 import java.util.List;
