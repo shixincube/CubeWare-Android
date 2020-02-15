@@ -94,20 +94,19 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
             </LinearLayout>
-            <include android:layout_marginTop="@dimen/dp_10"
+            <include android:layout_marginTop="@dimen/view_space_10"
                 android:layout_width="wrap_content"
                 android:visibility="gone"
-                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginLeft="@dimen/view_space_10"
                 android:layout_height="wrap_content"
-                layout="@layout/wb_tab_next_page"
                 />
             <include
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/view_space_10"
                 android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
                 android:layout_marginRight="@dimen/view_height_10"
                 android:layout_height="wrap_content"
-                layout="@layout/wb_tab_manipulate_popwindow"/>
+                />
         </RelativeLayout>
     </LinearLayout>
 

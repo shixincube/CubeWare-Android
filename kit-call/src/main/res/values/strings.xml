@@ -43,4 +43,14 @@
     <string name="call_completed">通话已结束</string>
     <string name="other_terminal_has_answered">其它终端已接听</string>
     <string name="other_terminal_has_cancle">其它终端已拒绝</string>
+
+    <string name="cancel">取消</string>
+    <string name="call_member">通话成员</string>
+
+    <!-- 屏幕分享 -->
+    <string name="start_share_screen">%1$s正在屏幕分享</string>
+    <string name="connect_white_borad">白板演示</string>
+    <string name="connect_share_screen">屏幕分享</string>
+    <string name="joined_member_share_screen">已加入成员</string>
+    <string name="invited_member_share_screen">待加入成员</string>
 </resources>
