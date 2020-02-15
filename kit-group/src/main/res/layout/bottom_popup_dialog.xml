@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@color/primary_divider"
-        android:dividerHeight="@dimen/divider_size_0.5"
+        android:dividerHeight="@dimen/divider_size_1"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="true"
         android:listSelector="@android:color/transparent"

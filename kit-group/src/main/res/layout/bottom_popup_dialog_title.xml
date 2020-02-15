@@ -19,7 +19,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_size_0.5"
+        android:layout_height="@dimen/divider_size_1"
         android:background="@color/primary_divider"
         />
 </LinearLayout>

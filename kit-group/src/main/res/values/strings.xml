@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">kit-group</string>
+
+    <string name="create_group1">创建群</string>
+    <string name="add_contact">加入群</string>
+    <string name="group_num">群号码</string>
+
+    <string name="send_message">发消息</string>
 </resources>
