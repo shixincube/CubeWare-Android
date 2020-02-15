@@ -24,7 +24,7 @@
             app:cardElevation="0dp"
             app:cardMaxElevation="0dp"
             >
-            <ImageView
+            <cube.ware.widget.ChatImageView
                 android:id="@+id/chat_content_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
                 android:adjustViewBounds="true"
                 android:minHeight="@dimen/view_space_84"
                 android:minWidth="@dimen/view_space_72"
-                android:chat_image_mask="@drawable/ic_img_message_bg"
+                app:chat_image_mask="@drawable/ic_img_message_bg"
                 android:scaleType="centerCrop"
                 android:src="@drawable/default_image"
                 android:background="@color/transparent"

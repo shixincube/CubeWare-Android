@@ -24,7 +24,7 @@
             app:cardElevation="0dp"
             app:cardMaxElevation="0dp"
             >
-            <ImageView
+            <cube.ware.widget.ChatImageView
                 android:id="@+id/chat_content_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

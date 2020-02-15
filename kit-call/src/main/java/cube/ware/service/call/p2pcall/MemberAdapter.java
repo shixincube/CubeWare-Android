@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.common.utils.glide.GlideUtil;
 import cube.ware.service.call.R;
 import java.util.ArrayList;
@@ -56,7 +55,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        GlideUtil.loadCircleImage(membersList.get(position), mContext, holder.item_head, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
+        GlideUtil.loadCircleImage(membersList.get(position), mContext, holder.item_head, R.drawable.default_head_user);
     }
 
     @Override

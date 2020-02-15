@@ -6,8 +6,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.common.utils.glide.GlideUtil;
 import cube.ware.service.message.R;
 import cube.ware.service.message.chat.panel.input.emoticon.model.EmoticonType;
@@ -77,7 +75,7 @@ public class StickerAdapter extends BaseAdapter {
                 viewHolder.imageView.setBackgroundResource(R.drawable.img_collection_increase_default);
             }
             else {
-                Glide.with(context).load(new File(chartlet.getPath())).asBitmap().diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.ic_default_img_failed).into(viewHolder.imageView);
+                GlideUtil.loadImage(new File(chartlet.getPath() + ".png"), context, viewHolder.imageView, R.drawable.ic_default_img_failed);
             }
         }
         else {

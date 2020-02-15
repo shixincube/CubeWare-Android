@@ -17,8 +17,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.support.annotation.DrawableRes;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 import cube.ware.service.message.R;
 
@@ -29,7 +29,7 @@ import cube.ware.service.message.R;
  * @author Wangxx
  * @date 2017/2/23
  */
-public class ChatImageView extends ImageView {
+public class ChatImageView extends AppCompatImageView {
 
     private int               mMaskResId;
     private Bitmap            mBitmap;

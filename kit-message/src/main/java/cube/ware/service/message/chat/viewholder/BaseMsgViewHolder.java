@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.common.utils.DateUtil;
 import com.common.utils.DeviceUtil;
@@ -351,7 +350,7 @@ public abstract class BaseMsgViewHolder implements MessagePopupManager.OnPopMenu
             else {
                 nameContainer.setVisibility(View.GONE);
                 if (mData.mMessage.isAnonymous()) {
-                    Glide.with(mContext).load(R.drawable.ic_chat_secret_face_1).into(show);
+                    GlideUtil.loadCircleImage(R.drawable.ic_chat_secret_face_1, mContext, show, R.drawable.ic_chat_secret_face_1);
                 }
                 else {
                     GlideUtil.loadSignatureCircleImage(mData.userFace, mContext, show, R.drawable.default_head_user);

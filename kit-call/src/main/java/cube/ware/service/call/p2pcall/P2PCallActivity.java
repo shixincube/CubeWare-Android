@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.common.base.BaseActivity;
 import com.common.utils.NetworkUtil;
 import com.common.utils.ToastUtil;
@@ -325,7 +324,7 @@ public class P2PCallActivity extends BaseActivity<P2PCallPresenter> implements C
             this.mCallSwitchMuteBtn.setSelected(CubeEngine.getInstance().getMediaService().isAudioEnabled());
         }
         getUserNickName(this.mCallId);
-        GlideUtil.loadCircleImage(CubeCore.getInstance().getAvatarUrl() + this.mCallId, this, mPeerHeadIv, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
+        GlideUtil.loadCircleImage(CubeCore.getInstance().getAvatarUrl() + this.mCallId, this, mPeerHeadIv, R.drawable.default_head_user);
         this.initListener();
     }
 
@@ -359,7 +358,7 @@ public class P2PCallActivity extends BaseActivity<P2PCallPresenter> implements C
         }
         this.mPeerNameTv.setText(this.mCallId);
         getUserNickName(this.mCallId);
-        GlideUtil.loadCircleImage(CubeCore.getInstance().getAvatarUrl() + this.mCallId, this, mPeerHeadIv, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
+        GlideUtil.loadCircleImage(CubeCore.getInstance().getAvatarUrl() + this.mCallId, this, mPeerHeadIv, R.drawable.default_head_user);
         this.initListener();
     }
 
@@ -454,7 +453,7 @@ public class P2PCallActivity extends BaseActivity<P2PCallPresenter> implements C
         }
         //初始化用户信息
         this.mPeerNameTv.setText(this.mCallId);
-        GlideUtil.loadCircleImage(CubeCore.getInstance().getAvatarUrl() + CubeCore.getInstance().getCubeId(), this, mPeerHeadIv, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
+        GlideUtil.loadCircleImage(CubeCore.getInstance().getAvatarUrl() + CubeCore.getInstance().getCubeId(), this, mPeerHeadIv, R.drawable.default_head_user);
 
         // 初始化事件
         this.initListener();
@@ -489,7 +488,7 @@ public class P2PCallActivity extends BaseActivity<P2PCallPresenter> implements C
         }
         //初始化用户信息
         this.mPeerNameTv.setText(this.mCallId);
-        GlideUtil.loadCircleImage(CubeCore.getInstance().getAvatarUrl() + this.mCallId, this, mPeerHeadIv, DiskCacheStrategy.NONE, true, R.drawable.default_head_user);
+        GlideUtil.loadCircleImage(CubeCore.getInstance().getAvatarUrl() + this.mCallId, this, mPeerHeadIv, R.drawable.default_head_user);
 
         // 初始化事件
         this.initListener();
