@@ -80,7 +80,7 @@
     <string name="secret_chat_msg_num_back">密聊(%1$s)</string>
     <string name="secret_message_tip">消息已读后立即销毁\n消息在各端不留痕迹\n消息不可转发或保存\n头像马赛克以防截屏</string>
     <string name="at_contacts">选择提醒的人</string>
-    <string name="writing_chat">对方正在输入...</string>
+    <string name="writing_chat">对方正在输入…</string>
     <string name="image_message">[图片]</string>
     <string name="video_message">[视频消息]</string>
     <string name="voice_message">[语音消息]</string>

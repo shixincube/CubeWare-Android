@@ -19,7 +19,7 @@ public class AppManager {
     private static boolean mIsDebug;
 
     /** 服务器环境配置 **/
-    private static ServerEnum serverConfig = ServerEnum.DEVELOP;
+    private static ServerEnum serverConfig = ServerEnum.BETA;
 
     static {
         LogUtil.setLoggable(true);          // 是否打印日志

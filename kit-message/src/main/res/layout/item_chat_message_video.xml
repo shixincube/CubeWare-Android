@@ -32,7 +32,7 @@
                 android:adjustViewBounds="true"
                 android:minHeight="@dimen/view_space_84"
                 android:minWidth="@dimen/view_space_72"
-                app:chat_image_mask="@drawable/ic_img_message_bg"
+                android:chat_image_mask="@drawable/ic_img_message_bg"
                 android:scaleType="centerCrop"
                 android:src="@drawable/default_image"
                 android:background="@color/transparent"

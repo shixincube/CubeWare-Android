@@ -34,9 +34,9 @@
             android:layout_marginBottom="2dp"
             android:layout_toRightOf="@id/item_message_file_icon_image"
             android:ellipsize="middle"
-            android:maxLines="1"
             android:textColor="@color/cube_secondary_text"
             android:textSize="@dimen/text_size_16"
+            android:singleLine="true"
             />
         <RelativeLayout
             android:layout_width="match_parent"
@@ -51,9 +51,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:ellipsize="middle"
-                android:maxLines="1"
                 android:textColor="@color/C4"
                 android:textSize="@dimen/F5"
+                android:singleLine="true"
                 />
             <TextView
                 android:id="@+id/item_message_file_status_label"
