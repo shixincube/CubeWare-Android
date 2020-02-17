@@ -96,7 +96,7 @@ public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implem
 
     @Override
     public void showMessage(String msg) {
-        ToastUtil.showToast(this, msg);
+        ToastUtil.showToast( msg);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class CubeIdListActivity extends BaseActivity<CubeIdListPresenter> implem
     @Override
     public void loginFailed(String desc) {
         LogUtil.e("登录失败：" + desc);
-        ToastUtil.showToast(this, "登录失败：" + desc);
+        ToastUtil.showToast( "登录失败：" + desc);
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }

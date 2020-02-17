@@ -722,7 +722,7 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
         if (TextUtils.isEmpty(groupId) || mPresenter.isCurrentGroup(groupId, whiteboard.bindGroupId)) {
             if (mWhiteboard.whiteboardId.equals(whiteboard.whiteboardId)) {
                 mWhiteboard = whiteboard;
-                ToastUtil.showToast(this, user.cubeId + "退出");
+                ToastUtil.showToast( user.cubeId + "退出");
                 updateJoinedAdapter(user.cubeId, false);
             }
         }
@@ -781,7 +781,7 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
 
     @Override
     public void showMessage(String msg) {
-        ToastUtil.showToast(this, msg);
+        ToastUtil.showToast( msg);
     }
 
     /**
@@ -855,7 +855,7 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     @Override
     public void onFileUploadCompleted(FileInfo fileInfo) {
         //        mProgressDialog.dismiss();
-        ToastUtil.showToast(this, "上传完成");
+        ToastUtil.showToast( "上传完成");
         LogUtil.i(fileInfo.toString());
         File file = FileInfoToFile();
         CubeEngine.getInstance().getWhiteboardService().shareFile(file);
@@ -879,7 +879,7 @@ public class WhiteBoardActivity extends BaseActivity<WhitePresenter> implements 
     @Override
     public void onFileManagerFailed(FileInfo fileInfo, CubeError cubeError) {
         //        mProgressDialog.dismiss();
-        ToastUtil.showToast(this, cubeError.desc + " 上传失败");
+        ToastUtil.showToast( cubeError.desc + " 上传失败");
         LogUtil.i(fileInfo.toString());
     }
 }

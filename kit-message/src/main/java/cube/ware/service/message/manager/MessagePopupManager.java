@@ -278,11 +278,11 @@ public class MessagePopupManager {
     private static void recallMessage(Context context, CubeMessage message) {
         long receiveTimestamp = message.getSendTimestamp();
         if (System.currentTimeMillis() - receiveTimestamp > RECALL_LIMIT_TIME) {
-            ToastUtil.showToast(context, "发送时间超过两分钟的消息不能撤回。");
+            ToastUtil.showToast( "发送时间超过两分钟的消息不能撤回。");
         }
         else {
             CubeEngine.getInstance().getMessageService().recallMessage(message.getMessageSN());
-            //ToastUtil.showToast(context, "撤回失败");
+            //ToastUtil.showToast( "撤回失败");
         }
     }
 
@@ -361,7 +361,7 @@ public class MessagePopupManager {
         //                    }
         //                }
         //                if (exist) {
-        //                    ToastUtil.showToast(context, "该表情已添加");
+        //                    ToastUtil.showToast( "该表情已添加");
         //                }
         //                else {
         //                    createEmojiCollect(context, message.getFileUrl(), collectFile.getPath(), emojiPath);
@@ -455,11 +455,11 @@ public class MessagePopupManager {
             super.handleMessage(msg);
             Context context = (Context) msg.obj;
             if (msg.what == 0) {
-                ToastUtil.showToast(context, "表情添加成功");
+                ToastUtil.showToast( "表情添加成功");
                 StickerManager.getInstance(context).refreshStickerType(null);
             }
             else {
-                ToastUtil.showToast(context, "不支持的图片");
+                ToastUtil.showToast( "不支持的图片");
             }
         }
     };

@@ -112,7 +112,7 @@ public class ModifyNameActivity extends BaseActivity implements View.OnClickList
             case R.id.tv_save:
                 String newName = mEtName.getText().toString().trim();
                 if (TextUtils.isEmpty(newName)) {
-                    ToastUtil.showToast(this, "名字不能为空");
+                    ToastUtil.showToast( "名字不能为空");
                     return;
                 }
 
@@ -147,7 +147,7 @@ public class ModifyNameActivity extends BaseActivity implements View.OnClickList
     @Override
     public void afterTextChanged(Editable s) {
         if (Integer.parseInt(String.valueOf(mTvCount.getText()).trim()) == 0) {
-            ToastUtil.showToast(this, "最多只能输入" + mMaxLength + "个字符");
+            ToastUtil.showToast( "最多只能输入" + mMaxLength + "个字符");
         }
     }
 

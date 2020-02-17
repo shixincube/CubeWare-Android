@@ -113,11 +113,11 @@ public class P2PCallActivity extends BaseActivity<P2PCallPresenter> implements C
         this.getArguments();
         if (this.mCallState == CallStatus.AUDIO_OUTGOING || this.mCallState == CallStatus.VIDEO_OUTGOING) {
             if (!NetworkUtil.isNetAvailable(this)) {
-                ToastUtil.showToast(this, 0, getString(R.string.network_not_available_please_try_again_later));
+                ToastUtil.showToast( 0, getString(R.string.network_not_available_please_try_again_later));
                 this.release();
             }
             else if (!CubeEngine.getInstance().getCallService().makeCall(this.mCallId, this.mCallState == CallStatus.VIDEO_OUTGOING)) {
-                ToastUtil.showToast(this, 0, getString(R.string.call_failure_please_try_again_later));
+                ToastUtil.showToast( 0, getString(R.string.call_failure_please_try_again_later));
                 this.release();
             }
         }
@@ -162,7 +162,7 @@ public class P2PCallActivity extends BaseActivity<P2PCallPresenter> implements C
     public void onNetworkStateChanged(boolean isNetAvailable) {
         super.onNetworkStateChanged(isNetAvailable);
         //当在通话界面中
-        //        ToastUtil.showToast(this,R.string.network_not_available_please_try_again_later);
+        //        ToastUtil.showToast(R.string.network_not_available_please_try_again_later);
         //        CubeEngine.getInstance().getCallService().terminateCall(getPeerCubeId());
         //        release();
     }
@@ -706,28 +706,28 @@ public class P2PCallActivity extends BaseActivity<P2PCallPresenter> implements C
     public void onCallFailed(Session session, CubeErrorCode errorCode) {
         LogUtil.i("P2PCallActivity ===> onCallFailed" + "，errorCode：" + errorCode.code);
         if (errorCode == CubeErrorCode.ConnectionFailed) {
-            ToastUtil.showToast(this, 0, getString(R.string.connection_failure_please_try_again_later));
+            ToastUtil.showToast( 0, getString(R.string.connection_failure_please_try_again_later));
         }
         else if (errorCode == CubeErrorCode.ICEConnectionFailed) {
-            ToastUtil.showToast(this, 0, getString(R.string.connection_failure_please_try_again_later));
+            ToastUtil.showToast( 0, getString(R.string.connection_failure_please_try_again_later));
         }
         else if (errorCode == CubeErrorCode.NetworkNotReachable) {
-            ToastUtil.showToast(this, 0, getString(R.string.connection_failure));
+            ToastUtil.showToast( 0, getString(R.string.connection_failure));
         }
         else if (errorCode == CubeErrorCode.BusyHere) {
-            ToastUtil.showToast(this, 0, getString(R.string.call_user_busy));
+            ToastUtil.showToast( 0, getString(R.string.call_user_busy));
         }
         else if (errorCode == CubeErrorCode.DoNotDisturb) {
-            ToastUtil.showToast(this, 0, getString(R.string.call_user_busy));
+            ToastUtil.showToast( 0, getString(R.string.call_user_busy));
         }
         else if (errorCode == CubeErrorCode.RequestTerminated) {
-            ToastUtil.showToast(this, 0, getString(R.string.peer_offline_please_try_again_later));
+            ToastUtil.showToast( 0, getString(R.string.peer_offline_please_try_again_later));
         }
         else if (errorCode == CubeErrorCode.AlreadyInCalling) {
-            ToastUtil.showToast(this, "您已经在通话中！");
+            ToastUtil.showToast( "您已经在通话中！");
         }
         else {
-            ToastUtil.showToast(this, "对方正在通话中,请稍后再拨");
+            ToastUtil.showToast( "对方正在通话中,请稍后再拨");
         }
         this.release();
     }

@@ -129,7 +129,7 @@ public class VoicePlayClickListener implements View.OnClickListener, SensorEvent
     @Override
     public void onClick(final View v) {
         if (CubeEngine.getInstance().getSession().isCalling()) {
-            ToastUtil.showToast(context, context.getString(R.string.in_calling_tips));
+            ToastUtil.showToast( context.getString(R.string.in_calling_tips));
             return;
         }
 

@@ -182,7 +182,7 @@ public class ConferenceListFragment extends BaseFragment<ConferenceListContract.
 
     @Override
     public void showMessage(String message) {
-        ToastUtil.showToast(getContext(), message);
+        ToastUtil.showToast( message);
     }
 
     @Override

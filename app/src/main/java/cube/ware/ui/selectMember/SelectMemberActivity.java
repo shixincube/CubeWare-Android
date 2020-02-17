@@ -258,7 +258,7 @@ public class SelectMemberActivity extends BaseActivity<SelectMemberPresenter> im
 
     @Override
     public void showMessage(String message) {
-        ToastUtil.showToast(this, message);
+        ToastUtil.showToast( message);
     }
 
     /*//会议的创建回调

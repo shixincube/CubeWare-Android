@@ -186,7 +186,7 @@ public abstract class BaseChatActivity extends BaseToolBarActivity implements Se
     @Override
     public void onInOrOut(int state) {
         if (state == PlayerManager.MODE_HEADSET) {
-            ToastUtil.showToast(this, 0, "耳机已插入");
+            ToastUtil.showToast( 0, "耳机已插入");
             PlayerManager.getInstance().changeToHeadsetMode();
         }
         else if (state == 0) {
@@ -196,7 +196,7 @@ public abstract class BaseChatActivity extends BaseToolBarActivity implements Se
 
     @Override
     public void onPullOut() {
-        ToastUtil.showToast(this, 0, "耳机已拔出");
+        ToastUtil.showToast( 0, "耳机已拔出");
         PlayerManager.getInstance().pause();
         PlayerManager.getInstance().changeToSpeakerMode();
     }

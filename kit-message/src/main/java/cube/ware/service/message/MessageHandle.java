@@ -285,11 +285,11 @@ public class MessageHandle implements MessageListener {
     public void onMessageFailed(MessageEntity message, CubeError cubeError) {
         LogUtil.i("消息错误：" + cubeError.desc + "code: " + cubeError.code);
         if (CubeErrorCode.NoReceiver == CubeErrorCode.convert(cubeError.code)) {
-            ToastUtil.showToast(CubeCore.getContext(), "消息发送失败 没有接收者！");
+            ToastUtil.showToast( "消息发送失败 没有接收者！");
             return;
         }
         if (CubeErrorCode.NoPullMessage == CubeErrorCode.convert(cubeError.code)) {
-            ToastUtil.showToast(CubeCore.getContext(), "没有更多消息啦~");
+            ToastUtil.showToast( "没有更多消息啦~");
             return;
         }
         if (null != message) {

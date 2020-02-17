@@ -89,7 +89,7 @@ public class SelectContactsAdapter extends BaseQuickAdapter<CubeUser, BaseViewHo
                     }
                     else {
                         if (mUserLimit != -1 && mSelectedCubeMap.size() > mUserLimit - 1) {
-                            ToastUtil.showToast(mContext, mContext.getString(R.string.select_forward_user, mUserLimit));
+                            ToastUtil.showToast( mContext.getString(R.string.select_forward_user, mUserLimit));
                             return;
                         }
                         mSelectedCubeMap.put(userCube, item);

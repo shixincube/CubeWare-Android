@@ -156,7 +156,7 @@ public abstract class JCVideoPlayer extends FrameLayout implements View.OnClickL
         if (i == R.id.start) {
             Log.i(TAG, "onClick start [" + this.hashCode() + "] ");
             if (TextUtils.isEmpty(url)) {
-                ToastUtil.showToast(getContext(), "视频正在努力加载中，请稍等。。。");
+                ToastUtil.showToast( "视频正在努力加载中，请稍等。。。");
                 return;
             }
             if (currentState == CURRENT_STATE_NORMAL || currentState == CURRENT_STATE_ERROR) {

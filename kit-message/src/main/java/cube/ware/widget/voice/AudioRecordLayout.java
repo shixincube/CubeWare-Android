@@ -280,7 +280,7 @@ public class AudioRecordLayout extends RelativeLayout implements VoiceRecordList
                 //判断当前按下的坐标是否在按钮范围里面
                 if (containRecordBtn()) {
                     if (CubeEngine.getInstance().getSession().isCalling()) {
-                        ToastUtil.showToastTime(mContext, R.string.in_calling_tips, 1000);
+                        ToastUtil.showToastTime(R.string.in_calling_tips, 1000);
                         return true;
                     }
                     //开始录制
@@ -536,10 +536,10 @@ public class AudioRecordLayout extends RelativeLayout implements VoiceRecordList
             return;
         }
         if (CubeErrorCode.convert(cubeError.code) == CubeErrorCode.VoiceClipTooShort) {
-            ToastUtil.showToastTime(mContext, R.string.record_too_short, 800);
+            ToastUtil.showToastTime(R.string.record_too_short, 800);
         }
         if (CubeErrorCode.convert(cubeError.code) == CubeErrorCode.VoiceClipError) {
-            ToastUtil.showToast(mContext, R.string.record_error);
+            ToastUtil.showToast( R.string.record_error);
         }
     }
 

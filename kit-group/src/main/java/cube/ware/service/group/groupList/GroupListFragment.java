@@ -126,7 +126,7 @@ public class GroupListFragment extends BaseFragment<GroupListContract.Presenter>
 
     @Override
     public void onGroupDeleted(Group group) {
-        ToastUtil.showToast(CubeCore.getContext(), "删除群组成功");
+        ToastUtil.showToast( "删除群组成功");
         int position = mGroupListAdapter.findPosition(group.getGroupId());
         if (position != -1) {
             mGroupListAdapter.getData().remove(position);
@@ -147,7 +147,7 @@ public class GroupListFragment extends BaseFragment<GroupListContract.Presenter>
     @Override
     public void onMemberRemoved(Group group, List<String> removedMembers) {
         if (removedMembers.contains(CubeCore.getInstance().getCubeId())) {
-            ToastUtil.showToast(CubeCore.getContext(), "退出群组成功");
+            ToastUtil.showToast( "退出群组成功");
             List<Group> data = mGroupListAdapter.getData();
             Iterator<Group> iterator = data.iterator();
             while (iterator.hasNext()) {
@@ -163,12 +163,12 @@ public class GroupListFragment extends BaseFragment<GroupListContract.Presenter>
 
     @Override
     public void onMasterAdded(Group group, String addedMaster) {
-        ToastUtil.showToast(CubeCore.getContext(), "添加管理员成功");
+        ToastUtil.showToast( "添加管理员成功");
     }
 
     @Override
     public void onMasterRemoved(Group group, String removedMaster) {
-        ToastUtil.showToast(CubeCore.getContext(), "移除管理员成功");
+        ToastUtil.showToast( "移除管理员成功");
     }
 
     @Override

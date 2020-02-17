@@ -108,7 +108,7 @@ public class AddFriendActivity extends BaseActivity<AddFriendPresener> implement
         if(mGroupListAdapter.getData().size()!= 0){
             mGroupListAdapter.remove(0);
         }
-        ToastUtil.showToast(this,message);
+        ToastUtil.showToast(message);
     }
 
     @Override

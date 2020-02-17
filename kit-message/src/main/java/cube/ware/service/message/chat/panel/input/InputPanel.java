@@ -475,7 +475,7 @@ public class InputPanel implements EmoticonSelectedListener, View.OnClickListene
                         hasBottomNavigationListener(NAVIGATION_TYPE_FILE);
                     }
                     else {
-                        ToastUtil.showToast(mChatContainer.mChatActivity, 0, mChatContainer.mChatActivity.getString(R.string.request_storage_permission));
+                        ToastUtil.showToast( 0, mChatContainer.mChatActivity.getString(R.string.request_storage_permission));
                     }
                 }
             });
@@ -489,7 +489,7 @@ public class InputPanel implements EmoticonSelectedListener, View.OnClickListene
         else if (v.getId() == R.id.chat_voice_btn) {
             if (CubeCore.getInstance().isCalling()) {
                 hideEmoticonLayout();
-                ToastUtil.showToast(mChatContainer.mChatActivity, 0, mChatContainer.mChatActivity.getString(R.string.calling_please_try_again_later));
+                ToastUtil.showToast( 0, mChatContainer.mChatActivity.getString(R.string.calling_please_try_again_later));
                 return;
             }
             RxPermissionUtil.requestRecordPermission(mChatContainer.mChatActivity).compose(RxSchedulers.<Boolean>io_main()).subscribe(new Action1<Boolean>() {
@@ -499,7 +499,7 @@ public class InputPanel implements EmoticonSelectedListener, View.OnClickListene
                         toggleVoiceLayout();
                     }
                     else {
-                        ToastUtil.showToast(mChatContainer.mChatActivity, 0, mChatContainer.mChatActivity.getString(R.string.request_record_permission));
+                        ToastUtil.showToast( 0, mChatContainer.mChatActivity.getString(R.string.request_record_permission));
                     }
                 }
             });

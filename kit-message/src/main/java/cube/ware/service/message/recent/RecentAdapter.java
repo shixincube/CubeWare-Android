@@ -76,7 +76,7 @@ public class RecentAdapter extends BaseQuickAdapter<CubeRecentViewModel, BaseVie
             public void onPopupListClick(View contextView, int contextPosition, String type, int position) {
                 switch (position) {
                     case 0://置顶/取消置顶
-                        ToastUtil.showToast(mContext, "置顶");
+                        ToastUtil.showToast( "置顶");
                         break;
 
                     case 1://删除

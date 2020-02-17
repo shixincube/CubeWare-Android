@@ -228,7 +228,7 @@ public class CaptureButton extends View {
                     @Override
                     public void call(Boolean aBoolean) {
                         if (!aBoolean) {
-                            ToastUtil.showToast(activity, 0, R.string.open_audio);
+                            ToastUtil.showToast(0, R.string.open_audio);
                         }
                     }
                 });

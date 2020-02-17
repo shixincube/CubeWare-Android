@@ -107,17 +107,17 @@ public class FileAdapter extends BaseQuickAdapter<File, BaseViewHolder> {
                 if (FileActivity.flag == FileActivity.FLAG_SELECT_ATTACHMENT) {
                     //如果是选择附件，只判断附件的总大小，不判断数量
                     if (null != file && file.exists() && file.length() > FileActivity.remainSize) {
-                        ToastUtil.showToast(mContext, "附件总大小不能超过20M");
+                        ToastUtil.showToast( "附件总大小不能超过20M");
                         return;
                     }
                 }
                 else {
                     if (FileActivity.remainFileNum < 1) {
-                        ToastUtil.showToast(mContext, "你最多可以选择9个文件");
+                        ToastUtil.showToast( "你最多可以选择9个文件");
                         return;
                     }
                     if (null != file && file.exists() && file.length() > FileActivity.remainSize) {
-                        ToastUtil.showToast(mContext, "发送文件总大小不能超过100M");
+                        ToastUtil.showToast( "发送文件总大小不能超过100M");
                         return;
                     }
                 }

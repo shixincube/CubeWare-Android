@@ -120,7 +120,7 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
             public void onGroupDetails(Group group, List<String> members) {
                 mGroup = group;
                 if (mGroup == null) {
-                    ToastUtil.showToast(CubeCore.getContext(), "查询结果为null");
+                    ToastUtil.showToast( "查询结果为null");
                     return;
                 }
 
@@ -305,7 +305,7 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
                         bottomPopupDialog.dismiss();
                         break;
                     case 1:
-                        ToastUtil.showToast(mContext, position + "");
+                        ToastUtil.showToast( position + "");
                         CubeEngine.getInstance().getGroupService().removeMembers(mGroup.getGroupId(), Collections.singletonList(CubeCore.getInstance().getCubeId()));
                         bottomPopupDialog.dismiss();
                         break;
@@ -373,7 +373,7 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
                     dialog.dismiss();
                 }
                 else {
-                    ToastUtil.showToast(CubeCore.getContext(), "群名称不能为空");
+                    ToastUtil.showToast( "群名称不能为空");
                 }
             }
         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -387,7 +387,7 @@ public class GroupDetailsActivity extends BaseActivity<GroupDetailsContract.Pres
 
     @Override
     public void onGroupFailed(CubeError error) {
-        ToastUtil.showToast(CubeCore.getContext(), error.desc);
+        ToastUtil.showToast( error.desc);
     }
 
     @Override

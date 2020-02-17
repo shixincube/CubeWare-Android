@@ -71,7 +71,7 @@ public class WBListener implements WhiteBoardStateListener {
     public void onWhiteboardJoined(Whiteboard whiteboard, User user) {
         //判断是自己创建
         if (user.cubeId.equals(CubeEngine.getInstance().getSession().getUser().cubeId)) {
-            ToastUtil.showToast(mContext, "创建白板成功");
+            ToastUtil.showToast( "创建白板成功");
             mCreateCallback.onWBFinish(whiteboard);
             startWhiteBoard(whiteboard);
         }

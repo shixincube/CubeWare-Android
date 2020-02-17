@@ -80,6 +80,7 @@ public class AddDialogFragment extends DialogFragment implements View.OnClickLis
                 getDialog().dismiss();
                 break;
             case R.id.ll_sfu:
+                ToastUtil.showToast( "点击了SFU会议");
                 //startActivity(new Intent(getContext(),TestConferenceActivity.class));
                 dismiss();
                 break;
@@ -106,6 +107,6 @@ public class AddDialogFragment extends DialogFragment implements View.OnClickLis
     }
 
     private void showToast(String msg) {
-        ToastUtil.showToast(getContext(), msg);
+        ToastUtil.showToast( msg);
     }
 }

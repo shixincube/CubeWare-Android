@@ -78,7 +78,7 @@ public class AppIdActivity extends BaseActivity<AppIdPresenter> implements AppId
 
     @Override
     public void showToast(String msg) {
-        ToastUtil.showToast(this, msg);
+        ToastUtil.showToast( msg);
     }
 
     @TargetApi(23)

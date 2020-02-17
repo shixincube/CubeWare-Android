@@ -137,7 +137,7 @@ public class PreviewImageFragment extends BaseLazyFragment {
                                 @Override
                                 public void onLoadFailed(Exception e, Drawable errorDrawable) {
                                     super.onLoadFailed(e, errorDrawable);
-                                    ToastUtil.showToast(getContext(), 0, "图片加载失败");
+                                    ToastUtil.showToast( 0, "图片加载失败");
                                     mProgressBar.setVisibility(View.GONE);
                                 }
                             });
@@ -148,7 +148,7 @@ public class PreviewImageFragment extends BaseLazyFragment {
                     public void call(Throwable throwable) {
                         LogUtil.e(throwable);
                         mProgressBar.setVisibility(View.GONE);
-                        ToastUtil.showToast(getContext(), 0, "图片加载失败");
+                        ToastUtil.showToast( 0, "图片加载失败");
                     }
                 });
     }

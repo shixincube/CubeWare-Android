@@ -297,7 +297,7 @@ public class CreateConferenceActivity extends BaseActivity<CreatePresenter> impl
 
     @Override
     public void showMessage(String message) {
-        ToastUtil.showToast(this, message);
+        ToastUtil.showToast( message);
     }
 
     //edittext的监听

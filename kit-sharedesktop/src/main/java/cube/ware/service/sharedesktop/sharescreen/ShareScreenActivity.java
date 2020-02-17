@@ -198,7 +198,7 @@ public class ShareScreenActivity extends BaseActivity implements ScreenSwitchUti
     @Override
     public void onNetworkStateChanged(boolean isNetAvailable) {
         super.onNetworkStateChanged(isNetAvailable);
-        ToastUtil.showToast(this, R.string.network_not_available_please_try_again_later);
+        ToastUtil.showToast( R.string.network_not_available_please_try_again_later);
         CubeEngine.getInstance().getConferenceService().quit(mConference.conferenceId);
         release();
     }
@@ -545,7 +545,7 @@ public class ShareScreenActivity extends BaseActivity implements ScreenSwitchUti
 
     @Override
     public void onConferenceDestroyed(Conference conference, User from) {
-        ToastUtil.showToast(this, "会议销毁了");
+        ToastUtil.showToast( "会议销毁了");
         CubeEngine.getInstance().getConferenceService().removeConferenceListener(this);
         release();
     }
@@ -645,7 +645,7 @@ public class ShareScreenActivity extends BaseActivity implements ScreenSwitchUti
     @Override
     public void onConferenceFailed(Conference conference, CubeError error) {
         LogUtil.d("===会议发生错误===" + error.code + "==描述==" + error.desc);
-        ToastUtil.showToast(this, "会议发生错误" + error.desc);
+        ToastUtil.showToast( "会议发生错误" + error.desc);
         release();
     }
 }

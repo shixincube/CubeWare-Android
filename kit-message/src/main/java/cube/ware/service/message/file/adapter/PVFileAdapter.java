@@ -113,7 +113,7 @@ public class PVFileAdapter extends RecyclerView.Adapter<PVFileAdapter.ViewHolder
                     //RxBus.getInstance().post(MessageConstants.Event.EVENT_FILE_COUNT, image.getPath());
                     //}
                     //else {
-                    //    ToastUtil.showToast(mContext, "你最多可以选择9个文件");
+                    //    ToastUtil.showToast( "你最多可以选择9个文件");
                     //}
                 }
             });
@@ -199,22 +199,22 @@ public class PVFileAdapter extends RecyclerView.Adapter<PVFileAdapter.ViewHolder
         File file = new File(image.getPath());
         if (FileActivity.flag == FileActivity.FLAG_SELECT_ATTACHMENT) {
             if (file.exists() && file.length() > FileActivity.remainSize) {
-                ToastUtil.showToast(mContext, "附件总大小不能超过20M");
+                ToastUtil.showToast( "附件总大小不能超过20M");
                 return;
             }
         }
         else {
             if (FileActivity.remainPicNum < 1 && !isChecked) {
-                ToastUtil.showToast(mContext, "你最多可以选择9张图片");
+                ToastUtil.showToast( "你最多可以选择9张图片");
                 return;
             }
             if (file.exists() && FileUtil.isImage(file.getName()) && file.length() > 10 * 1024 * 1024) {
-                ToastUtil.showToast(mContext, "单张图片不能超过10M，请重新选择");
+                ToastUtil.showToast( "单张图片不能超过10M，请重新选择");
                 return;
             }
 
             if (null != file && file.exists() && file.length() > FileActivity.remainSize && !isChecked) {
-                ToastUtil.showToast(mContext, "发送文件总大小不能超过100M");
+                ToastUtil.showToast( "发送文件总大小不能超过100M");
                 return;
             }
         }

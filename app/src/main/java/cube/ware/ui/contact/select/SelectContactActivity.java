@@ -203,7 +203,7 @@ public class SelectContactActivity extends BaseActivity<SelectContactContract.Pr
 
         @Override
         public void onGroupFailed(CubeError cubeError) {
-            ToastUtil.showToast(CubeCore.getContext(), cubeError.desc);
+            ToastUtil.showToast( cubeError.desc);
         }
     };
 }

@@ -132,7 +132,7 @@ public class PreviewVideoActivity extends BaseActivity {
                                 loadVideo(cubeMessage.getFileUrl());
                             }
                             else {
-                                ToastUtil.showToast(CubeCore.getContext(), 0, "视频地址为空！");
+                                ToastUtil.showToast( 0, "视频地址为空！");
                             }
                         }
                     }
@@ -141,7 +141,7 @@ public class PreviewVideoActivity extends BaseActivity {
                 @Override
                 public void call(Throwable throwable) {
                     LogUtil.e(throwable);
-                    ToastUtil.showToast(CubeCore.getContext(), 0, "未找到视频");
+                    ToastUtil.showToast( 0, "未找到视频");
                 }
             });
         }

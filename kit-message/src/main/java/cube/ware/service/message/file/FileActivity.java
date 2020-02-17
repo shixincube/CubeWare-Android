@@ -175,7 +175,7 @@ public class FileActivity extends BaseToolBarActivity implements ICubeToolbar.On
                     }
                 }
                 if (hasSelectedVideoNum > 1) {
-                    ToastUtil.showToast(this, "视频只支持单个预览");
+                    ToastUtil.showToast( "视频只支持单个预览");
                     return;
                 }
                 if (hasSelectedVideoNum == 1 && imgList.size() == 1) {
@@ -185,7 +185,7 @@ public class FileActivity extends BaseToolBarActivity implements ICubeToolbar.On
 //                PvPagerActivity.start(this, 0, mRequestCode, imgList, imgList);
             }
             else {
-                ToastUtil.showToast(this, "请先选择预览对象");
+                ToastUtil.showToast( "请先选择预览对象");
             }
         }
         else if (vId == R.id.send_btn) {

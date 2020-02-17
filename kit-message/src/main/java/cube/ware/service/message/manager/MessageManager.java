@@ -240,7 +240,7 @@ public class MessageManager {
     public void sendFileMessage(final CubeSessionType sessionType, final Receiver receiver, final String filePath, final boolean isAnonymous, boolean isCompress) {
         File file = new File(filePath);
         if (TextUtils.isEmpty(filePath) || !file.exists() || file.length() == 0) {
-            ToastUtil.showToast(CubeUI.getInstance().getContext(), R.string.invilid_file);
+            ToastUtil.showToast(R.string.invilid_file);
             return;
         }
 

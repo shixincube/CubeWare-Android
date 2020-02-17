@@ -29,7 +29,7 @@ public class AudioFunction extends BaseFunction {
     public void onClick() {
         if (getChatType() == CubeSessionType.P2P) {//单聊
             if (CubeCore.getInstance().isCalling()) {
-                ToastUtil.showToast(getActivity(), R.string.calling_please_try_again_later);
+                ToastUtil.showToast( R.string.calling_please_try_again_later);
             }
             else {
                 Bundle bundle = new Bundle();
@@ -42,7 +42,7 @@ public class AudioFunction extends BaseFunction {
         else {//群聊
             if (ClickUtil.isFastClick()) { //重复点击
                 if (CubeCore.getInstance().isCalling()) {
-                    ToastUtil.showToast(getActivity(), R.string.calling_please_try_again_later);
+                    ToastUtil.showToast( R.string.calling_please_try_again_later);
                 }
                 else {
                     LogUtil.d("===调用了这个方法吗==");
@@ -60,7 +60,7 @@ public class AudioFunction extends BaseFunction {
             @Override
             public void onSucceed(List<Conference> conferenceList) {
                 if (conferenceList != null && conferenceList.size() > 0) {
-                    ToastUtil.showToast(getActivity(), "当前存在会议");
+                    ToastUtil.showToast( "当前存在会议");
                 }
                 else {
                     isHasWhiteBoard();
@@ -79,7 +79,7 @@ public class AudioFunction extends BaseFunction {
         //            @Override
         //            public void onSucceed(Conference conference) {
         //                if(conference!=null){
-        //                    ToastUtil.showToast(getActivity(),"当前存在会议");
+        //                    ToastUtil.showToast("当前存在会议");
         //                }
         //            }
         //            @Override
@@ -101,7 +101,7 @@ public class AudioFunction extends BaseFunction {
             @Override
             public void onSucceed(WhiteBoardInfo whiteBoardData) {
                 if (whiteBoardData.whiteboards.size() != 0 && null != whiteBoardData.whiteboards.get(0)) {
-                    ToastUtil.showToast(getActivity(), "当前存在白板");
+                    ToastUtil.showToast( "当前存在白板");
                 }
                 else if (whiteBoardData.whiteboards.size() == 0) {
                     //表示当前群没有白板，跳入选择成员页面

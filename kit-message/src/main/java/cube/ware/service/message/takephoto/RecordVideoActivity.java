@@ -104,7 +104,7 @@ public class RecordVideoActivity extends AppCompatActivity implements CompoundBu
         this.mCameraView.setErrorListener(new CameraInterface.ErrorListener() {
             @Override
             public void onError() {
-                ToastUtil.showToast(getApplicationContext(), 0, getString(R.string.request_camera_permission));
+                ToastUtil.showToast(0, getString(R.string.request_camera_permission));
                 onBackPressed();
             }
         });
@@ -151,7 +151,7 @@ public class RecordVideoActivity extends AppCompatActivity implements CompoundBu
     public void returnPhotoPath(String photoPath, boolean isOrigin) {
         long size = new File(photoPath).length();
         if ((mAttachmentSize + size) > FileActivity.FILE_MAX_SIZE) {
-            ToastUtil.showToast(this, 0, this.getString(R.string.select_max_size));
+            ToastUtil.showToast( 0, this.getString(R.string.select_max_size));
             return;
         }
         Intent data = new Intent();

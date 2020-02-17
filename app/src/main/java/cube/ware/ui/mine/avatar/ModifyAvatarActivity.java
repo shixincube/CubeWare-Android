@@ -82,7 +82,7 @@ public class ModifyAvatarActivity extends BaseActivity<ModifyAvatarPresenter> im
                     ModifyAvatarActivity.this.startActivityForResult(intent, REQUEST_CODE_FROM_GALLERY);
                 }
                 else {
-                    ToastUtil.showToast(ModifyAvatarActivity.this, "请给予读取权限");
+                    ToastUtil.showToast("请给予读取权限");
                 }
             }
         });
@@ -136,6 +136,6 @@ public class ModifyAvatarActivity extends BaseActivity<ModifyAvatarPresenter> im
 
     @Override
     public void onError(int code, String message) {
-        ToastUtil.showToast(this, "修改头像失败");
+        ToastUtil.showToast( "修改头像失败");
     }
 }

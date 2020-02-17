@@ -144,7 +144,7 @@ public class GroupChatActivity extends BaseChatActivity implements InputPanel.On
 
                             @Override
                             public void onError(Throwable e) {
-                                ToastUtil.showToast(GroupChatActivity.this, 0, "图片无效");
+                                ToastUtil.showToast( 0, "图片无效");
                             }
                         });
                     }
@@ -164,7 +164,7 @@ public class GroupChatActivity extends BaseChatActivity implements InputPanel.On
     @Override
     public void onCameraListener() {
         if (CubeCore.getInstance().isCalling() && CubeEngine.getInstance().getSession().getVideoEnabled()) {
-            ToastUtil.showToast(this, 0, getString(R.string.in_calling_tips));
+            ToastUtil.showToast( 0, getString(R.string.in_calling_tips));
         }
         else {
             this.selectImageFromCamera();
@@ -176,7 +176,7 @@ public class GroupChatActivity extends BaseChatActivity implements InputPanel.On
      */
     public void selectImageFromCamera() {
         if (CubeCore.getInstance().isCalling()) {
-            ToastUtil.showToast(this, 0, getString(R.string.calling_please_try_again_later));
+            ToastUtil.showToast( 0, getString(R.string.calling_please_try_again_later));
             return;
         }
 
@@ -188,7 +188,7 @@ public class GroupChatActivity extends BaseChatActivity implements InputPanel.On
                     GroupChatActivity.this.overridePendingTransition(R.anim.bottom_in, 0);
                 }
                 else {
-                    ToastUtil.showToast(GroupChatActivity.this, 0, getString(R.string.request_camera_permission));
+                    ToastUtil.showToast( 0, getString(R.string.request_camera_permission));
                 }
             }
         });
@@ -206,7 +206,7 @@ public class GroupChatActivity extends BaseChatActivity implements InputPanel.On
                     overridePendingTransition(R.anim.activity_open, 0);
                 }
                 else {
-                    ToastUtil.showToast(GroupChatActivity.this, 0, getString(R.string.request_storage_permission));
+                    ToastUtil.showToast( 0, getString(R.string.request_storage_permission));
                 }
             }
         });
@@ -230,7 +230,7 @@ public class GroupChatActivity extends BaseChatActivity implements InputPanel.On
                     overridePendingTransition(R.anim.activity_open, 0);
                 }
                 else {
-                    ToastUtil.showToast(GroupChatActivity.this, 0, getString(R.string.request_storage_permission));
+                    ToastUtil.showToast( 0, getString(R.string.request_storage_permission));
                 }
             }
         });
@@ -238,7 +238,7 @@ public class GroupChatActivity extends BaseChatActivity implements InputPanel.On
 
     @Override
     public void onAvatarClicked(final Context context, CubeMessage cubeMessage) {
-        ToastUtil.showToast(context, "点击头像");
+        ToastUtil.showToast( "点击头像");
         if (!TextUtils.equals(CubeCore.getInstance().getCubeId(), cubeMessage.getSenderId())) {
             CubeUserRepository.getInstance().queryUser(cubeMessage.getSenderId()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<CubeUser>() {
                 @Override
@@ -251,6 +251,6 @@ public class GroupChatActivity extends BaseChatActivity implements InputPanel.On
 
     @Override
     public void onAvatarLongClicked(Context context, CubeMessage cubeMessage) {
-        ToastUtil.showToast(context, "长按头像");
+        ToastUtil.showToast( "长按头像");
     }
 }

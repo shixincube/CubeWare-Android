@@ -1012,7 +1012,7 @@ public class MessageListPanel implements ICubeToolbar.OnTitleItemClickListener {
         public void onFailedBtnClick(View clickView, CubeMessage cubeMessage) {
             // 重置状态为unsent
             if (!NetworkUtil.isNetworkConnected(mContext)) {
-                ToastUtil.showToast(mContext, "网络未连接，发送失败");
+                ToastUtil.showToast( "网络未连接，发送失败");
                 return;
             }
             int index = mChatMessageAdapter.findCurrentPosition(cubeMessage.getMessageSN());

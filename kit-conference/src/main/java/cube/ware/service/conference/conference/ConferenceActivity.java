@@ -770,7 +770,7 @@ public class ConferenceActivity extends BaseActivity<ConferencePresenter> implem
 
     @Override
     public void showMessage(String message) {
-        ToastUtil.showToast(this, message);
+        ToastUtil.showToast( message);
     }
 
     //刷新两个adapter
