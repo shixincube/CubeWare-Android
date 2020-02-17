@@ -36,29 +36,91 @@ public class ToastUtil {
     }
 
     /**
+     * 显示吐司
+     *
+     * @param message 消息
+     */
+    public static void showToast(String message) {
+        Toast mToast = makeText(0, message, 3000);
+        mToast.show();
+    }
+
+    /**
+     * 显示吐司
+     *
+     * @param messageResId 消息资源ID
+     */
+    public static void showToast(int messageResId) {
+        Toast mToast = makeText(0, context.getResources().getString(messageResId), 3000);
+        mToast.show();
+    }
+
+    /**
+     * 显示吐司
+     *
+     * @param message  消息
+     * @param duration 间隔时间 单位：ms
+     */
+    public static void showToast(String message, int duration) {
+        Toast mToast = makeText(0, message, duration);
+        mToast.show();
+    }
+
+    /**
+     * 显示吐司
+     *
+     * @param imageResId 图片资源ID
+     * @param message    消息
+     */
+    public static void showToast(int imageResId, String message) {
+        Toast mToast = makeText(imageResId, message, 3000);
+        mToast.show();
+    }
+
+    /**
+     * 显示吐司
+     *
+     * @param imageResId
+     * @param messageResId
+     */
+    public static void showToast(int imageResId, int messageResId) {
+        Toast mToast = makeText(imageResId, context.getResources().getString(messageResId), 3000);
+        mToast.show();
+    }
+
+    /**
+     * 显示吐司
+     *
+     * @param messageResId
+     * @param duration
+     */
+    public static void showToastTime(int messageResId, int duration) {
+        Toast mToast = makeText(0, context.getResources().getString(messageResId), duration);
+        mToast.show();
+    }
+
+    /**
      * 自定义Toast样式
      *
-     * @param resId
-     * @param text
-     * @param duration
-     *
-     * @description
+     * @param imageResId 图片Id
+     * @param text       消息文本
+     * @param duration   间隔时间 单位：ms
      */
-    private static Toast makeText(int resId, CharSequence text, int duration) {
+    private static Toast makeText(int imageResId, CharSequence text, int duration) {
         Toast result = new Toast(context);
 
         // 由layout文件创建一个View对象
         LinearLayout layout = new LinearLayout(context);
         layout.setBackgroundResource(R.drawable.toast_default_bg);
         layout.setAlpha(0.8f);
-        layout.setPadding(left, top, right, bottom);
         layout.setGravity(Gravity.CENTER);
+        layout.setPadding(left, top, right, bottom);
 
         // 可显示带图的toast
-        if (resId != 0) {
+        if (imageResId != 0) {
             // 实例化ImageView对象
             ImageView imageView = new ImageView(context);
-            imageView.setImageResource(resId);
+            imageView.setImageResource(imageResId);
             layout.addView(imageView);
         }
 
@@ -75,44 +137,5 @@ public class ToastUtil {
         result.setDuration(duration);
 
         return result;
-    }
-
-    /**
-     * @param imageResId 图片Id
-     * @param message    消息
-     *                   默认3秒
-     */
-    public static void showToast(int imageResId, String message) {
-        Toast mToast = makeText(imageResId, message, 3000);
-        mToast.show();
-    }
-
-    /**
-     * @param message 消息
-     */
-    public static void showToast(String message) {
-        Toast mToast = makeText(0, message, 3000);
-        mToast.show();
-    }
-
-    public static void showToast(int imageResId, int messageResId) {
-        Toast mToast = makeText(imageResId, context.getResources().getString(messageResId), 3000);
-        mToast.show();
-    }
-
-    /**
-     * @param messageResId 消息String ID
-     */
-    public static void showToast(int messageResId) {
-        Toast mToast = makeText(0, context.getResources().getString(messageResId), 3000);
-        mToast.show();
-    }
-
-    /**
-     * @param messageResId 消息String ID
-     */
-    public static void showToastTime(int messageResId, int duration) {
-        Toast mToast = makeText(0, context.getResources().getString(messageResId), duration);
-        mToast.show();
     }
 }
